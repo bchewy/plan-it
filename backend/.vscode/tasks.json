@@ -1,6 +1,7 @@
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
+    // press run & debug , then press play button to run the webapp backend
     "version": "2.0.0",
     "tasks": [
         {
