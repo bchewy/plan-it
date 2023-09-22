@@ -1,4 +1,4 @@
-// press ctrl+shift+b, select "npm: dev" 
+//  in the terminal, enter "npm install" command. then press ctrl+shift+b, select "npm: dev" 
 
 {
 	"version": "2.0.0",
