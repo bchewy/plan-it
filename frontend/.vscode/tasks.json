@@ -1,0 +1,25 @@
+//  in the terminal, enter "npm install" command. then press ctrl+shift+b, select "npm: dev" 
+
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "dev",
+			"problemMatcher": [],
+			"label": "npm: dev",
+			"detail": "vite",
+			"group": "build"
+		},
+		{
+			"type": "npm",
+			"script": "install",
+			"group": {
+				"kind": "build"
+			},
+			"problemMatcher": [],
+			"label": "npm: install",
+			"detail": "install dependencies from package"
+		}
+	]
+}

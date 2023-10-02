@@ -1,0 +1,3 @@
+flask
+Flask-Cors
+Flask-SQLAlchemy
