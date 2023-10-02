@@ -7,28 +7,243 @@
 	},
 	"item": [
 		{
-			"name": "OneMAP API Test",
+			"name": "OneMAP API Routing - Walk",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlOGM4YWI4Y2IyNmFiODA4OWZhYTYwZWRlY2VlYzNkMCIsImlzcyI6Imh0dHA6Ly9pbnRlcm5hbC1hbGItb20tcHJkZXppdC1pdC0xMjIzNjk4OTkyLmFwLXNvdXRoZWFzdC0xLmVsYi5hbWF6b25hd3MuY29tL2FwaS92Mi91c2VyL3Bhc3N3b3JkIiwiaWF0IjoxNjk2MjU0NTcyLCJleHAiOjE2OTY1MTM3NzIsIm5iZiI6MTY5NjI1NDU3MiwianRpIjoidjBVNVZIV095Ulg0RDVBRSIsInVzZXJfaWQiOjgzOCwiZm9yZXZlciI6ZmFsc2V9.3sQwkdGroJptcKVaDjYwmgP7QNSzVmCtedqaiMVyswM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer xyz",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
-					"raw": "http://sandbox.bchewy.me:5001/api/Student",
-					"protocol": "http",
+					"raw": "https://www.onemap.gov.sg/api/public/routingsvc/route?start=1.319728,103.8421&end=1.319728905,103.8421581&routeType=walk",
+					"protocol": "https",
 					"host": [
-						"sandbox",
-						"bchewy",
-						"me"
+						"www",
+						"onemap",
+						"gov",
+						"sg"
 					],
-					"port": "5001",
 					"path": [
 						"api",
-						"Student"
+						"public",
+						"routingsvc",
+						"route"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "1.319728,103.8421"
+						},
+						{
+							"key": "end",
+							"value": "1.319728905,103.8421581"
+						},
+						{
+							"key": "routeType",
+							"value": "walk"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OneMAP API Routing - pTrans",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..3sQwkdGroJptcKVaDjYwmgP7QNSzVmCtedqaiMVyswM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.onemap.gov.sg/api/public/routingsvc/route?start=1.320981,103.844150&end=1.319728905,103.8421581&routeType=pt&mode=TRANSIT&date=10-02-2023&time=09:00:00&maxWalkDistance=1000&numItineraries=3",
+					"protocol": "https",
+					"host": [
+						"www",
+						"onemap",
+						"gov",
+						"sg"
+					],
+					"path": [
+						"api",
+						"public",
+						"routingsvc",
+						"route"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "1.320981,103.844150"
+						},
+						{
+							"key": "end",
+							"value": "1.319728905,103.8421581"
+						},
+						{
+							"key": "routeType",
+							"value": "pt"
+						},
+						{
+							"key": "mode",
+							"value": "TRANSIT"
+						},
+						{
+							"key": "date",
+							"value": "10-02-2023"
+						},
+						{
+							"key": "time",
+							"value": "09:00:00"
+						},
+						{
+							"key": "maxWalkDistance",
+							"value": "1000"
+						},
+						{
+							"key": "numItineraries",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OneMAP API Routing - Static Maps",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlOGM4YWI4Y2IyNmFiODA4OWZhYTYwZWRlY2VlYzNkMCIsImlzcyI6Imh0dHA6Ly9pbnRlcm5hbC1hbGItb20tcHJkZXppdC1pdC0xMjIzNjk4OTkyLmFwLXNvdXRoZWFzdC0xLmVsYi5hbWF6b25hd3MuY29tL2FwaS92Mi91c2VyL3Bhc3N3b3JkIiwiaWF0IjoxNjk2MjU0NTcyLCJleHAiOjE2OTY1MTM3NzIsIm5iZiI6MTY5NjI1NDU3MiwianRpIjoidjBVNVZIV095Ulg0RDVBRSIsInVzZXJfaWQiOjgzOCwiZm9yZXZlciI6ZmFsc2V9.3sQwkdGroJptcKVaDjYwmgP7QNSzVmCtedqaiMVyswM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.onemap.gov.sg/api/public/routingsvc/route?start=1.320981,103.844150&end=1.319728905,103.8421581&routeType=pt&mode=TRANSIT&date=10-02-2023&time=09:00:00&maxWalkDistance=1000&numItineraries=3",
+					"protocol": "https",
+					"host": [
+						"www",
+						"onemap",
+						"gov",
+						"sg"
+					],
+					"path": [
+						"api",
+						"public",
+						"routingsvc",
+						"route"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "1.320981,103.844150"
+						},
+						{
+							"key": "end",
+							"value": "1.319728905,103.8421581"
+						},
+						{
+							"key": "routeType",
+							"value": "pt"
+						},
+						{
+							"key": "mode",
+							"value": "TRANSIT"
+						},
+						{
+							"key": "date",
+							"value": "10-02-2023"
+						},
+						{
+							"key": "time",
+							"value": "09:00:00"
+						},
+						{
+							"key": "maxWalkDistance",
+							"value": "1000"
+						},
+						{
+							"key": "numItineraries",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Google Maps",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://maps.googleapis.com/maps/api/directions/json?origin=37.419734,-122.0827784&destination=37.417670,-122.079595&key=xyz",
+					"protocol": "https",
+					"host": [
+						"maps",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"maps",
+						"api",
+						"directions",
+						"json"
+					],
+					"query": [
+						{
+							"key": "origin",
+							"value": "37.419734,-122.0827784"
+						},
+						{
+							"key": "destination",
+							"value": "37.417670,-122.079595"
+						},
+						{
+							"key": "key",
+							"value": "xyz"
+						}
 					]
 				}
 			},
