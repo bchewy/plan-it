@@ -11,5 +11,14 @@ import router from './router' // The router is for navigating to other pages
 
 
 const app = createApp(App)
+app.use(VueGoogleMaps, {
+	load: {
+		key: "AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM",
+		libraries: "places",
+		componentRestrictions: {
+			country: "SG"
+		}
+	}
+})
 app.use(router)
 app.mount('#app')
