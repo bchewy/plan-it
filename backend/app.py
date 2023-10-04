@@ -1,16 +1,17 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify
 from flask_cors import CORS
-from flash_pymongo import PyMongo
+from pymongo import MongoClient
 from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
-mongo = PyMongo(app)
+client = MongoClient("localhost", 27017)
+# mongo = PyMongo(app)
 
 CORS(app)
 
 
-@app.route("/health")
+@app.route("/")
 def health_check():
 	return jsonify(
         	{
@@ -20,4 +21,4 @@ def health_check():
 
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=5000, debug=True)
+	app.run(host='0.0.0.0', port=8888, debug=True) # must be same as gunicorn
