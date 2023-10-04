@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from pymongo import MongoClient
+from pymongo.errors import ServerSelectionTimeoutError
 from config import Config
 from datetime import datetime
 
@@ -12,7 +13,7 @@ CORS(app)
 db = client.wad2
 collection = db.routes
 
-####################### HOME endpoint #######################
+####################### ROOT endpoint #######################
 
 @app.route("/")
 def health_check():
@@ -22,6 +23,15 @@ def health_check():
         	}
 	), 200
 
+@app.route("/db")
+def db_check():
+    client = MongoClient('localhost', serverSelectionTimeoutMS=1000)
+    try:
+        # The ismaster command is cheap and does not require auth.
+        client.admin.command('ismaster')
+        return jsonify({"message": "Database is healthy."}), 200
+    except ServerSelectionTimeoutError:
+        return jsonify({"message": "Database is unhealthy."}), 500
 ####################### ROUTES endpoint #######################
 # Create (POST)
 @app.route("/routes", methods=['POST'])
