@@ -21,7 +21,7 @@ jobs:
         aws-region: ap-southeast-1  # Replace with your AWS region
 
     - name: Install dependencies
-      run: npm install --prefix ./frontend  # Replace with your frontend directory
+      run: npm install --legacy-peer-deps --prefix ./frontend  # Replace with your frontend directory
 
     - name: Build
       run: npm run build --prefix ./frontend  # Replace with your frontend directory
