@@ -19,6 +19,13 @@
 			<GMapAutocomplete v-model="destination.value" placeholder="Destination"
 				:componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
 		</div>
+		<div class="input-group m-2">
+			<span class="input-group-text">Travel Mode</span>
+			<select v-model="travelMode" class="form-control">
+				<option value="DRIVE">Drive</option>
+				<option value="TRANSIT">Public Transport</option>
+			</select>
+		</div>
 		<button @click="fetchRouteDetails">Get Route Details</button>
 		<div v-if="routeDetails">
 			<p>Distance: {{ routeDetails.distanceMeters }} meters</p>
@@ -33,6 +40,7 @@ import axios from "axios";
 
 export default defineComponent({
 	setup() {
+		const travelMode = ref("DRIVE");  // Default is "DRIVE"
 		const center = { lat: 1.3331, lng: 103.7428 };
 		const startLocation = ref({
 			lat: 0,
@@ -66,7 +74,7 @@ export default defineComponent({
 		};
 
 		const fetchRouteDetails = async () => {
-			const requestData = {
+			let requestData = {
 				origin: {
 					location: {
 						latLng: {
@@ -83,10 +91,7 @@ export default defineComponent({
 						}
 					}
 				},
-				travelMode: "DRIVE",
-				routingPreference: "TRAFFIC_AWARE",
-				// departureTime: new Date().toISOString(),
-				// 30 mins later!	
+				travelMode: travelMode.value,
 				departureTime: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
 				computeAlternativeRoutes: false,
 				routeModifiers: {
@@ -97,6 +102,9 @@ export default defineComponent({
 				languageCode: "en-US",
 				units: "IMPERIAL"
 			};
+			if (travelMode.value === "DRIVE") {
+				requestData.routingPreference = "TRAFFIC_AWARE";
+			}
 
 			try {
 				const response = await axios.post("https://routes.googleapis.com/directions/v2:computeRoutes", requestData, {
@@ -164,7 +172,8 @@ export default defineComponent({
 			fetchRouteDetails,
 			routeDetails,
 			polylinePath,
-			decodedPolyline
+			decodedPolyline,
+			travelMode
 		};
 	}
 });
