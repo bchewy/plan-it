@@ -5,7 +5,7 @@
 			<GMapMarker v-if="destination.lat && destination.lng" :position="destination" /> -->
 			<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 			<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
-			<GMapMarker :position="{ lat: 1.3331, lng: 103.7428 }" />
+			<!-- <GMapMarker :position="{ lat: 1.3331, lng: 103.7428 }" /> -->
 
 		</GMapMap>
 		<div class="input-group m-2">
@@ -37,42 +37,55 @@ export default defineComponent({
 		// 	}
 		// })
 		const startLocation = ref({
-			lat: null,
-			lng: null
+			lat: 0,
+			lng: 0
 		});
 
 		const destination = ref({
-			lat: null,
-			lng: null
+			lat: 0,
+			lng: 0
 		});
 		// console.log('setting up');
 
-		return {
-			center,
-			startLocation,
-			destination,
-		};
-	},
-	methods: {
-		setPlace(place) {
+		const setPlace = (place) => {
 			const lat = Number(place.geometry.location.lat());
 			const lng = Number(place.geometry.location.lng());
-			// console.log(lat, lng);
+			console.log('Place changed');
 
-			console.log('Placed changed');
 			if (!startLocation.value.lat && !startLocation.value.lng) {
 				startLocation.value = { lat, lng };
 			} else {
 				destination.value = { lat, lng };
 			}
+		};
 
-			// Reactive
-		// 	if (!state.startLocation.lat && !state.startLocation.lng) {
-		// 		state.startLocation = { lat, lng }
+		return {
+			center,
+			startLocation,
+			destination,
+			setPlace
+		};
+	},
+	methods: {
+		// setPlace(place) {
+		// 	const lat = Number(place.geometry.location.lat());
+		// 	const lng = Number(place.geometry.location.lng());
+		// 	// console.log(lat, lng);
+
+		// 	console.log('Placed changed');
+		// 	if (!startLocation.value.lat && !startLocation.value.lng) {
+		// 		startLocation.value = { lat, lng };
 		// 	} else {
-		// 		state.destination = { lat, lng }
+		// 		destination.value = { lat, lng };
 		// 	}
-		}
+
+		// 	// Reactive
+		// 	// 	if (!state.startLocation.lat && !state.startLocation.lng) {
+		// 	// 		state.startLocation = { lat, lng }
+		// 	// 	} else {
+		// 	// 		state.destination = { lat, lng }
+		// 	// 	}
+		// }
 
 	}
 });
