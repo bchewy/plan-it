@@ -1,5 +1,6 @@
 <template>
 	<div>
+
 		<GMapMap :center="center" :zoom="12" map-type-id="terrain" style="width: 100vw; height: 900px">
 			<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 			<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
@@ -30,6 +31,15 @@
 		<div v-if="routeDetails">
 			<p>Distance: {{ routeDetails.distanceMeters }} meters</p>
 			<p>Duration: {{ routeDetails.duration }}</p>
+			<div v-if="directionSteps.length > 0">
+				<h2>Directions:</h2>
+				<ol>
+					<li v-for="(step, index) in directionSteps" :key="index">
+						{{ step && step.navigationInstruction ? step.navigationInstruction.instructions : 'Step not available' }}
+					</li>
+				</ol>
+			</div>
+
 		</div>
 	</div>
 </template>
@@ -52,6 +62,7 @@ export default defineComponent({
 		});
 		const routeDetails = ref(null);
 		const decodedPolyline = ref([]);  // Decoded polyline data from the API
+		const directionSteps = ref([]);  // Add this line at the beginning of your setup() method
 
 		// original straight polyline
 		const polylinePath = computed(() => {
@@ -111,13 +122,32 @@ export default defineComponent({
 					headers: {
 						'Content-Type': 'application/json',
 						'X-Goog-Api-Key': 'AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM',
-						'X-Goog-FieldMask': 'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline'
+						'X-Goog-FieldMask': 'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs.steps'
 					}
 				});
+
+				//Error Checking
+				// console.log(JSON.stringify(response.data, null, 2));  // Log the entire API response
+				console.log("Steps from API:", response.data.routes[0]?.legs[0]?.steps);
+
+
+				// if (response.data.routes[0]?.legs[0]?.steps) {
+				// 	directionSteps.value = response.data.routes[0].legs[0].steps.map(step => step.html_instructions);
+				// }
+
+				if (response.data.routes[0]?.legs[0]?.steps) {
+					directionSteps.value = response.data.routes[0].legs[0].steps;
+				}
+
+				console.log('directionSteps:', JSON.stringify(directionSteps.value, null, 2));
 				routeDetails.value = response.data.routes[0];  // Assuming the first route is what you want
 				// Decode the encodedPolyline and update decodedPolyline
 				const encodedPolyline = response.data.routes[0].polyline.encodedPolyline;
 				decodedPolyline.value = decodePolyline(encodedPolyline);  // Assume decodePolyline is a function to decode the polyline
+
+				// Directions
+				directionSteps.value = response.data.routes[0].legs[0].steps.map(step => step);
+
 
 			} catch (error) {
 				console.error("Failed to fetch route details:", error);
@@ -173,7 +203,8 @@ export default defineComponent({
 			routeDetails,
 			polylinePath,
 			decodedPolyline,
-			travelMode
+			travelMode,
+			directionSteps
 		};
 	}
 });
