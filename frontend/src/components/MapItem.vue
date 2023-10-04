@@ -1,10 +1,12 @@
 <template>
 	<div>
-		<GMapMap :center="center" :zoom="7" map-type-id="terrain" style="width: 100vw; height: 900px">
+		<GMapMap :center="center" :zoom="12" map-type-id="terrain" style="width: 100vw; height: 900px">
 			<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 			<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
 			<!-- Polyline here -->
-			<GMapPolyline :path="polylinePath" :editable="true" ref="polyline" />
+			<!-- <GMapPolyline :path="polylinePath" :editable="true" ref="polyline" /> -->
+			<GMapPolyline :path="decodedPolyline" :editable="true" ref="polyline" />
+
 
 		</GMapMap>
 		<div class="input-group m-2">
@@ -41,6 +43,9 @@ export default defineComponent({
 			lng: 0
 		});
 		const routeDetails = ref(null);
+		const decodedPolyline = ref([]);  // Decoded polyline data from the API
+
+		// original straight polyline
 		const polylinePath = computed(() => {
 			if (startLocation.value.lat && startLocation.value.lng && destination.value.lat && destination.value.lng) {
 				return [startLocation.value, destination.value];
@@ -102,10 +107,53 @@ export default defineComponent({
 					}
 				});
 				routeDetails.value = response.data.routes[0];  // Assuming the first route is what you want
+				// Decode the encodedPolyline and update decodedPolyline
+				const encodedPolyline = response.data.routes[0].polyline.encodedPolyline;
+				decodedPolyline.value = decodePolyline(encodedPolyline);  // Assume decodePolyline is a function to decode the polyline
+
 			} catch (error) {
 				console.error("Failed to fetch route details:", error);
 			}
 		};
+
+		const decodePolyline = (encoded) => {
+			let index = 0;
+			let lat = 0;
+			let lng = 0;
+			const coordinates = [];
+			let char = 0;  // Declare char here
+
+			while (index < encoded.length) {
+				let shift = 0;
+				let result = 0;
+
+				do {
+					char = encoded.charCodeAt(index++) - 63;  // Update char
+					result |= (char & 0x1F) << shift;
+					shift += 5;
+				} while (char >= 0x20);
+
+				const dlat = (result & 1 ? ~(result >> 1) : result >> 1);
+				lat += dlat;
+
+				shift = 0;
+				result = 0;
+
+				do {
+					char = encoded.charCodeAt(index++) - 63;  // Update char
+					result |= (char & 0x1F) << shift;
+					shift += 5;
+				} while (char >= 0x20);
+
+				const dlng = (result & 1 ? ~(result >> 1) : result >> 1);
+				lng += dlng;
+
+				coordinates.push({ lat: lat / 1E5, lng: lng / 1E5 });
+			}
+
+			return coordinates;
+		};
+
 
 		return {
 			center,
@@ -115,7 +163,8 @@ export default defineComponent({
 			setDestination,
 			fetchRouteDetails,
 			routeDetails,
-			polylinePath
+			polylinePath,
+			decodedPolyline
 		};
 	}
 });
