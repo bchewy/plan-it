@@ -21,8 +21,9 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           cd /home/ubuntu/sustainable-singapore/backend
-          # Assuming the SSH key is already set up on the EC2 instance
           git pull git@github.com:bchewy/sustainable-singapore.git main
           pip3 install -r requirements.txt
-          pkill -f gunicorn
-          nohup gunicorn -b 0.0.0.0:8888 app:app &
+          pkill -f gunicorn || true  # It's okay if this fails
+          nohup gunicorn -b 0.0.0.0:8888 app:app > gunicorn.log 2>&1 &
+          sleep 5  # Give Gunicorn some time to start
+          cat gunicorn.log  # Output the log for debugging
