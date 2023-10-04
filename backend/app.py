@@ -1,7 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flash_pymongo import PyMongo
+from config import Config
 
 app = Flask(__name__)
+app.config.from_object(Config)
+mongo = PyMongo(app)
 
 CORS(app)
 
