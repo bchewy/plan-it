@@ -1,0 +1,27 @@
+name: Deploy Flask to EC2
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          cd /path/to/your/project
+          git pull origin main
+          pip3 install -r requirements.txt
+          pkill gunicorn
+          nohup gunicorn -b 0.0.0.0:8888 app:app &

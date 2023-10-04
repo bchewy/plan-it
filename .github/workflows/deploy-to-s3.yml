@@ -1,0 +1,30 @@
+name: Deploy Vue.js to S3
+
+on: 
+  push:
+    branches:
+      - main  # Trigger the workflow on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-southeast-1  # Replace with your AWS region
+
+    - name: Install dependencies
+      run: npm install --prefix ./frontend  # Replace with your frontend directory
+
+    - name: Build
+      run: npm run build --prefix ./frontend  # Replace with your frontend directory
+
+    - name: Deploy to S3
+      run: aws s3 sync frontend/dist s3://wad2.bchwy.com/ --delete --acl public-read  # Replace with your S3 bucket name
