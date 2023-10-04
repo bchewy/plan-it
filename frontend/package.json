@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fawmi/vue-google-maps": "^0.9.67",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.2",
     "esbuild-node-loader": "^0.8.0",

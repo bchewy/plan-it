@@ -8,6 +8,8 @@ import 'bootstrap/dist/js/bootstrap.js'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router' // The router is for navigating to other pages
+import VueGoogleMaps from '@fawmi/vue-google-maps'
+
 
 
 const app = createApp(App)
