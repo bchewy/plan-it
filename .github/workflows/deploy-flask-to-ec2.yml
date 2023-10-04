@@ -20,7 +20,7 @@ jobs:
         username: ubuntu
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          cd /path/to/your/project
+          cd /home/ubuntu/sustainable-singapore/backend
           git pull origin main
           pip3 install -r requirements.txt
           pkill gunicorn
