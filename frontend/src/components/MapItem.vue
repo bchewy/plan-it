@@ -11,12 +11,12 @@
 		<div class="input-group m-2">
 			<span class="input-group-text" id="autocomplete-label">Start Location</span>
 			<GMapAutocomplete v-model="startLocation.value" placeholder="Starting point"
-				:componentRestrictions="{ country: 'SG' }" @place_changed="setPlace" class="form-control" />
+				:componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
 		</div>
 		<div class="input-group m-2">
 			<span class="input-group-text" id="autocomplete-label">End Location</span>
 			<GMapAutocomplete v-model="destination.value" placeholder="Destination"
-				:componentRestrictions="{ country: 'SG' }" @place_changed="setPlace" class="form-control" />
+				:componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
 		</div>
 	</div>
 </template>
@@ -47,23 +47,24 @@ export default defineComponent({
 		});
 		// console.log('setting up');
 
-		const setPlace = (place) => {
+		const setStartLocation = (place) => {
 			const lat = Number(place.geometry.location.lat());
 			const lng = Number(place.geometry.location.lng());
-			console.log('Place changed');
+			startLocation.value = { lat, lng };
+		};
 
-			if (!startLocation.value.lat && !startLocation.value.lng) {
-				startLocation.value = { lat, lng };
-			} else {
-				destination.value = { lat, lng };
-			}
+		const setDestination = (place) => {
+			const lat = Number(place.geometry.location.lat());
+			const lng = Number(place.geometry.location.lng());
+			destination.value = { lat, lng };
 		};
 
 		return {
 			center,
 			startLocation,
 			destination,
-			setPlace
+			setStartLocation,
+			setDestination
 		};
 	},
 	methods: {
