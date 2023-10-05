@@ -10,6 +10,7 @@ import App from './App.vue'
 import router from './router' // The router is for navigating to other pages
 import VueGoogleMaps from '@fawmi/vue-google-maps'
 import { createAuth0 } from '@auth0/auth0-vue';
+import authConfig from "../auth_config.json";
 
 
 
@@ -25,10 +26,10 @@ app.use(VueGoogleMaps, {
 })
 app.use(
 	createAuth0({
-		domain: "bchewy.auth0.com",
-		clientId: "YlYuClzH0InCceiP77CP230U9AHuMp2j",
+		domain: authConfig.domain,
+		clientId: authConfig.clientId,
 		authorizationParams: {
-			redirect_uri: window.location.origin
+			redirect_uri: window.location.origin,
 		}
 	})
 );
