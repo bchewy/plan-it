@@ -27,7 +27,7 @@
 				<option value="TRANSIT">Public Transport</option>
 			</select>
 		</div>
-		<button @click="fetchRouteDetails">Get Route Details</button>
+		<button @click="fetchRouteDetails">Log Route</button>
 		<div v-if="routeDetails">
 			<p>Distance: {{ routeDetails.distanceMeters }} meters</p>
 			<p>Duration: {{ routeDetails.duration }}</p>
@@ -128,7 +128,8 @@ export default defineComponent({
 
 				//Error Checking
 				// console.log(JSON.stringify(response.data, null, 2));  // Log the entire API response
-				console.log("Steps from API:", response.data.routes[0]?.legs[0]?.steps);
+				// console.log("Steps from API:", response.data.routes[0]?.legs[0]?.steps);
+				console.log(startLocation.value)
 
 
 				// if (response.data.routes[0]?.legs[0]?.steps) {
@@ -139,7 +140,7 @@ export default defineComponent({
 					directionSteps.value = response.data.routes[0].legs[0].steps;
 				}
 
-				console.log('directionSteps:', JSON.stringify(directionSteps.value, null, 2));
+				// console.log('directionSteps:', JSON.stringify(directionSteps.value, null, 2));
 				routeDetails.value = response.data.routes[0];  // Assuming the first route is what you want
 				// Decode the encodedPolyline and update decodedPolyline
 				const encodedPolyline = response.data.routes[0].polyline.encodedPolyline;
@@ -147,6 +148,42 @@ export default defineComponent({
 
 				// Directions
 				directionSteps.value = response.data.routes[0].legs[0].steps.map(step => step);
+
+
+				// Helper Function to get names
+				const getLocationName = async (lat, lng) => {
+					try {
+						const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
+						if (response.data.results && response.data.results.length > 0) {
+							// Return the formatted address of the first result
+							return response.data.results[0].formatted_address;
+						}
+					} catch (error) {
+						console.error('Failed to fetch location name:', error);
+					}
+					return '';  // Return an empty string if the location name could not be fetched
+				};
+
+				// Completed Fetching processing plotting
+				// Store in DB
+				const routeData = {
+					route_id: 'route_1',  // You will need a way to generate unique route IDs
+					start_point_lat: `Point(${startLocation.value.lat}, ${startLocation.value.lng})`,
+					end_point_lat: `Point(${destination.value.lat}, ${destination.value.lng})`,
+					start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
+					end_point_name: await getLocationName(destination.value.lat, destination.value.lng),
+					transport_mode: travelMode.value === 'DRIVE' ? 'car' : 'public transport',
+					// You will need a way to calculate carbon emission based on the route
+					carbon_emission: 20.5,  // This is a placeholder value
+					timestamp: new Date().toISOString(),
+				};
+
+				try {
+					// Send a POST request to the server to store the route data
+					await axios.post('http://prd.bchwy.com:8888/routes', routeData);  // Adjust the URL to match your server
+				} catch (error) {
+					console.error('Failed to store route data:', error);
+				}
 
 
 			} catch (error) {
@@ -191,6 +228,7 @@ export default defineComponent({
 
 			return coordinates;
 		};
+
 
 
 		return {

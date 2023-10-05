@@ -17,14 +17,14 @@ export default defineConfig({
 		}
 	},
 	// Remove this for self-signed certificate
-	server: {
-		https: {
-			key: fs.readFileSync('./key.pem'),
-			cert: fs.readFileSync('./cert.pem'),
-		},
-		host: 'localhost',
-		port: 5173,  // You can specify another port if you want
-	}
+	// server: {
+	// 	https: {
+	// 		key: fs.readFileSync('./key.pem'),
+	// 		cert: fs.readFileSync('./cert.pem'),
+	// 	},
+	// 	host: 'localhost',
+	// 	port: 5173,  // You can specify another port if you want
+	// }
 	// Self signed cert above 
 
 	
