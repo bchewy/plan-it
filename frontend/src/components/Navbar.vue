@@ -1,7 +1,7 @@
 <template>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container">
-
+			<font-awesome-icon :icon="['fas', 'map-location-dot']" shake style="color: #33d71d;" />
 			<a class="navbar-brand" href="#">PlanIt</a>
 
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"

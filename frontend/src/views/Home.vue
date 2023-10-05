@@ -30,9 +30,10 @@ export default {
 				console.log('Login button clicked');
 				try {
 					await loginWithRedirect();
-					console.log('User:', user);
-					console.log('Authenticated:', isAuthenticated);
+					// console.log('User:', user);
+					// console.log('Authenticated:', isAuthenticated);
 				} catch (e) {
+					alert('Failed to login');
 					console.error('Failed to login:', e);
 				}
 			},
