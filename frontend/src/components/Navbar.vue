@@ -36,12 +36,19 @@
 							Welcome, {{ user.name }}
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<!-- <li><router-link class="dropdown-item" to="/profile">User Profile</router-link></li>
-							<li><router-link class="dropdown-item" to="/journey">Journey</router-link></li> -->
+							<li><router-link class="dropdown-item" to="/profile">
+									<font-awesome-icon icon="fa-solid fa-circle-user" /> Profile</router-link>
+							</li>
+							<!-- <li><router-link class="dropdown-item" to="/journey">
+								<font-awesome-icon icon="fa-solid fa-truck-fast" />
+								Journey</router-link>
+							</li> -->
 							<li>
 								<hr class="dropdown-divider">
 							</li>
-							<li><a class="dropdown-item" @click="logout">Logout</a></li>
+							<li><a class="dropdown-item" @click="logout">Logout
+									<font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" />
+								</a></li>
 						</ul>
 					</li>
 				</ul>
