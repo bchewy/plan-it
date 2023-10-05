@@ -1,26 +1,3 @@
-<script>
-import MapItem from '../components/MapItem.vue'
-import Navbar from '../components/Navbar.vue';
-import { useAuth0 } from '@auth0/auth0-vue';
-
-export default {
-	data() {
-		const { user, isAuthenticated } = useAuth0();
-		console.log('Route.vue: is authenticated?', isAuthenticated)
-		console.log('Route.vue user', user)
-		return {
-			user,
-			isAuthenticated
-		}
-	},
-	components: {
-		Navbar,
-		MapItem
-	}
-}
-</script>
-
-
 <template>
 	<Navbar />
 	<!-- {{ user }} -->
@@ -87,3 +64,43 @@ export default {
 	</div>
 </template>
 
+<script>
+import MapItem from '../components/MapItem.vue'
+import Navbar from '../components/Navbar.vue';
+import { useAuth0 } from '@auth0/auth0-vue';
+import axios from 'axios';
+
+export default {
+	data() {
+		const { user, isAuthenticated } = useAuth0();
+		console.log('Profile.vue: is authenticated?', isAuthenticated)
+		console.log('Profile.vue user', user)
+		return {
+			user,
+			isAuthenticated,
+			routes: [],
+		}
+	},
+	components: {
+		Navbar,
+		MapItem
+	},
+	created() {
+		this.fetchRoutes();
+	},
+	methods: {
+		async fetchRoutes() {
+			console.log('Fetching!')
+			const email = this.user.email;  // Get the email from user object
+			const url = `https://api.bchwy.com/routes/email?email=${encodeURIComponent(email)}`;
+			try {
+				const response = await axios.get(url);
+				this.routes = response.data;  // Assign the fetched routes to the routes data property
+			} catch (error) {
+				console.error('Error fetching routes:', error);
+			}
+		}
+	}
+}
+
+</script>
