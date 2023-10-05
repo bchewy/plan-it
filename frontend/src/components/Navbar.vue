@@ -53,7 +53,7 @@
 <script>
 import { useAuth0 } from '@auth0/auth0-vue';
 import { watch, computed, defineComponent } from 'vue';
-import { useStore } from 'vuex';
+// import { useStore } from 'vuex';
 
 
 export default defineComponent({
