@@ -42,7 +42,7 @@
 		</div>
 	</div>
 	<div v-else>
-		<h1>Please log in to use this feature</h1>
+		<h3 class="text-center p-5">Please log in to use this feature</h3>
 	</div>
 </template>
 

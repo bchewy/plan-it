@@ -1,8 +1,10 @@
 <template>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container">
-			<font-awesome-icon :icon="['fas', 'map-location-dot']" shake style="color: #33d71d;" />
-			<a class="navbar-brand" href="#">PlanIt</a>
+			<a class="navbar-brand" href="#">
+				<font-awesome-icon icon="fa-solid fa-car" bounce style="color: green;" /> Plan-It
+			</a>
+			<!-- <font-awesome-icon icon="fa-solid fa-user-secret" /> -->
 
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
 				aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,8 +32,7 @@
 					<li v-else class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown"
 							role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<img :src="user.picture" alt="" class="rounded-circle me-2"
-								style="width: 30px; height: 30px;">
+							<img :src="user.picture" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px;">
 							Welcome, {{ user.name }}
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -78,4 +79,5 @@ export default {
 		};
 	}
 }
+
 </script>
