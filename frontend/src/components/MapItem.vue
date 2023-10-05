@@ -171,6 +171,7 @@ export default defineComponent({
 
 				// Completed Fetching processing plotting
 				// Store in DB
+				console.log('Attempting to store database in MongoDB')
 				const routeData = {
 					route_id: 'route_1',  // You will need a way to generate unique route IDs
 					start_point_lat_lng: `Point(${startLocation.value.lat}, ${startLocation.value.lng})`,
@@ -186,12 +187,13 @@ export default defineComponent({
 
 				try {
 					// Send a POST request to the server to store the route data
+					console.log('Attempt store happenin...')
 					await axios.post('http://prd.bchwy.com:8888/routes', routeData);  // Adjust the URL to match your server
 				} catch (error) {
 					console.error('Failed to store route data:', error);
 				}
 
-
+				console.log('Route data stored successfully.. we think?');
 			} catch (error) {
 				console.error("Failed to fetch route details:", error);
 			}
