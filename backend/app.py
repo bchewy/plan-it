@@ -51,7 +51,7 @@ def read_all_routes():
 
 # Read All EMAIL OF USER(GET)
 @app.route("/routes/email", methods=['GET'])
-def read_all_routes():
+def read_all_routes_email():
     email = request.args.get('email')
     if email:
         all_routes = list(collection.find({"user_id": email}))
