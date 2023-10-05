@@ -1,5 +1,8 @@
 <template>
-	<div v-if="isAuthenticated">
+	<div v-if="!isAuthenticated">
+		<h3 class="text-center p-5">Please log in to use this feature</h3>
+	</div>
+	<div v-else >
 		<GMapMap :center="center" :zoom="12" map-type-id="terrain" style="width: 100vw; height: 900px">
 			<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 			<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
@@ -40,9 +43,6 @@
 			</div>
 
 		</div>
-	</div>
-	<div v-else>
-		<h3 class="text-center p-5">Please log in to use this feature</h3>
 	</div>
 </template>
 
