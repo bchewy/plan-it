@@ -30,7 +30,7 @@
 					<li v-else class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown"
 							role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<img :src="user.picture" alt="User Image" class="rounded-circle me-2"
+							<img :src="user.picture" alt="" class="rounded-circle me-2"
 								style="width: 30px; height: 30px;">
 							Welcome, {{ user.name }}
 						</a>
@@ -55,7 +55,7 @@ import { useAuth0 } from '@auth0/auth0-vue';
 export default {
 	name: 'NavBar',
 	setup() {
-		const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+		const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
 
 		// console.log(user);
 
@@ -69,6 +69,9 @@ export default {
 				} catch (e) {
 					console.error('Failed to login:', e);
 				}
+			},
+			logout: () => {
+				logout({ logoutParams: { returnTo: window.location.origin } });
 			},
 			user,
 			isAuthenticated,
