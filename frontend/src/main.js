@@ -7,11 +7,23 @@ import 'bootstrap/dist/js/bootstrap.js'
 // Importing the main App component
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router' // The router is for navigating to other pages
+import router from './router'
+
+// Google Maps
 import VueGoogleMaps from '@fawmi/vue-google-maps'
+
+// Auth0
 import { createAuth0 } from '@auth0/auth0-vue';
 import authConfig from "../auth_config.json";
 
+// Font Awesome
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faArrowRightFromBracket, faCar, faCircleUser, faTruckFast } from '@fortawesome/free-solid-svg-icons'
+library.add(faCar)
+library.add(faCircleUser)
+library.add(faTruckFast)
+library.add(faArrowRightFromBracket)
 
 
 const app = createApp(App)
@@ -33,6 +45,6 @@ app.use(
 		}
 	})
 );
-
+app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)
 app.mount('#app')

@@ -23,6 +23,6 @@ export default{
 
 <template>
 	<Navbar />
-	<MapItem :userme="user" />
+	<!-- <MapItem :userme="user" /> -->
 </template>
 
