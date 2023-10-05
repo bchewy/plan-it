@@ -27,4 +27,4 @@ jobs:
       run: npm run build --prefix ./frontend  # Replace with your frontend directory
 
     - name: Deploy to S3
-      run: aws s3 sync frontend/dist s3://wad2.bchwy.com/ --delete --acl public-read  # Replace with your S3 bucket name
+      run: aws s3 sync frontend/dist s3://wad2.bchwy.com/ --delete --cache-control max-age=60 --acl public-read  # Replace with your S3 bucket name
