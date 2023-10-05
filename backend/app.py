@@ -13,15 +13,20 @@ CORS(app)
 db = client.wad2
 collection = db.routes
 
-####################### ROOT endpoint #######################
+# Healthcheck
+
 
 @app.route("/")
 def health_check():
-	return jsonify(
-        	{
-            	"message": "Service is healthy."
-        	}
-	), 200
+    return jsonify(
+        {
+            "message": "Service is healthy."
+        }
+    ), 200
+
+
+# Database healthcheck
+
 
 @app.route("/db")
 def db_check():
@@ -32,8 +37,10 @@ def db_check():
         return jsonify({"message": "Database is healthy."}), 200
     except ServerSelectionTimeoutError:
         return jsonify({"message": "Database is unhealthy."}), 500
-####################### ROUTES endpoint #######################
+
 # Create (POST)
+
+
 @app.route("/routes", methods=['POST'])
 def create_route():
     data = request.json
@@ -42,6 +49,8 @@ def create_route():
     return jsonify({"message": "Route created successfully."}), 201
 
 # Read All (GET)
+
+
 @app.route("/routes", methods=['GET'])
 def read_all_routes():
     all_routes = list(collection.find())
@@ -50,6 +59,8 @@ def read_all_routes():
     return jsonify(all_routes), 200
 
 # Read All EMAIL OF USER(GET)
+
+
 @app.route("/routes/email", methods=['GET'])
 def read_all_routes_email():
     email = request.args.get('email')
@@ -62,6 +73,8 @@ def read_all_routes_email():
         return jsonify({"message": "Email parameter is required."}), 400
 
 # Read One (GET)
+
+
 @app.route("/routes/<route_id>", methods=['GET'])
 def read_one_route(route_id):
     route = collection.find_one({"route_id": route_id})
@@ -72,16 +85,21 @@ def read_one_route(route_id):
         return jsonify({"message": "Route not found."}), 404
 
 # Update (PUT)
+
+
 @app.route("/routes/<route_id>", methods=['PUT'])
 def update_route(route_id):
     data = request.json
-    updated_route = collection.find_one_and_update({"route_id": route_id}, {"$set": data})
+    updated_route = collection.find_one_and_update(
+        {"route_id": route_id}, {"$set": data})
     if updated_route:
         return jsonify({"message": "Route updated successfully."}), 200
     else:
         return jsonify({"message": "Route not found."}), 404
 
 # Delete (DELETE)
+
+
 @app.route("/routes/<route_id>", methods=['DELETE'])
 def delete_route(route_id):
     deleted_route = collection.find_one_and_delete({"route_id": route_id})
@@ -90,7 +108,8 @@ def delete_route(route_id):
     else:
         return jsonify({"message": "Route not found."}), 404
 
-#######################  #######################
+
+
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=8888, debug=True) # must be same as gunicorn
+    app.run(host='0.0.0.0', port=8888, debug=True)  # must be same as gunicorn
