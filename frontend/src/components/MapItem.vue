@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="isAuthenticated">
 
 		<GMapMap :center="center" :zoom="12" map-type-id="terrain" style="width: 100vw; height: 900px">
 			<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
@@ -42,14 +42,20 @@
 
 		</div>
 	</div>
+	<div v-else>
+		<h1>Please log in to use this feature</h1>
+	</div>
 </template>
 
 <script>
 import { ref, defineComponent, computed } from "vue";
 import axios from "axios";
+import { useAuth0 } from '@auth0/auth0-vue';
+
 
 export default defineComponent({
 	setup() {
+		const { user, isAuthenticated } = useAuth0();
 		const travelMode = ref("DRIVE");  // Default is "DRIVE"
 		const center = { lat: 1.3331, lng: 103.7428 };
 		const startLocation = ref({
@@ -168,14 +174,15 @@ export default defineComponent({
 				// Store in DB
 				const routeData = {
 					route_id: 'route_1',  // You will need a way to generate unique route IDs
-					start_point_lat: `Point(${startLocation.value.lat}, ${startLocation.value.lng})`,
-					end_point_lat: `Point(${destination.value.lat}, ${destination.value.lng})`,
+					start_point_lat_lng: `Point(${startLocation.value.lat}, ${startLocation.value.lng})`,
+					end_point_lat_lng: `Point(${destination.value.lat}, ${destination.value.lng})`,
 					start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
 					end_point_name: await getLocationName(destination.value.lat, destination.value.lng),
 					transport_mode: travelMode.value === 'DRIVE' ? 'car' : 'public transport',
 					// You will need a way to calculate carbon emission based on the route
-					carbon_emission: 20.5,  // This is a placeholder value
+					carbon_emission: 0,  // This is a placeholder value
 					timestamp: new Date().toISOString(),
+					user_id: 'user_1'  // You will need a way to get the user ID
 				};
 
 				try {
@@ -242,7 +249,8 @@ export default defineComponent({
 			polylinePath,
 			decodedPolyline,
 			travelMode,
-			directionSteps
+			directionSteps,
+			user
 		};
 	}
 });
