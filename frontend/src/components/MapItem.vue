@@ -173,7 +173,7 @@ export default defineComponent({
 				// Store in DB
 				console.log('Attempting to store database in MongoDB')
 				const routeData = {
-					route_id: 'route_1',  // You will need a way to generate unique route IDs
+					route_id: 'route_1'+Date.now(),  // You will need a way to generate unique route IDs
 					start_point_lat_lng: `Point(${startLocation.value.lat}, ${startLocation.value.lng})`,
 					end_point_lat_lng: `Point(${destination.value.lat}, ${destination.value.lng})`,
 					start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
