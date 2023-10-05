@@ -6,8 +6,9 @@
 	</header>
 
 	Welcome Home.
-	<button @click="login">Log in</button>
-	<button @click="register">Register</button>
+	<!-- <button @click="login">Log in</button> -->
+	<!-- <Login /> -->
+	<!-- <button @click="register">Register</button> -->
 
 	<footer>
 		<!-- footer -->
@@ -15,20 +16,33 @@
 </template>
 <script>
 import NavBar from '../components/Navbar.vue'
+// import Login from '../components/Login.vue'
 import { useAuth0 } from '@auth0/auth0-vue';
 
 export default {
 	name: 'Home',
 	components: {
-		NavBar  // Register the NavBar component
+		NavBar,  // Register the NavBar component
+		// Login
 	},
 	setup() {
-		const { loginWithRedirect } = useAuth0();
+		const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+
+		console.log('Setup method is called');
 
 		return {
-			login: () => {
-				loginWithRedirect();
-			}
+			login: async () => {
+				console.log('Login button clicked');
+				try {
+					await loginWithRedirect();
+					console.log('User:', user);
+					console.log('Authenticated:', isAuthenticated);
+				} catch (e) {
+					console.error('Failed to login:', e);
+				}
+			},
+			user,
+			isAuthenticated,
 		};
 	}
 }
