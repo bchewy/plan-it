@@ -50,11 +50,16 @@
 import { ref, defineComponent, computed } from "vue";
 import axios from "axios";
 import { useAuth0 } from '@auth0/auth0-vue';
+// import { useStore } from 'vuex';
 
 
 export default defineComponent({
-	setup() {
+	props: ['userme'],
+	setup(props) {
+		// const store = useStore();
 		const { user, isAuthenticated } = useAuth0();
+		// console.log('is authenticated?', isAuthenticated)
+		// console.log('user', user)
 		const travelMode = ref("DRIVE");  // Default is "DRIVE"
 		const center = { lat: 1.3331, lng: 103.7428 };
 		const startLocation = ref({
@@ -134,7 +139,7 @@ export default defineComponent({
 				//Error Checking
 				// console.log(JSON.stringify(response.data, null, 2));  // Log the entire API response
 				// console.log("Steps from API:", response.data.routes[0]?.legs[0]?.steps);
-				console.log(startLocation.value)
+				// console.log(startLocation.value)
 
 
 				// if (response.data.routes[0]?.legs[0]?.steps) {
@@ -172,6 +177,7 @@ export default defineComponent({
 				// Completed Fetching processing plotting
 				// Store in DB
 				console.log('Attempting to store database in MongoDB')
+				console.log('Loggin for user email', props.userme.name)
 				const routeData = {
 					route_id: 'route_1'+Date.now(),  // You will need a way to generate unique route IDs
 					start_point_lat_lng: `Point(${startLocation.value.lat}, ${startLocation.value.lng})`,
@@ -179,10 +185,9 @@ export default defineComponent({
 					start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
 					end_point_name: await getLocationName(destination.value.lat, destination.value.lng),
 					transport_mode: travelMode.value === 'DRIVE' ? 'car' : 'public transport',
-					// You will need a way to calculate carbon emission based on the route
-					carbon_emission: 0,  // This is a placeholder value
+					carbon_emission: 0,  
 					timestamp: new Date().toISOString(),
-					user_id: 'user_1'  // You will need a way to get the user ID
+					user_id: props.userme.email  
 				};
 
 				try {
@@ -252,7 +257,9 @@ export default defineComponent({
 			travelMode,
 			directionSteps,
 			user,
-			isAuthenticated
+			isAuthenticated,
+			// user: computed(() => store.getters.user),
+			// isAuthenticated: computed(() => store.getters.isAuthenticated)
 		};
 	}
 });

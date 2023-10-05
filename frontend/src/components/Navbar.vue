@@ -23,11 +23,11 @@
 				<ul class="navbar-nav">
 					<!-- If user is not authenticated -->
 					<li v-if="!isAuthenticated" class="nav-item">
-						<a class="nav-link" @click="login">Log in</a>
+						<a class="nav-link" @click.prevent="login">Log in</a>
 					</li>
-					<li v-if="!isAuthenticated" class="nav-item">
+					<!-- <li v-if="!isAuthenticated" class="nav-item">
 						<a class="nav-link" @click="signup">Sign up</a>
-					</li>
+					</li> -->
 					<!-- If user is authenticated -->
 					<li v-else class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown"
@@ -36,8 +36,8 @@
 							Welcome, {{ user.name }}
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<li><router-link class="dropdown-item" to="/profile">User Profile</router-link></li>
-							<li><router-link class="dropdown-item" to="/journey">Journey</router-link></li>
+							<!-- <li><router-link class="dropdown-item" to="/profile">User Profile</router-link></li>
+							<li><router-link class="dropdown-item" to="/journey">Journey</router-link></li> -->
 							<li>
 								<hr class="dropdown-divider">
 							</li>
@@ -52,32 +52,34 @@
 </template>
 <script>
 import { useAuth0 } from '@auth0/auth0-vue';
+import { watch, computed, defineComponent } from 'vue';
+import { useStore } from 'vuex';
 
-export default {
+
+export default defineComponent({
 	name: 'NavBar',
 	setup() {
 		const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
-
-		// console.log(user);
 
 		return {
 			login: async () => {
 				console.log('Login button clicked');
 				try {
 					await loginWithRedirect();
-					console.log('User:', user);
-					console.log('Authenticated:', isAuthenticated);
 				} catch (e) {
 					console.error('Failed to login:', e);
 				}
 			},
 			logout: () => {
 				logout({ logoutParams: { returnTo: window.location.origin } });
+				// store.dispatch('updateUser', null);
 			},
+			// user: computed(() => store.getters.user),
 			user,
 			isAuthenticated,
+			// isAuthenticated: computed(() => store.getters.isAuthenticated),
 		};
 	}
-}
+});
 
 </script>
