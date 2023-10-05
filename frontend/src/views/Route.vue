@@ -13,7 +13,6 @@ export default {
 
 <template>
 	<Navbar />
-	Route Page.
 	<MapItem />
 </template>
 
