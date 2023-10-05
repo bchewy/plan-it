@@ -1,6 +1,5 @@
 <template>
 	<div v-if="isAuthenticated">
-
 		<GMapMap :center="center" :zoom="12" map-type-id="terrain" style="width: 100vw; height: 900px">
 			<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 			<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
@@ -250,7 +249,8 @@ export default defineComponent({
 			decodedPolyline,
 			travelMode,
 			directionSteps,
-			user
+			user,
+			isAuthenticated
 		};
 	}
 });
