@@ -188,7 +188,7 @@ export default defineComponent({
 				try {
 					// Send a POST request to the server to store the route data
 					console.log('Attempt store happenin...')
-					await axios.post('http://prd.bchwy.com:8888/routes', routeData);  // Adjust the URL to match your server
+					await axios.post('http://api.bchwy.com:8888/routes', routeData);  // Adjust the URL to match your server
 				} catch (error) {
 					console.error('Failed to store route data:', error);
 				}
