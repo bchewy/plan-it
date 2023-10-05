@@ -1,47 +1,48 @@
 <template>
-	<div v-if="!isAuthenticated">
-		<h3 class="text-center p-5">Please log in to use this feature</h3>
-	</div>
-	<div v-else >
-		<GMapMap :center="center" :zoom="12" map-type-id="terrain" style="width: 100vw; height: 900px">
-			<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
-			<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
-			<!-- Polyline here -->
-			<!-- <GMapPolyline :path="polylinePath" :editable="true" ref="polyline" /> -->
-			<GMapPolyline :path="decodedPolyline" :editable="true" ref="polyline" />
-
-
-		</GMapMap>
-		<div class="input-group m-2">
-			<span class="input-group-text" id="autocomplete-label">Start Location</span>
-			<GMapAutocomplete v-model="startLocation.value" placeholder="Starting point"
-				:componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+	<div class="container-fluid">
+		<div v-if="!isAuthenticated" class="row justify-content-center align-items-center" style="height: 100vh;">
+			<h3 class="text-center p-5">Please log in to use this feature</h3>
 		</div>
-		<div class="input-group m-2">
-			<span class="input-group-text" id="autocomplete-label">End Location</span>
-			<GMapAutocomplete v-model="destination.value" placeholder="Destination"
-				:componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
-		</div>
-		<div class="input-group m-2">
-			<span class="input-group-text">Travel Mode</span>
-			<select v-model="travelMode" class="form-control">
-				<option value="DRIVE">Drive</option>
-				<option value="TRANSIT">Public Transport</option>
-			</select>
-		</div>
-		<button @click="fetchRouteDetails">Log Route</button>
-		<div v-if="routeDetails">
-			<p>Distance: {{ routeDetails.distanceMeters }} meters</p>
-			<p>Duration: {{ routeDetails.duration }}</p>
-			<div v-if="directionSteps.length > 0">
-				<h2>Directions:</h2>
-				<ol>
-					<li v-for="(step, index) in directionSteps" :key="index">
-						{{ step && step.navigationInstruction ? step.navigationInstruction.instructions : 'Step not available' }}
-					</li>
-				</ol>
+		<div v-else class="row">
+			<div class="col-lg-8 col-md-12">
+				<GMapMap :center="center" :zoom="12" map-type-id="terrain" style="width: 100%; height: 100vh;">
+					<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
+					<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
+					<GMapPolyline :path="decodedPolyline" :editable="true" ref="polyline" />
+				</GMapMap>
 			</div>
-
+			<div class="col-lg-4 col-md-12 p-4">
+				<div class="input-group mb-3">
+					<span class="input-group-text" id="autocomplete-label">Start Location</span>
+					<GMapAutocomplete v-model="startLocation.value" placeholder="Starting point"
+						:componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+				</div>
+				<div class="input-group mb-3">
+					<span class="input-group-text" id="autocomplete-label">End Location</span>
+					<GMapAutocomplete v-model="destination.value" placeholder="Destination"
+						:componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
+				</div>
+				<div class="input-group mb-3">
+					<span class="input-group-text">Travel Mode</span>
+					<select v-model="travelMode" class="form-control">
+						<option value="DRIVE">Drive</option>
+						<option value="TRANSIT">Public Transport</option>
+					</select>
+				</div>
+				<button class="btn btn-primary mb-4" @click="fetchRouteDetails">Log Route</button>
+				<div v-if="routeDetails">
+					<p><strong>Distance:</strong> {{ routeDetails.distanceMeters }} meters</p>
+					<p><strong>Duration:</strong> {{ routeDetails.duration }}</p>
+					<div v-if="directionSteps.length > 0" style="max-height: 300px; overflow-y: auto;">
+						<h2>Directions:</h2>
+						<ol>
+							<li v-for="(step, index) in directionSteps" :key="index">
+								{{ step && step.navigationInstruction ? step.navigationInstruction.instructions : 'Step not available' }}
+							</li>
+						</ol>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -179,15 +180,15 @@ export default defineComponent({
 				console.log('Attempting to store database in MongoDB')
 				console.log('Loggin for user email', props.userme.name)
 				const routeData = {
-					route_id: 'route_1'+Date.now(),  // You will need a way to generate unique route IDs
+					route_id: 'route_1' + Date.now(),  // You will need a way to generate unique route IDs
 					start_point_lat_lng: `Point(${startLocation.value.lat}, ${startLocation.value.lng})`,
 					end_point_lat_lng: `Point(${destination.value.lat}, ${destination.value.lng})`,
 					start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
 					end_point_name: await getLocationName(destination.value.lat, destination.value.lng),
 					transport_mode: travelMode.value === 'DRIVE' ? 'car' : 'public transport',
-					carbon_emission: 0,  
+					carbon_emission: 0,
 					timestamp: new Date().toISOString(),
-					user_id: props.userme.email  
+					user_id: props.userme.email
 				};
 
 				try {
