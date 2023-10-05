@@ -49,6 +49,18 @@ def read_all_routes():
         route["_id"] = str(route["_id"])
     return jsonify(all_routes), 200
 
+# Read All EMAIL OF USER(GET)
+@app.route("/routes/email", methods=['GET'])
+def read_all_routes():
+    email = request.args.get('email')
+    if email:
+        all_routes = list(collection.find({"user_id": email}))
+        for route in all_routes:
+            route["_id"] = str(route["_id"])
+        return jsonify(all_routes), 200
+    else:
+        return jsonify({"message": "Email parameter is required."}), 400
+
 # Read One (GET)
 @app.route("/routes/<route_id>", methods=['GET'])
 def read_one_route(route_id):
