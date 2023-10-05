@@ -5,11 +5,6 @@
 
 	</header>
 
-	Welcome Home.
-	<!-- <button @click="login">Log in</button> -->
-	<!-- <Login /> -->
-	<!-- <button @click="register">Register</button> -->
-
 	<footer>
 		<!-- footer -->
 	</footer>
