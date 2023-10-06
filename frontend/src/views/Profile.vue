@@ -55,11 +55,15 @@
 						<h3>Routes</h3>
 					</div>
 					<div class="card-body">
+						<!-- Shows if empty -->
+						<div v-if="routes && routes.length == 0">
+							<p class="text-center text-muted">Your route list is empty. You need to commit more.</p>
+						</div>
 						<div v-for="route in paginatedRoutes" :key="route.route_id" class="mb-4">
 							<h5>{{ route.start_point_name }} to {{ route.end_point_name }}</h5>
 							<p><b>Mode of Transport:</b> {{ route.transport_mode }}</p>
 							<p><b>Carbon Emission:</b> {{ route.carbon_emission }}</p>
-							<p><b>Timestamp:</b> {{ new Date(route.timestamp.$date).toLocaleString() }}</p>
+							<p><b>Timestamp:</b> {{ new Date(route.timestamp).toLocaleString() }}</p>
 						</div>
 						<!-- Pagination controls -->
 						<nav aria-label="Pagination-for-routes">
@@ -135,10 +139,6 @@ export default {
 			try {
 				const response = await axios.get(url);
 				this.routes = response.data;  // Assign the fetched routes to the routes data property
-				this.routes = response.data.map(route => {
-					route.timestamp = new Date(route.timestamp.$date).toLocaleString();
-					return route;
-				});
 			} catch (error) {
 				console.error('Error fetching routes:', error);
 			}
