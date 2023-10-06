@@ -4,6 +4,9 @@ from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
 from config import Config
 from datetime import datetime
+from functools import wraps
+
+API_KEY = "PlanItIsTheBestProjectEverXYZ"
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -13,10 +16,25 @@ CORS(app)
 db = client.wad2
 collection = db.routes
 
+# API Key
+
+
+def require_api_key(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        api_key = request.headers.get('x-api-key')
+        if api_key and api_key == API_KEY:
+            return f(*args, **kwargs)
+        else:
+            return jsonify({"message": "Invalid or missing API key."}), 403
+    return decorated
+
+
 # Healthcheck
 
 
 @app.route("/")
+@require_api_key
 def health_check():
     return jsonify(
         {
@@ -29,6 +47,7 @@ def health_check():
 
 
 @app.route("/db")
+@require_api_key
 def db_check():
     client = MongoClient('localhost', serverSelectionTimeoutMS=1000)
     try:
@@ -42,6 +61,7 @@ def db_check():
 
 
 @app.route("/routes", methods=['POST'])
+@require_api_key
 def create_route():
     data = request.json
     data['timestamp'] = datetime.now()
@@ -52,6 +72,7 @@ def create_route():
 
 
 @app.route("/routes", methods=['GET'])
+@require_api_key
 def read_all_routes():
     all_routes = list(collection.find())
     for route in all_routes:
@@ -62,6 +83,7 @@ def read_all_routes():
 
 
 @app.route("/routes/email", methods=['GET'])
+@require_api_key
 def read_all_routes_email():
     email = request.args.get('email')
     if email:
@@ -76,6 +98,7 @@ def read_all_routes_email():
 
 
 @app.route("/routes/<route_id>", methods=['GET'])
+@require_api_key
 def read_one_route(route_id):
     route = collection.find_one({"route_id": route_id})
     if route:
@@ -88,6 +111,7 @@ def read_one_route(route_id):
 
 
 @app.route("/routes/<route_id>", methods=['PUT'])
+@require_api_key
 def update_route(route_id):
     data = request.json
     updated_route = collection.find_one_and_update(
@@ -101,14 +125,13 @@ def update_route(route_id):
 
 
 @app.route("/routes/<route_id>", methods=['DELETE'])
+@require_api_key
 def delete_route(route_id):
     deleted_route = collection.find_one_and_delete({"route_id": route_id})
     if deleted_route:
         return jsonify({"message": "Route deleted successfully."}), 200
     else:
         return jsonify({"message": "Route not found."}), 404
-
-
 
 
 if __name__ == '__main__':
