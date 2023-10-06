@@ -1,9 +1,13 @@
 <template>
-	<Navbar />
-	<!-- {{ user }} -->
-	<!-- <MapItem :userme="user" /> -->
+	<!-- Profile page bugs: -->
 
-	<div class="container">
+	<!--  Fix the issue with the routes not being loaded after a refresh -->
+	<Navbar />
+
+	<div v-if="!isAuthenticated" class="row justify-content-center align-items-center" style="height: 100vh;">
+		<h3 class="text-center p-5">Please log in to use this feature</h3>
+	</div>
+	<div v-else class="container">
 		<div class="row">
 			<div class="col-12 text-center mt-5">
 				<h1>User Profile</h1>
@@ -67,14 +71,15 @@
 <script>
 import MapItem from '../components/MapItem.vue'
 import Navbar from '../components/Navbar.vue';
+// import NotAuthenticated from '../components/NotAuthenticated.vue';
 import { useAuth0 } from '@auth0/auth0-vue';
 import axios from 'axios';
 
 export default {
 	data() {
 		const { user, isAuthenticated } = useAuth0();
-		console.log('Profile.vue: is authenticated?', isAuthenticated)
-		console.log('Profile.vue user', user)
+		// console.log('Profile.vue: is authenticated?', isAuthenticated)
+		// console.log('Profile.vue user', user)
 		return {
 			user,
 			isAuthenticated,
@@ -85,8 +90,12 @@ export default {
 		Navbar,
 		MapItem
 	},
+	// Could be replaced with setup() or etc so that it refreshes on reset 
 	created() {
-		this.fetchRoutes();
+		if (this.isAuthenticated) {
+			this.fetchRoutes();
+
+		}
 	},
 	methods: {
 		async fetchRoutes() {
