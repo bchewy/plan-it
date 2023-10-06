@@ -136,8 +136,11 @@ export default {
 			console.log('Fetching!')
 			const email = this.user.email;  // Get the email from user object
 			const url = `https://api.bchwy.com/routes/email?email=${encodeURIComponent(email)}`;
+			const headers = {
+				'x-api-key': 'PlanItIsTheBestProjectEverXYZ'  // Replace with your actual API key
+			};
 			try {
-				const response = await axios.get(url);
+				const response = await axios.get(url, { headers });
 				this.routes = response.data;  // Assign the fetched routes to the routes data property
 			} catch (error) {
 				console.error('Error fetching routes:', error);

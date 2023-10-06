@@ -259,7 +259,10 @@ export default defineComponent({
 				try {
 					// Send a POST request to the server to store the route data
 					console.log('Attempt store happenin...')
-					await axios.post('https://api.bchwy.com/routes', routeData);  // Adjust the URL to match your server
+					const headers = {
+						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'  // Replace with your actual API key
+					};
+					await axios.post('https://api.bchwy.com/routes', routeData, { headers });  // Adjust the URL to match your server
 				} catch (error) {
 					console.error('Failed to store route data:', error);
 				}
