@@ -155,6 +155,12 @@ export default defineComponent({
 			departureTime.value = `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
 		};
 		const fetchRouteDetails = async () => {
+			const [hours, minutes] = departureTime.value.split(':').map(Number);
+			const departureDate = new Date();
+			departureDate.setHours(hours);
+			departureDate.setMinutes(minutes);
+			const departureTimeISO = departureDate.toISOString();
+
 			let requestData = {
 				origin: {
 					location: {
@@ -173,12 +179,12 @@ export default defineComponent({
 					}
 				},
 				travelMode: travelMode.value,
-				departureTime: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+				departureTime: departureTimeISO,
 				computeAlternativeRoutes: false,
 				routeModifiers: {
-					avoidTolls: false,
-					avoidHighways: false,
-					avoidFerries: false
+					avoidTolls: routeModifiers.value.avoidTolls,
+					avoidHighways: routeModifiers.value.avoidHighways,
+					avoidFerries: routeModifiers.value.avoidFerries
 				},
 				languageCode: "en-US",
 				units: "IMPERIAL"
