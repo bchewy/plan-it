@@ -12,16 +12,19 @@
 				</GMapMap>
 			</div>
 			<div class="col-lg-4 col-md-12 p-4">
+
 				<div class="input-group mb-3">
 					<span class="input-group-text" id="autocomplete-label">Start Location</span>
 					<GMapAutocomplete v-model="startLocation.value" placeholder="Starting point"
 						:componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
 				</div>
+
 				<div class="input-group mb-3">
 					<span class="input-group-text" id="autocomplete-label">End Location</span>
 					<GMapAutocomplete v-model="destination.value" placeholder="Destination"
 						:componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
 				</div>
+
 				<div class="input-group mb-3">
 					<span class="input-group-text">Travel Mode</span>
 					<select v-model="travelMode" class="form-control">
@@ -29,6 +32,38 @@
 						<option value="TRANSIT">Public Transport</option>
 					</select>
 				</div>
+
+				<div class="input-group mb-3">
+					<span class="input-group-text">Departure Time</span>
+					<input type="time" v-model="departureTime" class="form-control">
+					<button class="btn btn-outline-secondary" type="button" @click="addMinutes(5)">+5m</button>
+					<button class="btn btn-outline-secondary" type="button" @click="addMinutes(10)">+10m</button>
+				</div>
+				<div class="mb-3">
+					<span class="d-block mb-2"><strong>Route Modifiers</strong></span>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="avoidTolls"
+							v-model="routeModifiers.avoidTolls">
+						<label class="form-check-label" for="avoidTolls">
+							Avoid Tolls
+						</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="avoidHighways"
+							v-model="routeModifiers.avoidHighways">
+						<label class="form-check-label" for="avoidHighways">
+							Avoid Highways
+						</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="avoidFerries"
+							v-model="routeModifiers.avoidFerries">
+						<label class="form-check-label" for="avoidFerries">
+							Avoid Ferries
+						</label>
+					</div>
+				</div>
+
 				<button class="btn btn-primary mb-4" @click="fetchRouteDetails">Log Route</button>
 				<div v-if="routeDetails">
 					<p><strong>Distance:</strong> {{ routeDetails.distanceMeters }} meters</p>
@@ -71,6 +106,11 @@ export default defineComponent({
 			lat: 0,
 			lng: 0
 		});
+		const routeModifiers = ref({
+			avoidTolls: false,
+			avoidHighways: false,
+			avoidFerries: false
+		});
 		const routeDetails = ref(null);
 		const decodedPolyline = ref([]);  // Decoded polyline data from the API
 		const directionSteps = ref([]);  // Add this line at the beginning of your setup() method
@@ -95,7 +135,32 @@ export default defineComponent({
 			destination.value = { lat, lng };
 		};
 
+		const getCurrentTime = () => {
+			const now = new Date();
+			const hours = String(now.getHours()).padStart(2, '0');
+			const minutes = String(now.getMinutes()).padStart(2, '0');
+			return `${hours}:${minutes}`;
+		};
+
+		const departureTime = ref(getCurrentTime());
+
+		const addMinutes = (minutesToAdd) => {
+			const [hours, minutes] = departureTime.value.split(':').map(Number);
+			const currentTimeInMinutes = hours * 60 + minutes;
+			const newTimeInMinutes = currentTimeInMinutes + minutesToAdd;
+
+			const newHours = Math.floor(newTimeInMinutes / 60) % 24;
+			const newMinutes = newTimeInMinutes % 60;
+
+			departureTime.value = `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
+		};
 		const fetchRouteDetails = async () => {
+			const [hours, minutes] = departureTime.value.split(':').map(Number);
+			const departureDate = new Date();
+			departureDate.setHours(hours);
+			departureDate.setMinutes(minutes);
+			const departureTimeISO = departureDate.toISOString();
+
 			let requestData = {
 				origin: {
 					location: {
@@ -114,12 +179,12 @@ export default defineComponent({
 					}
 				},
 				travelMode: travelMode.value,
-				departureTime: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+				departureTime: departureTimeISO,
 				computeAlternativeRoutes: false,
 				routeModifiers: {
-					avoidTolls: false,
-					avoidHighways: false,
-					avoidFerries: false
+					avoidTolls: routeModifiers.value.avoidTolls,
+					avoidHighways: routeModifiers.value.avoidHighways,
+					avoidFerries: routeModifiers.value.avoidFerries
 				},
 				languageCode: "en-US",
 				units: "IMPERIAL"
@@ -194,7 +259,10 @@ export default defineComponent({
 				try {
 					// Send a POST request to the server to store the route data
 					console.log('Attempt store happenin...')
-					await axios.post('https://api.bchwy.com/routes', routeData);  // Adjust the URL to match your server
+					const headers = {
+						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'  // Replace with your actual API key
+					};
+					await axios.post('https://api.bchwy.com/routes', routeData, { headers });  // Adjust the URL to match your server
 				} catch (error) {
 					console.error('Failed to store route data:', error);
 				}
@@ -246,6 +314,9 @@ export default defineComponent({
 
 
 		return {
+			addMinutes,
+			departureTime,
+			routeModifiers,
 			center,
 			startLocation,
 			destination,

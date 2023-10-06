@@ -1,3 +1,5 @@
 flask
 Flask-Cors
 PyMongo
+flake8
+autopep8
