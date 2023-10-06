@@ -55,12 +55,28 @@
 						<h3>Routes</h3>
 					</div>
 					<div class="card-body">
-						<div v-for="route in routes" :key="route.route_id" class="mb-4">
+						<div v-for="route in paginatedRoutes" :key="route.route_id" class="mb-4">
 							<h5>{{ route.start_point_name }} to {{ route.end_point_name }}</h5>
 							<p><b>Mode of Transport:</b> {{ route.transport_mode }}</p>
 							<p><b>Carbon Emission:</b> {{ route.carbon_emission }}</p>
 							<p><b>Timestamp:</b> {{ new Date(route.timestamp.$date).toLocaleString() }}</p>
 						</div>
+						<!-- Pagination controls -->
+						<nav aria-label="Pagination-for-routes">
+							<ul class="pagination justify-content-center">
+								<li class="page-item" :class="{ disabled: currentPage === 1 }">
+									<a class="page-link" href="#" @click.prevent="currentPage--">Previous</a>
+								</li>
+								<!-- Page count -->
+								<li class="page-item disabled">
+									<span class="page-link">{{ currentPage }} / {{ totalPages }}</span>
+								</li>
+								<li class="page-item" :class="{ disabled: currentPage >= totalPages }">
+									<a class="page-link" href="#" @click.prevent="currentPage++">Next</a>
+								</li>
+							</ul>
+						</nav>
+
 					</div>
 				</div>
 			</div>
@@ -81,9 +97,23 @@ export default {
 		// console.log('Profile.vue: is authenticated?', isAuthenticated)
 		// console.log('Profile.vue user', user)
 		return {
+			currentPage: 1,
+			itemsPerPage: 3,
 			user,
 			isAuthenticated,
 			routes: [],
+		}
+	},
+	computed: {
+		// For pagination
+		paginatedRoutes() {
+			const start = (this.currentPage - 1) * this.itemsPerPage;
+			const end = start + this.itemsPerPage;
+			return this.routes.slice(start, end);
+		},
+		// Total pages
+		totalPages() {
+			return Math.ceil(this.routes.length / this.itemsPerPage);
 		}
 	},
 	components: {
@@ -105,6 +135,10 @@ export default {
 			try {
 				const response = await axios.get(url);
 				this.routes = response.data;  // Assign the fetched routes to the routes data property
+				this.routes = response.data.map(route => {
+					route.timestamp = new Date(route.timestamp.$date).toLocaleString();
+					return route;
+				});
 			} catch (error) {
 				console.error('Error fetching routes:', error);
 			}
