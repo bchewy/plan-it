@@ -2,6 +2,7 @@ version: '3'
 services:
   skills-service:
     image: skilltree/skills-service:2.10.0
+    # public.ecr.aws/bchewy/skilltree:latest --> on ECR
     ports:
       - "8080:8080"
     environment:
@@ -23,6 +24,7 @@ services:
 
   postgres:
     image: postgres
+    # public.ecr.aws/bchewy/skilltree:postgres --> on ECR
     environment:
       - POSTGRES_USER=skills
       - POSTGRES_PASSWORD=skillsPassword
