@@ -1,15 +1,10 @@
 <template>
-  <!-- Profile page bugs: -->
-
-  <!--  Fix the issue with the routes not being loaded after a refresh -->
   <Navbar />
-
-  <div
-    v-if="!isAuthenticated"
-    class="row justify-content-center align-items-center"
-    style="height: 100vh"
-  >
-    <h3 class="text-center p-5">Please log in to use this feature</h3>
+  <div v-if="isLoading || !isAuthenticated" class="loading-screen">
+    <div v-if="isLoading">Loading...</div>
+    <div v-else class="row justify-content-center align-items-center" style="height: 100vh">
+      <h3 class="text-center p-5">Please log in to use this feature</h3>
+    </div>
   </div>
   <div v-else class="container">
     <div class="row">
@@ -29,13 +24,7 @@
           </div>
           <div class="card-body">
             <div class="text-center mb-3">
-              <img
-                :src="user.picture"
-                class="rounded-circle"
-                alt="User profile picture"
-                width="128"
-                height="128"
-              />
+              <img :src="user.picture" class="rounded-circle" alt="User profile picture" width="128" height="128" />
             </div>
             <div class="mb-3"><b>Given Name:</b> {{ user.given_name }}</div>
             <div class="mb-3"><b>Family Name:</b> {{ user.family_name }}</div>
@@ -68,9 +57,7 @@
             <nav aria-label="Pagination-for-routes">
               <ul class="pagination justify-content-center">
                 <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                  <a class="page-link" href="#" @click.prevent="currentPage--"
-                    >Previous</a
-                  >
+                  <a class="page-link" href="#" @click.prevent="currentPage--">Previous</a>
                 </li>
                 <!-- Page count -->
                 <li class="page-item disabled">
@@ -88,7 +75,7 @@
     <!-- Friends Section -->
     <div class="row justify-content-center mt-5">
       <div class="col-lg-9 col-md-6 col-sm-12 mb-4">
-      <AddFriend :user="user"/>
+        <AddFriend :user="user" />
         <div class="card">
           <div class="card-header">
             <h3>Friends</h3>
@@ -145,6 +132,7 @@ export default {
     // console.log('Profile.vue: is authenticated?', isAuthenticated)
     // console.log('Profile.vue user', user)
     return {
+      isLoading: false,
       currentPage: 1,
       itemsPerPage: 3,
       user,
@@ -168,14 +156,16 @@ export default {
   components: {
     Navbar,
     MapItem,
-	AddFriend,
+    AddFriend,
   },
   methods: {
     fetchData() {
-        if (this.isAuthenticated) {
-          this.fetchRoutes();
-          this.fetchFriends();
-        }
+      this.isLoading = true;
+      if (this.isAuthenticated) {
+        this.fetchRoutes();
+        this.fetchFriends();
+      }
+      this.isLoading = false;
     },
     async fetchRoutes() {
       console.log("Fetchin Routes!");
@@ -187,7 +177,7 @@ export default {
       try {
         const response = await axios.get(url, { headers });
         this.routes = response.data; // Assign the fetched routes to the routes data property
-        console.log("Fetched routes!",response.data)
+        console.log("Fetched routes!", response.data)
       } catch (error) {
         console.error("Error fetching routes:", error);
       }
@@ -201,7 +191,7 @@ export default {
       };
       try {
         const response = await axios.get(url, { headers });
-		console.log('fetching friends but data tho',response.data)
+        console.log('Fetched Friends!', response.data)
         this.friends = response.data; // Assign the fetched friends to the friends data property
       } catch (error) {
         console.error("Error fetching friends:", error);
