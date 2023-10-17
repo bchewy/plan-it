@@ -184,20 +184,28 @@ def search_users():
 
 
 @app.route("/friends", methods=['POST'])
-# @require_api_key
 def add_friend():
     data = request.json
-    friends_collection.insert_one(data)
+    user_id = data.get('user_id')
+    user_email = data.get('user_email')
+    friend_email = data.get('friend_email')
+    # Add friend to the user's document
+    friends_collection.update_one(
+        {"user_id": user_id}, 
+        {"$set": {"user_email": user_email}, "$push": {"friends": friend_email}}, 
+        upsert=True
+    )
     return jsonify({"message": "Friend added successfully."}), 201
 
 
 @app.route("/friends", methods=['GET'])
-# @require_api_key
 def list_friends():
-    user_id = request.args.get('user_id')
-    friends = list(friends_collection.find({"user_id": user_id}))
-    for friend in friends:
-        friend["_id"] = str(friend["_id"])
+    email = request.args.get('email')
+    user = friends_collection.find_one({"user_email": email})
+    if user:
+        friends = user.get('friends', [])
+    else:
+        friends = []
     return jsonify(friends), 200
 
 
