@@ -38,7 +38,7 @@ export default {
       }
       try {
         const response = await axios.post(
-          "http://127.0.0.1:5000/friends",
+          "https://api.bchwy.com/friends",
           {
             user_id: this.user.sub,
             user_email: this.user.email,
