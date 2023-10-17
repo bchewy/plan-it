@@ -69,7 +69,7 @@ def db_check():
 
 
 @app.route("/routes", methods=['POST'])
-# @require_api_key
+@require_api_key
 def create_route():
     data = request.json
     data['timestamp'] = datetime.now()
@@ -80,7 +80,7 @@ def create_route():
 
 
 @app.route("/routes", methods=['GET'])
-# @require_api_key
+@require_api_key
 def read_all_routes():
     all_routes = list(collection.find())
     for route in all_routes:
@@ -91,7 +91,7 @@ def read_all_routes():
 
 
 @app.route("/routes/email", methods=['GET'])
-# @require_api_key
+@require_api_key
 def read_all_routes_email():
     email = request.args.get('email')
     if email:
@@ -106,7 +106,7 @@ def read_all_routes_email():
 
 
 @app.route("/routes/<route_id>", methods=['GET'])
-# @require_api_key
+@require_api_key
 def read_one_route(route_id):
     route = collection.find_one({"route_id": route_id})
     if route:
@@ -119,7 +119,7 @@ def read_one_route(route_id):
 
 
 @app.route("/routes/<route_id>", methods=['PUT'])
-# @require_api_key
+@require_api_key
 def update_route(route_id):
     data = request.json
     updated_route = collection.find_one_and_update(
@@ -133,7 +133,7 @@ def update_route(route_id):
 
 
 @app.route("/routes/<route_id>", methods=['DELETE'])
-# @require_api_key
+@require_api_key
 def delete_route(route_id):
     deleted_route = collection.find_one_and_delete({"route_id": route_id})
     if deleted_route:
@@ -143,7 +143,7 @@ def delete_route(route_id):
 
 
 @app.route("/users", methods=['POST'])
-# @require_api_key
+@require_api_key
 def create_or_update_user():
     data = request.json
     print(data)
@@ -174,7 +174,7 @@ def create_or_update_user():
 
 
 @app.route("/users/search", methods=['GET'])
-# @require_api_key
+@require_api_key
 def search_users():
     name = request.args.get('name')
     users = list(user_collection.find({"name": name}))
@@ -184,11 +184,27 @@ def search_users():
 
 
 @app.route("/friends", methods=['POST'])
+@require_api_key
 def add_friend():
     data = request.json
     user_id = data.get('user_id')
     user_email = data.get('user_email')
     friend_email = data.get('friend_email')
+
+    # Check if the user is trying to add themselves
+    if user_email == friend_email:
+        return jsonify({"message": "You can't add yourself!"}), 400
+
+    # Check if friend exists in the users database
+    friend = user_collection.find_one({"email": friend_email})
+    if not friend:
+        return jsonify({"message": "Friend not found in users database."}), 404
+
+    # Check if friend is already added
+    user = friends_collection.find_one({"user_id": user_id})
+    if user and friend_email in user.get('friends', []):
+        return jsonify({"message": "Friend already added."}), 400
+
     # Add friend to the user's document
     friends_collection.update_one(
         {"user_id": user_id}, 
@@ -199,6 +215,7 @@ def add_friend():
 
 
 @app.route("/friends", methods=['GET'])
+@require_api_key
 def list_friends():
     email = request.args.get('email')
     user = friends_collection.find_one({"user_email": email})
