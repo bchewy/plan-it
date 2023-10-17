@@ -175,7 +175,7 @@ export default {
     async fetchFriends() {
       console.log("Fetching Friends!");
       const email = this.user.email; // Get the email from user object
-      const url = `https://api.bchwy.comfriends?email=${encodeURIComponent(email)}`;
+      const url = `https://api.bchwy.com/friends?email=${encodeURIComponent(email)}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
       };
