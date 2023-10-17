@@ -88,7 +88,7 @@
     <!-- Friends Section -->
     <div class="row justify-content-center mt-5">
       <div class="col-lg-9 col-md-6 col-sm-12 mb-4">
-	  	<AddFriend :user="user"/>
+      <AddFriend :user="user"/>
         <div class="card">
           <div class="card-header">
             <h3>Friends</h3>
@@ -120,6 +120,26 @@ import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
 
 export default {
+  created() {
+    this.fetchData();
+  },
+  mounted() {
+    this.fetchData();
+  },
+  watch: {
+    isAuthenticated: {
+      immediate: true,
+      handler() {
+        this.fetchData();
+      },
+    },
+    user: {
+      immediate: true,
+      handler() {
+        this.fetchData();
+      },
+    },
+  },
   data() {
     const { user, isAuthenticated } = useAuth0();
     // console.log('Profile.vue: is authenticated?', isAuthenticated)
@@ -150,16 +170,15 @@ export default {
     MapItem,
 	AddFriend,
   },
-  // Could be replaced with setup() or etc so that it refreshes on reset
-  created() {
-    if (this.isAuthenticated) {
-      this.fetchRoutes();
-      this.fetchFriends();
-    }
-  },
   methods: {
+    fetchData() {
+        if (this.isAuthenticated) {
+          this.fetchRoutes();
+          this.fetchFriends();
+        }
+    },
     async fetchRoutes() {
-      console.log("Fetching!");
+      console.log("Fetchin Routes!");
       const email = this.user.email; // Get the email from user object
       const url = `https://api.bchwy.com/routes/email?email=${encodeURIComponent(email)}`;
       const headers = {
@@ -168,6 +187,7 @@ export default {
       try {
         const response = await axios.get(url, { headers });
         this.routes = response.data; // Assign the fetched routes to the routes data property
+        console.log("Fetched routes!",response.data)
       } catch (error) {
         console.error("Error fetching routes:", error);
       }

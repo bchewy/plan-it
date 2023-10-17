@@ -93,39 +93,16 @@ export default defineComponent({
 	name: 'NavBar',
 	setup() {
 		const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
-
-		// Watch for changes in the isAuthenticated property
-		// watch(isAuthenticated, async (newValue) => {
-		// 	// If the user is authenticated
-		// 	if (newValue) {
-		// 		// Create or update the user in your database
-		// 		try {
-		// 			const response = await fetch('http://127.0.0.1:5000/users', {
-		// 				method: 'POST',
-		// 				headers: {
-		// 					'Content-Type': 'application/json'
-		// 				},
-		// 				body: JSON.stringify({
-		// 					auth0_user_id: user.value.sub,
-		// 					email: user.value.email
-		// 				})
-		// 			});
-		// 			const data = await response.json();
-		// 			console.log('User upserted:', data);
-		// 		} catch (e) {
-		// 			console.error('Failed to upsert user:', e);
-		// 		}
-		// 	}
-		// });
 		watch(user, async (newValue) => {
 			// If the user is authenticated
 			if (newValue) {
 				// Create or update the user in your database
 				try {
-					const response = await fetch('http://127.0.0.1:5000/users', {
+					const response = await fetch('https://api.bchwy.com/users', {
 						method: 'POST',
 						headers: {
-							'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
 						},
 						body: JSON.stringify({
 							auth0_user_id: newValue.sub,
