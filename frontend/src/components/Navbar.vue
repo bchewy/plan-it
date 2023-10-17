@@ -19,6 +19,9 @@
 					<li class="nav-item">
 						<router-link class="nav-link" to="/route">Routing</router-link>
 					</li>
+					<li class="nav-item">
+						<router-link class="nav-link" to="/activity">Activity</router-link>
+					</li>
 				</ul>
 				<ul class="navbar-nav">
 					<!-- If user is not authenticated -->
