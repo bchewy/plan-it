@@ -4,7 +4,12 @@
 		<NavBar />
 
 	</header>
+    <body>
+    <div class="row justify-content-center">
+        <div class="col-3 h1">Community</div>
 
+    </div>
+    </body>
 	<footer>
 		<!-- footer -->
 	</footer>
