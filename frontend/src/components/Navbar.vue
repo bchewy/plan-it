@@ -18,26 +18,6 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-<<<<<<< HEAD
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav me-auto">
-					<li class="nav-item">
-						<router-link class="nav-link" to="/">Home</router-link>
-					</li>
-					<li class="nav-item">
-						<router-link class="nav-link" to="/route">Routing</router-link>
-					</li>
-					<li class="nav-item">
-						<router-link class="nav-link" to="/community">Routing</router-link>
-					</li>
-				</ul>
-				<ul class="navbar-nav">
-					<!-- If user is not authenticated -->
-					<li v-if="!isAuthenticated" class="nav-item">
-						<a class="nav-link" @click.prevent="login">Log in</a>
-					</li>
-					<!-- <li v-if="!isAuthenticated" class="nav-item">
-=======
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
@@ -56,7 +36,6 @@
             <a class="nav-link" @click.prevent="login">Log in</a>
           </li>
           <!-- <li v-if="!isAuthenticated" class="nav-item">
->>>>>>> 4aac2d93beb2932cb2779842c5468c3c11f6d19c
 						<a class="nav-link" @click="signup">Sign up</a>
 					</li> -->
           <!-- If user is authenticated -->
