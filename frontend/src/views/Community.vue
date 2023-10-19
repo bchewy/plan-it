@@ -6,7 +6,7 @@
 	</header>
     <body>
     <div class="row justify-content-center">
-        <div class="col-3 h1">Community</div>
+        <div class="text-center h1 text-muted">Community</div>
 
     </div>
     </body>
