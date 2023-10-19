@@ -17,6 +17,10 @@ const router = createRouter({
 			path: '/profile',
 			component: () => import('./views/Profile.vue')
 		},
+		{
+			path:'/community',
+			component:() => import('./views/Community.vue')
+		}
 	]
 })
 
