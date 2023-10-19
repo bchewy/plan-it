@@ -15,7 +15,7 @@ import NavBar from "../components/Navbar.vue";
 import { useAuth0 } from '@auth0/auth0-vue';
 
 export default {
-	name: 'Home',
+	name: 'Community',
 	components: {
 		NavBar,  // Register the NavBar component
 		// Login
