@@ -25,6 +25,10 @@ library.add(faCircleUser)
 library.add(faTruckFast)
 library.add(faArrowRightFromBracket)
 
+// Prima Vue
+import PrimeVue from 'primevue/config';
+
+
 
 const app = createApp(App)
 app.use(VueGoogleMaps, {
@@ -45,6 +49,8 @@ app.use(
 		}
 	})
 );
+app.use(PrimeVue);
+
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)
 app.mount('#app')
