@@ -6,15 +6,8 @@
       </a>
       <!-- <font-awesome-icon icon="fa-solid fa-user-secret" /> -->
 
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -26,9 +19,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/route">Routing</router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link class="nav-link" to="/activity">Activity</router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link class="nav-link" to="/community">Community</router-link>
           </li>
@@ -43,28 +36,16 @@
 					</li> -->
           <!-- If user is authenticated -->
           <li v-else class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle d-flex align-items-center"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <img
-                :src="user.picture"
-                alt=""
-                class="rounded-circle me-2"
-                style="width: 30px; height: 30px"
-              />
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <img :src="user.picture" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px" />
               Welcome, {{ user.name }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
                 <router-link class="dropdown-item" to="/profile">
                   <font-awesome-icon icon="fa-solid fa-circle-user" />
-                  Profile</router-link
-                >
+                  Profile</router-link>
               </li>
               <!-- <li><router-link class="dropdown-item" to="/journey">
 								<font-awesome-icon icon="fa-solid fa-truck-fast" />
@@ -74,8 +55,7 @@
                 <hr class="dropdown-divider" />
               </li>
               <li>
-                <a class="dropdown-item" @click="logout"
-                  >Logout
+                <a class="dropdown-item" @click="logout">Logout
                   <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" />
                 </a>
               </li>
@@ -93,49 +73,49 @@ import { useAuth0 } from '@auth0/auth0-vue';
 import { watch, computed, defineComponent } from 'vue';
 
 export default defineComponent({
-	name: 'NavBar',
-	setup() {
-		const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
-		watch(user, async (newValue) => {
-			// If the user is authenticated
-			if (newValue) {
-				// Create or update the user in your database
-				try {
-					const response = await fetch('https://api.bchwy.com/users', {
-						method: 'POST',
-						headers: {
+  name: 'NavBar',
+  setup() {
+    const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
+    watch(user, async (newValue) => {
+      // If the user is authenticated
+      if (newValue) {
+        // Create or update the user in your database
+        try {
+          const response = await fetch('https://api.bchwy.com/users', {
+            method: 'POST',
+            headers: {
               'Content-Type': 'application/json',
               'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
-						},
-						body: JSON.stringify({
-							auth0_user_id: newValue.sub,
-							email: newValue.email
-						})
-					});
-					const data = await response.json();
-					console.log('User upserted:', data);
-				} catch (e) {
-					console.error('Failed to upsert user:', e);
-				}
-			}
-		});
-		
-		return {
-			login: async () => {
-				try {
-					await loginWithRedirect({
-						appState: { targetUrl: window.location.pathname }
-					});
-				} catch (e) {
-					console.error('Failed to login:', e);
-				}
-			},
-			logout: () => {
-				logout({ logoutParams: { returnTo: window.location.origin } });
-			},
-			user,
-			isAuthenticated,
-		};
-	}
+            },
+            body: JSON.stringify({
+              auth0_user_id: newValue.sub,
+              email: newValue.email
+            })
+          });
+          const data = await response.json();
+          console.log('User upserted:', data);
+        } catch (e) {
+          console.error('Failed to upsert user:', e);
+        }
+      }
+    });
+
+    return {
+      login: async () => {
+        try {
+          await loginWithRedirect({
+            appState: { targetUrl: window.location.pathname }
+          });
+        } catch (e) {
+          console.error('Failed to login:', e);
+        }
+      },
+      logout: () => {
+        logout({ logoutParams: { returnTo: window.location.origin } });
+      },
+      user,
+      isAuthenticated,
+    };
+  }
 });
 </script>

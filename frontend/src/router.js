@@ -13,17 +13,17 @@ const router = createRouter({
 			path: '/route',
 			component: () => import('./views/Route.vue')
 		},
-		{
-			path: '/activity',
-			component: () => import('./views/Activity.vue')
-		},
+		// {
+		// 	path: '/activity',
+		// 	component: () => import('./views/Activity.vue')
+		// },
 		{
 			path: '/profile',
 			component: () => import('./views/Profile.vue')
 		},
 		{
-			path:'/community',
-			component:() => import('./views/Community.vue')
+			path: '/community',
+			component: () => import('./views/Community.vue')
 		}
 	]
 })
