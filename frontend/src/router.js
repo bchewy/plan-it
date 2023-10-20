@@ -13,10 +13,10 @@ const router = createRouter({
 			path: '/route',
 			component: () => import('./views/Route.vue')
 		},
-		// {
-		// 	path: '/activity',
-		// 	component: () => import('./views/Activity.vue')
-		// },
+		{
+			path: '/debug',
+			component: () => import('./views/Debug.vue')
+		},
 		{
 			path: '/profile',
 			component: () => import('./views/Profile.vue')

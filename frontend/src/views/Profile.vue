@@ -75,7 +75,9 @@
     <!-- Friends Section -->
     <div class="row justify-content-center mt-5">
       <div class="col-lg-9 col-md-6 col-sm-12 mb-4">
+        <!-- Add Friend component is here -->
         <AddFriend :user="user" />
+        <!-- Friend List section -->
         <div class="card">
           <div class="card-header">
             <h3>Friends</h3>
@@ -90,6 +92,26 @@
             </div>
             <div v-for="friend in friends" :key="friend.friend_email" class="mb-4">
               <h5>{{ friend }}</h5>
+            </div>
+          </div>
+        </div>
+        <!-- Friend Requests Section -->
+        <div class="card mt-4">
+          <div class="card-header">
+            <h3>Friend Requests</h3>
+          </div>
+          <div class="container"></div>
+          <div class="card-body">
+            <!-- Shows if empty -->
+            <div v-if="friendRequests && friendRequests.length == 0">
+              <p class="text-center text-muted">
+                You have no friend requests at the moment.
+              </p>
+            </div>
+            <div v-for="request in friendRequests" :key="request.sender_email" class="mb-4">
+              <h5>{{ request.sender_email }}</h5>
+              <button @click="acceptFriendRequest(request._id)">Accept</button>
+              <button @click="declineFriendRequest(request._id)">Decline</button>
             </div>
           </div>
         </div>
@@ -139,6 +161,7 @@ export default {
       isAuthenticated,
       routes: [],
       friends: [],
+      friendRequests: [],
     };
   },
   computed: {
@@ -164,6 +187,7 @@ export default {
       if (this.isAuthenticated) {
         this.fetchRoutes();
         this.fetchFriends();
+        this.fetchFriendRequests();
       }
       this.isLoading = false;
     },
@@ -197,6 +221,54 @@ export default {
         console.error("Error fetching friends:", error);
       }
     },
+    async fetchFriendRequests() {
+      console.log("Fetching Friend Requests!");
+      const email = this.user.email; // Get the email from user object
+      console.log('this is the email in the friend request', email)
+      const url = `http://127.0.0.1:5000/friend_requests?email=${encodeURIComponent(email)}`;
+      const headers = {
+        "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
+      };
+      try {
+        const response = await axios.get(url, { headers });
+        console.log('Fetched Friend Requests!', response.data)
+        this.friendRequests = response.data; // Assign the fetched friend requests to the friendRequests data property
+      } catch (error) {
+        console.error("Error fetching friend requests:", error);
+      }
+    },
+    async acceptFriendRequest(requestId) {
+      console.log("Accepting Friend Request!");
+      const url = `http://127.0.0.1:5000/friend_requests/${requestId}`;
+      const headers = {
+        "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
+      };
+      try {
+        await axios.put(url, {}, { headers });
+        console.log('Friend Request Accepted!', requestId)
+        this.fetchFriendRequests(); // Refresh the friend requests
+      } catch (error) {
+        console.error("Error accepting friend request:", error);
+      }
+    },
+    async declineFriendRequest(requestId) {
+      console.log("Declining Friend Request!");
+      const url = `http://127.0.0.1:5000/friend_requests/${requestId}`;
+      const headers = {
+        "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
+      };
+      try {
+        await axios.delete(url, { headers });
+        console.log('Friend Request Declined!', requestId)
+        this.fetchFriendRequests(); // Refresh the friend requests
+      } catch (error) {
+        console.error("Error declining friend request:", error);
+      }
+    },
+
+
+
   },
 };
 </script>
+

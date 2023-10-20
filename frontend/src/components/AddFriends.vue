@@ -6,10 +6,10 @@
     <div v-if="successMessage" class="alert alert-success" role="alert">
       {{ successMessage }}
     </div>
-    <form @submit.prevent="addFriend">
+    <form @submit.prevent="sendFriendRequest">
       <label for="friendEmail">Friend's Email:</label>
       <input id="friendEmail" v-model="friendEmail" type="text" required />
-      <button type="submit">Add Friend</button>
+      <button type="submit">Send Friend Request</button>
     </form>
   </div>
 </template>
@@ -31,18 +31,17 @@ export default {
     };
   },
   methods: {
-    async addFriend() {
+    async sendFriendRequest() {
       if (!this.user.sub) {
         this.errorMessage = "User prop wasn't passed properly.";
         return;
       }
       try {
         const response = await axios.post(
-          "https://api.bchwy.com/friends",
+          "http://127.0.0.1:5000/friend_requests",
           {
-            user_id: this.user.sub,
-            user_email: this.user.email,
-            friend_email: this.friendEmail,
+            sender_email: this.user.email,
+            receiver_email: this.friendEmail,
           },
           {
             headers: {
@@ -55,25 +54,21 @@ export default {
           }
         );
         if (response.status === 404) {
-          this.errorMessage = "Friend not found in database.";
+          this.errorMessage = "Friend not found";
           this.successMessage = "";
         } else if (response.status === 400) {
-          if (response.data.message === "You can't add yourself!") {
-            this.errorMessage = "Cannot add self.";
-          } else {
-            this.errorMessage = "Friend already added.";
-          }
+          this.errorMessage = "You cannot send a friend request to yourself";
           this.successMessage = "";
         } else if (response.status === 201) {
           this.errorMessage = "";
-          this.successMessage = "Friend added successfully.";
+          this.successMessage = "Friend request sent successfully.";
         } else {
           this.errorMessage = "Unexpected response.";
         }
       } catch (e) {
         this.errorMessage = "Please try again later. The backend may be down.";
       }
-    },
+    }
   },
 };
 </script>

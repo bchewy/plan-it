@@ -19,9 +19,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/route">Routing</router-link>
           </li>
-          <!-- <li class="nav-item">
-            <router-link class="nav-link" to="/activity">Activity</router-link>
-          </li> -->
+          <li class="nav-item">
+            <router-link class="nav-link" to="/debug">Debug</router-link>
+          </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/community">Community</router-link>
           </li>
