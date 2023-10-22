@@ -7,20 +7,14 @@ from datetime import datetime
 from functools import wraps
 from bson import ObjectId
 
-API_KEY = "PlanItIsTheBestProjectEverXYZ"
-
 app = Flask(__name__)
 app.config.from_object(Config)
 client = MongoClient(app.config['MONGO_URI'])
-
 CORS(app)
-
-# Database init
+API_KEY = "PlanItIsTheBestProjectEverXYZ"
 db = client.wad2
 collection = db.routes
 user_collection = db.users
-friends_collection = db.friends
-friend_requests_collection = db.friend_requests
 
 
 # HELPEER FUNCTIONS
@@ -157,193 +151,7 @@ def delete_route(route_id):
     else:
         return jsonify({"message": "Route not found."}), 404
 
-
-###########################################################################################################################################################################
-###################################################################################################
-############################################################################################################
-########################################################################
-################################################################################################################################################################
-###################################################################################################
-############################################################################################################
-########################################################################################################################################################################################################################################
-###################################################################################################
-############################################################################################################
-########################################################################
-
-
-# This is an internal API call, only meant for the frontend to call our backend database to sync with auth0 users.
-# @app.route("/users", methods=['POST'])
-# @require_api_key
-# def create_or_update_user():
-#     data = request.json
-#     print(data)
-#     auth0_user_id = data.get('auth0_user_id')
-#     email = data.get('email')
-#     # Validate the data
-#     if not auth0_user_id or not email:
-#         return jsonify({"message": "Both auth0_user_id and email are required."}), 400
-#     # Check if user exists
-#     existing_user = user_collection.find_one({"auth0_user_id": auth0_user_id})
-#     if existing_user:
-#         # Update user data if necessary
-#         updated_user = user_collection.find_one_and_update(
-#             {"auth0_user_id": auth0_user_id}, {"$set": data}, return_document=ReturnDocument.AFTER)
-#         if updated_user:
-#             updated_user["_id"] = str(updated_user["_id"])
-#             return jsonify({"message": "User updated successfully.", "user": updated_user}), 200
-#     else:
-#         # Create new user document
-#         data['timestamp'] = datetime.now()
-#         user_collection.insert_one(data)
-#         return jsonify({"message": "User created successfully."}), 201
-
-
-# @app.route("/users/search", methods=['GET'])
-# @require_api_key
-# def search_users():
-#     # This is an internal API call, only meant for the frontend to call our backend database to sync with auth0 users.
-#     # Validate the data
-#     email = request.args.get('email')
-#     if not email:
-#         return jsonify({"message": "Email is required."}), 400
-#     users = list(user_collection.find({"email": email}))
-#     if not users:
-#         return jsonify({"message": "User not found."}), 404
-#     for user in users:
-#         user["_id"] = str(user["_id"])
-#     return jsonify(users), 200
-
-
-# @app.route("/friends", methods=['POST'])
-# @require_api_key
-# def add_friend():
-#     data = request.json
-#     user_id = data.get('user_id')
-#     user_email = data.get('user_email')
-#     friend_email = data.get('friend_email')
-
-#     # Check if the user is trying to add themselves
-#     if user_email == friend_email:
-#         return jsonify({"message": "You can't add yourself!"}), 400
-
-#     # Check if friend exists in the users database
-#     friend = user_collection.find_one({"email": friend_email})
-#     if not friend:
-#         return jsonify({"message": "Friend not found in users database."}), 404
-
-#     # Check if friend is already added
-#     user = friends_collection.find_one({"user_id": user_id})
-#     if user and friend_email in user.get('friends', []):
-#         return jsonify({"message": "Friend already added."}), 400
-
-#     # Add friend to the user's document
-#     friends_collection.update_one(
-#         {"user_id": user_id},
-#         {"$set": {"user_email": user_email}, "$push": {"friends": friend_email}},
-#         upsert=True
-#     )
-#     return jsonify({"message": "Friend added successfully."}), 201
-
-
-# @app.route("/friends", methods=['GET'])
-# @require_api_key
-# def list_friends():
-#     email = request.args.get('email')
-#     user = friends_collection.find_one({"user_email": email})
-#     if user:
-#         friends = user.get('friends', [])
-#     else:
-#         friends = []
-#     return jsonify(friends), 200
-
-
-# @app.route("/friend_requests", methods=['POST'])
-# @require_api_key
-# def create_friend_request():
-#     data = request.json
-#     sender_email = data.get('sender_email')
-#     receiver_email = data.get('receiver_email')
-
-#     # Check if body contains the two fields
-#     if not sender_email or not receiver_email:
-#         return jsonify({"message": "Both sender and receiver emails are required."}), 400
-
-#     # Check if the user is trying to add themselves
-#     if sender_email == receiver_email:
-#         return jsonify({"message": "You can't send a friend request to yourself!"}), 400
-
-#     # Check if receiver exists in the users database
-#     receiver = user_collection.find_one({"email": receiver_email})
-#     if not receiver:
-#         return jsonify({"message": "This user was not found."}), 404
-
-#     friend_requests_collection.insert_one(
-#         {"sender_email": sender_email, "receiver_email": receiver_email}
-#     )
-#     return jsonify({"message": "Friend request sent."}), 201
-
-
-# # Fetch all friend requests for this user based on their email
-# @app.route("/friend_requests", methods=['GET'])
-# @require_api_key
-# def list_friend_requests():
-#     print('Looking for friend requests')
-#     email = request.args.get('email')
-#     if not email:
-#         return jsonify({"message": "Email is required."}), 400
-#     friend_request = friend_requests_collection.find_one(
-#         {"receiver_email": email})
-#     print(friend_request)
-#     if friend_request:
-#         sent_requests = friend_request.get('sent_requests', [])
-#     else:
-#         sent_requests = []
-#     return jsonify(sent_requests), 200
-
-
-# @app.route("/friend_requests/<request_id>", methods=['PUT'])
-# @require_api_key
-# def accept_friend_request(request_id):
-#     # Move the friend request from the friend_requests collection to the friends collection
-#     friend_request = friend_requests_collection.find_one_and_delete(
-#         {"_id": ObjectId(request_id)})
-#     if friend_request:
-#         friends_collection.update_one(
-#             {"user_email": friend_request['sender_email']},
-#             {"$push": {"friends": friend_request['receiver_email']}},
-#             upsert=True
-#         )
-#         return jsonify({"message": "Friend request accepted."}), 200
-#     else:
-#         return jsonify({"message": "Friend request not found."}), 404
-
-
-# @app.route("/friend_requests/<request_id>", methods=['DELETE'])
-# @require_api_key
-# def decline_friend_request(request_id):
-#     # Remove the friend request from the friend_requests collection
-#     result = friend_requests_collection.delete_one(
-#         {"_id": ObjectId(request_id)})
-#     if result.deleted_count > 0:
-#         return jsonify({"message": "Friend request declined."}), 200
-#     else:
-#         return jsonify({"message": "Friend request not found."}), 404
-
-
-###########################################################################################################################################################################
-###################################################################################################
-############################################################################################################
-########################################################################
-################################################################################################################################################################
-###################################################################################################
-############################################################################################################
-########################################################################################################################################################################################################################################
-###################################################################################################
-############################################################################################################
-########################################################################
-
-
-
+# Update or create user init into our backend, since we're using auth0
 @app.route("/users", methods=['POST'])
 def create_or_update_user():
     """
@@ -372,7 +180,7 @@ def create_or_update_user():
         user_collection.insert_one(data)
         return jsonify({"message": "User created successfully."}), 201
 
-
+# Users get individual user
 @app.route("/users/<user_email>", methods=['GET'])
 def get_user(user_email):
     """
@@ -389,8 +197,9 @@ def get_user(user_email):
         return jsonify({"message": "User not found."}), 404
 
 
+# Friend Requests Backend Calls
 @app.route("/users/<user_email>/friend_requests", methods=['GET'])
-@require_api_key
+# @require_api_key
 def get_friend_requests(user_email):
     """
     This function handles the GET request at the /users/<user_email>/friend_requests endpoint.
@@ -412,88 +221,125 @@ def get_friend_requests(user_email):
     else:
         # If the user is not found, return a 404 error with a message
         return jsonify({"message": "User not_found."}), 404
+    
 
-
-@app.route("/friend_requests", methods=['POST'])
-def create_friend_request():
+# Friend Request Send
+@app.route("/users/<user_email>/friend_requests/send", methods=['POST'])
+# @require_api_key
+def send_friend_request(user_email):
     """
-    This function handles the POST request at the /friend_requests endpoint.
-    It creates a new friend request between two users.
-    The sender and receiver emails are required in the request body.
-    If the sender or receiver email is not provided, it returns a 400 error with a message.
-    If the sender email is the same as the receiver email, it returns a 400 error with a message.
-    If the receiver is not found, it returns a 404 error with a message.
-    If the sender is not found, it returns a 404 error with a message.
-    If the friend request is successfully created, it returns a 201 status with a message.
+    This function handles the POST request at the /users/<user_email>/friend_requests/send endpoint.
+    It sends a friend request from the current user to the user with the given email.
+    If both users are found, it adds the friend request to the current user's friendRequests.sent list
+    and the receiving user's friendRequests.received list.
+    If any user is not found, it returns a 404 error with a message.
     """
-    data = request.json
-    sender_email = data.get('sender_email')
-    receiver_email = data.get('receiver_email')
+    # Find the current user in the database using the provided email
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        # Get the email of the user to send the friend request to
+        friend_email = request.json.get('friend_email')
+        # Check if the friend request has already been sent
+        if friend_email in current_user['friendRequests']['sent']:
+            return jsonify({"message": "Friend request already sent."}), 400
+        # Find the user to send the friend request to in the database
+        friend_user = user_collection.find_one({"email": friend_email})
+        if friend_user:
+            # Add the friend request to the current user's friendRequests.sent list
+            current_user['friendRequests']['sent'].append(friend_email)
+            user_collection.update_one({"email": user_email}, {"$set": current_user})
 
-    # Error Handling
-    if not sender_email or not receiver_email:
-        return jsonify({"message": "Both sender and receiver emails are required."}), 400
-    if sender_email == receiver_email:
-        return jsonify({"message": "You can't send a friend request to yourself!"}), 400
-    receiver = user_collection.find_one({"email": receiver_email})
-    if not receiver:
-        return jsonify({"message": "This user was not found."}), 404
-    sender = user_collection.find_one({"email": sender_email})
-    if not sender:
-        return jsonify({"message": "Sender not found."}), 404
-    # Error Handling end.
+            # Add the friend request to the receiving user's friendRequests.received list
+            friend_user['friendRequests']['received'].append(user_email)
+            user_collection.update_one({"email": friend_email}, {"$set": friend_user})
 
-    friend_request = {"sender_email": sender_email, "receiver_email": receiver_email}
-    friend_requests_collection.insert_one(friend_request)
-    user_collection.update_one({"email": sender_email}, { "$push": {"friendRequests.sent": friend_request["_id"]}})
-    user_collection.update_one({"email": receiver_email}, {"$push": {"friendRequests.received": friend_request["_id"]}})
-    return jsonify({"message": "Friend request sent."}), 201
+            return jsonify({"message": "Friend request sent successfully."}), 200
+        else:
+            # If the user to send the friend request to is not found, return a 404 error with a message
+            return jsonify({"message": "Friend not found."}), 404
+    else:
+        # If the current user is not found, return a 404 error with a message
+        return jsonify({"message": "User not found."}), 404
+    
 
-
-@app.route("/friend_requests/<request_id>", methods=['PUT'])
-def accept_friend_request(request_id):
+# Friend Request Decline
+@app.route("/users/<user_email>/friend_requests/decline", methods=['POST'])
+# @require_api_key
+def decline_friend_request(user_email):
     """
-    This function handles the PUT request at the /friend_requests/<request_id> endpoint.
-    It accepts a friend request between two users.
-    The request_id is required in the URL.
-    If the friend request is not found, it returns a 404 error with a message.
-    If the friend request is successfully accepted, it removes the request from the sender's and receiver's friendRequests and adds each other to their friends list, then returns a 200 status with a message.
+    This function handles the POST request at the /users/<user_email>/friend_requests/decline endpoint.
+    It declines a friend request from the current user to the user with the given email.
+    If the user is found, it removes the friend request from the user's friendRequests.received list.
+    If the user is not found, it returns a 404 error with a message.
     """
-    friend_request = friend_requests_collection.find_one_and_delete(
-        {"_id": ObjectId(request_id)})
-    if friend_request:
-        sender = user_collection.find_one(
-            {"email": friend_request['sender_email']})
-        receiver = user_collection.find_one(
-            {"email": friend_request['receiver_email']})
-        if sender and receiver:
-            user_collection.update_one({"_id": sender["_id"]}, {"$pull": { "friendRequests.sent": friend_request["_id"]}, "$push": {"friends": receiver["_id"]}})
-            user_collection.update_one({"_id": receiver["_id"]}, {"$pull": {"friendRequests.received": friend_request["_id"]}, "$push": {"friends": sender["_id"]}})
-            return jsonify({"message": "Friend request accepted."}), 200
-    return jsonify({"message": "Friend request not found."}), 404
+    # Find the current user in the database using the provided email
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        # Get the email of the user to decline the friend request from
+        friend_email = request.json.get('friend_email')
+        # Find the user to decline the friend request from in the database
+        friend_user = user_collection.find_one({"email": friend_email})
+        if friend_user:
+            # Check if the friend request has already been declined
+            if user_email not in friend_user['friendRequests']['received']:
+                return jsonify({"message": "Friend request already declined or not found."}), 400
+            # Remove the friend request from the user's friendRequests.received list
+            friend_user['friendRequests']['received'].remove(user_email)
+            user_collection.update_one({"email": friend_email}, {"$set": friend_user})
 
+            # Also remove the friend request from the current user's friendRequests.sent list
+            current_user['friendRequests']['sent'].remove(friend_email)
+            user_collection.update_one({"email": user_email}, {"$set": current_user})
 
-@app.route("/friend_requests/<request_id>", methods=['DELETE'])
-def decline_friend_request(request_id):
+            return jsonify({"message": "Friend request declined successfully."}), 200
+        else:
+            # If the user to decline the friend request from is not found, return a 404 error with a message
+            return jsonify({"message": "Friend not found."}), 404
+    else:
+        # If the current user is not found, return a 404 error with a message
+        return jsonify({"message": "User not found."}), 404
+
+# Friend Request Accept
+@app.route("/users/<user_email>/friend_requests/accept", methods=['POST'])
+# @require_api_key
+def accept_friend_request(user_email):
     """
-    This function handles the DELETE request at the /friend_requests/<request_id> endpoint.
-    It declines a friend request between two users.
-    The request_id is required in the URL.
-    If the friend request is not found, it returns a 404 error with a message.
-    If the friend request is successfully declined, it removes the request from the sender's and receiver's friendRequests and returns a 200 status with a message.
+    This function handles the POST request at the /users/<user_email>/friend_requests/accept endpoint.
+    It accepts a friend request from the current user to the user with the given email.
+    If the user is found, it adds the current user to the user's friends list and removes the friend request
+    from the user's friendRequests.received list.
+    If the user is not found, it returns a 404 error with a message.
     """
-    friend_request = friend_requests_collection.find_one_and_delete(
-        {"_id": ObjectId(request_id)})
-    if friend_request:
-        sender = user_collection.find_one(
-            {"email": friend_request['sender_email']})
-        receiver = user_collection.find_one(
-            {"email": friend_request['receiver_email']})
-        if sender and receiver:
-            user_collection.update_one({"_id": sender["_id"]}, { "$pull": {"friendRequests.sent": friend_request["_id"]}})
-            user_collection.update_one({"_id": receiver["_id"]}, { "$pull": {"friendRequests.received": friend_request["_id"]}})
-            return jsonify({"message": "Friend request declined."}), 200
-    return jsonify({"message": "Friend request not found."}), 404
+    # Find the current user in the database using the provided email
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        # Get the email of the user to accept the friend request from
+        friend_email = request.json.get('friend_email')
+        # Find the user to accept the friend request from in the database
+        friend_user = user_collection.find_one({"email": friend_email})
+        if friend_user:
+            # Check if the friend request has already been accepted or does not exist
+            if user_email not in friend_user['friendRequests']['received']:
+                return jsonify({"message": "Friend request already accepted or not found."}), 400
+            # Add the current user to the user's friends list
+            friend_user['friends'].append(user_email)
+            # Remove the friend request from the user's friendRequests.received list
+            friend_user['friendRequests']['received'].remove(user_email)
+            user_collection.update_one({"email": friend_email}, {"$set": friend_user})
+
+            # Also remove the friend request from the current user's friendRequests.sent list
+            current_user['friendRequests']['sent'].remove(friend_email)
+            # Add the friend to the current user's friends list
+            current_user['friends'].append(friend_email)
+            user_collection.update_one({"email": user_email}, {"$set": current_user})
+
+            return jsonify({"message": "Friend request accepted successfully."}), 200
+        else:
+            # If the user to accept the friend request from is not found, return a 404 error with a message
+            return jsonify({"message": "Friend not found."}), 404
+    else:
+        # If the current user is not found, return a 404 error with a message
+        return jsonify({"message": "User not found."}), 404
 
 
 if __name__ == '__main__':
