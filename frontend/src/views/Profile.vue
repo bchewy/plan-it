@@ -175,7 +175,7 @@ export default {
       this.isLoading = false;
     },
     async fetchUser() {
-      const url = `http://127.0.0.1:5000/users/${encodeURIComponent(this.user.email)}`;
+      const url = `https://api.bchwy.com/users/${encodeURIComponent(this.user.email)}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };
@@ -190,7 +190,7 @@ export default {
       }
     },
     async fetchFriendRequests() {
-      const url = `http://127.0.0.1:5000/users/${encodeURIComponent(this.user.email)}/friend_requests`;
+      const url = `https://api.bchwy.com/users/${encodeURIComponent(this.user.email)}/friend_requests`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };

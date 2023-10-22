@@ -40,7 +40,7 @@ export default {
       }
       try {
         const response = await axios.post(
-          `http://127.0.0.1:5000/users/${this.user.email}/friend_requests/send`,
+          `https://api.bchwy.com/users/${this.user.email}/friend_requests/send`,
           {
             friend_email: this.friendEmail,
           },
