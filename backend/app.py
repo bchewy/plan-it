@@ -184,6 +184,25 @@ def get_user(user_email):
     else:
         return jsonify({"message": "User not found."}), 404
 
+# Users search for multiple users
+@app.route("/users/search/<search_term>", methods=['GET'])
+@require_api_key
+def search_users(search_term):
+    """
+    This function handles the GET request at the /users/search/<search_term> endpoint.
+    It retrieves the users that match the given search term.
+    If any users are found, it returns a JSON array containing the user data.
+    If no users are found, it returns a 404 error with a message.
+    """
+    if len(search_term) < 5:
+        return jsonify({"message": "Please enter at least 5 characters."}), 400
+    users = list(user_collection.find({"email": {"$regex": search_term}}))
+    if users:
+        users = [convert_objectid_to_string(user) for user in users]
+        return jsonify(users), 200
+    else:
+        return jsonify({"message": "No users found."}), 404
+
 
 # Friend Requests Backend Calls
 @app.route("/users/<user_email>/friend_requests", methods=['GET'])

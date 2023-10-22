@@ -35,6 +35,16 @@
             <div class="mb-3"><b>Last Updated:</b> {{ user.updated_at }}</div>
           </div>
         </div>
+        <div class="card mt-4 mb-4">
+          <div class="card-header">
+            <h3 class="mb-0">Friends</h3>
+          </div>
+          <div class="card-body">
+            <div v-for="friend in friends" :key="friend" class="mb-4">
+              <h5>{{ friend }}</h5>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- Routes Column -->
       <div class="col-lg-9 col-md-6 col-sm-12 mb-4">
@@ -75,16 +85,8 @@
       </div>
     </div>
     <!-- Friends -->
-    <div class="card mt-4 mb-4">
-      <div class="card-header">
-        <h3 class="mb-0">Friends</h3>
-      </div>
-      <div class="card-body">
-        <div v-for="friend in friends" :key="friend" class="mb-4">
-          <h5>{{ friend }}</h5>
-        </div>
-      </div>
-    </div>
+    <!-- <div class="row justify-content-center mt-5"> -->
+
     <div class="card mt-4 mb-4">
       <div class="card-header">
         <h3 class="mb-0">Friend Requests</h3>
@@ -98,6 +100,8 @@
         <FriendRequest v-for="request in sentRequests" :key="request" :friend="request" :user="user" :sentRequests="sentRequests" type="sent" />
       </div>
     </div>
+    <!-- </div> -->
+
 
   </div>
 </template>
