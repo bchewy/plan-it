@@ -41,6 +41,7 @@ export default {
 				const response = await axios.post(url, body, { headers });
 				this.showAlert = true;
 				this.alertMessage = 'Friend request accepted.';
+				this.$emit('refresh');
 			} catch (error) {
 				console.error("Error accepting friend request", error);
 			}
@@ -54,6 +55,7 @@ export default {
 				const response = await axios.post(url, body, { headers });
 				this.showAlert = true;
 				this.alertMessage = 'Friend request declined.';
+				this.$emit('refresh');
 			} catch (error) {
 				console.error("Error declining friend request", error);
 			}

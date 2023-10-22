@@ -60,6 +60,7 @@ export default {
         );
         if (response.status === 200) {
           this.successMessage = "Friend request sent successfully.";
+          this.$emit('friendRequestSent'); // Emit an event to the parent component to update the page
         } else if (response.status === 400) {
           this.errorMessage = "Friend request already sent.";
         } else if (response.status === 404) {
