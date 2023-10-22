@@ -330,5 +330,26 @@ def accept_friend_request(user_email):
         return jsonify({"message": "User not found."}), 404
 
 
+# Add levels and exp count to users
+@app.route("/users/<user_email>/level", methods=['POST'])
+@require_api_key
+def add_level(user_email):
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        level = request.json.get('level')
+        exp = request.json.get('exp')
+        if level and exp:
+            current_user['level'] += level
+            current_user['exp'] += exp
+            user_collection.update_one({"email": user_email}, {"$set": current_user})
+            return jsonify({"message": "Level and exp added successfully."}), 200
+        else:
+            return jsonify({"message": "Level and exp are required."}), 400
+    else:
+        return jsonify({"message": "User not found."}), 404
+
+
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8888, debug=True)  # must be same as gunicorn

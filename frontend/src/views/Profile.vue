@@ -182,7 +182,6 @@ export default {
 
       try {
         const response = await axios.get(url, { headers });
-        console.log('Response received from fetching user.')
         this.friends = response.data.friends;
 
       } catch (error) {
@@ -197,7 +196,6 @@ export default {
 
       try {
         const response = await axios.get(url, { headers });
-        console.log('Response received from fetching friend request.')
         this.receivedRequests = response.data.received;
         this.sentRequests = response.data.sent;
 
@@ -207,7 +205,6 @@ export default {
 
     },
     async fetchRoutes() {
-      // console.log("Fetching Routes!");
       const email = this.user.email; // Get the email from user object
       const url = `https://api.bchwy.com/routes/email?email=${encodeURIComponent(email)}`;
       const headers = {

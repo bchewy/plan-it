@@ -15,21 +15,22 @@
 
 				<div class="input-group mb-3">
 					<span class="input-group-text" id="autocomplete-label">Start Location</span>
-					<GMapAutocomplete v-model="startLocation.value" placeholder="Starting point"
-						:componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+					<GMapAutocomplete v-model="startLocation.value" placeholder="Starting point" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
 				</div>
 
 				<div class="input-group mb-3">
 					<span class="input-group-text" id="autocomplete-label">End Location</span>
-					<GMapAutocomplete v-model="destination.value" placeholder="Destination"
-						:componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
+					<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
 				</div>
-
+				<!-- <VueConfetti ref="confetti" /> -->
 				<div class="input-group mb-3">
 					<span class="input-group-text">Travel Mode</span>
 					<select v-model="travelMode" class="form-control">
 						<option value="DRIVE">Drive</option>
+						<option value="TWO_WHEELER">Motorbike</option>
 						<option value="TRANSIT">Public Transport</option>
+						<option value="BICYCLE">Bicycle</option>
+						<option value="WALK">Walk</option>
 					</select>
 				</div>
 
@@ -42,22 +43,19 @@
 				<div class="mb-3">
 					<span class="d-block mb-2"><strong>Route Modifiers</strong></span>
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="avoidTolls"
-							v-model="routeModifiers.avoidTolls">
+						<input class="form-check-input" type="checkbox" value="" id="avoidTolls" v-model="routeModifiers.avoidTolls">
 						<label class="form-check-label" for="avoidTolls">
 							Avoid Tolls
 						</label>
 					</div>
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="avoidHighways"
-							v-model="routeModifiers.avoidHighways">
+						<input class="form-check-input" type="checkbox" value="" id="avoidHighways" v-model="routeModifiers.avoidHighways">
 						<label class="form-check-label" for="avoidHighways">
 							Avoid Highways
 						</label>
 					</div>
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="avoidFerries"
-							v-model="routeModifiers.avoidFerries">
+						<input class="form-check-input" type="checkbox" value="" id="avoidFerries" v-model="routeModifiers.avoidFerries">
 						<label class="form-check-label" for="avoidFerries">
 							Avoid Ferries
 						</label>
@@ -66,8 +64,9 @@
 
 				<button class="btn btn-primary mb-4" @click="fetchRouteDetails">Log Route</button>
 				<div v-if="routeDetails">
-					<p><strong>Distance:</strong> {{ routeDetails.distanceMeters }} meters</p>
-					<p><strong>Duration:</strong> {{ routeDetails.duration }}</p>
+					<p><strong>Distance:</strong> {{ routeDetails.distanceMeters }} meters ({{ routeDetails.distanceMeters / 1000 }} kilometers) </p>
+					<p><strong>Duration:</strong> {{ routeDetails.duration }} seconds </p>
+					<!-- <p><strong>Arrival Time:</strong> {{ new Date(departureDate.getTime() + routeDetails.duration * 1000).toLocaleTimeString() }} </p> -->
 					<div v-if="directionSteps.length > 0" style="max-height: 300px; overflow-y: auto;">
 						<h2>Directions:</h2>
 						<ol>
@@ -86,17 +85,19 @@
 import { ref, defineComponent, computed } from "vue";
 import axios from "axios";
 import { useAuth0 } from '@auth0/auth0-vue';
-// import { useStore } from 'vuex';
-
+import VueConfetti from 'vue-confetti'
 
 export default defineComponent({
+	components: {
+		VueConfetti
+	},
 	props: ['userme'],
 	setup(props) {
-		// const store = useStore();
 		const { user, isAuthenticated } = useAuth0();
-		// console.log('is authenticated?', isAuthenticated)
-		// console.log('user', user)
 		const travelMode = ref("DRIVE");  // Default is "DRIVE"
+		const confetti = ref(null);
+		// confetti.value.start();  // Start the confetti animation
+
 		const center = { lat: 1.3331, lng: 103.7428 };
 		const startLocation = ref({
 			lat: 0,
@@ -112,10 +113,9 @@ export default defineComponent({
 			avoidFerries: false
 		});
 		const routeDetails = ref(null);
-		const decodedPolyline = ref([]);  // Decoded polyline data from the API
-		const directionSteps = ref([]);  // Add this line at the beginning of your setup() method
+		const decodedPolyline = ref([]);
+		const directionSteps = ref([]);
 
-		// original straight polyline
 		const polylinePath = computed(() => {
 			if (startLocation.value.lat && startLocation.value.lng && destination.value.lat && destination.value.lng) {
 				return [startLocation.value, destination.value];
@@ -202,25 +202,13 @@ export default defineComponent({
 					}
 				});
 
-				//Error Checking
-				// console.log(JSON.stringify(response.data, null, 2));  // Log the entire API response
-				// console.log("Steps from API:", response.data.routes[0]?.legs[0]?.steps);
-				// console.log(startLocation.value)
-
-
-				// if (response.data.routes[0]?.legs[0]?.steps) {
-				// 	directionSteps.value = response.data.routes[0].legs[0].steps.map(step => step.html_instructions);
-				// }
-
 				if (response.data.routes[0]?.legs[0]?.steps) {
 					directionSteps.value = response.data.routes[0].legs[0].steps;
 				}
 
-				// console.log('directionSteps:', JSON.stringify(directionSteps.value, null, 2));
-				routeDetails.value = response.data.routes[0];  // Assuming the first route is what you want
-				// Decode the encodedPolyline and update decodedPolyline
+				routeDetails.value = response.data.routes[0];
 				const encodedPolyline = response.data.routes[0].polyline.encodedPolyline;
-				decodedPolyline.value = decodePolyline(encodedPolyline);  // Assume decodePolyline is a function to decode the polyline
+				decodedPolyline.value = decodePolyline(encodedPolyline);
 
 				// Directions
 				directionSteps.value = response.data.routes[0].legs[0].steps.map(step => step);
@@ -240,25 +228,23 @@ export default defineComponent({
 					return '';  // Return an empty string if the location name could not be fetched
 				};
 
-				// Completed Fetching processing plotting
 				// Store in DB
-				console.log('Attempting to store database in MongoDB')
-				console.log('Loggin for user email', props.userme.name)
+				console.log("Route stored in the database for this user.")
 				const routeData = {
 					route_id: 'route_1' + Date.now(),  // You will need a way to generate unique route IDs
 					start_point_lat_lng: `Point(${startLocation.value.lat}, ${startLocation.value.lng})`,
 					end_point_lat_lng: `Point(${destination.value.lat}, ${destination.value.lng})`,
 					start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
 					end_point_name: await getLocationName(destination.value.lat, destination.value.lng),
-					transport_mode: travelMode.value === 'DRIVE' ? 'car' : 'public transport',
-					carbon_emission: 0,
+					transport_mode: travelMode.value,
+					// carbon_emission: calculateCarbonEmission(travelMode.value, routeDetails.value.distanceMeters),  // Assume calculateCarbonEmission is a function to calculate the carbon emission
+					carbon_emission: 0,  // Assume calculateCarbonEmission is a function to calculate the carbon emission
 					timestamp: new Date().toISOString(),
 					user_id: props.userme.email
 				};
 
 				try {
 					// Send a POST request to the server to store the route data
-					console.log('Attempt store happenin...')
 					const headers = {
 						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'  // Replace with your actual API key
 					};
@@ -266,8 +252,6 @@ export default defineComponent({
 				} catch (error) {
 					console.error('Failed to store route data:', error);
 				}
-
-				console.log('Route data stored successfully.. we think?');
 			} catch (error) {
 				console.error("Failed to fetch route details:", error);
 			}
@@ -330,8 +314,6 @@ export default defineComponent({
 			directionSteps,
 			user,
 			isAuthenticated,
-			// user: computed(() => store.getters.user),
-			// isAuthenticated: computed(() => store.getters.isAuthenticated)
 		};
 	}
 });

@@ -3,7 +3,7 @@
     <!-- nav -->
     <NavBar />
   </header>
-  <AddFriends :user="user" />
+  <!-- <AddFriends :user="user" /> -->
 
 
   <footer>

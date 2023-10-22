@@ -38,9 +38,7 @@ export default {
 				const url = `https://api.bchwy.com/users/${encodeURIComponent(email)}/friend_requests/accept`;
 				const body = { friend_email: this.friend };
 				const headers = { 'Content-Type': 'application/json' };
-				console.log('url', url)
 				const response = await axios.post(url, body, { headers });
-				console.log('Reponse of accepting request', response);
 				this.showAlert = true;
 				this.alertMessage = 'Friend request accepted.';
 			} catch (error) {
@@ -53,8 +51,6 @@ export default {
 				const url = `https://api.bchwy.com/users/${encodeURIComponent(email)}/friend_requests/decline`;
 				const body = { friend_email: this.friend };
 				const headers = { 'Content-Type': 'application/json' };
-				console.log('url', url)
-
 				const response = await axios.post(url, body, { headers });
 				this.showAlert = true;
 				this.alertMessage = 'Friend request declined.';
