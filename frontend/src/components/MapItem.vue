@@ -5,7 +5,7 @@
 		</div>
 		<div v-else class="row">
 			<div class="col-lg-8 col-md-12">
-				<GMapMap :center="center" :zoom="12" map-type-id="terrain" style="width: 100%; height: 100vh;">
+				<GMapMap :center="center" :zoom="zoom" map-type-id="terrain" style="width: 100%; height: 100vh;">
 					<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 					<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
 					<GMapPolyline :path="decodedPolyline" :editable="true" ref="polyline" />
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { ref, defineComponent, computed } from "vue";
+import { ref, defineComponent, computed, reactive } from "vue";
 import axios from "axios";
 import { useAuth0 } from '@auth0/auth0-vue';
 import VueConfetti from 'vue-confetti'
@@ -96,9 +96,8 @@ export default defineComponent({
 		const { user, isAuthenticated } = useAuth0();
 		const travelMode = ref("DRIVE");  // Default is "DRIVE"
 		const confetti = ref(null);
-		// confetti.value.start();  // Start the confetti animation
-
-		const center = { lat: 1.3331, lng: 103.7428 };
+		const zoom = ref(12);  // Default zoom level
+		const center = reactive({ lat: 1.3331, lng: 103.7428 });
 		const startLocation = ref({
 			lat: 0,
 			lng: 0
@@ -115,24 +114,58 @@ export default defineComponent({
 		const routeDetails = ref(null);
 		const decodedPolyline = ref([]);
 		const directionSteps = ref([]);
-
 		const polylinePath = computed(() => {
 			if (startLocation.value.lat && startLocation.value.lng && destination.value.lat && destination.value.lng) {
 				return [startLocation.value, destination.value];
 			}
 			return [];
 		});
-
 		const setStartLocation = (place) => {
 			const lat = Number(place.geometry.location.lat());
 			const lng = Number(place.geometry.location.lng());
 			startLocation.value = { lat, lng };
+			center.lat = lat;
+			center.lng = lng;
+			if (destination.value.lat && destination.value.lng) {
+				const distance = getDistance(startLocation.value, destination.value);
+				zoom.value = getZoomLevel(distance);
+			}
+
 		};
+
+		function getDistance(location1, location2) {
+			const R = 6371e3; // metres
+			const φ1 = location1.lat * Math.PI / 180; // φ, λ in radians
+			const φ2 = location2.lat * Math.PI / 180;
+			const Δφ = (location2.lat - location1.lat) * Math.PI / 180;
+			const Δλ = (location2.lng - location1.lng) * Math.PI / 180;
+
+			const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+				Math.cos(φ1) * Math.cos(φ2) *
+				Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+			const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+			const distance = R * c; // in metres
+			return distance;
+		}
+
+		function getZoomLevel(distance) {
+			if (distance > 10000) return 10;
+			if (distance > 5000) return 12;
+			if (distance > 2000) return 12;
+			if (distance > 1000) return 12;
+			if (distance > 500) return 12;
+			return 18;
+		}
 
 		const setDestination = (place) => {
 			const lat = Number(place.geometry.location.lat());
 			const lng = Number(place.geometry.location.lng());
 			destination.value = { lat, lng };
+			if (startLocation.value.lat && startLocation.value.lng) {
+				const distance = getDistance(startLocation.value, destination.value);
+				zoom.value = getZoomLevel(distance);
+			}
 		};
 
 		const getCurrentTime = () => {
@@ -314,6 +347,7 @@ export default defineComponent({
 			directionSteps,
 			user,
 			isAuthenticated,
+			zoom
 		};
 	}
 });
