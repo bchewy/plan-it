@@ -79,10 +79,9 @@
         <AddFriend :user="user" />
         <!-- Friend List section -->
         <div class="card">
-          <div class="card-header">
+          <div class="card-header bg-secondary text-white">
             <h3>Friends</h3>
           </div>
-          <div class="container"></div>
           <div class="card-body">
             <!-- Shows if empty -->
             <div v-if="friends && friends.length == 0">
@@ -97,10 +96,9 @@
         </div>
         <!-- Friend Requests Section -->
         <div class="card mt-4">
-          <div class="card-header">
+          <div class="card-header bg-secondary text-white">
             <h3>Friend Requests</h3>
           </div>
-          <div class="container"></div>
           <div class="card-body">
             <!-- Shows if empty -->
             <div v-if="friendRequests && friendRequests.length == 0">
@@ -110,8 +108,8 @@
             </div>
             <div v-for="request in friendRequests" :key="request.sender_email" class="mb-4">
               <h5>{{ request.sender_email }}</h5>
-              <button @click="acceptFriendRequest(request._id)">Accept</button>
-              <button @click="declineFriendRequest(request._id)">Decline</button>
+              <button class="btn btn-success" @click="acceptFriendRequest(request._id)">Accept</button>
+              <button class="btn btn-danger" @click="declineFriendRequest(request._id)">Decline</button>
             </div>
           </div>
         </div>
