@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS
 from pymongo import MongoClient, ReturnDocument
 from pymongo.errors import ServerSelectionTimeoutError
@@ -10,12 +10,19 @@ from bson import ObjectId
 app = Flask(__name__)
 app.config.from_object(Config)
 client = MongoClient(app.config['MONGO_URI'])
-CORS(app)
+# CORS(app)
+# CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"]}})
 API_KEY = "PlanItIsTheBestProjectEverXYZ"
 db = client.wad2
 collection = db.routes
 user_collection = db.users
 
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, x-api-key')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH')
+    return response
 
 # HELPEER FUNCTIONS
 def convert_objectid_to_string(data):
@@ -199,7 +206,7 @@ def get_user(user_email):
 
 # Friend Requests Backend Calls
 @app.route("/users/<user_email>/friend_requests", methods=['GET'])
-# @require_api_key
+@require_api_key
 def get_friend_requests(user_email):
     """
     This function handles the GET request at the /users/<user_email>/friend_requests endpoint.
@@ -272,6 +279,12 @@ def decline_friend_request(user_email):
     If the user is found, it removes the friend request from the user's friendRequests.received list.
     If the user is not found, it returns a 404 error with a message.
     """
+    print("\n-------------------------")
+    print("Declining friend request")
+    print("Sender Email (user): ", user_email)
+    print("Receiver (friend) email", request.json.get('friend_email'))
+    print(f"{user_email} is declining {request.json.get('friend_email')}")
+    print("-------------------------\n")
     # Find the current user in the database using the provided email
     current_user = user_collection.find_one({"email": user_email})
     if current_user:
@@ -281,20 +294,20 @@ def decline_friend_request(user_email):
         friend_user = user_collection.find_one({"email": friend_email})
         if friend_user:
             # Check if the friend request has already been declined
-            if user_email not in friend_user['friendRequests']['received']:
+            if user_email not in friend_user['friendRequests']['sent']:
                 return jsonify({"message": "Friend request already declined or not found."}), 400
             # Remove the friend request from the user's friendRequests.received list
-            friend_user['friendRequests']['received'].remove(user_email)
+            friend_user['friendRequests']['sent'].remove(user_email)
             user_collection.update_one({"email": friend_email}, {"$set": friend_user})
 
             # Also remove the friend request from the current user's friendRequests.sent list
-            current_user['friendRequests']['sent'].remove(friend_email)
+            current_user['friendRequests']['received'].remove(friend_email)
             user_collection.update_one({"email": user_email}, {"$set": current_user})
 
             return jsonify({"message": "Friend request declined successfully."}), 200
         else:
             # If the user to decline the friend request from is not found, return a 404 error with a message
-            return jsonify({"message": "Friend not found."}), 404
+            return jsonify({"message": "Friend not found."}), 500
     else:
         # If the current user is not found, return a 404 error with a message
         return jsonify({"message": "User not found."}), 404
@@ -310,6 +323,12 @@ def accept_friend_request(user_email):
     from the user's friendRequests.received list.
     If the user is not found, it returns a 404 error with a message.
     """
+    print("\n-------------------------")
+    print("Accepting friend request")
+    print("Sender Email (user): ",  request.json.get('friend_email'))
+    print("Receiver (friend) email", user_email)
+    print(f"{user_email} is accepting {request.json.get('friend_email')}")
+    print("-------------------------\n")
     # Find the current user in the database using the provided email
     current_user = user_collection.find_one({"email": user_email})
     if current_user:
@@ -319,16 +338,18 @@ def accept_friend_request(user_email):
         friend_user = user_collection.find_one({"email": friend_email})
         if friend_user:
             # Check if the friend request has already been accepted or does not exist
-            if user_email not in friend_user['friendRequests']['received']:
+            print("Friend user's friend requests received: ", friend_user['friendRequests']['received'])
+            print("Friend user's friend requests sent: ", friend_user['friendRequests']['sent'])
+            if user_email not in friend_user['friendRequests']['sent']:
                 return jsonify({"message": "Friend request already accepted or not found."}), 400
             # Add the current user to the user's friends list
             friend_user['friends'].append(user_email)
             # Remove the friend request from the user's friendRequests.received list
-            friend_user['friendRequests']['received'].remove(user_email)
+            friend_user['friendRequests']['sent'].remove(user_email)
             user_collection.update_one({"email": friend_email}, {"$set": friend_user})
 
             # Also remove the friend request from the current user's friendRequests.sent list
-            current_user['friendRequests']['sent'].remove(friend_email)
+            current_user['friendRequests']['received'].remove(friend_email)
             # Add the friend to the current user's friends list
             current_user['friends'].append(friend_email)
             user_collection.update_one({"email": user_email}, {"$set": current_user})

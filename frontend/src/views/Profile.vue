@@ -12,9 +12,10 @@
         <h1>User Profile</h1>
       </div>
     </div>
-    <div class="alert alert-info" role="alert">
+    <!-- <div class="alert alert-info" role="alert">
       You are signed in with Google. Profile editing is disabled.
-    </div>
+    </div> -->
+    <!-- User Profile and Routes -->
     <div class="row justify-content-center mt-5">
       <!-- User Profile Column -->
       <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
@@ -35,6 +36,7 @@
           </div>
         </div>
       </div>
+      <!-- Routes Column -->
       <div class="col-lg-9 col-md-6 col-sm-12 mb-4">
         <div class="card">
           <div class="card-header">
@@ -72,23 +74,28 @@
         </div>
       </div>
     </div>
-    <!-- Friends Section -->
+    <!-- Friends -->
+    <div class="card mt-4 mb-4">
+      <div class="card-header">
+        <h3 class="mb-0">Friends</h3>
+      </div>
+      <div class="card-body">
+        <div v-for="friend in friends" :key="friend" class="mb-4">
+          <h5>{{ friend }}</h5>
+        </div>
+      </div>
+    </div>
     <div class="card mt-4 mb-4">
       <div class="card-header">
         <h3 class="mb-0">Friend Requests</h3>
       </div>
       <div class="card-body">
-        <!-- AddFriend Component -->
         <AddFriend :user="user" />
+        <h4>Received Requests</h4>
+        <FriendRequest v-for="request in receivedRequests" :key="request" :friend="request" :user="user" :receivedRequests="receivedRequests" type="received" />
 
-        <div v-if="!friendRequests.length" class="text-center text-muted mt-4">
-          <p>You have no friend requests at the moment.</p>
-        </div>
-        <div v-else v-for="request in friendRequests" :key="request.sender_email" class="mb-4 d-flex align-items-center">
-          <h5 class="flex-grow-1 mb-0">{{ request.sender_email }}</h5>
-          <button class="btn btn-success me-2" @click="acceptFriendRequest(request._id)">Accept</button>
-          <button class="btn btn-danger" @click="declineFriendRequest(request._id)">Decline</button>
-        </div>
+        <h4>Sent Requests</h4>
+        <FriendRequest v-for="request in sentRequests" :key="request" :friend="request" :user="user" :sentRequests="sentRequests" type="sent" />
       </div>
     </div>
 
@@ -99,7 +106,7 @@
 import MapItem from "../components/MapItem.vue";
 import AddFriend from "../components/AddFriends.vue";
 import Navbar from "../components/Navbar.vue";
-// import NotAuthenticated from '../components/NotAuthenticated.vue';
+import FriendRequest from '../components/FriendRequest.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
 
@@ -126,8 +133,6 @@ export default {
   },
   data() {
     const { user, isAuthenticated } = useAuth0();
-    // console.log('Profile.vue: is authenticated?', isAuthenticated)
-    // console.log('Profile.vue user', user)
     return {
       isLoading: false,
       currentPage: 1,
@@ -137,6 +142,8 @@ export default {
       routes: [],
       friends: [],
       friendRequests: [],
+      receivedRequests: [],
+      sentRequests: [],
     };
   },
   computed: {
@@ -155,19 +162,52 @@ export default {
     Navbar,
     MapItem,
     AddFriend,
+    FriendRequest,
   },
   methods: {
     fetchData() {
       this.isLoading = true;
       if (this.isAuthenticated) {
         this.fetchRoutes();
-        this.fetchFriends();
+        this.fetchUser();
         this.fetchFriendRequests();
       }
       this.isLoading = false;
     },
+    async fetchUser() {
+      const url = `http://127.0.0.1:5000/users/${encodeURIComponent(this.user.email)}`;
+      const headers = {
+        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+      };
+
+      try {
+        const response = await axios.get(url, { headers });
+        console.log('Response received from fetching user.')
+        this.friends = response.data.friends;
+
+      } catch (error) {
+        console.error("Error fetching user", error);
+      }
+    },
+    async fetchFriendRequests() {
+      const url = `http://127.0.0.1:5000/users/${encodeURIComponent(this.user.email)}/friend_requests`;
+      const headers = {
+        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+      };
+
+      try {
+        const response = await axios.get(url, { headers });
+        console.log('Response received from fetching friend request.')
+        this.receivedRequests = response.data.received;
+        this.sentRequests = response.data.sent;
+
+      } catch (error) {
+        console.error("Error fetching friend requests", error);
+      }
+
+    },
     async fetchRoutes() {
-      console.log("Fetchin Routes!");
+      // console.log("Fetching Routes!");
       const email = this.user.email; // Get the email from user object
       const url = `https://api.bchwy.com/routes/email?email=${encodeURIComponent(email)}`;
       const headers = {
@@ -176,73 +216,10 @@ export default {
       try {
         const response = await axios.get(url, { headers });
         this.routes = response.data; // Assign the fetched routes to the routes data property
-        console.log("Fetched routes!", response.data)
       } catch (error) {
         console.error("Error fetching routes:", error);
       }
     },
-    async fetchFriends() {
-      console.log("Fetching Friends!");
-      const email = this.user.email; // Get the email from user object
-      const url = `https://api.bchwy.com/friends?email=${encodeURIComponent(email)}`;
-      const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
-      };
-      try {
-        const response = await axios.get(url, { headers });
-        console.log('Fetched Friends!', response.data)
-        this.friends = response.data; // Assign the fetched friends to the friends data property
-      } catch (error) {
-        console.error("Error fetching friends:", error);
-      }
-    },
-    async fetchFriendRequests() {
-      console.log("Fetching Friend Requests!");
-      const email = this.user.email; // Get the email from user object
-      console.log('this is the email in the friend request', email)
-      const url = `http://127.0.0.1:5000/friend_requests?email=${encodeURIComponent(email)}`;
-      const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
-      };
-      try {
-        const response = await axios.get(url, { headers });
-        console.log('Fetched Friend Requests!', response.data)
-        this.friendRequests = response.data; // Assign the fetched friend requests to the friendRequests data property
-      } catch (error) {
-        console.error("Error fetching friend requests:", error);
-      }
-    },
-    async acceptFriendRequest(requestId) {
-      console.log("Accepting Friend Request!");
-      const url = `http://127.0.0.1:5000/friend_requests/${requestId}`;
-      const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
-      };
-      try {
-        await axios.put(url, {}, { headers });
-        console.log('Friend Request Accepted!', requestId)
-        this.fetchFriendRequests(); // Refresh the friend requests
-      } catch (error) {
-        console.error("Error accepting friend request:", error);
-      }
-    },
-    async declineFriendRequest(requestId) {
-      console.log("Declining Friend Request!");
-      const url = `http://127.0.0.1:5000/friend_requests/${requestId}`;
-      const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
-      };
-      try {
-        await axios.delete(url, { headers });
-        console.log('Friend Request Declined!', requestId)
-        this.fetchFriendRequests(); // Refresh the friend requests
-      } catch (error) {
-        console.error("Error declining friend request:", error);
-      }
-    },
-
-
-
   },
 };
 </script>
