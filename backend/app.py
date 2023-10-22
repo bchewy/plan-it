@@ -10,8 +10,6 @@ from bson import ObjectId
 app = Flask(__name__)
 app.config.from_object(Config)
 client = MongoClient(app.config['MONGO_URI'])
-# CORS(app)
-# CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"]}})
 API_KEY = "PlanItIsTheBestProjectEverXYZ"
 db = client.wad2
 collection = db.routes
@@ -24,7 +22,7 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH')
     return response
 
-# HELPEER FUNCTIONS
+# HELPER FUNCTIONS
 def convert_objectid_to_string(data):
     if isinstance(data, dict):
         for key, value in data.items():
@@ -59,20 +57,9 @@ def get_all_routes():
     routes = [str(rule) for rule in app.url_map.iter_rules()]
     return jsonify({"routes": routes}), 200
 
-# @require_api_key
-# def health_check():
-#     return jsonify(
-#         {
-#             "message": "Service is healthy."
-#         }
-#     ), 200
-
-
-# Database healthcheck
-
 
 @app.route("/db")
-# @require_api_key
+@require_api_key
 def db_check():
     client = MongoClient('localhost', serverSelectionTimeoutMS=1000)
     try:
@@ -82,9 +69,9 @@ def db_check():
     except ServerSelectionTimeoutError:
         return jsonify({"message": "Database is unhealthy."}), 500
 
+# CRUD Operations
+
 # Create (POST)
-
-
 @app.route("/routes", methods=['POST'])
 @require_api_key
 def create_route():
@@ -94,8 +81,6 @@ def create_route():
     return jsonify({"message": "Route created successfully."}), 201
 
 # Read All (GET)
-
-
 @app.route("/routes", methods=['GET'])
 @require_api_key
 def read_all_routes():
@@ -105,8 +90,6 @@ def read_all_routes():
     return jsonify(all_routes), 200
 
 # Read All EMAIL OF USER(GET)
-
-
 @app.route("/routes/email", methods=['GET'])
 @require_api_key
 def read_all_routes_email():
@@ -120,8 +103,6 @@ def read_all_routes_email():
         return jsonify({"message": "Email parameter is required."}), 400
 
 # Read One (GET)
-
-
 @app.route("/routes/<route_id>", methods=['GET'])
 @require_api_key
 def read_one_route(route_id):
@@ -133,8 +114,6 @@ def read_one_route(route_id):
         return jsonify({"message": "Route not found."}), 404
 
 # Update (PUT)
-
-
 @app.route("/routes/<route_id>", methods=['PUT'])
 @require_api_key
 def update_route(route_id):
@@ -147,8 +126,6 @@ def update_route(route_id):
         return jsonify({"message": "Route not found."}), 404
 
 # Delete (DELETE)
-
-
 @app.route("/routes/<route_id>", methods=['DELETE'])
 @require_api_key
 def delete_route(route_id):
@@ -158,8 +135,11 @@ def delete_route(route_id):
     else:
         return jsonify({"message": "Route not found."}), 404
 
+# User Operations
+
 # Update or create user init into our backend, since we're using auth0
 @app.route("/users", methods=['POST'])
+@require_api_key
 def create_or_update_user():
     """
     This function handles the POST request at the /users endpoint.
@@ -189,6 +169,7 @@ def create_or_update_user():
 
 # Users get individual user
 @app.route("/users/<user_email>", methods=['GET'])
+@require_api_key
 def get_user(user_email):
     """
     This function handles the GET request at the /users/<user_email> endpoint.
@@ -232,7 +213,7 @@ def get_friend_requests(user_email):
 
 # Friend Request Send
 @app.route("/users/<user_email>/friend_requests/send", methods=['POST'])
-# @require_api_key
+@require_api_key
 def send_friend_request(user_email):
     """
     This function handles the POST request at the /users/<user_email>/friend_requests/send endpoint.
@@ -271,7 +252,7 @@ def send_friend_request(user_email):
 
 # Friend Request Decline
 @app.route("/users/<user_email>/friend_requests/decline", methods=['POST'])
-# @require_api_key
+@require_api_key
 def decline_friend_request(user_email):
     """
     This function handles the POST request at the /users/<user_email>/friend_requests/decline endpoint.
@@ -279,12 +260,6 @@ def decline_friend_request(user_email):
     If the user is found, it removes the friend request from the user's friendRequests.received list.
     If the user is not found, it returns a 404 error with a message.
     """
-    print("\n-------------------------")
-    print("Declining friend request")
-    print("Sender Email (user): ", user_email)
-    print("Receiver (friend) email", request.json.get('friend_email'))
-    print(f"{user_email} is declining {request.json.get('friend_email')}")
-    print("-------------------------\n")
     # Find the current user in the database using the provided email
     current_user = user_collection.find_one({"email": user_email})
     if current_user:
@@ -314,7 +289,7 @@ def decline_friend_request(user_email):
 
 # Friend Request Accept
 @app.route("/users/<user_email>/friend_requests/accept", methods=['POST'])
-# @require_api_key
+@require_api_key
 def accept_friend_request(user_email):
     """
     This function handles the POST request at the /users/<user_email>/friend_requests/accept endpoint.
@@ -323,12 +298,6 @@ def accept_friend_request(user_email):
     from the user's friendRequests.received list.
     If the user is not found, it returns a 404 error with a message.
     """
-    print("\n-------------------------")
-    print("Accepting friend request")
-    print("Sender Email (user): ",  request.json.get('friend_email'))
-    print("Receiver (friend) email", user_email)
-    print(f"{user_email} is accepting {request.json.get('friend_email')}")
-    print("-------------------------\n")
     # Find the current user in the database using the provided email
     current_user = user_collection.find_one({"email": user_email})
     if current_user:
@@ -338,8 +307,6 @@ def accept_friend_request(user_email):
         friend_user = user_collection.find_one({"email": friend_email})
         if friend_user:
             # Check if the friend request has already been accepted or does not exist
-            print("Friend user's friend requests received: ", friend_user['friendRequests']['received'])
-            print("Friend user's friend requests sent: ", friend_user['friendRequests']['sent'])
             if user_email not in friend_user['friendRequests']['sent']:
                 return jsonify({"message": "Friend request already accepted or not found."}), 400
             # Add the current user to the user's friends list
