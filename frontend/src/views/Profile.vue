@@ -35,6 +35,16 @@
             <div class="mb-3"><b>Last Updated:</b> {{ user.updated_at }}</div>
           </div>
         </div>
+        <div class="card mt-4 mb-4">
+          <div class="card-header">
+            <h3 class="mb-0">Friends</h3>
+          </div>
+          <div class="card-body">
+            <div v-for="friend in friends" :key="friend" class="mb-4">
+              <h5>{{ friend }}</h5>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- Routes Column -->
       <div class="col-lg-9 col-md-6 col-sm-12 mb-4">
@@ -75,16 +85,8 @@
       </div>
     </div>
     <!-- Friends -->
-    <div class="card mt-4 mb-4">
-      <div class="card-header">
-        <h3 class="mb-0">Friends</h3>
-      </div>
-      <div class="card-body">
-        <div v-for="friend in friends" :key="friend" class="mb-4">
-          <h5>{{ friend }}</h5>
-        </div>
-      </div>
-    </div>
+    <!-- <div class="row justify-content-center mt-5"> -->
+
     <div class="card mt-4 mb-4">
       <div class="card-header">
         <h3 class="mb-0">Friend Requests</h3>
@@ -98,6 +100,8 @@
         <FriendRequest v-for="request in sentRequests" :key="request" :friend="request" :user="user" :sentRequests="sentRequests" type="sent" />
       </div>
     </div>
+    <!-- </div> -->
+
 
   </div>
 </template>
@@ -175,14 +179,13 @@ export default {
       this.isLoading = false;
     },
     async fetchUser() {
-      const url = `http://127.0.0.1:5000/users/${encodeURIComponent(this.user.email)}`;
+      const url = `http://127.0.0.1:5000/users/iz/${encodeURIComponent(this.user.email)}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };
 
       try {
         const response = await axios.get(url, { headers });
-        console.log('Response received from fetching user.')
         this.friends = response.data.friends;
 
       } catch (error) {
@@ -197,7 +200,6 @@ export default {
 
       try {
         const response = await axios.get(url, { headers });
-        console.log('Response received from fetching friend request.')
         this.receivedRequests = response.data.received;
         this.sentRequests = response.data.sent;
 
@@ -207,15 +209,14 @@ export default {
 
     },
     async fetchRoutes() {
-      // console.log("Fetching Routes!");
       const email = this.user.email; // Get the email from user object
-      const url = `https://api.bchwy.com/routes/email?email=${encodeURIComponent(email)}`;
+      const url = `http://127.0.0.1:5000/routes/email?email=${encodeURIComponent(email)}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
       };
       try {
         const response = await axios.get(url, { headers });
-        this.routes = response.data; // Assign the fetched routes to the routes data property
+        this.routes = response.data.reverse(); // Assign the fetched routes to the routes data property
       } catch (error) {
         console.error("Error fetching routes:", error);
       }
@@ -223,4 +224,5 @@ export default {
   },
 };
 </script>
+
 

@@ -6,24 +6,23 @@
       </a>
       <!-- <font-awesome-icon icon="fa-solid fa-user-secret" /> -->
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Home</router-link>
+            <router-link class="nav-link" to="/" active-class="active">Home</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/route">Routing</router-link>
+            <router-link class="nav-link" to="/route" active-class="active">Routing</router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link class="nav-link" to="/debug">Debug</router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
-            <router-link class="nav-link" to="/community">Community</router-link>
+            <router-link class="nav-link" to="/community" active-class="active">Community</router-link>
           </li>
         </ul>
         <ul class="navbar-nav">
@@ -36,16 +35,20 @@
 					</li> -->
           <!-- If user is authenticated -->
           <li v-else class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img :src="user.picture" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px" />
-              Welcome, {{ user.name }}
+              Welcome, {{ user.name }}!
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
                 <router-link class="dropdown-item" to="/profile">
                   <font-awesome-icon icon="fa-solid fa-circle-user" />
                   Profile</router-link>
+              </li>
+              <li>
+                <router-link class="dropdown-item" :to="`/profile/public/${user.email}`">
+                  <font-awesome-icon icon="fa-solid fa-circle-user" />
+                  Your Public Profile</router-link>
               </li>
               <!-- <li><router-link class="dropdown-item" to="/journey">
 								<font-awesome-icon icon="fa-solid fa-truck-fast" />
@@ -81,7 +84,7 @@ export default defineComponent({
       if (newValue) {
         // Create or update the user in your database
         try {
-          const response = await fetch('https://api.bchwy.com/users', {
+          const response = await fetch('http://127.0.0.1:5000/users', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

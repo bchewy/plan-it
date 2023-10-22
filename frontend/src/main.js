@@ -16,6 +16,9 @@ import VueGoogleMaps from '@fawmi/vue-google-maps'
 import { createAuth0 } from '@auth0/auth0-vue';
 import authConfig from "../auth_config.json";
 
+// animations
+import 'animate.css'
+
 // Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
