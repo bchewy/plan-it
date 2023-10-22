@@ -371,6 +371,32 @@ def add_level(user_email):
         return jsonify({"message": "User not found."}), 404
 
 
+# Post section
+@app.route("/users/<user_email>/posts", methods=['POST'])
+@require_api_key
+def create_post(user_email):
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        post_content = request.json.get('content')
+        if post_content:
+            post = {"content": post_content, "author": user_email, "timestamp": datetime.datetime.utcnow()}
+            current_user['posts'].append(post)
+            user_collection.update_one({"email": user_email}, {"$set": current_user})
+            return jsonify({"message": "Post created successfully."}), 200
+        else:
+            return jsonify({"message": "Post content is required."}), 400
+    else:
+        return jsonify({"message": "User not found."}), 404
+
+@app.route("/users/<user_email>/posts", methods=['GET'])
+@require_api_key
+def get_posts(user_email):
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        return jsonify({"posts": current_user['posts']}), 200
+    else:
+        return jsonify({"message": "User not found."}), 404
+
 
 
 
