@@ -79,7 +79,7 @@ export default defineComponent({
       if (newValue) {
         // Create or update the user in your database
         try {
-          const response = await fetch('https://api.bchwy.com/users', {
+          const response = await fetch('http://127.0.0.1:5000/users', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

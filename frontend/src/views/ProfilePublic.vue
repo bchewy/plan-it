@@ -94,7 +94,7 @@ export default {
       this.isLoading = false;
     },
     async fetchUser() {
-      const url = `https://api.bchwy.com/users/${encodeURIComponent(this.user.email)}`;
+      const url = `http://127.0.0.1:5000/users/${encodeURIComponent(this.user.email)}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };

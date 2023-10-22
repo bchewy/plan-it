@@ -243,12 +243,15 @@ def send_friend_request(user_email):
     """
     # Find the current user in the database using the provided email
     current_user = user_collection.find_one({"email": user_email})
+    friend_email = request.json.get('friend_email')
+
+    if str(user_email) == str(friend_email):
+        return jsonify({"message":"you can't add yourself!"}), 400
     if current_user:
         # Get the email of the user to send the friend request to
-        friend_email = request.json.get('friend_email')
         # Check if the friend request has already been sent
         if friend_email in current_user['friendRequests']['sent']:
-            return jsonify({"message": "Friend request already sent."}), 400
+            return jsonify({"message": "Friend request already sent/or already friends!"}), 400
         # Find the user to send the friend request to in the database
         friend_user = user_collection.find_one({"email": friend_email})
         if friend_user:
