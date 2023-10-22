@@ -1,10 +1,7 @@
 <template>
   <Navbar />
-  <div v-if="isLoading || !isAuthenticated" class="loading-screen">
-    <div v-if="isLoading">Loading...</div>
-    <div v-else class="row justify-content-center align-items-center" style="height: 100vh">
-      <h3 class="text-center p-5">Please log in to use this feature</h3>
-    </div>
+  <div v-if="isLoading" class="loading-screen">
+    <div>Loading...</div>
   </div>
   <div v-else class="container">
     <div class="row">
@@ -24,11 +21,8 @@
             <div class="text-center mb-3">
               <img :src="user.picture" class="rounded-circle" alt="User profile picture" width="128" height="128" />
             </div>
-            <div class="mb-3"><b>Given Name:</b> {{ user.given_name }}</div>
-            <div class="mb-3"><b>Family Name:</b> {{ user.family_name }}</div>
-            <div class="mb-3"><b>Nickname:</b> {{ user.nickname }}</div>
-            <div class="mb-3"><b>Locale:</b> {{ user.locale }}</div>
-            <div class="mb-3"><b>Last Updated:</b> {{ user.updated_at }}</div>
+            <div class="mb-3"><b>Email:</b> {{ user.email }}</div>
+            <div class="mb-3"><b>Experience:</b> {{ user.exp }}</div>
           </div>
         </div>
       </div>
@@ -49,38 +43,18 @@
 
 <script>
 import Navbar from "../components/Navbar.vue";
-import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
 
 export default {
-  created() {
-    this.fetchData();
-  },
-  mounted() {
-    this.fetchData();
-  },
-  watch: {
-    isAuthenticated: {
-      immediate: true,
-      handler() {
-        this.fetchData();
-      },
-    },
-    user: {
-      immediate: true,
-      handler() {
-        this.fetchData();
-      },
-    },
-  },
   data() {
-    const { user, isAuthenticated } = useAuth0();
     return {
       isLoading: false,
-      user,
-      isAuthenticated,
+      user: {},
       friends: [],
     };
+  },
+  created() {
+    this.fetchData();
   },
   components: {
     Navbar,
@@ -88,20 +62,18 @@ export default {
   methods: {
     fetchData() {
       this.isLoading = true;
-      if (this.isAuthenticated) {
-        this.fetchUser();
-      }
+      this.fetchUser();
       this.isLoading = false;
     },
     async fetchUser() {
-      const url = `http://127.0.0.1:5000/users/${encodeURIComponent(this.user.email)}`;
+      const url = `http://127.0.0.1:5000/users/ez/${this.$route.params.userEmail}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };
 
       try {
         const response = await axios.get(url, { headers });
-        console.log('Response received from fetching user.')
+        this.user = response.data;
         this.friends = response.data.friends;
 
       } catch (error) {

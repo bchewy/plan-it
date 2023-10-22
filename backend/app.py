@@ -6,7 +6,6 @@ from config import Config
 from datetime import datetime
 from functools import wraps
 from bson import ObjectId
-
 app = Flask(__name__)
 app.config.from_object(Config)
 client = MongoClient(app.config['MONGO_URI'])
@@ -54,7 +53,7 @@ def require_api_key(f):
 
 @app.route("/")
 def get_all_routes():
-    routes = [str(rule) for rule in app.url_map.iter_rules()]
+    routes = [{"rule": str(rule), "methods": ', '.join([method for method in rule.methods if method in ['GET', 'POST', 'PUT', 'DELETE']])} for rule in app.url_map.iter_rules()]
     return jsonify({"routes": routes}), 200
 
 
@@ -167,12 +166,12 @@ def create_or_update_user():
         user_collection.insert_one(data)
         return jsonify({"message": "User created successfully."}), 201
 
-# Users get individual user
-@app.route("/users/<user_email>", methods=['GET'])
+# Users get individual user ## Internal 
+@app.route("/users/iz/<user_email>", methods=['GET'])
 @require_api_key
 def get_user(user_email):
     """
-    This function handles the GET request at the /users/<user_email> endpoint.
+    This function handles the GET request at the /users/iz/<user_email> endpoint.
     It retrieves the user with the given email.
     If the user is found, it returns a JSON object containing the user data.
     If the user is not found, it returns a 404 error with a message.
@@ -180,6 +179,23 @@ def get_user(user_email):
     user = user_collection.find_one({"email": user_email})
     if user:
         user = convert_objectid_to_string(user)
+        return jsonify(user), 200
+    else:
+        return jsonify({"message": "User not found."}), 404
+
+# Users get individual user ## External
+@app.route("/users/ez/<user_email>", methods=['GET'])
+def ez_get_user(user_email):
+    """
+    This function handles the GET request at the /users/ez/<user_email> endpoint.
+    It retrieves the user with the given email.
+    If the user is found, it returns a JSON object containing the user's email, exp, and friends level.
+    If the user is not found, it returns a 404 error with a message.
+    """
+    user = user_collection.find_one({"email": user_email})
+    if user:
+        user = convert_objectid_to_string(user)
+        user = { "email": user["email"], "exp": user["exp"], "friends": user["friends"] }
         return jsonify(user), 200
     else:
         return jsonify({"message": "User not found."}), 404
@@ -397,6 +413,106 @@ def get_posts(user_email):
     else:
         return jsonify({"message": "User not found."}), 404
 
+# Groups section
+@app.route("/users/<user_email>/groups", methods=['POST'])
+@require_api_key
+def create_group(user_email):
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        group_name = request.json.get('group_name')
+        if group_name:
+            group = {"name": group_name, "owner_email": user_email, "members": [user_email]}
+            db.groups.insert_one(group)
+            return jsonify({"message": "Group created successfully."}), 200
+        else:
+            return jsonify({"message": "Group name is required."}), 400
+    else:
+        return jsonify({"message": "User not found."}), 404
+
+# Join Group
+@app.route("/users/<user_email>/groups/<group_name>/join", methods=['POST'])
+@require_api_key
+def join_group(user_email, group_name):
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        group = db.groups.find_one({"name": group_name})
+        if group:
+            if user_email not in group['members']:
+                group['members'].append(user_email)
+                db.groups.update_one({"name": group_name}, {"$set": group})
+                return jsonify({"message": "Joined group successfully."}), 200
+            else:
+                return jsonify({"message": "Already a member of the group."}), 400
+        else:
+            return jsonify({"message": "Group not found."}), 404
+    else:
+        return jsonify({"message": "User not found."}), 404
+
+# Leave Group
+@app.route("/users/<user_email>/groups/<group_name>/leave", methods=['POST'])
+@require_api_key
+def leave_group(user_email, group_name):
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        group = db.groups.find_one({"name": group_name})
+        if group:
+            if user_email in group['members']:
+                group['members'].remove(user_email)
+                db.groups.update_one({"name": group_name}, {"$set": group})
+                return jsonify({"message": "Left group successfully."}), 200
+            else:
+                return jsonify({"message": "Not a member of the group."}), 400
+        else:
+            return jsonify({"message": "Group not found."}), 404
+    else:
+        return jsonify({"message": "User not found."}), 404
+
+# Badges CRUD
+
+# Create Badge
+@app.route("/badges", methods=['POST'])
+@require_api_key
+def create_badge():
+    name = request.json.get('name')
+    description = request.json.get('description')
+    image = request.json.get('image')
+    if name and description and image:
+        badge = {"name": name, "description": description, "image": image}
+        db.badges.insert_one(badge)
+        return jsonify({"message": "Badge created successfully."}), 200
+    else:
+        return jsonify({"message": "Name, description and image are required."}), 400
+
+# Read Badge
+@app.route("/badges/<badge_id>", methods=['GET'])
+@require_api_key
+def read_badge(badge_id):
+    badge = db.badges.find_one({"_id": ObjectId(badge_id)})
+    if badge:
+        return jsonify(badge), 200
+    else:
+        return jsonify({"message": "Badge not found."}), 404
+
+# Update Badge
+@app.route("/badges/<badge_id>", methods=['PUT'])
+@require_api_key
+def update_badge(badge_id):
+    name = request.json.get('name')
+    description = request.json.get('description')
+    image = request.json.get('image')
+    if name and description and image:
+        badge = {"name": name, "description": description, "image": image}
+        db.badges.update_one({"_id": ObjectId(badge_id)}, {"$set": badge})
+        return jsonify({"message": "Badge updated successfully."}), 200
+    else:
+        return jsonify({"message": "Name, description and image are required."}), 400
+
+# Delete Badge
+@app.route("/badges/<badge_id>", methods=['DELETE'])
+@require_api_key
+def delete_badge(badge_id):
+    db.badges.delete_one({"_id": ObjectId(badge_id)})
+    return jsonify({"message": "Badge deleted successfully."}), 200
 
 
 

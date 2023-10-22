@@ -37,13 +37,18 @@
           <li v-else class="nav-item dropdown">
             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img :src="user.picture" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px" />
-              Welcome, {{ user.name }}
+              Welcome, {{ user.name }}!
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
                 <router-link class="dropdown-item" to="/profile">
                   <font-awesome-icon icon="fa-solid fa-circle-user" />
                   Profile</router-link>
+              </li>
+              <li>
+                <router-link class="dropdown-item" :to="`/profile/public/${user.email}`">
+                  <font-awesome-icon icon="fa-solid fa-circle-user" />
+                  Your Public Profile</router-link>
               </li>
               <!-- <li><router-link class="dropdown-item" to="/journey">
 								<font-awesome-icon icon="fa-solid fa-truck-fast" />

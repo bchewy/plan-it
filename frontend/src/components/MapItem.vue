@@ -4,6 +4,9 @@
 			<h3 class="text-center p-5">Please log in to use this feature</h3>
 		</div>
 		<div v-else class="row">
+			<div v-if="errorMessage" class="alert alert-danger" role="alert">
+				{{ errorMessage }}
+			</div>
 			<div class="col-lg-8 col-md-12">
 				<GMapMap :center="center" :zoom="zoom" map-type-id="terrain" style="width: 100%; height: 100vh;">
 					<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
@@ -113,6 +116,7 @@ export default defineComponent({
 	},
 	props: ['userme'],
 	setup(props) {
+		const errorMessage = ref('');
 		const { user, isAuthenticated } = useAuth0();
 		const travelMode = ref("DRIVE");  // Default is "DRIVE"
 		const confetti = ref(null);
@@ -284,7 +288,7 @@ export default defineComponent({
 				// Store in DB
 				console.log("Route stored in the database for this user.")
 				const routeData = {
-					route_id: 'route_1' + Date.now(),  // You will need a way to generate unique route IDs
+					route_id: 'route_' + Date.now(),  // You will need a way to generate unique route IDs
 					start_point_lat_lng: `Point(${startLocation.value.lat}, ${startLocation.value.lng})`,
 					end_point_lat_lng: `Point(${destination.value.lat}, ${destination.value.lng})`,
 					start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
@@ -304,9 +308,15 @@ export default defineComponent({
 					await axios.post('http://127.0.0.1:5000/routes', routeData, { headers });  // Adjust the URL to match your server
 				} catch (error) {
 					console.error('Failed to store route data:', error);
+					errorMessage.value = error.message += ' Please try again.';  // Assign new value to errorMessage
+
+
 				}
 			} catch (error) {
 				console.error("Failed to fetch route details:", error);
+				errorMessage.value = error.message += ' Please try again.';  // Assign new value to errorMessage
+
+
 			}
 		};
 
@@ -367,7 +377,8 @@ export default defineComponent({
 			directionSteps,
 			user,
 			isAuthenticated,
-			zoom
+			zoom,
+			errorMessage,
 		};
 	}
 });

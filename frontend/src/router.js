@@ -22,8 +22,16 @@ const router = createRouter({
 			component: () => import('./views/Profile.vue')
 		},
 		{
+			path: '/profile/public/:userEmail',
+			component: () => import('./views/ProfilePublic.vue')
+		},
+		{
 			path: '/community',
 			component: () => import('./views/Community.vue')
+		},
+		{
+			path: '/admin',
+			component: () => import('./views/Admin.vue')
 		}
 	]
 })

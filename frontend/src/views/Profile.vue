@@ -179,7 +179,7 @@ export default {
       this.isLoading = false;
     },
     async fetchUser() {
-      const url = `http://127.0.0.1:5000/users/${encodeURIComponent(this.user.email)}`;
+      const url = `http://127.0.0.1:5000/users/iz/${encodeURIComponent(this.user.email)}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };
@@ -216,7 +216,7 @@ export default {
       };
       try {
         const response = await axios.get(url, { headers });
-        this.routes = response.data; // Assign the fetched routes to the routes data property
+        this.routes = response.data.reverse(); // Assign the fetched routes to the routes data property
       } catch (error) {
         console.error("Error fetching routes:", error);
       }
@@ -224,4 +224,5 @@ export default {
   },
 };
 </script>
+
 
