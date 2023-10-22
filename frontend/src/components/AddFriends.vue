@@ -6,10 +6,12 @@
     <div v-if="successMessage" class="alert alert-success" role="alert">
       {{ successMessage }}
     </div>
-    <form @submit.prevent="sendFriendRequest">
-      <label for="friendEmail">Friend's Email:</label>
-      <input id="friendEmail" v-model="friendEmail" type="text" required />
-      <button type="submit">Send Friend Request</button>
+    <form @submit.prevent="sendFriendRequest" class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
+      <div class="form-group mb-2 me-md-2 flex-grow-1">
+        <label for="friendEmail" class="sr-only">Friend's Email:</label>
+        <input id="friendEmail" v-model="friendEmail" type="email" class="form-control" required placeholder="Friend's Email">
+      </div>
+      <button type="submit" class="btn btn-primary mb-2 flex-shrink-0">Send Friend Request</button>
     </form>
   </div>
 </template>
@@ -38,10 +40,9 @@ export default {
       }
       try {
         const response = await axios.post(
-          "http://127.0.0.1:5000/friend_requests",
+          `http://127.0.0.1:5000/users/${this.user.email}/friend_requests/send`,
           {
-            sender_email: this.user.email,
-            receiver_email: this.friendEmail,
+            friend_email: this.friendEmail,
           },
           {
             headers: {
@@ -53,17 +54,12 @@ export default {
             },
           }
         );
-        if (response.status === 404) {
-          this.errorMessage = "Friend not found";
-          this.successMessage = "";
-        } else if (response.status === 400) {
-          this.errorMessage = "You cannot send a friend request to yourself";
-          this.successMessage = "";
-        } else if (response.status === 201) {
-          this.errorMessage = "";
+        if (response.status === 200) {
           this.successMessage = "Friend request sent successfully.";
-        } else {
-          this.errorMessage = "Unexpected response.";
+        } else if (response.status === 400) {
+          this.errorMessage = "Friend request already sent.";
+        } else if (response.status === 404) {
+          this.errorMessage = "Friend not found.";
         }
       } catch (e) {
         this.errorMessage = "Please try again later. The backend may be down.";
