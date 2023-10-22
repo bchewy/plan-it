@@ -6,12 +6,12 @@
     <div v-if="successMessage" class="alert alert-success" role="alert">
       {{ successMessage }}
     </div>
-    <form @submit.prevent="sendFriendRequest" class="form-inline">
-      <div class="form-group mb-2">
+    <form @submit.prevent="sendFriendRequest" class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
+      <div class="form-group mb-2 me-md-2 flex-grow-1">
         <label for="friendEmail" class="sr-only">Friend's Email:</label>
-        <input id="friendEmail" v-model="friendEmail" type="email" class="form-control" required placeholder="Friend's Email" />
+        <input id="friendEmail" v-model="friendEmail" type="email" class="form-control" required placeholder="Friend's Email">
       </div>
-      <button type="submit" class="btn btn-primary mb-2">Send Friend Request</button>
+      <button type="submit" class="btn btn-primary mb-2 flex-shrink-0">Send Friend Request</button>
     </form>
   </div>
 </template>

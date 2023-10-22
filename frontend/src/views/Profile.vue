@@ -73,48 +73,25 @@
       </div>
     </div>
     <!-- Friends Section -->
-    <div class="row justify-content-center mt-5">
-      <div class="col-lg-9 col-md-6 col-sm-12 mb-4">
-        <!-- Add Friend component is here -->
+    <div class="card mt-4 mb-4">
+      <div class="card-header">
+        <h3 class="mb-0">Friend Requests</h3>
+      </div>
+      <div class="card-body">
+        <!-- AddFriend Component -->
         <AddFriend :user="user" />
-        <!-- Friend List section -->
-        <div class="card">
-          <div class="card-header bg-secondary text-white">
-            <h3>Friends</h3>
-          </div>
-          <div class="card-body">
-            <!-- Shows if empty -->
-            <div v-if="friends && friends.length == 0">
-              <p class="text-center text-muted">
-                Your friends list is empty. Add some friends!
-              </p>
-            </div>
-            <div v-for="friend in friends" :key="friend.friend_email" class="mb-4">
-              <h5>{{ friend }}</h5>
-            </div>
-          </div>
+
+        <div v-if="!friendRequests.length" class="text-center text-muted mt-4">
+          <p>You have no friend requests at the moment.</p>
         </div>
-        <!-- Friend Requests Section -->
-        <div class="card mt-4">
-          <div class="card-header bg-secondary text-white">
-            <h3>Friend Requests</h3>
-          </div>
-          <div class="card-body">
-            <!-- Shows if empty -->
-            <div v-if="friendRequests && friendRequests.length == 0">
-              <p class="text-center text-muted">
-                You have no friend requests at the moment.
-              </p>
-            </div>
-            <div v-for="request in friendRequests" :key="request.sender_email" class="mb-4">
-              <h5>{{ request.sender_email }}</h5>
-              <button class="btn btn-success" @click="acceptFriendRequest(request._id)">Accept</button>
-              <button class="btn btn-danger" @click="declineFriendRequest(request._id)">Decline</button>
-            </div>
-          </div>
+        <div v-else v-for="request in friendRequests" :key="request.sender_email" class="mb-4 d-flex align-items-center">
+          <h5 class="flex-grow-1 mb-0">{{ request.sender_email }}</h5>
+          <button class="btn btn-success me-2" @click="acceptFriendRequest(request._id)">Accept</button>
+          <button class="btn btn-danger" @click="declineFriendRequest(request._id)">Decline</button>
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
