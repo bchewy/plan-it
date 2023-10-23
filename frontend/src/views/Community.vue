@@ -4,7 +4,7 @@
 		<NavBar />
 
 
-<body class="position-relative"  style="background-color: rgb(232, 251, 240);"">
+<body class="position-relative"  style="background-color: rgb(232, 251, 240);">
 <div class="container-fluid">
 <div class="row">
 
