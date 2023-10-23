@@ -32,7 +32,7 @@
 <div class="row justify-content-center">
 <div class="col-8 rounded border bg-white">
 	<input type="text" class="mt-3 form-control" placeholder="Share something with the community!">
-	<button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+	<button class="btn btn-primary" type="button"><span class="plus-circle-fill"></span></button>
 </div>
 </div>
 </div>
