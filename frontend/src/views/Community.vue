@@ -10,9 +10,9 @@
 <nav class="col-3 position-fixed h-100"  style="background-color: rgb(177, 237, 177)">
 	<div class="container-fluid">
 	<ul class="navbar-nav flex-column">
-    <li class="active nav-item"><a href="#">For you page</a></li>
-    <li class="nav-item"><a href="#">Your groups</a></li>
-    <li class="nav-item"><a href="#">Your friends</a></li>
+    <li class="active nav-item"><a class="nav-link" href="#">For you page</a></li>
+    <li class="nav-item"><a class="nav-link" href="#">Your groups</a></li>
+    <li class="nav-item"><a class="nav-link" href="#">Your friends</a></li>
 
 </ul>
 	</div>
