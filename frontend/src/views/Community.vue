@@ -7,7 +7,7 @@
     <body class="position-relative">
 <div class="container-fluid">
 <div class="row">
-	<span class="position-fixed">
+
 <nav class="col-3 h-100"  style="background-color: rgb(209, 244, 209)">
 	
 	<div class="container-fluid">
@@ -23,7 +23,7 @@
 </ul>
 	</div>
 </nav>
-	</span>
+
 <div class="col-9">
 <h1>Community</h1>
 </div>
