@@ -7,7 +7,7 @@
     <body>
 <div class="container-fluid">
 <div class="row">
-<div class="sidebar">
+<div class="sidebar" style="width:180px">
 <ul class="nav nav-sidebar">
     <li class="active"><a href="#">For you page</a></li>
     <li><a href="#">Your groups</a></li>
