@@ -9,15 +9,16 @@
 <div class="row">
 <nav class="col-3 position-fixed h-100"  style="background-color: rgb(177, 237, 177)">
 	<div class="container-fluid">
+		<span class="navbar-text h1">Community</span>
 	<ul class="navbar-nav flex-column">
     <li class="active nav-item"><a class="nav-link" href="#">For you page</a></li>
-    <li class="nav-item"><a class="nav-link" href="#">Your groups</a></li>
-    <li class="nav-item"><a class="nav-link" href="#">Your friends</a></li>
+    <li class="nav-item"><a class="nav-link" href="#">Groups</a></li>
+    <li class="nav-item"><a class="nav-link" href="#">Friends</a></li>
 
 </ul>
 	</div>
 </nav>
-<div class="col-9">
+<div class="col-9 position-relative">
 <h1>Community</h1>
 </div>
 </div>
