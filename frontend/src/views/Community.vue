@@ -33,9 +33,11 @@
 <div class="col-8 rounded border bg-white">
 	<input type="text" class="my-3 form-control" placeholder="Share something with the community!">
 	<div class="row mb-3 justify-content-between">
-	<button class="btn btn-primary col-2" type="button"><font-awesome-icon  icon="fa-solid fa-plus"/>  Add an image</button>
-	<button class="btn btn-primary col-2" type="button"><font-awesome-icon icon="fa-solid fa-share"/>  Share a badge</button>
-	<button class="btn btn-primary col-2" type="button"><font-awesome-icon icon="fa-solid fa-tag"/>  Tag a friend</button>
+	<span class="col-1"></span>
+	<button class="btn btn-light col-3" type="button"><font-awesome-icon  icon="fa-solid fa-plus"/>  Add an image</button>
+	<button class="btn btn-light col-3" type="button"><font-awesome-icon icon="fa-solid fa-share"/>  Share a badge</button>
+	<button class="btn btn-light col-3" type="button"><font-awesome-icon icon="fa-solid fa-tag"/>  Tag a friend</button>
+	<span class="col-1"></span>
 	</div>
 
 </div>
