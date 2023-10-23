@@ -14,8 +14,11 @@
 		<span class="navbar-text h1">Community</span>
 	<ul class="navbar-nav flex-column">
     <li class="active nav-item"><a class="nav-link" href="#">For you page</a></li>
+	<hr>
     <li class="nav-item"><a class="nav-link" href="#">Groups</a></li>
+	<hr>
     <li class="nav-item"><a class="nav-link" href="#">Friends</a></li>
+	<hr>
 
 </ul>
 	</div>
