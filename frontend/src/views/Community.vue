@@ -5,13 +5,13 @@
 
 	</header>
     <body class="position-relative">
-<div class="container-fluid">
-<div class="row">
+<div class="container-fluid h-100">
+<div class="row h-100">
 
 <nav class="col-3 h-100"  style="background-color: rgb(209, 244, 209)">
 	
 	<div class="container-fluid">
-		<span class="navbar-text h1">Community</span>
+		<span class="navbar-text h2">Menu</span>
 	<ul class="navbar-nav flex-column">
     <li class="active nav-item"><a class="nav-link" href="#">For you page</a></li>
 	<hr>
@@ -25,7 +25,7 @@
 </nav>
 
 <div class="col-9">
-<h1>Community</h1>
+<h1 class="text-center">Plan-it Community</h1>
 </div>
 </div>
 </div>
