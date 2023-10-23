@@ -37,7 +37,7 @@
 <h1 class="text-center py-3 text-muted" style="font-weight: bold;">For You Page</h1>
 <div class="row justify-content-center">
 <div class="col-8 rounded border bg-white">
-	<input type="text" class="my-3 form-control" placeholder="Share something with the community!">
+	<textarea class="my-3 form-control" placeholder="Share something with the community!"></textarea>
 	<div class="row mb-3 justify-content-between">
 	<span class="col-1"></span>
 	
