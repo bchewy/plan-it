@@ -4,10 +4,10 @@
 		<NavBar />
 
 	</header>
-    <body>
+    <body class="position-relative">
 <div class="container-fluid">
 <div class="row">
-<nav class="col-3 position-fixed"  style="background-color: rgb(177, 237, 177)">
+<nav class="col-3 position-fixed h-100"  style="background-color: rgb(177, 237, 177)">
 	<div class="container-fluid">
 	<ul class="navbar-nav flex-column">
     <li class="active nav-item"><a href="#">For you page</a></li>
@@ -18,7 +18,7 @@
 	</div>
 </nav>
 <div class="col-9">
-<h1 class="page-header">Community</h1>
+<h1>Community</h1>
 </div>
 </div>
 </div>
