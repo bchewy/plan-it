@@ -16,7 +16,7 @@
 		
 	<ul class="navbar-nav flex-column mt-5">
 	
-    <li class="active nav-item"><a class="h3 nav-link" href="#">For you page</a></li>
+    <li class="active nav-item"><a class="h3 nav-link" href="#">For you</a></li>
 	<hr>
     <li class="nav-item"><a class="h3 nav-link" href="#">Groups</a></li>
 	<hr>
@@ -29,15 +29,16 @@
 <div class="col-2"></div>
 <div class="col-10 h-100" style="background-color: rgb(232, 251, 240);">
 	
-<h1 class="text-center py-3 text-muted">Plan-it Community</h1>
+<h1 class="text-center py-3 text-muted">For you</h1>
 <div class="row justify-content-center">
 <div class="col-8 rounded border bg-white">
 	<input type="text" class="my-3 form-control" placeholder="Share something with the community!">
 	<div class="row mb-3 justify-content-between">
 	<span class="col-1"></span>
-	<button class="btn btn-secondary col-3" type="button"><font-awesome-icon  icon="fa-solid fa-plus"/>  Add an image</button>
+	
 	<button class="btn btn-secondary col-3" type="button"><font-awesome-icon icon="fa-solid fa-share"/>  Share a badge</button>
 	<button class="btn btn-secondary col-3" type="button"><font-awesome-icon icon="fa-solid fa-tag"/>  Tag a friend</button>
+	<button class="btn btn-secondary col-3" type="button"><font-awesome-icon  icon="fa-solid fa-plus-square"/>  Create post!</button>
 	<span class="col-1"></span>
 	</div>
 
