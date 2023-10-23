@@ -11,9 +11,9 @@
 <nav class="col-3 position-fixed h-100"  style="background-color: rgb(209, 244, 209)">
 	
 	<div class="container-fluid">
-		<span class="navbar-text h2 m-4">Menu</span>
+		<span class="navbar-text h2">Menu</span>
 		<br>
-	<ul class="navbar-nav flex-column">
+	<ul class="navbar-nav flex-column mt-5">
     <li class="active nav-item"><a class="nav-link" href="#">For you page</a></li>
 	<hr>
     <li class="nav-item"><a class="nav-link" href="#">Groups</a></li>
