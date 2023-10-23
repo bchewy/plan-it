@@ -4,11 +4,11 @@
 		<NavBar />
 
 	</header>
-    <body class="position-relative">
-<div class="container-fluid h-100">
-<div class="row h-100">
+<body class="position-relative">
+<div class="container-fluid">
+<div class="row">
 
-<nav class="col-3 h-100"  style="background-color: rgb(209, 244, 209)">
+<nav class="col-3 position-sticky h-100"  style="background-color: rgb(209, 244, 209)">
 	
 	<div class="container-fluid">
 		<span class="navbar-text h2">Menu</span>
