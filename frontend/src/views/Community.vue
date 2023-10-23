@@ -12,9 +12,9 @@
 	
 	<div class="container-fluid">
 		<br>
-		<span class="h4 text-muted">Menu</span>
+		<span class="h5 text-muted">Plan-it Community</span>
 		
-	<ul class="navbar-nav flex-column mt-3">
+	<ul class="navbar-nav flex-column mt-5">
 	
     <li class="active nav-item"><a class="h3 nav-link" href="#">For you page</a></li>
 	<hr>
