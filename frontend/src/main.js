@@ -27,6 +27,9 @@ library.add(faCar)
 library.add(faCircleUser)
 library.add(faTruckFast)
 library.add(faArrowRightFromBracket)
+library.add(faPlus)
+library.add(faShare)
+library.add(faTag)
 
 // Prima Vue
 import PrimeVue from 'primevue/config';

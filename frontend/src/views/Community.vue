@@ -28,11 +28,14 @@
 <div class="col-2"></div>
 <div class="col-10 h-100" style="background-color: rgb(232, 251, 240);">
 	
-<h1 class="text-center pb-2 text-muted">Plan-it Community</h1>
+<h1 class="text-center py-3 text-muted">Plan-it Community</h1>
 <div class="row justify-content-center">
 <div class="col-8 rounded border bg-white">
 	<input type="text" class="mt-3 form-control" placeholder="Share something with the community!">
-	<button class="btn btn-primary" type="button"><span class="bi-plus-circle-fill"></span></button>
+	<div class="row">
+	<button class="btn btn-primary col" type="button"><i class="fa fa-plus"></i>Add an image</button>
+	
+	</div>
 </div>
 </div>
 </div>
