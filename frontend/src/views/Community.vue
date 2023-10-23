@@ -7,15 +7,17 @@
     <body>
 <div class="container-fluid">
 <div class="row">
-<div class="sidebar" style="width:180px">
-<ul class="nav nav-sidebar">
-    <li class="active"><a href="#">For you page</a></li>
-    <li><a href="#">Your groups</a></li>
-    <li><a href="#">Your friends</a></li>
+<nav class="col-3 position-fixed"  style="background-color: rgb(177, 237, 177)">
+	<div class="container-fluid">
+	<ul class="navbar-nav flex-column">
+    <li class="active nav-item"><a href="#">For you page</a></li>
+    <li class="nav-item"><a href="#">Your groups</a></li>
+    <li class="nav-item"><a href="#">Your friends</a></li>
 
 </ul>
-</div>
-<div class="col-sm-12 main">
+	</div>
+</nav>
+<div class="col-9">
 <h1 class="page-header">Community</h1>
 </div>
 </div>
