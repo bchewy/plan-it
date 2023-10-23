@@ -84,3 +84,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.sidebarbackground{
+  background-color: rgb(187, 243, 187);
+}

@@ -1,9 +1,4 @@
-
-
 <template>
-<head>
-	<link rel="stylesheet" href="community_css.css">
-</head>
 	<header>
 		<!-- nav -->
 		<NavBar />
