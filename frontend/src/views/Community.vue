@@ -18,7 +18,12 @@
 	
     <li class="active nav-item"><a class="h3 nav-link" href="#">For you</a></li>
 	<hr>
-    <li class="nav-item"><a class="h3" href="#">Groups</a></li>
+    <li class="nav-item dropdown"><a class="h3 nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Groups</a>
+	<ul class="dropdown-menu">
+		<li><font-awesome-icon icon="fa-solid fa-plus"/><a class="dropdown-item" href="#">  Create group</a></li>
+		<li><font-awesome-icon icon="fa-solid fa-users"/><a class="dropdown-item" href="#">  Your groups</a></li>
+	</ul>
+	</li>
 	<hr>
     <li class="nav-item"><a class="h3 nav-link" href="#">Friends</a></li>
 	<hr>
