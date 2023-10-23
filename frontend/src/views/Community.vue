@@ -4,7 +4,7 @@
 		<NavBar />
 
 
-<body class="position-relative"  style="background-color: rgb(232, 251, 240);">
+<body class="position-relative" >
 <div class="container-fluid">
 <div class="row">
 
@@ -26,11 +26,14 @@
 	</div>
 </nav>
 <div class="col-2"></div>
-<div class="col-10 h-100">
-<h1 class="text-center pb-2 text-muted">Plan-it Community</h1>
-<div class="col-8 rounded">
-	<input type="text" class="form-control" placeholder="Share something with the community!">
+<div class="col-10 h-100" style="background-color: rgb(232, 251, 240);">
 	
+<h1 class="text-center pb-2 text-muted">Plan-it Community</h1>
+<div class="row justify-content-center">
+<div class="col-8 rounded border bg-white">
+	<input type="text" class="form-control" placeholder="Share something with the community!">
+	<button class="btn"><span class="glyphicon glyphicon-plus"></span></button>
+</div>
 </div>
 </div>
 </div>
