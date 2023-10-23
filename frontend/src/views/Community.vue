@@ -8,7 +8,7 @@
 <div class="container-fluid">
 <div class="row">
 	<span class="position-fixed">
-<nav class="col-3 h-100"  style="background-color: rgb(177, 237, 177)">
+<nav class="col-3 h-100"  style="background-color: rgb(209, 244, 209)">
 	
 	<div class="container-fluid">
 		<span class="navbar-text h1">Community</span>
