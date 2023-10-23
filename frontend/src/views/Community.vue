@@ -5,24 +5,21 @@
 
 	</header>
     <body>
-<nav class="navbar sidebarbackground">
-
 <div class="container-fluid">
+<div class="row">
+<div class="sidebar">
+<ul class="nav nav-sidebar">
+    <li class="active"><a href="#">For you page</a></li>
+    <li><a href="#">Your groups</a></li>
+    <li><a href="#">Your friends</a></li>
 
-  <ul class="navbar-nav">
-	<li class="nav-item">
-	  <a class="nav-link" href="#">For you page</a>
-	</li>
-	<li class="nav-item">
-	  <a class="nav-link" href="#">Your groups</a>
-	</li>
-	<li class="nav-item">
-	  <a class="nav-link" href="#">Your friends</a>
-	</li>
-  </ul>
+</ul>
 </div>
-
-</nav>
+<div class="col-sm-12 main">
+<h1 class="page-header">Community</h1>
+</div>
+</div>
+</div>
 
     
         
