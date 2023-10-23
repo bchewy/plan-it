@@ -1,11 +1,16 @@
+
+
 <template>
+<head>
+	<link rel="stylesheet" href="community_css.css">
+</head>
 	<header>
 		<!-- nav -->
 		<NavBar />
 
 	</header>
     <body>
-<nav class="navbar bg-light">
+<nav class="navbar sidebarbackground">
 
 <div class="container-fluid">
 
