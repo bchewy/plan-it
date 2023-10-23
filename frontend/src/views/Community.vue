@@ -1,17 +1,18 @@
 <template>
-	<header>
+
 		<!-- nav -->
 		<NavBar />
 
-	</header>
+
 <body class="position-relative">
 <div class="container-fluid">
 <div class="row">
 
-<nav class="col-3 position-sticky h-100"  style="background-color: rgb(209, 244, 209)">
+<nav class="col-3"  style="background-color: rgb(209, 244, 209)">
 	
 	<div class="container-fluid">
-		<span class="navbar-text h2">Menu</span>
+		<span class="navbar-text h2 pt-4">Menu</span>
+		<br>
 	<ul class="navbar-nav flex-column">
     <li class="active nav-item"><a class="nav-link" href="#">For you page</a></li>
 	<hr>
