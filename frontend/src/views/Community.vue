@@ -34,7 +34,7 @@
 <div class="col-2"></div>
 <div class="col-10 h-100" style="background-color: rgb(232, 251, 240);">
 	
-<h1 class="text-center py-3 text-muted" style="font-weight: bold;">For you page</h1>
+<h1 class="text-center py-3 text-muted" style="font-weight: bold;">For You Page</h1>
 <div class="row justify-content-center">
 <div class="col-8 rounded border bg-white">
 	<input type="text" class="my-3 form-control" placeholder="Share something with the community!">
