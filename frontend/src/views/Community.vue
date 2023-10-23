@@ -31,8 +31,8 @@
 <h1 class="text-center pb-2 text-muted">Plan-it Community</h1>
 <div class="row justify-content-center">
 <div class="col-8 rounded border bg-white">
-	<input type="text" class="form-control" placeholder="Share something with the community!">
-	<button class="btn"><span class="glyphicon glyphicon-plus"></span></button>
+	<input type="text" class="mt-3 form-control" placeholder="Share something with the community!">
+	<button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-plus"></span></button>
 </div>
 </div>
 </div>
