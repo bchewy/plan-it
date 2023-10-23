@@ -33,8 +33,9 @@
 <div class="col-8 rounded border bg-white">
 	<input type="text" class="mt-3 form-control" placeholder="Share something with the community!">
 	<div class="row">
-	<button class="btn btn-primary col" type="button"><i class="fa fa-plus" aria-hidden="true"></i>Add an image</button>
-	
+	<button class="btn btn-primary col" type="button"><i class="fa-solid fa-plus" aria-hidden="true"></i>Add an image</button>
+	<button class="btn btn-primary col" type="button"><i class="fa-solid fa-share" aria-hidden="true"></i>Share a badge</button>
+	<button class="btn btn-primary col" type="button"><i class="fa-solid fa-tag" aria-hidden="true"></i>Tag a friend</button>
 	</div>
 </div>
 </div>
