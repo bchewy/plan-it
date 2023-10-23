@@ -31,12 +31,13 @@
 <h1 class="text-center py-3 text-muted">Plan-it Community</h1>
 <div class="row justify-content-center">
 <div class="col-8 rounded border bg-white">
-	<input type="text" class="mt-3 form-control" placeholder="Share something with the community!">
-	<div class="row">
-	<button class="btn btn-primary col" type="button"><font-awesome-icon  icon="fa-solid fa-car"/>Add an image</button>
-	<button class="btn btn-primary col" type="button"><font-awesome-icon icon="fa-solid fa-share"/>Share a badge</button>
-	<button class="btn btn-primary col" type="button"><font-awesome-icon icon="fa-solid fa-tag"/>Tag a friend</button>
+	<input type="text" class="my-3 form-control" placeholder="Share something with the community!">
+	<div class="row mb-3 justify-content-between">
+	<button class="btn btn-primary col-2" type="button"><font-awesome-icon  icon="fa-solid fa-plus"/>  Add an image</button>
+	<button class="btn btn-primary col-2" type="button"><font-awesome-icon icon="fa-solid fa-share"/>  Share a badge</button>
+	<button class="btn btn-primary col-2" type="button"><font-awesome-icon icon="fa-solid fa-tag"/>  Tag a friend</button>
 	</div>
+
 </div>
 </div>
 </div>
