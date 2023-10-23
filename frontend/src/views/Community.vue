@@ -11,7 +11,7 @@
 <nav class="col-2 position-fixed h-100"  style="background-color: rgb(209, 244, 209)">
 	
 	<div class="container-fluid">
-		<span class="navbar-text h2">Menu</span>
+		<span class="navbar-text h2 text-muted">Menu</span>
 	<ul class="navbar-nav flex-column mt-3">
 	<hr>
     <li class="active nav-item"><a class="nav-link" href="#">For you page</a></li>
@@ -26,7 +26,7 @@
 </nav>
 <div class="col-2"></div>
 <div class="col-10" style="background-color: rgb(232, 251, 240);">
-<h1 class="text-center pb-2">Plan-it Community</h1>
+<h1 class="text-center pb-2 text-muted">Plan-it Community</h1>
 <div class="col-8 rounded">
 	<input type="text" class="form-control" placeholder="Share something with the community!">
 	
