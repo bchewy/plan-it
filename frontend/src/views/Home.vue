@@ -1,14 +1,27 @@
 <template>
-	<header>
 		<!-- nav -->
 		<NavBar />
 
-	</header>
 
+<body class="position-relative" >
+<div class="container-fluid">
+<div class="row">
+
+<div class=" text-center" style="margin-bottom:0">
+  <h1>PLAN-IT!</h1>
+  <p>Singapore's Best Carbon-efficient Travel Planner</p> 
+</div>
+
+
+</div>
+</div>
+</body>
 	<footer>
 		<!-- footer -->
 	</footer>
 </template>
+
+
 <script>
 import NavBar from '../components/Navbar.vue'
 // import Login from '../components/Login.vue'
