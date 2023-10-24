@@ -19,12 +19,11 @@
       <div class="input-group news-input">
         <input
           type="text"
-          class="form-control news-input" <!-- Apply the "news-input" class to adjust the width -->
+          class="form-control news-input" 
           placeholder="Friend's Email Address"
           aria-label="Friend's Email Address"
           aria-describedby="button-addon2">
-        <button class="btn btn-lg" <!-- Adjust button sizing as needed -->
-          type="button"
+        <button class="btn btn-lg" 
           id="button-addon2">Send</button>
       </div>
     </div>
