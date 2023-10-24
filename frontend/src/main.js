@@ -24,6 +24,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faArrowRightFromBracket, faCar, faCircleUser, faTruckFast, faCog } from '@fortawesome/free-solid-svg-icons'
 import { faPlusSquare, faShare, faTag, faPlus, faUsers, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faLeaf, faShoePrints, faBus } from '@fortawesome/free-solid-svg-icons';
 
 
 library.add(faCar)
@@ -37,6 +38,8 @@ library.add(faShare)
 library.add(faTag)
 library.add(faUsers)
 library.add(faUser)
+library.add(faLeaf, faShoePrints, faBus);
+
 
 // Prima Vue
 import PrimeVue from 'primevue/config';
