@@ -23,7 +23,6 @@ import 'animate.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faArrowRightFromBracket, faCar, faCircleUser, faTruckFast, faCog } from '@fortawesome/free-solid-svg-icons'
-import { faArrowRightFromBracket, faCar, faCircleUser, faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { faPlusSquare, faShare, faTag, faPlus, faUsers } from '@fortawesome/free-solid-svg-icons'
 
 
