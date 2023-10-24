@@ -30,8 +30,8 @@ import axios from "axios";
 import { useAuth0 } from '@auth0/auth0-vue';
 
 export default defineComponent({
-props:['userme'],
-setup(props){
+
+setup(){
     const { user, isAuthenticated } = useAuth0();
     const badges=false;
     return{
