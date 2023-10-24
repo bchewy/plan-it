@@ -82,6 +82,7 @@ export default {
 	},
 	setup() {
 		const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+		const badges=false
 
 		console.log('Setup method is called');
 
@@ -99,6 +100,7 @@ export default {
 			},
 			user,
 			isAuthenticated,
+			badges
 		};
 	}
 }
