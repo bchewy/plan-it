@@ -35,10 +35,10 @@
 	<div class = "container">
 		<div class= "row text-center">
 			<div class = "col-md">
-				<div class = "card text-dark" style = "outline-color: darkgreen;">
+				<div class = "card text-mute" style = "outline-color: darkgreen;">
 				<div class = "card-body text-center">
 					<div class="h1 mb-3>">
-					<font-awesome-icon icon="fa-solid fa-leaf" />
+					<font-awesome-icon icon="fa-solid fa-leaf"></font-awesome-icon>
 				</div>
 				<h3 class = "card-title mb-3">
 					Eco-friendly Navigation
@@ -51,10 +51,10 @@
 				</div>
 			</div>
 			<div class = "col-md">
-				<div class = "card text-dark" style = "outline-color: darkgreen;">
+				<div class = "card text-mute" style = "outline-color: darkgreen;">
 				<div class = "card-body text-center">
 					<div class="h1 mb-3>">
-					<font-awesome-icon icon="fa-solid fa-shoe-prints" />
+					<font-awesome-icon icon="fa-solid fa-shoe-prints"></font-awesome-icon>
 				</div>
 				<h3 class = "card-title mb-3">
 					Traffic Optimisation
@@ -68,10 +68,10 @@
 			</div>
 
 			<div class = "col-md">
-				<div class = "card text-dark" style = "outline-color: darkgreen;">
+				<div class = "card text-mute" style = "outline-color: darkgreen;">
 				<div class = "card-body text-center">
 					<div class="h1 mb-3>">
-						<font-awesome-icon icon="fa-solid fa-bus" />
+						<font-awesome-icon icon="fa-solid fa-bus"></font-awesome-icon>
 				</div>
 				<h3 class = "card-title mb-3">
 					Incentivising Public Transport
