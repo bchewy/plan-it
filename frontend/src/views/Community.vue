@@ -82,6 +82,7 @@
 import NavBar from "../components/Navbar.vue";
 // import Login from '../components/Login.vue'
 import { useAuth0 } from '@auth0/auth0-vue';
+
 import Share_badge from "../components/Share_badge.vue";
 export default {
 	name: 'Community',
