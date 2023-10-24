@@ -50,7 +50,7 @@
 
 </div>
 </div>
-</div>
+
 <div class="row justify-content-start">
 <div class="col-1"></div>
 <div class="col-1"><div class="card"><div class="card-body"><font-awesome-icon icon="fa-solid fa-user"></font-awesome-icon><br>
@@ -58,6 +58,7 @@
 </div>
 <div class="col-9">Content</div>
 	</div>
+</div>
 </div>
 </div>
 </div>
