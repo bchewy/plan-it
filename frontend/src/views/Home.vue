@@ -5,7 +5,7 @@
 	</header>
   
 	<!--showcase-->
-	<section class="p-5 text-center">
+	<section class="text-center">
 	  <div class="container" style= "background-color: rgb(209, 244, 209);">
 			<h1>Plan-It!<br> Stay <span class= "text-success"> Sustainable </span> . </h1>
 	  </div>
