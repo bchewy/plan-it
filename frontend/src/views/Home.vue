@@ -5,31 +5,32 @@
 	</header>
   
 	<!--showcase-->
-	<section class="text-center">
-	  <div class="container" style= "background-color: rgb(209, 244, 209);">
-			<h1>Plan-It!<br> Stay <span class= "text-success"> Sustainable </span> . </h1>
-	  </div>
-	</section>
+	<section class="text-center col-12 p-5">
+  <div class="container" style="background-color: rgb(209, 244, 209);">
+    <h1>Plan-It!<br> Stay <span class="text-success"> Sustainable </span> . </h1>
+  </div>
+</section>
 
-	<!-- signup now-->
-	<section class=" bg-success text-light p-5">
-		<div class = "container">
-			<div class="d-md-flex justify-content-between-align-items-center">
-				<h3 class = "mb-3 mb-md-0"> Refer a friend now!</h3>
-				<div class = "input-group">
-					<input
-					type = "text"
-					class = "form-control"
-					placeholder = "Friend's Email Address"
-					aria-label="Friend's Email Address"
-					aria-describedby="button-addon2">
-					<button class=" btn btn-lg" 
-					type = "button" 
-					id = "button-addon2"> Send </button>
-				</div>
-			</div>
-		</div>
-	</section>
+<!-- signup now-->
+<section class="bg-success text-light">
+  <div class="container">
+    <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
+      <h3>Refer a friend now!</h3>
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Friend's Email Address"
+          aria-label="Friend's Email Address"
+          aria-describedby="button-addon2">
+        <button class="btn btn-lg"
+          type="button"
+          id="button-addon2">Send</button>
+      </div>
+    </div>
+  </div>
+</section>
+
   
 	<footer>
 	  <!-- footer -->
