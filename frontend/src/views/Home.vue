@@ -66,7 +66,7 @@
 				</div>
 				</div>
 			</div>
-			</div>
+
 			<div class = "col-md">
 				<div class = "card text-dark" style = "outline-color: darkgreen;">
 				<div class = "card-body text-center">
@@ -84,6 +84,7 @@
 				</div>
 				</div>
 				</div>
+	</div>
 </section>
 
 
@@ -104,6 +105,7 @@ export default {
 	name: 'Home',
 	components: {
 		NavBar,  // Register the NavBar component
+		FontAwesomeIcon,
 		// Login
 	},
 	setup() {
