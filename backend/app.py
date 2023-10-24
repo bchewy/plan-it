@@ -494,7 +494,7 @@ def read_badge(badge_id):
         return jsonify({"message": "Badge not found."}), 404
     
 
-@app.route("/users/brian@bchewy.com/badges", methods=['GET'])
+@app.route("/users/<user_email>/badges", methods=['GET'])
 # @require_api_key
 def get_user_badges(user_email):
     if user_email == "brian@bchewy.com":
