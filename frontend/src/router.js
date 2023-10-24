@@ -40,7 +40,22 @@ const router = createRouter({
 		{
 			path: '/badges',
 			component: () => import('./views/Badges.vue')
+		},
+		{
+			path:'/community/createGroup',
+			component: () =>('./views/CreateGroup.vue')
+		},
+		,
+		{
+			path:'/community/friendCommnunity',
+			component: () =>('./views/FriendCommunity.vue')
 		}
+		,
+		{
+			path:'/community/yourGroups',
+			component: () =>('./views/YourGroups.vue')
+		},
+
 	]
 })
 
