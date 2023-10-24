@@ -24,6 +24,10 @@ const router = createRouter({
 		{
 			path: '/community',
 			component: () => import('./views/Community.vue')
+		},
+		{
+			path: '/settings',
+			component: () => import('./views/Settings.vue')
 		}
 	]
 })

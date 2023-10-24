@@ -47,6 +47,11 @@
                   <font-awesome-icon icon="fa-solid fa-circle-user" />
                   Profile</router-link>
               </li>
+              <li>
+                <router-link class="dropdown-item" to="/settings">
+                  <font-awesome-icon icon="fa-cog" />
+                  Settings</router-link>
+              </li>
               <!-- <li><router-link class="dropdown-item" to="/journey">
 								<font-awesome-icon icon="fa-solid fa-truck-fast" />
 								Journey</router-link>
