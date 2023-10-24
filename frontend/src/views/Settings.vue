@@ -12,90 +12,21 @@
           <h1>Notification Settings</h1>
         </div>
       </div>
-      <div class="alert alert-info" role="alert">
+      <div v-if="this.isSubmitted" class="alert alert-info" role="alert">
         Settings saved! 
       </div>
-      <div class="row justify-content-center mt-5">
-        <!-- User Profile Column
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
-          <div class="card">
-            <div class="card-header">
-              <h3>{{ user.name }}</h3>
-            </div>
-            <div class="card-body">
-              <div class="text-center mb-3">
-                <img :src="user.picture" class="rounded-circle" alt="User profile picture" width="128" height="128" />
-              </div>
-              <div class="mb-3"><b>Given Name:</b> {{ user.given_name }}</div>
-              <div class="mb-3"><b>Family Name:</b> {{ user.family_name }}</div>
-              <div class="mb-3"><b>Nickname:</b> {{ user.nickname }}</div>
-              <div class="mb-3"><b>Email:</b> {{ user.email }}</div>
-              <div class="mb-3"><b>Locale:</b> {{ user.locale }}</div>
-              <div class="mb-3"><b>Last Updated:</b> {{ user.updated_at }}</div>
-            </div>
-          </div>
-        </div> -->
-        <div class="col-lg-9 col-md-6 col-sm-12 mb-4">
-          <div class="card">
-            <div class="card-header">
-              <h3>Routes</h3>
-            </div>
-            <div class="card-body">
-              <!-- Shows if empty -->
-              <div v-if="routes && routes.length == 0">
-                <p class="text-center text-muted">
-                  Your route list is empty. You need to commit more.
-                </p>
-              </div>
-              <div v-for="route in paginatedRoutes" :key="route.route_id" class="mb-4">
-                <h5>{{ route.start_point_name }} to {{ route.end_point_name }}</h5>
-                <p><b>Mode of Transport:</b> {{ route.transport_mode }}</p>
-                <p><b>Carbon Emission:</b> {{ route.carbon_emission }}</p>
-                <p><b>Timestamp:</b> {{ new Date(route.timestamp).toLocaleString() }}</p>
-              </div>
-              <!-- Pagination controls -->
-              <nav aria-label="Pagination-for-routes">
-                <ul class="pagination justify-content-center">
-                  <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                    <a class="page-link" href="#" @click.prevent="currentPage--">Previous</a>
-                  </li>
-                  <!-- Page count -->
-                  <li class="page-item disabled">
-                    <span class="page-link">{{ currentPage }} / {{ totalPages }}</span>
-                  </li>
-                  <li class="page-item" :class="{ disabled: currentPage >= totalPages }">
-                    <a class="page-link" href="#" @click.prevent="currentPage++">Next</a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
+        <div class="control-group col-12 mt-5">
+          <div class="controls">
+            <label><input type="checkbox" v-model="newFriends"/>Notify me about new friends who signed up with my friend code </label>
+            <br>
+            <label><input type="checkbox" v-model="newFeatures"/>Nofity me about new features of PlanIt!  </label>
+            <br>
+            <label><input type="checkbox" v-model="lostPlace"/>Notify me if I lose my place in the leaderboard</label>
+          </div>         
+          <button class="btn btn-light" @click="reset()">Reset</button>
+          <button class="btn btn-success" @click="submit()">Save</button>
         </div>
       </div>
-      <!-- Friends Section -->
-      <div class="row justify-content-center mt-5">
-        <div class="col-lg-9 col-md-6 col-sm-12 mb-4">
-          <AddFriend :user="user" />
-          <div class="card">
-            <div class="card-header">
-              <h3>Friends</h3>
-            </div>
-            <div class="container"></div>
-            <div class="card-body">
-              <!-- Shows if empty -->
-              <div v-if="friends && friends.length == 0">
-                <p class="text-center text-muted">
-                  Your friends list is empty. Add some friends!
-                </p>
-              </div>
-              <div v-for="friend in friends" :key="friend.friend_email" class="mb-4">
-                <h5>{{ friend }}</h5>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </template>
   
   <script>
@@ -139,19 +70,15 @@
         isAuthenticated,
         routes: [],
         friends: [],
+
+        isSubmitted: false,
+        newFriends: true,
+        newFeatures: true,
+        lostPlace: true,
+
       };
     },
     computed: {
-      // For pagination
-      paginatedRoutes() {
-        const start = (this.currentPage - 1) * this.itemsPerPage;
-        const end = start + this.itemsPerPage;
-        return this.routes.slice(start, end);
-      },
-      // Total pages
-      totalPages() {
-        return Math.ceil(this.routes.length / this.itemsPerPage);
-      },
     },
     components: {
       Navbar,
@@ -159,6 +86,17 @@
       AddFriend,
     },
     methods: {
+      submit(){
+        this.isSubmitted = true;
+
+      },
+      reset(){
+        this.newFriends = true;
+        this.newFeatures = true;
+        this.lostPlace = true;
+      },
+
+
       fetchData() {
         this.isLoading = true;
         if (this.isAuthenticated) {
