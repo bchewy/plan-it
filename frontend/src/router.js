@@ -36,7 +36,7 @@ const router = createRouter({
 		{
 			path: '/admin',
 			component: () => import('./views/Admin.vue')
-		}
+		},
 		{
 			path: '/badges',
 			component: () => import('./views/Badges.vue')
