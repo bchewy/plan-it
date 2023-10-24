@@ -30,6 +30,63 @@
   </div>
 </section>
 
+<!--Boxes-->
+<section class="p-5">
+	<div class = "container">
+		<div class= "row text-center">
+			<div class = "col-md">
+				<div class = "card text-light" style = "background-color: rgb(209, 244, 209);">
+				<div class = "card-body text-center">
+					<div class="h1 mb-3>">
+					<font-awesome-icon :icon="['fas', 'leaf']" />
+				</div>
+				<h3 class = "card-title mb-3">
+					Eco-friendly Navigation
+				</h3>
+				<p class="card-text">
+					this is so great and green! change writeup at the end.
+				</p>
+				<a href = "#" class = "btn btn-success"> Learn More</a>
+				</div>
+				</div>
+			</div>
+			<div class = "col-md">
+			<div class = "card text-light" style = "background-color: rgb(209, 244, 209);">
+				<div class = "card-body text-center">
+					<div class="h1 mb-3>">
+					<font-awesome-icon :icon="['fas', 'shoe-prints']" />
+				</div>
+				<h3 class = "card-title mb-3">
+					Traffic Optimisation
+				</h3>
+				<p class="card-text">
+					This reduces our carbon footprint.
+				</p>
+				<a href = "#" class = "btn btn-success"> Learn More</a>
+				</div>
+				</div>
+			</div>
+			</div>
+			<div class = "col-md">
+			<div class = "card text-light" style = "background-color: rgb(209, 244, 209);">
+				<div class = "card-body text-center">
+					<div class="h1 mb-3>">
+						<font-awesome-icon :icon="['fas', 'bus']" />
+				</div>
+				<h3 class = "card-title mb-3">
+					Incentivising Public Transport
+				</h3>
+				<p class="card-text">
+					Encourages more people to take the public transport through badges.
+				</p>
+				<a href = "#" class = "btn btn-success"> Learn More</a>
+				</div>
+				</div>
+				</div>
+				</div>
+</section>
+
+
 
   
 	<footer>
