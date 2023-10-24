@@ -25,7 +25,7 @@
   }
 
   p:first-child {
-    color: #FFFF;
+    color: black;
   }
 
   p {
@@ -34,13 +34,13 @@
   }
 
   .Route {
-    background-color: rgb(209, 244, 209); /* Change the button color */
+    background-color: #00B300; /* Change the button color */
     border-radius: 10px; /* Add rounded corners */
     transition: outline 0.3s ease-in-out; /* Add transition for outline */
   }
 
   .Route:hover {
-    outline: 2px solid #00FF00; /* Green outline on hover */
+    outline: 2px solid #00B300; /* Green outline on hover */
   }
 </style>
 
