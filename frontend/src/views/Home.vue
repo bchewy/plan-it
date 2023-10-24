@@ -7,8 +7,8 @@
 	<!--showcase-->
 	<section class="text-center col-12 m-0 p-0">
   <div class="container" style="background-color: rgb(209, 244, 209);">
-    <h1>Plan-It!<br> Stay <span class="text-success"> Sustainable </span> . </h1>
-  </div>
+    <h1>Plan-It!</h1>
+</div>
 </section>
 
 <!-- signup now-->
@@ -30,12 +30,28 @@
   </div>
 </section>
 
+<!--flexbox thingy!-->
+<section class="text-muted p-5 text-center">
+	<div class = "container">
+		<div class = "d-sm-flex">
+			<div>
+				<h1><span class= "text-success">Carbon-First </span> Routing.</h1>
+				<p class= "lead">
+					Account for your own carbon footprint for your traffic taken, value-add and commit to reducing your carbon footprint and reduce your personal impact.
+				</p>
+			</div>
+			<img class="img-fluid w-50" src = "frontend/src/assets/Homepage pictures/ehotel_Co2-Fussabdruck-header_750x500-750x500.jpg" alt="">
+		</div>
+	</div>
+    <h1>Plan-It!</h1>
+</section>
+
 <!--Boxes-->
 <section class="p-5">
 	<div class = "container">
 		<div class= "row text-center">
 			<div class = "col-md">
-				<div class = "card text-mute" style = "outline-color: darkgreen;">
+				<div class = "card text-muted" style = "outline-color: darkgreen;">
 				<div class = "card-body text-center">
 					<div class="h1 mb-3>">
 					<font-awesome-icon icon="fa-solid fa-leaf"></font-awesome-icon>
@@ -51,7 +67,7 @@
 				</div>
 			</div>
 			<div class = "col-md">
-				<div class = "card text-mute" style = "outline-color: darkgreen;">
+				<div class = "card text-muted" style = "outline-color: darkgreen;">
 				<div class = "card-body text-center">
 					<div class="h1 mb-3>">
 					<font-awesome-icon icon="fa-solid fa-shoe-prints"></font-awesome-icon>
@@ -68,7 +84,7 @@
 			</div>
 
 			<div class = "col-md">
-				<div class = "card text-mute" style = "outline-color: darkgreen;">
+				<div class = "card text-muted" style = "outline-color: darkgreen;">
 				<div class = "card-body text-center">
 					<div class="h1 mb-3>">
 						<font-awesome-icon icon="fa-solid fa-bus"></font-awesome-icon>
