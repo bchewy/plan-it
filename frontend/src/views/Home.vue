@@ -105,7 +105,7 @@ export default {
 	name: 'Home',
 	components: {
 		NavBar,  // Register the NavBar component
-		FontAwesomeIcon,
+		
 		// Login
 	},
 	setup() {
