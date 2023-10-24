@@ -53,12 +53,12 @@
 
 <div class="row justify-content-start">
 <div class="col-1"></div>
-<div class="col-1"><div class="card border-0"><div class="card-body"><font-awesome-icon icon="fa-solid fa-user"></font-awesome-icon><br>
+<div class="col-1"><div class="card border-0"><div class="card-body"><font-awesome-icon icon="fa-solid fa-user fa-xl"></font-awesome-icon><br>
 <p class="card-text">Your name</p>
 </div>
 </div>
 </div>
-<div class="col-9">Content</div>
+<div class="col-9"><div class="border rounded"><p>Post text</p></div>
 </div>
 
 </div>
