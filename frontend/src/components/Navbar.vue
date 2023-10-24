@@ -46,6 +46,9 @@
                   Profile</router-link>
               </li>
               <li>
+                <router-link class="dropdown-item" to="/settings">
+                  <font-awesome-icon icon="fa-cog" />
+                  Settings</router-link>
                 <router-link class="dropdown-item" :to="`/profile/public/${user.email}`">
                   <font-awesome-icon icon="fa-solid fa-circle-user" />
                   Your Public Profile</router-link>

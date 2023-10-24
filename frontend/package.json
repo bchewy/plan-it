@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@auth0/auth0-vue": "^2.3.1",
-    "@fawmi/vue-google-maps": "^0.9.67",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-brands-svg-icons": "^6.4.2",
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
@@ -22,8 +21,10 @@
     "bootstrap": "^5.3.2",
     "esbuild-node-loader": "^0.8.0",
     "install": "^0.13.0",
+    "lsof": "^0.1.0",
     "primevue": "^3.36.0",
     "vue": "^3.3.4",
+    "vue-router": "^4.2.5"
     "vue-confetti": "^2.3.0",
     "vue-place-autocomplete": "^0.2.8",
     "vue-router": "^4.2.5",

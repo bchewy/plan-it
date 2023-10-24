@@ -41,7 +41,8 @@
 	<div class="row mb-3 justify-content-between">
 	<span class="col-1"></span>
 	
-	<button class="btn btn-secondary col-3" type="button"><font-awesome-icon icon="fa-solid fa-share"/>  Share a badge</button>
+	<button class="btn btn-secondary col-3" type="button" @click="badges=!badges"><font-awesome-icon icon="fa-solid fa-share"/>  Share a badge</button>
+	<Share_badge></Share_badge>
 	<button class="btn btn-secondary col-3" type="button"><font-awesome-icon icon="fa-solid fa-tag"/>  Tag a friend</button>
 	<button class="btn btn-secondary col-3" type="button"><font-awesome-icon  icon="fa-solid fa-plus-square"/>  Create post!</button>
 	<span class="col-1"></span>
@@ -68,15 +69,20 @@
 import NavBar from "../components/Navbar.vue";
 // import Login from '../components/Login.vue'
 import { useAuth0 } from '@auth0/auth0-vue';
-
+import Share_badge from "../components/Share_badge.vue";
 export default {
 	name: 'Community',
+	data(){
+
+	},
 	components: {
 		NavBar,  // Register the NavBar component
 		// Login
+		Share_badge
 	},
 	setup() {
 		const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+		const badges=false
 
 		console.log('Setup method is called');
 
@@ -94,6 +100,7 @@ export default {
 			},
 			user,
 			isAuthenticated,
+			badges
 		};
 	}
 }
