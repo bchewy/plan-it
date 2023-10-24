@@ -30,6 +30,8 @@ const router = createRouter({
 			component: () => import('./views/Community.vue')
 		},
 		{
+			path: '/settings',
+			component: () => import('./views/Settings.vue')
 			path: '/admin',
 			component: () => import('./views/Admin.vue')
 		}
