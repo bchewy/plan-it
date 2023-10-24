@@ -5,7 +5,7 @@
 	</header>
   
 	<!--showcase-->
-	<section class="text-center col-12 p-5">
+	<section class="text-center col-12">
   <div class="container" style="background-color: rgb(209, 244, 209);">
     <h1>Plan-It!<br> Stay <span class="text-success"> Sustainable </span> . </h1>
   </div>
@@ -15,7 +15,7 @@
 <section class="bg-success text-light">
   <div class="container">
     <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
-      <h3>Refer a friend now!</h3>
+      <p>Refer a friend now!</p>
       <div class="input-group">
         <input
           type="text"
