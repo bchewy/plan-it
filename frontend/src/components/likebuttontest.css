@@ -1,0 +1,115 @@
+:focus {
+    outline: #08f auto 2px;
+  }
+  
+
+  
+  #app{
+    padding: 50px;
+    text-align: center;
+  }
+  
+  .heart{
+    width: 20px;
+    fill: gray;
+    transition: fill .5s, transform .5s;
+    pointer-events: none;
+    
+    &-btn{
+      position: relative;
+      background: transparent;
+      border-radius: 50%;
+      background-color: white;
+      padding: 10px 10px 8px 10px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.25), 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
+      border: 0;
+     
+      &.liked{
+        .heart{
+          fill: #ee3529;
+         
+         &-icon{
+          transform: scale(1.2);
+         }
+          
+          &-pop{
+            animation-direction: normal;
+          }
+        }
+      }
+      
+      &:active{
+        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+      }
+    }
+    
+    &-pop{
+     position: absolute; 
+     width: 30%;
+     opacity: 0;
+     left: 0;
+     animation: pop 1s ease forwards reverse;
+      
+      &.one{
+        left: 1%;
+        transform: rotate(-10deg);
+        animation-delay: .45;
+      }
+      &.two{
+        left: 15%;
+        transform: rotate(8deg);
+        animation-delay: .25s;
+      }
+      &.three{
+        left: 30%;
+        transform: rotate(-5deg);
+        animation-delay: 0;
+      }
+      &.four{
+        left: 50%;
+        transform: rotate(-8deg);
+        animation-delay: .3s;
+      }
+      &.five{
+        left: 60%;
+        transform: rotate(-10deg);
+        animation-delay: .9s;
+      }
+      &.six{
+        left: 70%;
+        transform: rotate(-8deg);
+        animation-delay: .2;
+      }
+      &.seven{
+        left: 85%;
+        transform: rotate(6deg);
+        animation-delay: .35s;
+      }
+      &.eight{
+        left: 90%;
+        transform: rotate(-4deg);
+        animation-delay: .5s;
+      }
+      &.nine{
+        left: 95%;
+        transform: rotate(8deg);
+        animation-delay: .2s;
+      }
+    }
+  }
+  
+  @keyframes pop{
+    0%{
+      left: calc(50% - 7px);
+      top: 10px;
+    }
+    20%{
+      opacity: 1;
+    }
+    80%{
+      top: -20px;
+    }
+    100%{
+      opacity: 0;
+    }
+  }
