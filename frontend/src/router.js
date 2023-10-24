@@ -14,12 +14,16 @@ const router = createRouter({
 			component: () => import('./views/Route.vue')
 		},
 		// {
-		// 	path: '/activity',
-		// 	component: () => import('./views/Activity.vue')
+		// 	path: '/debug',
+		// 	component: () => import('./views/Debug.vue')
 		// },
 		{
 			path: '/profile',
 			component: () => import('./views/Profile.vue')
+		},
+		{
+			path: '/profile/public/:userEmail',
+			component: () => import('./views/ProfilePublic.vue')
 		},
 		{
 			path: '/community',
@@ -28,6 +32,8 @@ const router = createRouter({
 		{
 			path: '/settings',
 			component: () => import('./views/Settings.vue')
+			path: '/admin',
+			component: () => import('./views/Admin.vue')
 		}
 	]
 })

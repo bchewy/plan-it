@@ -27,7 +27,7 @@ export default defineConfig({
 	// }
 	// Self signed cert above 
 
-	
+
 	// esbuild: {
 	// 	// Enable esbuild's node adapter 
 	// 	nodeAdapter: true

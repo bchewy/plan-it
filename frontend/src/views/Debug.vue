@@ -3,7 +3,8 @@
     <!-- nav -->
     <NavBar />
   </header>
-  <!-- <Friends v-if="user" :user="user" /> -->
+  <!-- <AddFriends :user="user" /> -->
+
 
   <footer>
     <!-- footer -->
@@ -11,14 +12,14 @@
 </template>
 <script>
 import NavBar from "../components/Navbar.vue";
-// import Friends from "../components/Friends.vue";
+import AddFriends from "../components/AddFriends.vue";
 import { useAuth0 } from "@auth0/auth0-vue";
 
 export default {
   name: "Home",
   components: {
     NavBar,
-    // Friends,
+    AddFriends,
   },
   setup() {
     const { loginWithRedirect, user, isAuthenticated } = useAuth0();
