@@ -16,7 +16,7 @@
   <div class="container">
     <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
       <p>Refer a friend now!</p>
-      <div class="input-group">
+      <div class="input-group news-input">
         <input
           type="text"
           class="form-control"
@@ -38,6 +38,7 @@
   </template>
   
 <script>
+
 import NavBar from '../components/Navbar.vue'
 // import Login from '../components/Login.vue'
 import { useAuth0 } from '@auth0/auth0-vue';
@@ -71,3 +72,13 @@ export default {
 	}
 }
 </script>
+
+<style scoped>
+/* Other component-specific styles */
+
+.news-input {
+  width: 50%; /* Set the width to 50% */
+}
+
+/* Additional styles if needed */
+</style>
