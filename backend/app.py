@@ -492,6 +492,67 @@ def read_badge(badge_id):
         return jsonify(badge), 200
     else:
         return jsonify({"message": "Badge not found."}), 404
+    
+
+@app.route("/users/brian@bchewy.com/badges", methods=['GET'])
+# @require_api_key
+def get_user_badges(user_email):
+    if user_email == "brian@bchewy.com":
+        badges = [
+        {
+            "id": "badge_1",
+            "name": "Green Newbie",
+            "description": "Congratulations on taking your first step toward a greener planet!",
+            "icon": "green_newbie_icon.png",
+            "milestone": "First carbon footprint calculation"
+            },
+            {
+            "id": "badge_2",
+            "name": "Eco-Friendly Traveler",
+            "description": "You've offset the carbon footprint of your travels for one month!",
+            "icon": "eco_friendly_traveler_icon.png",
+            "milestone": "Offset one month of travel"
+            },
+            {
+            "id": "badge_3",
+            "name": "Foodprint Fighter",
+            "description": "One week of sustainable eating choices. Way to go!",
+            "icon": "foodprint_fighter_icon.png",
+            "milestone": "One week of sustainable food choices"
+            },
+            {
+            "id": "badge_4",
+            "name": "Solar Superstar",
+            "description": "You've converted to using solar energy at home.",
+            "icon": "solar_superstar_icon.png",
+            "milestone": "Switch to solar energy"
+            },
+            {
+            "id": "badge_5",
+            "name": "Recycle Ranger",
+            "description": "Recycled items for 30 consecutive days!",
+            "icon": "recycle_ranger_icon.png",
+            "milestone": "30 days of recycling"
+            },
+            {
+            "id": "badge_6",
+            "name": "Community Catalyst",
+            "description": "You've inspired 5 friends to join the app and start tracking their footprint.",
+            "icon": "community_catalyst_icon.png",
+            "milestone": "Refer 5 friends"
+            },
+            {
+            "id": "badge_7",
+            "name": "Zero-Waste Warrior",
+            "description": "Achieved a zero-waste lifestyle for one month.",
+            "icon": "zero_waste_warrior_icon.png",
+            "milestone": "One month of zero-waste"
+            }
+        ]
+        return jsonify({"badges": badges}), 200
+    else:
+        return jsonify({"message": "User not found."}), 404
+
 
 # Update Badge
 @app.route("/badges/<badge_id>", methods=['PUT'])
