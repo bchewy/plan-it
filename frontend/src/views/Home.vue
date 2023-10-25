@@ -38,7 +38,7 @@
 				<img class="img-fluid w-50" src="@/assets/homepage/co2.jpg" alt="">
 			</div>
 		</div>
-	<h3 v-if="isAuthenticated">Hi, {{ userName }} !</h3> <!-- Display the user's name if authenticated -->
+		<h3 v-if="isAuthenticated">Hi, {{ user.name }}!</h3> <!-- Display the user's name if authenticated -->
 </section>
 
 	<!--Boxes-->
@@ -115,14 +115,6 @@ export default {
   components: {
     NavBar,
   },
-  data() {
-    const { user, isAuthenticated } = useAuth0();
-    const userName = isAuthenticated ? user.name : ''; // Get the user's name if authenticated
-
-    return {
-      userName, // Add user's name to the data object
-    };
-  },
   setup() {
     const { loginWithRedirect, user, isAuthenticated } = useAuth0();
 
@@ -137,13 +129,31 @@ export default {
           alert('Failed to login');
           console.error('Failed to login:', e);
         }
-      },
-      user,
-      isAuthenticated,
+      }
     };
   },
 };
 </script>
+
+<style scoped>
+/* Other component-specific styles */
+
+.news-input {
+  width: 50%;
+  /* Set the width to 50% */
+}
+
+/* Additional styles if needed */
+</style>
+In this code, I've directly used {{ user.name }} in your template to display the user's name. This assumes that the user object contains the user's name when the user is authenticated.
+
+If you're still facing issues with the user's name not showing up, please ensure that the user object obtained from useAuth0 contains the name of the authenticated user. If it doesn't, you may need to check how the user object is structured and adjust your code accordingly.
+
+
+
+
+
+
 
 
 <style scoped>
