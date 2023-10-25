@@ -41,7 +41,7 @@
 					<span class="input-group-text">Departure Time</span>
 					<input type="time" v-model="departureTime" class="form-control">
 					<button class="btn btn-outline-secondary" type="button" @click="addMinutes(5)">+5m</button>
-					<button class="btn btn-outline-secondary" type="button" @click="addMinutes(10)">+10m</button>
+					<!-- <button class="btn btn-outline-secondary" type="button" @click="addMinutes(10)">+10m</button> -->
 				</div>
 				<div class="mb-3">
 					<span class="d-block mb-2"><strong>Route Modifiers</strong></span>
@@ -69,6 +69,7 @@
 				<div v-if="routeDetails">
 					<p><strong>Distance:</strong> {{ routeDetails.distanceMeters }} meters ({{ routeDetails.distanceMeters / 1000 }} kilometers) </p>
 					<p><strong>Duration:</strong> {{ routeDetails.duration }} seconds </p>
+					<p><strong>Carbon Emission:</strong> {{ calculateCarbonEmission() }} kg CO2</p>
 					<!-- <p><strong>Arrival Time:</strong> {{ new Date(departureDate.getTime() + routeDetails.duration * 1000).toLocaleTimeString() }} </p> -->
 					<div v-if="directionSteps.length > 0" style="max-height: 300px; overflow-y: auto;">
 						<h2>Directions:</h2>
@@ -294,7 +295,7 @@ export default defineComponent({
 					start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
 					end_point_name: await getLocationName(destination.value.lat, destination.value.lng),
 					transport_mode: travelMode.value,
-					// carbon_emission: calculateCarbonEmission(travelMode.value, routeDetails.value.distanceMeters),  // Assume calculateCarbonEmission is a function to calculate the carbon emission
+					carbon_emission: calculateCarbonEmission(travelMode.value, routeDetails.value.distanceMeters),  // Assume calculateCarbonEmission is a function to calculate the carbon emission
 					carbon_emission: 0,  // Assume calculateCarbonEmission is a function to calculate the carbon emission
 					timestamp: new Date().toISOString(),
 					user_id: props.userme.email
@@ -358,9 +359,29 @@ export default defineComponent({
 			return coordinates;
 		};
 
+		const calculateCarbonEmission = () => {
+			const distanceInKm = routeDetails.value.distanceMeters / 1000;
+			let carbonEmissionPerKm;
+
+			switch (travelMode.value) {
+				case 'driving':
+					carbonEmissionPerKm = 0.12;  // Assume 0.12 kg CO2 emitted per km for a car
+					break;
+				case 'bicycling':
+				case 'walking':
+					carbonEmissionPerKm = 0;  // No carbon emission for bicycling or walking
+					break;
+				default:
+					carbonEmissionPerKm = 0.12;  // Default to car emission if travel mode is not recognized
+			}
+
+			const carbonFootprint = distanceInKm * carbonEmissionPerKm;
+			return carbonFootprint;
+		};
 
 
 		return {
+			calculateCarbonEmission,
 			addMinutes,
 			departureTime,
 			routeModifiers,
