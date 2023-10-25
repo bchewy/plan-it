@@ -71,14 +71,14 @@
 					<p><strong>Duration:</strong> {{ routeDetails.duration }} seconds </p>
 					<p><strong>Carbon Emission:</strong> {{ calculateCarbonEmission() }} kg CO2</p>
 					<!-- <p><strong>Arrival Time:</strong> {{ new Date(departureDate.getTime() + routeDetails.duration * 1000).toLocaleTimeString() }} </p> -->
-					<div v-if="directionSteps.length > 0" style="max-height: 300px; overflow-y: auto;">
+					<!-- <div v-if="directionSteps.length > 0" style="max-height: 300px; overflow-y: auto;">
 						<h2>Directions:</h2>
 						<ol>
 							<li v-for="(step, index) in directionSteps" :key="index">
 								{{ step && step.navigationInstruction ? step.navigationInstruction.instructions : 'Step not available' }}
 							</li>
 						</ol>
-					</div>
+					</div> -->
 				</div>
 				<div v-if="routeDetails" class="d-flex justify-content-center align-items-center">
 					<div class="modal fade" id="makePostModal" tabindex="-1" aria-labelledby="makePostModalLabel" aria-hidden="true">
@@ -200,7 +200,14 @@ export default defineComponent({
 			return `${hours}:${minutes}`;
 		};
 
-		const departureTime = ref(getCurrentTime());
+		const addFiveMinutesToCurrentTime = () => {
+			const now = new Date();
+			now.setMinutes(now.getMinutes() + 5);
+			const hours = String(now.getHours()).padStart(2, '0');
+			const minutes = String(now.getMinutes()).padStart(2, '0');
+			return `${hours}:${minutes}`;
+		};
+		const departureTime = ref(addFiveMinutesToCurrentTime());
 
 		const addMinutes = (minutesToAdd) => {
 			const [hours, minutes] = departureTime.value.split(':').map(Number);
@@ -303,18 +310,18 @@ export default defineComponent({
 				try {
 					// Send a POST request to the server to store the route data
 					const headers = {
-						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'  // Replace with your actual API key
+						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
 					};
-					await axios.post('http://127.0.0.1:5000/routes', routeData, { headers });  // Adjust the URL to match your server
+					await axios.post('http://127.0.0.1:5000/routes', routeData, { headers });
 				} catch (error) {
 					console.error('Failed to store route data:', error);
-					errorMessage.value = error.message += ' Please try again.';  // Assign new value to errorMessage
+					errorMessage.value = error.message += ' Please try again.';
 
 
 				}
 			} catch (error) {
 				console.error("Failed to fetch route details:", error);
-				errorMessage.value = error.message += ' Please try again.';  // Assign new value to errorMessage
+				errorMessage.value = error.message += ' Please try again.';
 
 
 			}
