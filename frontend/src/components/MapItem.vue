@@ -296,7 +296,6 @@ export default defineComponent({
 					end_point_name: await getLocationName(destination.value.lat, destination.value.lng),
 					transport_mode: travelMode.value,
 					carbon_emission: calculateCarbonEmission(travelMode.value, routeDetails.value.distanceMeters),  // Assume calculateCarbonEmission is a function to calculate the carbon emission
-					carbon_emission: 0,  // Assume calculateCarbonEmission is a function to calculate the carbon emission
 					timestamp: new Date().toISOString(),
 					user_id: props.userme.email
 				};
