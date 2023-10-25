@@ -26,14 +26,9 @@
           </li>
         </ul>
         <ul class="navbar-nav">
-          <!-- If user is not authenticated -->
           <li v-if="!isAuthenticated" class="nav-item">
-            <a class="nav-link" @click.prevent="login">Log in</a>
+            <a class="nav-link" @click.prevent="login">Login</a>
           </li>
-          <!-- <li v-if="!isAuthenticated" class="nav-item">
-						<a class="nav-link" @click="signup">Sign up</a>
-					</li> -->
-          <!-- If user is authenticated -->
           <li v-else class="nav-item dropdown">
             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img :src="user.picture" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px" />
@@ -101,9 +96,14 @@ import { watch, computed, defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'NavBar',
+  // props: {
+  //   pictureurl: String
+  // },
   setup() {
     const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
     const userHandle = ref('');
+    // const pictureurl = user.picture
+
     watch(user, async (newValue) => {
       // If the user is authenticated
       if (newValue) {
@@ -135,7 +135,8 @@ export default defineComponent({
             body: JSON.stringify({
               auth0_user_id: newValue.sub,
               email: newValue.email,
-              handle: newValue.nickname
+              handle: newValue.nickname,
+              pictureurl: newValue.picture,
             })
           });
           const data = await response.json();
@@ -167,7 +168,7 @@ export default defineComponent({
       user,
       isAuthenticated,
       userHandle,
-      saveHandle
+      saveHandle,
     };
   }
 });

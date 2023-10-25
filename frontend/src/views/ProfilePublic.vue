@@ -19,10 +19,11 @@
           </div>
           <div class="card-body">
             <div class="text-center mb-3">
-              <img :src="user.picture" class="rounded-circle" alt="User profile picture" width="128" height="128" />
+              <img :src="user.pictureurl" class="rounded-circle" alt="User profile picture" width="128" height="128" />
             </div>
             <div class="mb-3"><b>Email:</b> {{ user.email }}</div>
             <div class="mb-3"><b>Experience:</b> {{ user.exp }}</div>
+            <div class="mb-3"><b>Level:</b> {{ user.level }}</div>
           </div>
         </div>
       </div>
@@ -34,7 +35,9 @@
       </div>
       <div class="card-body">
         <div v-for="friend in friends" :key="friend" class="mb-4">
-          <h5>{{ friend }}</h5>
+          <h5>
+            <router-link :to="`/profile/public/${friend}`">{{ friend }}</router-link>
+          </h5>
         </div>
       </div>
     </div>

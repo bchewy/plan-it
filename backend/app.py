@@ -214,7 +214,11 @@ def ez_get_user(user_email):
     user = user_collection.find_one({"email": user_email})
     if user:
         user = convert_objectid_to_string(user)
-        user = { "email": user["email"], "exp": user["exp"], "friends": user["friends"] }
+        user = { "email": user["email"], 
+                "pictureurl":user["pictureurl"],
+                "exp": user["exp"], 
+                "level": user["level"], 
+                "friends": user["friends"] }
         return jsonify(user), 200
     else:
         return jsonify({"message": "User not found."}), 404
