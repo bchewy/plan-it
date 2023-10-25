@@ -53,7 +53,7 @@
 
 <div class="row justify-content-center mt-5">
 
-	<div class="col-8 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user"></font-awesome-icon>  User<br>
+	<div class="col-8 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user" class="mt-3"></font-awesome-icon> User<br><br>
 	<p>Post text</p></div>
 
 </div>
