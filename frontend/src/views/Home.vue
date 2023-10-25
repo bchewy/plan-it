@@ -39,66 +39,63 @@
 			</div>
 		</div>
 		<h3 v-if="isAuthenticated">Hi, {{ user.name }}!</h3> <!-- Display the user's name if authenticated -->
-</section>
+		</section>
 
-	<!--Boxes-->
-	<section class="p-5">
-		<div class="container">
-			<div class="row text-center">
-				<div class="col-md">
-					<div class="card text-muted h-100" style="outline-color: darkgreen;">
-						<div class="card-body text-center">
-							<div class="h1 mb-3>">
-								<font-awesome-icon icon="fa-solid fa-leaf"></font-awesome-icon>
-							</div>
-							<h3 class="card-title mb-3">
-								Eco-friendly Navigation
-							</h3>
-							<p class="card-text">
-								this is so great and green! change writeup at the end.
-							</p>
-							<a href="#" class="btn btn-success"> Learn More</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md">
-					<div class="card text-muted h-100" style="outline-color: darkgreen;">
-						<div class="card-body text-center">
-							<div class="h1 mb-3>">
-								<font-awesome-icon icon="fa-solid fa-shoe-prints"></font-awesome-icon>
-							</div>
-							<h3 class="card-title mb-3">
-								Traffic Optimisation
-							</h3>
-							<p class="card-text">
-								This reduces our carbon footprint.
-							</p>
-							<a href="#" class="btn btn-success"> Learn More</a>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md">
-					<div class="card text-muted h-100" style="outline-color: darkgreen;">
-						<div class="card-body text-center">
-							<div class="h1 mb-3>">
-								<font-awesome-icon icon="fa-solid fa-bus"></font-awesome-icon>
-							</div>
-							<h3 class="card-title mb-3">
-								Incentivising Public Transport
-							</h3>
-							<p class="card-text">
-								Encourages more people to take the public transport through badges.
-							</p>
-							<a href="#" class="btn btn-success"> Learn More</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-
+  <!-- boxes-->
+  <section class="p-5">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md">
+          <div class="card text-muted h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+              <div class="text-center">
+                <div class="h1 mb-3">
+                  <font-awesome-icon icon="fa-solid fa-leaf"></font-awesome-icon>
+                </div>
+                <h3 class="card-title mb-3">Eco-friendly Navigation</h3>
+                <p class="card-text">
+                  this is so great and green! change writeup at the end.
+                </p>
+              </div>
+              <a href="#" class="btn btn-success"> Learn More</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="card text-muted h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+              <div class="text-center">
+                <div class="h1 mb-3">
+                  <font-awesome-icon icon="fa-solid fa-shoe-prints"></font-awesome-icon>
+                </div>
+                <h3 class="card-title mb-3">Traffic Optimisation</h3>
+                <p class="card-text">
+                  This reduces our carbon footprint.
+                </p>
+              </div>
+              <a href="#" class="btn btn-success"> Learn More</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="card text-muted h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+              <div class="text-center">
+                <div class="h1 mb-3">
+                  <font-awesome-icon icon="fa-solid fa-bus"></font-awesome-icon>
+                </div>
+                <h3 class="card-title mb-3">Incentivising Public Transport</h3>
+                <p class="card-text">
+                  Encourages more people to take public transport through badges.
+                </p>
+              </div>
+              <a href="#" class="btn btn-success"> Learn More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
 	<footer>
