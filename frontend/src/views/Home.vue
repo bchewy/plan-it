@@ -15,7 +15,7 @@
 	<section class="bg-success text-light">
 		<div class="container">
 			<div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
-				<p class="news-input">Refer a friend now!</p> <!-- Apply the "news-input" class -->
+				<h4 class="news-input">Refer a friend now!</h4> <!-- Apply the "news-input" class -->
 				<div class="input-group news-input">
 					<input type="text" class="form-control news-input" placeholder="Friend's Email Address" aria-label="Friend's Email Address" aria-describedby="button-addon2">
 					<button class="btn btn-lg" id="button-addon2">Send</button>
@@ -46,7 +46,7 @@
 		<div class="container">
 			<div class="row text-center">
 				<div class="col-md">
-					<div class="card text-muted" style="outline-color: darkgreen;">
+					<div class="card text-muted h-100" style="outline-color: darkgreen;">
 						<div class="card-body text-center">
 							<div class="h1 mb-3>">
 								<font-awesome-icon icon="fa-solid fa-leaf"></font-awesome-icon>
@@ -62,7 +62,7 @@
 					</div>
 				</div>
 				<div class="col-md">
-					<div class="card text-muted" style="outline-color: darkgreen;">
+					<div class="card text-muted h-100" style="outline-color: darkgreen;">
 						<div class="card-body text-center">
 							<div class="h1 mb-3>">
 								<font-awesome-icon icon="fa-solid fa-shoe-prints"></font-awesome-icon>
@@ -79,7 +79,7 @@
 				</div>
 
 				<div class="col-md">
-					<div class="card text-muted" style="outline-color: darkgreen;">
+					<div class="card text-muted h-100" style="outline-color: darkgreen;">
 						<div class="card-body text-center">
 							<div class="h1 mb-3>">
 								<font-awesome-icon icon="fa-solid fa-bus"></font-awesome-icon>
@@ -141,27 +141,6 @@ export default {
 .news-input {
   width: 50%;
   /* Set the width to 50% */
-}
-
-/* Additional styles if needed */
-</style>
-In this code, I've directly used {{ user.name }} in your template to display the user's name. This assumes that the user object contains the user's name when the user is authenticated.
-
-If you're still facing issues with the user's name not showing up, please ensure that the user object obtained from useAuth0 contains the name of the authenticated user. If it doesn't, you may need to check how the user object is structured and adjust your code accordingly.
-
-
-
-
-
-
-
-
-<style scoped>
-/* Other component-specific styles */
-
-.news-input {
-	width: 50%;
-	/* Set the width to 50% */
 }
 
 /* Additional styles if needed */
