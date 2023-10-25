@@ -43,7 +43,7 @@ const router = createRouter({
 		},
 		{
 			path:'/community/createGroup',
-			component: () => import ('./views/CreateGroup.vue')
+			component: () => import('./views/CreateGroup.vue')
 		},
 		,
 		{
