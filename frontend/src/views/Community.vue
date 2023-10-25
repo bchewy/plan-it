@@ -2,9 +2,14 @@
 
 		<!-- nav -->
 		<NavBar />
+<div v-if="isLoading || !isAuthenticated" class="loading-screen">
+    <div v-if="isLoading">Loading...</div>
+    <div v-else class="row justify-content-center align-items-center" style="height: 100vh">
+      <h3 class="text-center p-5">Please log in to use this feature</h3>
+    </div>
+  </div>
 
-
-<body class="position-relative" >
+<div v-else class="position-relative" >
 <div class="container-fluid">
 <div class="row">
 
@@ -72,7 +77,7 @@
 	
 
     
-    </body>
+</div>
 	<footer>
 		<!-- footer -->
 	</footer>
