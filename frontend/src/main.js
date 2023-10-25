@@ -26,6 +26,8 @@ import { faArrowRightFromBracket, faCar, faCircleUser, faTruckFast, faCog } from
 import { faPlusSquare, faShare, faTag, faPlus, faUsers, faUser } from '@fortawesome/free-solid-svg-icons'
 import { faLeaf, faShoePrints, faBus } from '@fortawesome/free-solid-svg-icons';
 
+// Main.js
+
 
 library.add(faCar)
 library.add(faCircleUser)
@@ -39,8 +41,8 @@ library.add(faTag)
 library.add(faUsers)
 library.add(faUser)
 library.add(faLeaf)
-library.add(faShoePrints) 
-library.add(faBus) 
+library.add(faShoePrints)
+library.add(faBus)
 // Prima Vue
 import PrimeVue from 'primevue/config';
 
