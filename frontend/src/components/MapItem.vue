@@ -41,7 +41,7 @@
 					<span class="input-group-text">Departure Time</span>
 					<input type="time" v-model="departureTime" class="form-control">
 					<button class="btn btn-outline-secondary" type="button" @click="addMinutes(5)">+5m</button>
-					<button class="btn btn-outline-secondary" type="button" @click="addMinutes(10)">+10m</button>
+					<!-- <button class="btn btn-outline-secondary" type="button" @click="addMinutes(10)">+10m</button> -->
 				</div>
 				<div class="mb-3">
 					<span class="d-block mb-2"><strong>Route Modifiers</strong></span>
@@ -69,15 +69,16 @@
 				<div v-if="routeDetails">
 					<p><strong>Distance:</strong> {{ routeDetails.distanceMeters }} meters ({{ routeDetails.distanceMeters / 1000 }} kilometers) </p>
 					<p><strong>Duration:</strong> {{ routeDetails.duration }} seconds </p>
+					<p><strong>Carbon Emission:</strong> {{ calculateCarbonEmission() }} kg CO2</p>
 					<!-- <p><strong>Arrival Time:</strong> {{ new Date(departureDate.getTime() + routeDetails.duration * 1000).toLocaleTimeString() }} </p> -->
-					<div v-if="directionSteps.length > 0" style="max-height: 300px; overflow-y: auto;">
+					<!-- <div v-if="directionSteps.length > 0" style="max-height: 300px; overflow-y: auto;">
 						<h2>Directions:</h2>
 						<ol>
 							<li v-for="(step, index) in directionSteps" :key="index">
 								{{ step && step.navigationInstruction ? step.navigationInstruction.instructions : 'Step not available' }}
 							</li>
 						</ol>
-					</div>
+					</div> -->
 				</div>
 				<div v-if="routeDetails" class="d-flex justify-content-center align-items-center">
 					<div class="modal fade" id="makePostModal" tabindex="-1" aria-labelledby="makePostModalLabel" aria-hidden="true">
@@ -199,7 +200,14 @@ export default defineComponent({
 			return `${hours}:${minutes}`;
 		};
 
-		const departureTime = ref(getCurrentTime());
+		const addFiveMinutesToCurrentTime = () => {
+			const now = new Date();
+			now.setMinutes(now.getMinutes() + 5);
+			const hours = String(now.getHours()).padStart(2, '0');
+			const minutes = String(now.getMinutes()).padStart(2, '0');
+			return `${hours}:${minutes}`;
+		};
+		const departureTime = ref(addFiveMinutesToCurrentTime());
 
 		const addMinutes = (minutesToAdd) => {
 			const [hours, minutes] = departureTime.value.split(':').map(Number);
@@ -294,8 +302,7 @@ export default defineComponent({
 					start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
 					end_point_name: await getLocationName(destination.value.lat, destination.value.lng),
 					transport_mode: travelMode.value,
-					// carbon_emission: calculateCarbonEmission(travelMode.value, routeDetails.value.distanceMeters),  // Assume calculateCarbonEmission is a function to calculate the carbon emission
-					carbon_emission: 0,  // Assume calculateCarbonEmission is a function to calculate the carbon emission
+					carbon_emission: calculateCarbonEmission(travelMode.value, routeDetails.value.distanceMeters),  // Assume calculateCarbonEmission is a function to calculate the carbon emission
 					timestamp: new Date().toISOString(),
 					user_id: props.userme.email
 				};
@@ -303,18 +310,18 @@ export default defineComponent({
 				try {
 					// Send a POST request to the server to store the route data
 					const headers = {
-						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'  // Replace with your actual API key
+						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
 					};
-					await axios.post('http://127.0.0.1:5000/routes', routeData, { headers });  // Adjust the URL to match your server
+					await axios.post('http://127.0.0.1:5000/routes', routeData, { headers });
 				} catch (error) {
 					console.error('Failed to store route data:', error);
-					errorMessage.value = error.message += ' Please try again.';  // Assign new value to errorMessage
+					errorMessage.value = error.message += ' Please try again.';
 
 
 				}
 			} catch (error) {
 				console.error("Failed to fetch route details:", error);
-				errorMessage.value = error.message += ' Please try again.';  // Assign new value to errorMessage
+				errorMessage.value = error.message += ' Please try again.';
 
 
 			}
@@ -358,9 +365,29 @@ export default defineComponent({
 			return coordinates;
 		};
 
+		const calculateCarbonEmission = () => {
+			const distanceInKm = routeDetails.value.distanceMeters / 1000;
+			let carbonEmissionPerKm;
+
+			switch (travelMode.value) {
+				case 'driving':
+					carbonEmissionPerKm = 0.12;  // Assume 0.12 kg CO2 emitted per km for a car
+					break;
+				case 'bicycling':
+				case 'walking':
+					carbonEmissionPerKm = 0;  // No carbon emission for bicycling or walking
+					break;
+				default:
+					carbonEmissionPerKm = 0.12;  // Default to car emission if travel mode is not recognized
+			}
+
+			const carbonFootprint = distanceInKm * carbonEmissionPerKm;
+			return carbonFootprint;
+		};
 
 
 		return {
+			calculateCarbonEmission,
 			addMinutes,
 			departureTime,
 			routeModifiers,

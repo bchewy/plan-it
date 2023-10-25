@@ -71,21 +71,60 @@
       </div>
     </div>
   </nav>
+  <!-- User handle modal -->
+  <div class="modal" tabindex="-1" role="dialog" id="handleModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Enter User Handle</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Please enter a handle for your account:</p>
+          <input type="text" class="form-control" v-model="userHandle" placeholder="Enter handle">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" @click="saveHandle">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 
 <script>
 import { useAuth0 } from '@auth0/auth0-vue';
-import { watch, computed, defineComponent } from 'vue';
+import { watch, computed, defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'NavBar',
   setup() {
     const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
+    const userHandle = ref('');
     watch(user, async (newValue) => {
       // If the user is authenticated
       if (newValue) {
         // Create or update the user in your database
+        console.log('new value here', newValue)
+        try {
+          const handleResponse = await fetch(`http://127.0.0.1:5000/users/handle/${newValue.nickname}`, {
+            method: 'GET',
+            headers: {
+              'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+            }
+          });
+          const handleData = await handleResponse.json();
+          if (handleData.message === "User not found.") {
+            // If the user doesn't have a handle, prompt them to enter one
+            console.log('handle not found')
+            $('#handleModal').modal('show');
+          }
+        } catch (e) {
+          console.error('Failed to check handle:', e);
+        }
         try {
           const response = await fetch('http://127.0.0.1:5000/users', {
             method: 'POST',
@@ -95,7 +134,8 @@ export default defineComponent({
             },
             body: JSON.stringify({
               auth0_user_id: newValue.sub,
-              email: newValue.email
+              email: newValue.email,
+              handle: newValue.nickname
             })
           });
           const data = await response.json();
@@ -105,6 +145,11 @@ export default defineComponent({
         }
       }
     });
+
+    const saveHandle = async () => {
+      user.nickname = userHandle.value;
+      $('#handleModal').modal('hide');
+    };
 
     return {
       login: async () => {
@@ -121,6 +166,8 @@ export default defineComponent({
       },
       user,
       isAuthenticated,
+      userHandle,
+      saveHandle
     };
   }
 });
