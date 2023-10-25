@@ -2,9 +2,14 @@
 
 		<!-- nav -->
 		<NavBar />
+<div v-if="isLoading || !isAuthenticated" class="loading-screen">
+    <div v-if="isLoading">Loading...</div>
+    <div v-else class="row justify-content-center align-items-center" style="height: 100vh">
+      <h3 class="text-center p-5">Please log in to use this feature</h3>
+    </div>
+  </div>
 
-
-<body class="position-relative" >
+<div v-else class="position-relative" >
 <div class="container-fluid">
 <div class="row">
 
@@ -20,12 +25,12 @@
 	<hr>
     <li class="nav-item dropdown"><a class="h3 nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Groups</a>
 	<ul class="dropdown-menu bg-light">
-		<li><a class="dropdown-item" href="https://wad2.bchwy.com/createGroup"><font-awesome-icon icon="fa-solid fa-plus"/>   Create group</a></li>
-		<li><a class="dropdown-item" href="https://wad2.bchwy.com/yourGroups"><font-awesome-icon icon="fa-solid fa-users"/>   Your groups</a></li>
+		<li><router-link class="dropdown-item" to="/createGroup" ><font-awesome-icon icon="fa-solid fa-plus"/>   Create group</router-link></li>
+		<li><router-link class="dropdown-item" to="/yourGroups" ><font-awesome-icon icon="fa-solid fa-users"/>   Your groups</router-link></li>
 	</ul>
 	</li>
 	<hr>
-    <li class="nav-item"><a class="h3 nav-link" href="https://wad2.bchwy.com/friendCommunity">Friends</a></li>
+    <li class="nav-item"><router-link class="h3 nav-link" to="/friendCommunity">Friends</router-link></li>
 	<hr>
 
 </ul>
@@ -52,18 +57,18 @@
 </div>
 
 <div class="row justify-content-center mt-5">
-<div class="col-1"></div>
-<div class="col-1"><div class="card border-0"><div class="card-body"><font-awesome-icon icon="fa-solid fa-user"></font-awesome-icon>
+
+	<div class="col-8 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user" class="mt-3"></font-awesome-icon> User<br><br>
+	<p>Post text</p></div>
+
+</div>
+
+
+</div>
 
 </div>
 </div>
-</div>
-<div class="col-9 rounded border bg-white"><p>Post text</p></div>
-</div>
 
-</div>
-</div>
-</div>
 
 
 
@@ -72,7 +77,7 @@
 	
 
     
-    </body>
+</div>
 	<footer>
 		<!-- footer -->
 	</footer>
