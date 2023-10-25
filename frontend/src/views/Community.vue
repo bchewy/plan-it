@@ -53,12 +53,12 @@
 
 <div class="row justify-content-center mt-5">
 
-
+	<div class="col-8 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user"></font-awesome-icon>  User<br>
+	<p>Post text</p></div>
 
 </div>
 
-<div class="col-8 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user"></font-awesome-icon>  User<br>
-	<p>Post text</p></div>
+
 </div>
 
 </div>
