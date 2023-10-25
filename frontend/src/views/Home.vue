@@ -113,31 +113,38 @@ import { useAuth0 } from '@auth0/auth0-vue';
 export default {
   name: 'Home',
   components: {
-	NavBar,
+    NavBar,
+  },
+  data() {
+    const { user, isAuthenticated } = useAuth0();
+    const userName = isAuthenticated ? user.name : ''; // Get the user's name if authenticated
+
+    return {
+      userName, // Add user's name to the data object
+    };
   },
   setup() {
-	const { loginWithRedirect, user, isAuthenticated } = useAuth0();
-	const userName = isAuthenticated ? user.name : ''; // Get the user's name if authenticated
+    const { loginWithRedirect, user, isAuthenticated } = useAuth0();
 
-	console.log('Setup method is called');
+    console.log('Setup method is called');
 
-	return {
-	  login: async () => {
-		console.log('Login button clicked');
-		try {
-		  await loginWithRedirect();
-		} catch (e) {
-		  alert('Failed to login');
-		  console.error('Failed to login:', e);
-		}
-	  },
-	  user,
-	  isAuthenticated,
-	  userName, // Add user's name to the return object
-	};
+    return {
+      login: async () => {
+        console.log('Login button clicked');
+        try {
+          await loginWithRedirect();
+        } catch (e) {
+          alert('Failed to login');
+          console.error('Failed to login:', e);
+        }
+      },
+      user,
+      isAuthenticated,
+    };
   },
 };
 </script>
+
 
 <style scoped>
 /* Other component-specific styles */
