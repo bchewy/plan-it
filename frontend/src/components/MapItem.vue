@@ -7,8 +7,8 @@
 			<div v-if="errorMessage" class="alert alert-danger" role="alert">
 				{{ errorMessage }}
 			</div>
-			<div class="col-lg-8 col-md-12">
-				<GMapMap :center="center" :zoom="zoom" map-type-id="terrain" style="width: 100%; height: 100vh;">
+			<div class="col-lg-8 col-md-12 p-0">
+				<GMapMap class="w-100 vh-100" :center="center" :zoom="zoom" map-type-id="terrain">
 					<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 					<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
 					<GMapPolyline :path="decodedPolyline" :editable="true" ref="polyline" />
@@ -16,71 +16,89 @@
 			</div>
 			<div class="col-lg-4 col-md-12 p-4">
 
-				<div class="input-group mb-3">
-					<span class="input-group-text" id="autocomplete-label">Start Location</span>
-					<GMapAutocomplete v-model="startLocation.value" placeholder="Starting point" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+				<div class="mb-4">
+					<!-- Start Location -->
+					<div class="input-group mb-3">
+						<span class="input-group-text font-weight-bold" id="autocomplete-label">Start Location</span>
+						<GMapAutocomplete v-model="startLocation.value" placeholder="Starting point" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+					</div>
+
+					<!-- End Location -->
+					<div class="input-group mb-3">
+						<span class="input-group-text font-weight-bold" id="autocomplete-label">End Location</span>
+						<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
+					</div>
+
+					<!-- Travel Mode -->
+					<div class="input-group mb-3">
+						<span class="input-group-text font-weight-bold">Travel Mode</span>
+						<select v-model="travelMode" class="form-control">
+							<option value="DRIVE">Drive</option>
+							<option value="TWO_WHEELER">Motorbike</option>
+							<option value="TRANSIT">Public Transport</option>
+							<option value="BICYCLE">Bicycle</option>
+							<option value="WALK">Walk</option>
+						</select>
+					</div>
+
+					<!-- Departure Time -->
+					<div class="input-group mb-3">
+						<span class="input-group-text font-weight-bold">Departure Time</span>
+						<input type="time" v-model="departureTime" class="form-control">
+						<button class="btn btn-outline-secondary" type="button" @click="addMinutes(5)">+5m</button>
+					</div>
 				</div>
 
-				<div class="input-group mb-3">
-					<span class="input-group-text" id="autocomplete-label">End Location</span>
-					<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
-				</div>
-				<!-- <VueConfetti ref="confetti" /> -->
-				<div class="input-group mb-3">
-					<span class="input-group-text">Travel Mode</span>
-					<select v-model="travelMode" class="form-control">
-						<option value="DRIVE">Drive</option>
-						<option value="TWO_WHEELER">Motorbike</option>
-						<option value="TRANSIT">Public Transport</option>
-						<option value="BICYCLE">Bicycle</option>
-						<option value="WALK">Walk</option>
-					</select>
-				</div>
-
-				<div class="input-group mb-3">
-					<span class="input-group-text">Departure Time</span>
-					<input type="time" v-model="departureTime" class="form-control">
-					<button class="btn btn-outline-secondary" type="button" @click="addMinutes(5)">+5m</button>
-					<!-- <button class="btn btn-outline-secondary" type="button" @click="addMinutes(10)">+10m</button> -->
-				</div>
-				<div class="mb-3">
-					<span class="d-block mb-2"><strong>Route Modifiers</strong></span>
+				<!-- Route Modifiers -->
+				<div class="mb-4">
+					<span class="d-block mb-2 font-weight-bold">Route Modifiers</span>
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" value="" id="avoidTolls" v-model="routeModifiers.avoidTolls">
-						<label class="form-check-label" for="avoidTolls">
-							Avoid Tolls
-						</label>
+						<label class="form-check-label" for="avoidTolls">Avoid Tolls</label>
 					</div>
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" value="" id="avoidHighways" v-model="routeModifiers.avoidHighways">
-						<label class="form-check-label" for="avoidHighways">
-							Avoid Highways
-						</label>
+						<label class="form-check-label" for="avoidHighways">Avoid Highways</label>
 					</div>
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" value="" id="avoidFerries" v-model="routeModifiers.avoidFerries">
-						<label class="form-check-label" for="avoidFerries">
-							Avoid Ferries
-						</label>
+						<label class="form-check-label" for="avoidFerries">Avoid Ferries</label>
 					</div>
 				</div>
 
-				<button class="btn btn-primary mb-4" @click="fetchRouteDetails">Log Route</button>
-				<div v-if="routeDetails">
-					<p><strong>Distance:</strong> {{ routeDetails.distanceMeters }} meters ({{ routeDetails.distanceMeters / 1000 }} kilometers) </p>
-					<p><strong>Duration:</strong> {{ routeDetails.duration }} seconds </p>
-					<p><strong>Carbon Emission:</strong> {{ calculateCarbonEmission() }} kg CO2</p>
-					<!-- <p><strong>Arrival Time:</strong> {{ new Date(departureDate.getTime() + routeDetails.duration * 1000).toLocaleTimeString() }} </p> -->
-					<!-- <div v-if="directionSteps.length > 0" style="max-height: 300px; overflow-y: auto;">
-						<h2>Directions:</h2>
-						<ol>
-							<li v-for="(step, index) in directionSteps" :key="index">
-								{{ step && step.navigationInstruction ? step.navigationInstruction.instructions : 'Step not available' }}
-							</li>
-						</ol>
-					</div> -->
+				<!-- Log Route Button -->
+				<div class="mb-4">
+					<button class="btn btn-primary w-100" @click="fetchRouteDetails">Log Route</button>
 				</div>
-				<div v-if="routeDetails" class="d-flex justify-content-center align-items-center">
+
+				<div v-if="routeDetails" class="card border-0 shadow p-4">
+					<div class="card-body">
+						<h5 class="card-title mb-4">Route Details</h5>
+						<div class="mb-2">
+							<strong>Distance:</strong>
+							<div class="row">
+								<div class="col-6">Meters: {{ routeDetails.distanceMeters }}</div>
+								<div class="col-6">Kilometers: {{ routeDetails.distanceMeters / 1000 }}</div>
+							</div>
+						</div>
+						<div class="d-flex justify-content-between mb-2">
+							<span><strong>Duration:</strong></span>
+							<span>{{ routeDetails.duration }} seconds</span>
+						</div>
+						<div class="d-flex justify-content-between mb-3">
+							<span><strong>Carbon Emission:</strong></span>
+							<span>{{ calculateCarbonEmission() }} kg CO2</span>
+						</div>
+						<div class="d-flex justify-content-center">
+							<button class="btn btn-primary rounded-pill shadow-sm" @click="openGoogleMaps">
+								<i class="fas fa-map-marker-alt"></i> Open on Google Maps
+							</button>
+						</div>
+					</div>
+				</div>
+
+
+				<!-- <div v-if="routeDetails" class="d-flex justify-content-center align-items-center">
 					<div class="modal fade" id="makePostModal" tabindex="-1" aria-labelledby="makePostModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
 							<div class="modal-content">
@@ -99,7 +117,7 @@
 						</div>
 					</div>
 					<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#makePostModal">Make a Post</button>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>
@@ -114,6 +132,22 @@ import VueConfetti from 'vue-confetti'
 export default defineComponent({
 	components: {
 		VueConfetti
+	},
+	methods: {
+		openGoogleMaps() {
+			window.open(this.googleMapsUrl, '_blank');
+		},
+	},
+	computed: {
+		// Open up on google maps
+		googleMapsUrl() {
+			const origin = `${this.startLocation.lat},${this.startLocation.lng}`;
+			const destination = `${this.destination.lat},${this.destination.lng}`;
+			let travelmode = this.travelMode.toLowerCase();
+			if (travelmode === 'drive') travelmode = 'driving';
+			if (travelmode === 'two_wheeler') travelmode = 'driving';
+			return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=${travelmode}`;
+		},
 	},
 	props: ['userme'],
 	setup(props) {
