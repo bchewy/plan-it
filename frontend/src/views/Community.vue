@@ -20,12 +20,12 @@
 	<hr>
     <li class="nav-item dropdown"><a class="h3 nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Groups</a>
 	<ul class="dropdown-menu bg-light">
-		<li><a class="dropdown-item" href="https://wad2.bchwy.com/createGroup"><font-awesome-icon icon="fa-solid fa-plus"/>   Create group</a></li>
-		<li><a class="dropdown-item" href="https://wad2.bchwy.com/yourGroups"><font-awesome-icon icon="fa-solid fa-users"/>   Your groups</a></li>
+		<li><router-link class="dropdown-item" to="/createGroup" ><font-awesome-icon icon="fa-solid fa-plus"/>   Create group</router-link></li>
+		<li><router-link class="dropdown-item" to="/yourGroups" ><font-awesome-icon icon="fa-solid fa-users"/>   Your groups</router-link></li>
 	</ul>
 	</li>
 	<hr>
-    <li class="nav-item"><a class="h3 nav-link" href="https://wad2.bchwy.com/friendCommunity">Friends</a></li>
+    <li class="nav-item"><router-link class="h3 nav-link" to="/friendCommunity">Friends</router-link></li>
 	<hr>
 
 </ul>
