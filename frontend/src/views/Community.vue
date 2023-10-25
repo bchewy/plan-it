@@ -52,18 +52,18 @@
 </div>
 
 <div class="row justify-content-center mt-5">
-<div class="col-1"></div>
-<div class="col-1"><div class="card border-0"><div class="card-body"><font-awesome-icon icon="fa-solid fa-user"></font-awesome-icon>
+
+
+
+</div>
+
+<div class="col-8 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user"></font-awesome-icon>  User<br>
+	<p>Post text</p></div>
+</div>
 
 </div>
 </div>
-</div>
-<div class="col-9 rounded border bg-white"><p>Post text</p></div>
-</div>
 
-</div>
-</div>
-</div>
 
 
 
