@@ -47,7 +47,7 @@ const router = createRouter({
 		},
 		,
 		{
-			path:'/community/friendCommnunity',
+			path:'/community/friendCommunity',
 			component: () => import('./views/FriendCommunity.vue')
 		}
 		,
