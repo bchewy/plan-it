@@ -24,22 +24,24 @@
 		</div>
 	</section>
 
-	<!--flexbox thingy!-->
-	<section class="text-muted p-5 text-center">
-		<div class="container">
-			<div class="d-sm-flex">
-				<div>
-					<h1><span class="text-success">Carbon-First </span> Routing.</h1>
-					<p class="lead">
-						Account for your own carbon footprint for your traffic taken, value-add and commit to reducing your carbon footprint and reduce your personal impact.
-					</p>
-				</div>
-				<!-- <img class="img-fluid w-50" src="frontend/src/assets/homepage/co2.jpg" alt=""> -->
-				<img class="img-fluid w-50" src="@/assets/homepage/co2.jpg" alt="">
-			</div>
-		</div>
-		<h3 v-if="isAuthenticated">Hi, {{ user.name }}!</h3> <!-- Display the user's name if authenticated -->
-		</section>
+<!--flexbox thingy!-->
+<section class="text-muted p-5 text-center">
+  <div class="container">
+    <div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
+      <div class="text-center">
+        <h1><span class="text-success">Carbon-First </span> Routing.</h1>
+        <p class="lead">
+          Account for your own carbon footprint for your traffic taken, value-add and commit to reducing your carbon footprint and reduce your personal impact.
+        </p>
+        <h3 v-if="isAuthenticated" class="mt-3">Hi, {{ user.name }}!</h3> <!-- Display the user's name if authenticated -->
+      </div>
+      <div class="text-center"> <!-- Center the image horizontally -->
+        <img class="img-fluid" src="@/assets/homepage/co2.jpg" alt="">
+      </div>
+    </div>
+  </div>
+</section>
+
 
   <!-- boxes-->
   <section class="p-5">
