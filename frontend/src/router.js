@@ -43,17 +43,17 @@ const router = createRouter({
 		},
 		{
 			path:'/community/createGroup',
-			component: () =>('./views/CreateGroup.vue')
+			component: () => import ('./views/CreateGroup.vue')
 		},
 		,
 		{
 			path:'/community/friendCommnunity',
-			component: () =>('./views/FriendCommunity.vue')
+			component: () => import('./views/FriendCommunity.vue')
 		}
 		,
 		{
 			path:'/community/yourGroups',
-			component: () =>('./views/YourGroups.vue')
+			component: () => import('./views/YourGroups.vue')
 		},
 
 	]
