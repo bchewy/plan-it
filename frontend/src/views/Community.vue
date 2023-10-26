@@ -10,10 +10,10 @@
   </div>
 
 <div v-else class="position-relative" >
-<div class="container-fluid">
+<div class="container-fluid" style="background-color: rgb(209, 244, 209)">
 <div class="row">
 
-<nav class="col-2 position-fixed h-100"  style="background-color: rgb(209, 244, 209)">
+<nav class="col-2 position-fixed h-100">
 	
 	<div class="container-fluid">
 		<br>
