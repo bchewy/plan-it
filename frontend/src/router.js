@@ -13,10 +13,10 @@ const router = createRouter({
 			path: '/route',
 			component: () => import('./views/Route.vue')
 		},
-		// {
-		// 	path: '/debug',
-		// 	component: () => import('./views/Debug.vue')
-		// },
+		{
+			path: '/debug',
+			component: () => import('./views/Debug.vue')
+		},
 		{
 			path: '/profile',
 			component: () => import('./views/Profile.vue')
@@ -42,17 +42,17 @@ const router = createRouter({
 			component: () => import('./views/Badges.vue')
 		},
 		{
-			path:'/community/createGroup',
+			path: '/community/createGroup',
 			component: () => import('./views/CreateGroup.vue')
 		},
 		,
 		{
-			path:'/community/friendCommnunity',
+			path: '/community/friendCommunity',
 			component: () => import('./views/FriendCommunity.vue')
 		}
 		,
 		{
-			path:'/community/yourGroups',
+			path: '/community/yourGroups',
 			component: () => import('./views/YourGroups.vue')
 		},
 

@@ -7,8 +7,8 @@
 			<div v-if="errorMessage" class="alert alert-danger" role="alert">
 				{{ errorMessage }}
 			</div>
-			<div class="col-lg-8 col-md-12">
-				<GMapMap :center="center" :zoom="zoom" map-type-id="terrain" style="width: 100%; height: 100vh;">
+			<div class="col-lg-8 col-md-12 p-0">
+				<GMapMap class="w-100 vh-100" :center="center" :zoom="zoom" map-type-id="terrain">
 					<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 					<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
 					<GMapPolyline :path="decodedPolyline" :editable="true" ref="polyline" />
@@ -16,70 +16,89 @@
 			</div>
 			<div class="col-lg-4 col-md-12 p-4">
 
-				<div class="input-group mb-3">
-					<span class="input-group-text" id="autocomplete-label">Start Location</span>
-					<GMapAutocomplete v-model="startLocation.value" placeholder="Starting point" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+				<div class="mb-4">
+					<!-- Start Location -->
+					<div class="input-group mb-3">
+						<span class="input-group-text font-weight-bold" id="autocomplete-label">Start Location</span>
+						<GMapAutocomplete v-model="startLocation.value" placeholder="Starting point" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+					</div>
+
+					<!-- End Location -->
+					<div class="input-group mb-3">
+						<span class="input-group-text font-weight-bold" id="autocomplete-label">End Location</span>
+						<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
+					</div>
+
+					<!-- Travel Mode -->
+					<div class="input-group mb-3">
+						<span class="input-group-text font-weight-bold">Travel Mode</span>
+						<select v-model="travelMode" class="form-control">
+							<option value="DRIVE">Drive</option>
+							<option value="TWO_WHEELER">Motorbike</option>
+							<option value="TRANSIT">Public Transport</option>
+							<option value="BICYCLE">Bicycle</option>
+							<option value="WALK">Walk</option>
+						</select>
+					</div>
+
+					<!-- Departure Time -->
+					<div class="input-group mb-3">
+						<span class="input-group-text font-weight-bold">Departure Time</span>
+						<input type="time" v-model="departureTime" class="form-control">
+						<button class="btn btn-outline-secondary" type="button" @click="addMinutes(5)">+5m</button>
+					</div>
 				</div>
 
-				<div class="input-group mb-3">
-					<span class="input-group-text" id="autocomplete-label">End Location</span>
-					<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
-				</div>
-				<!-- <VueConfetti ref="confetti" /> -->
-				<div class="input-group mb-3">
-					<span class="input-group-text">Travel Mode</span>
-					<select v-model="travelMode" class="form-control">
-						<option value="DRIVE">Drive</option>
-						<option value="TWO_WHEELER">Motorbike</option>
-						<option value="TRANSIT">Public Transport</option>
-						<option value="BICYCLE">Bicycle</option>
-						<option value="WALK">Walk</option>
-					</select>
-				</div>
-
-				<div class="input-group mb-3">
-					<span class="input-group-text">Departure Time</span>
-					<input type="time" v-model="departureTime" class="form-control">
-					<button class="btn btn-outline-secondary" type="button" @click="addMinutes(5)">+5m</button>
-					<button class="btn btn-outline-secondary" type="button" @click="addMinutes(10)">+10m</button>
-				</div>
-				<div class="mb-3">
-					<span class="d-block mb-2"><strong>Route Modifiers</strong></span>
+				<!-- Route Modifiers -->
+				<div class="mb-4">
+					<span class="d-block mb-2 font-weight-bold">Route Modifiers</span>
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" value="" id="avoidTolls" v-model="routeModifiers.avoidTolls">
-						<label class="form-check-label" for="avoidTolls">
-							Avoid Tolls
-						</label>
+						<label class="form-check-label" for="avoidTolls">Avoid Tolls</label>
 					</div>
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" value="" id="avoidHighways" v-model="routeModifiers.avoidHighways">
-						<label class="form-check-label" for="avoidHighways">
-							Avoid Highways
-						</label>
+						<label class="form-check-label" for="avoidHighways">Avoid Highways</label>
 					</div>
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" value="" id="avoidFerries" v-model="routeModifiers.avoidFerries">
-						<label class="form-check-label" for="avoidFerries">
-							Avoid Ferries
-						</label>
+						<label class="form-check-label" for="avoidFerries">Avoid Ferries</label>
 					</div>
 				</div>
 
-				<button class="btn btn-primary mb-4" @click="fetchRouteDetails">Log Route</button>
-				<div v-if="routeDetails">
-					<p><strong>Distance:</strong> {{ routeDetails.distanceMeters }} meters ({{ routeDetails.distanceMeters / 1000 }} kilometers) </p>
-					<p><strong>Duration:</strong> {{ routeDetails.duration }} seconds </p>
-					<!-- <p><strong>Arrival Time:</strong> {{ new Date(departureDate.getTime() + routeDetails.duration * 1000).toLocaleTimeString() }} </p> -->
-					<div v-if="directionSteps.length > 0" style="max-height: 300px; overflow-y: auto;">
-						<h2>Directions:</h2>
-						<ol>
-							<li v-for="(step, index) in directionSteps" :key="index">
-								{{ step && step.navigationInstruction ? step.navigationInstruction.instructions : 'Step not available' }}
-							</li>
-						</ol>
+				<!-- Log Route Button -->
+				<div class="mb-4">
+					<button class="btn btn-primary w-100" @click="fetchRouteDetails">Log Route</button>
+				</div>
+
+				<div v-if="routeDetails" class="card border-0 shadow p-4">
+					<div class="card-body">
+						<h5 class="card-title mb-4">Route Details</h5>
+						<div class="mb-2">
+							<strong>Distance:</strong>
+							<div class="row">
+								<div class="col-6">Meters: {{ routeDetails.distanceMeters }}</div>
+								<div class="col-6">Kilometers: {{ routeDetails.distanceMeters / 1000 }}</div>
+							</div>
+						</div>
+						<div class="d-flex justify-content-between mb-2">
+							<span><strong>Duration:</strong></span>
+							<span>{{ routeDetails.duration }} seconds</span>
+						</div>
+						<div class="d-flex justify-content-between mb-3">
+							<span><strong>Carbon Emission:</strong></span>
+							<span>{{ calculateCarbonEmission() }} kg CO2</span>
+						</div>
+						<div class="d-flex justify-content-center">
+							<button class="btn btn-primary rounded-pill shadow-sm" @click="openGoogleMaps">
+								<i class="fas fa-map-marker-alt"></i> Open on Google Maps
+							</button>
+						</div>
 					</div>
 				</div>
-				<div v-if="routeDetails" class="d-flex justify-content-center align-items-center">
+
+
+				<!-- <div v-if="routeDetails" class="d-flex justify-content-center align-items-center">
 					<div class="modal fade" id="makePostModal" tabindex="-1" aria-labelledby="makePostModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
 							<div class="modal-content">
@@ -98,7 +117,7 @@
 						</div>
 					</div>
 					<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#makePostModal">Make a Post</button>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>
@@ -113,6 +132,22 @@ import VueConfetti from 'vue-confetti'
 export default defineComponent({
 	components: {
 		VueConfetti
+	},
+	methods: {
+		openGoogleMaps() {
+			window.open(this.googleMapsUrl, '_blank');
+		},
+	},
+	computed: {
+		// Open up on google maps
+		googleMapsUrl() {
+			const origin = `${this.startLocation.lat},${this.startLocation.lng}`;
+			const destination = `${this.destination.lat},${this.destination.lng}`;
+			let travelmode = this.travelMode.toLowerCase();
+			if (travelmode === 'drive') travelmode = 'driving';
+			if (travelmode === 'two_wheeler') travelmode = 'driving';
+			return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=${travelmode}`;
+		},
 	},
 	props: ['userme'],
 	setup(props) {
@@ -199,7 +234,14 @@ export default defineComponent({
 			return `${hours}:${minutes}`;
 		};
 
-		const departureTime = ref(getCurrentTime());
+		const addFiveMinutesToCurrentTime = () => {
+			const now = new Date();
+			now.setMinutes(now.getMinutes() + 5);
+			const hours = String(now.getHours()).padStart(2, '0');
+			const minutes = String(now.getMinutes()).padStart(2, '0');
+			return `${hours}:${minutes}`;
+		};
+		const departureTime = ref(addFiveMinutesToCurrentTime());
 
 		const addMinutes = (minutesToAdd) => {
 			const [hours, minutes] = departureTime.value.split(':').map(Number);
@@ -294,8 +336,7 @@ export default defineComponent({
 					start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
 					end_point_name: await getLocationName(destination.value.lat, destination.value.lng),
 					transport_mode: travelMode.value,
-					// carbon_emission: calculateCarbonEmission(travelMode.value, routeDetails.value.distanceMeters),  // Assume calculateCarbonEmission is a function to calculate the carbon emission
-					carbon_emission: 0,  // Assume calculateCarbonEmission is a function to calculate the carbon emission
+					carbon_emission: calculateCarbonEmission(travelMode.value, routeDetails.value.distanceMeters),  // Assume calculateCarbonEmission is a function to calculate the carbon emission
 					timestamp: new Date().toISOString(),
 					user_id: props.userme.email
 				};
@@ -303,18 +344,18 @@ export default defineComponent({
 				try {
 					// Send a POST request to the server to store the route data
 					const headers = {
-						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'  // Replace with your actual API key
+						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
 					};
-					await axios.post('http://127.0.0.1:5000/routes', routeData, { headers });  // Adjust the URL to match your server
+					await axios.post('http://127.0.0.1:5000/routes', routeData, { headers });
 				} catch (error) {
 					console.error('Failed to store route data:', error);
-					errorMessage.value = error.message += ' Please try again.';  // Assign new value to errorMessage
+					errorMessage.value = error.message += ' Please try again.';
 
 
 				}
 			} catch (error) {
 				console.error("Failed to fetch route details:", error);
-				errorMessage.value = error.message += ' Please try again.';  // Assign new value to errorMessage
+				errorMessage.value = error.message += ' Please try again.';
 
 
 			}
@@ -358,9 +399,29 @@ export default defineComponent({
 			return coordinates;
 		};
 
+		const calculateCarbonEmission = () => {
+			const distanceInKm = routeDetails.value.distanceMeters / 1000;
+			let carbonEmissionPerKm;
+
+			switch (travelMode.value) {
+				case 'driving':
+					carbonEmissionPerKm = 0.12;  // Assume 0.12 kg CO2 emitted per km for a car
+					break;
+				case 'bicycling':
+				case 'walking':
+					carbonEmissionPerKm = 0;  // No carbon emission for bicycling or walking
+					break;
+				default:
+					carbonEmissionPerKm = 0.12;  // Default to car emission if travel mode is not recognized
+			}
+
+			const carbonFootprint = distanceInKm * carbonEmissionPerKm;
+			return carbonFootprint;
+		};
 
 
 		return {
+			calculateCarbonEmission,
 			addMinutes,
 			departureTime,
 			routeModifiers,

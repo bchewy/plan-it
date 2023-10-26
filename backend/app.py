@@ -137,21 +137,22 @@ def delete_route(route_id):
 # User Operations
 
 # Update or create user init into our backend, since we're using auth0
-@app.route("/users", methods=['POST'])
+@app.route("/users", methods=['POST', 'PUT'])
 @require_api_key
 def create_or_update_user():
     """
-    This function handles the POST request at the /users endpoint.
+    This function handles the POST and PUT request at the /users endpoint.
     It either creates a new user or updates an existing user based on the provided auth0_user_id.
-    If the auth0_user_id and email are not provided in the request, it returns a 400 error with a message.
+    If the auth0_user_id, email, or handle are not provided in the request, it returns a 400 error with a message.
     If the user already exists, it updates the user's data and returns a 200 status code with a success message and the updated user data.
     If the user does not exist, it creates a new user with the provided data, current timestamp, and empty friends and friendRequests lists, and returns a 201 status code with a success message.
     """
     data = request.json
     auth0_user_id = data.get('auth0_user_id')
     email = data.get('email')
-    if not auth0_user_id or not email:
-        return jsonify({"message": "Both auth0_user_id and email are required."}), 400
+    handle = data.get('handle')
+    if not auth0_user_id or not email or not handle:
+        return jsonify({"message": "auth0_user_id, email, and handle are required."}), 400
     existing_user = user_collection.find_one({"auth0_user_id": auth0_user_id})
     if existing_user:
         updated_user = user_collection.find_one_and_update(
@@ -165,6 +166,24 @@ def create_or_update_user():
         data['friendRequests'] = {"sent": [], "received": []}
         user_collection.insert_one(data)
         return jsonify({"message": "User created successfully."}), 201
+    
+
+@app.route("/users/handle/<user_handle>", methods=['GET'])
+@require_api_key
+def get_user_handle(user_handle):
+    """
+    This function handles the GET request at the /users/handle/<user_handle> endpoint.
+    It retrieves the user with the given handle.
+    If the user is found, it returns a JSON object containing the user data.
+    If the user is not found, it returns a 404 error with a message.
+    """
+    user = user_collection.find_one({"handle": user_handle})
+    if user:
+        user = convert_objectid_to_string(user)
+        return jsonify(user), 200
+    else:
+        return jsonify({"message": "User not found."}), 404
+
 
 # Users get individual user ## Internal 
 @app.route("/users/iz/<user_email>", methods=['GET'])
@@ -195,7 +214,11 @@ def ez_get_user(user_email):
     user = user_collection.find_one({"email": user_email})
     if user:
         user = convert_objectid_to_string(user)
-        user = { "email": user["email"], "exp": user["exp"], "friends": user["friends"] }
+        user = { "email": user["email"], 
+                "pictureurl":user["pictureurl"],
+                "exp": user["exp"], 
+                "level": user["level"], 
+                "friends": user["friends"] }
         return jsonify(user), 200
     else:
         return jsonify({"message": "User not found."}), 404
