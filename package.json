@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "mongodb": "^6.1.0"
+    "mongodb": "^6.1.0",
+    "primevue": "^3.37.0"
   },
   "devDependencies": {
     "sass": "^1.69.5"

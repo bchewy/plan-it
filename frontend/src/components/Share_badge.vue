@@ -1,7 +1,7 @@
 <template>
+<button class="btn btn-secondary col-3" type="button" @click="badges=!badges" data-bs-target="#badgesOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-share"/>  Share a badge</button>
 
-<div v-if="badges" class="d-flex justify-content-center align-items-center">
-					<div class="modal fade" id="badgesOverlay" tabindex="-1" aria-labelledby="badgesOverlayLabel" aria-hidden="true">
+					<div v-if="badges" class="modal fade" id="badgesOverlay" tabindex="-1" aria-labelledby="badgesOverlayLabel" aria-hidden="true">
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -14,14 +14,14 @@
                                     </ul>
 								</div>
 								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="badges=!badges">Close</button>
 									<button type="button" class="btn btn-primary" @click="confirmShareBadge">Confirm</button> <!--yet to define-->
 								</div>
 							</div>
 						</div>
 					</div>
-					<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#badgesOverlay">Make a Post</button>
-				</div>
+					
+				
 </template>
 
 <script>
@@ -31,18 +31,13 @@ import { useAuth0 } from '@auth0/auth0-vue';
 
 export default defineComponent({
 
-setup(){
-    const { user, isAuthenticated } = useAuth0();
-    const badges=false;
-    return{
-        badges,
-        isAuthenticated,
-        user
-
+data(){return{
+	badges:false
     }
 }
+}
 
-})
+)
 
 
 </script>

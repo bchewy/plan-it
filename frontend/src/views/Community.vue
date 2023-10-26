@@ -46,7 +46,7 @@
 	<div class="row mb-3 justify-content-between">
 	<span class="col-1"></span>
 	
-	<button class="btn btn-secondary col-3" type="button" @click="badges=!badges"><font-awesome-icon icon="fa-solid fa-share"/>  Share a badge</button>
+	
 	<Share_badge></Share_badge>
 	<button class="btn btn-secondary col-3" type="button"><font-awesome-icon icon="fa-solid fa-tag"/>  Tag a friend</button>
 	<button class="btn btn-secondary col-3" type="button"><font-awesome-icon  icon="fa-solid fa-plus-square"/>  Create post!</button>
