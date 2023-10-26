@@ -410,6 +410,25 @@ def add_level(user_email):
             return jsonify({"message": "Level is required."}), 400
     else:
         return jsonify({"message": "User not found."}), 404
+    
+@app.route("/users/<user_email>/exp", methods=['POST'])
+@require_api_key
+def add_exp(user_email):
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        exp = request.json.get('exp')
+        if exp:
+            # If the user doesn't have a level field, create it and set it to the provided level
+            if 'exp' not in current_user:
+                current_user['exp'] = exp
+            else:
+                current_user['exp'] += exp
+            user_collection.update_one({"email": user_email}, {"$set": current_user})
+            return jsonify({"message": "EXP added successfully."}), 200
+        else:
+            return jsonify({"message": "EXP is required."}), 400
+    else:
+        return jsonify({"message": "User not found."}), 404
 
 
 # Post section
