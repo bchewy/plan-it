@@ -16,7 +16,7 @@
     
 <ul class="navbar-nav flex-column mt-5">
 
-<li class="active nav-item"><a class="h3 nav-link" href="#">For you</a></li>
+<li class="active nav-item"><a class="h3 nav-link" href="/community">For you</a></li>
 <hr>
     <li class="nav-item dropdown"><a class="h3 nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Groups</a>
 	<ul class="dropdown-menu bg-light">
@@ -41,7 +41,7 @@
 <div class="row mb-3 justify-content-between">
 <span class="col-1"></span>
 
-<button class="btn btn-secondary col-3" type="button" @click="badges=!badges"><font-awesome-icon icon="fa-solid fa-share"/>  Share a badge</button>
+
 <Share_badge></Share_badge>
 <button class="btn btn-secondary col-3" type="button"><font-awesome-icon icon="fa-solid fa-tag"/>  Tag a friend</button>
 <button class="btn btn-secondary col-3" type="button"><font-awesome-icon  icon="fa-solid fa-plus-square"/>  Create post!</button>
