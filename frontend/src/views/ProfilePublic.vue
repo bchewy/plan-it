@@ -69,7 +69,7 @@ export default {
       this.isLoading = false;
     },
     async fetchUser() {
-      const url = `http://127.0.0.1:5000/users/ez/${this.$route.params.userEmail}`;
+      const url = `https://api.bchwy.com/users/ez/${this.$route.params.userEmail}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };

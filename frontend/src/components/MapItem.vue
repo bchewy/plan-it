@@ -20,7 +20,8 @@
 					<!-- Start Location -->
 					<div class="input-group mb-3">
 						<span class="input-group-text font-weight-bold" id="autocomplete-label">Start Location</span>
-						<GMapAutocomplete v-model="startLocation.value" placeholder="Starting point" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+						<GMapAutocomplete ref="autocomplete" v-model="startLocation.value" placeholder="Starting point" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+						<button class="btn btn-outline-secondary" type="button" @click="getUserLocation">Here</button>
 					</div>
 
 					<!-- End Location -->
@@ -127,16 +128,37 @@
 import { ref, defineComponent, computed, reactive } from "vue";
 import axios from "axios";
 import { useAuth0 } from '@auth0/auth0-vue';
-import VueConfetti from 'vue-confetti'
+import confetti from 'canvas-confetti';
+
 
 export default defineComponent({
 	components: {
-		VueConfetti
 	},
 	methods: {
+		triggerConfetti() {
+			confetti({
+				particleCount: 100,
+				spread: 70,
+				origin: { y: 0.6 }
+			});
+		},
 		openGoogleMaps() {
 			window.open(this.googleMapsUrl, '_blank');
 		},
+		getUserLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition((position) => {
+					const lat = position.coords.latitude;
+					const lng = position.coords.longitude;
+					const locationString = `${lat}, ${lng}`;
+
+					this.$refs.autocomplete.$el.querySelector('input').value = locationString;
+					this.$refs.autocomplete.$el.querySelector('input').dispatchEvent(new Event('input'));
+				});
+			} else {
+				this.errorMessage = "Geolocation is not supported by this browser.";
+			}
+		}
 	},
 	computed: {
 		// Open up on google maps
@@ -254,6 +276,7 @@ export default defineComponent({
 			departureTime.value = `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
 		};
 		const fetchRouteDetails = async () => {
+			this.triggerConfetti();
 			const [hours, minutes] = departureTime.value.split(':').map(Number);
 			const departureDate = new Date();
 			departureDate.setHours(hours);
@@ -346,7 +369,7 @@ export default defineComponent({
 					const headers = {
 						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
 					};
-					await axios.post('http://127.0.0.1:5000/routes', routeData, { headers });
+					await axios.post('https://api.bchwy.com/routes', routeData, { headers });
 				} catch (error) {
 					console.error('Failed to store route data:', error);
 					errorMessage.value = error.message += ' Please try again.';
@@ -444,3 +467,4 @@ export default defineComponent({
 	}
 });
 </script>
+

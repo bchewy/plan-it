@@ -35,7 +35,7 @@ export default {
 		async acceptRequest() {
 			try {
 				const email = this.user.email;
-				const url = `http://127.0.0.1:5000/users/${encodeURIComponent(email)}/friend_requests/accept`;
+				const url = `https://api.bchwy.com/users/${encodeURIComponent(email)}/friend_requests/accept`;
 				const body = { friend_email: this.friend };
 				const headers = { 'Content-Type': 'application/json' };
 				const response = await axios.post(url, body, { headers });
@@ -49,7 +49,7 @@ export default {
 		async declineRequest() {
 			try {
 				const email = this.user.email;
-				const url = `http://127.0.0.1:5000/users/${encodeURIComponent(email)}/friend_requests/decline`;
+				const url = `https://api.bchwy.com/users/${encodeURIComponent(email)}/friend_requests/decline`;
 				const body = { friend_email: this.friend };
 				const headers = { 'Content-Type': 'application/json' };
 				const response = await axios.post(url, body, { headers });

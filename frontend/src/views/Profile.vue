@@ -179,7 +179,7 @@ export default {
       this.isLoading = false;
     },
     async fetchUser() {
-      const url = `http://127.0.0.1:5000/users/iz/${encodeURIComponent(this.user.email)}`;
+      const url = `https://api.bchwy.com/users/iz/${encodeURIComponent(this.user.email)}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };
@@ -193,7 +193,7 @@ export default {
       }
     },
     async fetchFriendRequests() {
-      const url = `http://127.0.0.1:5000/users/${encodeURIComponent(this.user.email)}/friend_requests`;
+      const url = `https://api.bchwy.com/users/${encodeURIComponent(this.user.email)}/friend_requests`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };
@@ -210,7 +210,7 @@ export default {
     },
     async fetchRoutes() {
       const email = this.user.email; // Get the email from user object
-      const url = `http://127.0.0.1:5000/routes/email?email=${encodeURIComponent(email)}`;
+      const url = `https://api.bchwy.com/routes/email?email=${encodeURIComponent(email)}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
       };
