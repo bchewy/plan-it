@@ -147,11 +147,8 @@ export default {
   setup() {
     const { loginWithRedirect, user, isAuthenticated } = useAuth0();
 
-    console.log('Setup method is called');
-
     return {
       login: async () => {
-        console.log('Login button clicked');
         try {
           await loginWithRedirect();
         } catch (e) {
@@ -181,12 +178,13 @@ export default {
           details: "Additional details about Incentivising Public Transport.",
           showDetails: false,
         },
-		],	  
+      ],
+      toggleDetails(index) {
+        this.cards[index].showDetails = !this.cards[index].showDetails;
+      },
     };
   },
 };
-
-
 </script>
 
 <style scoped>
