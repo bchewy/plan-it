@@ -11,18 +11,6 @@
   </div>
 </section>
 
-	<!-- signup now-->
-	<section class="bg-success text-light">
-		<div class="container">
-			<div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
-				<h4 class="news-input">Refer a friend now!</h4> <!-- Apply the "news-input" class -->
-				<div class="input-group news-input">
-					<input type="text" class="form-control news-input" placeholder="Friend's Email Address" aria-label="Friend's Email Address" aria-describedby="button-addon2">
-					<button class="btn btn-lg" id="button-addon2">Send</button>
-				</div>
-			</div>
-		</div>
-	</section>
 
 <!--flexbox thingy!-->
 <section class="text-muted p-5 text-center">
@@ -44,60 +32,42 @@
 
 
   <!-- boxes-->
-  <section class="p-5">
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-md">
-          <div class="card text-muted h-100">
-            <div class="card-body d-flex flex-column justify-content-between">
-              <div class="text-center">
-                <div class="h1 mb-3">
-                  <font-awesome-icon icon="fa-solid fa-leaf"></font-awesome-icon>
-                </div>
-                <h3 class="card-title mb-3">Eco-friendly Navigation</h3>
-                <p class="card-text">
-                  this is so great and green! change writeup at the end.
-                </p>
+ <section class="p-5">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md" v-for="(card, index) in cards" :key="index">
+        <div class="card text-muted h-100">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div class="text-center">
+              <div class="h1 mb-3">
+                <font-awesome-icon :icon="card.icon"></font-awesome-icon>
               </div>
-              <a href="#" class="btn btn-success"> Learn More</a>
+              <h3 class="card-title mb-3">{{ card.title }}</h3>
+              <p class="card-text">{{ card.description }}</p>
+              <p class="card-details" v-show="card.showDetails">{{ card.details }}</p>
             </div>
-          </div>
-        </div>
-        <div class="col-md">
-          <div class="card text-muted h-100">
-            <div class="card-body d-flex flex-column justify-content-between">
-              <div class="text-center">
-                <div class="h1 mb-3">
-                  <font-awesome-icon icon="fa-solid fa-shoe-prints"></font-awesome-icon>
-                </div>
-                <h3 class="card-title mb-3">Traffic Optimisation</h3>
-                <p class="card-text">
-                  This reduces our carbon footprint.
-                </p>
-              </div>
-              <a href="#" class="btn btn-success"> Learn More</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md">
-          <div class="card text-muted h-100">
-            <div class="card-body d-flex flex-column justify-content-between">
-              <div class="text-center">
-                <div class="h1 mb-3">
-                  <font-awesome-icon icon="fa-solid fa-bus"></font-awesome-icon>
-                </div>
-                <h3 class="card-title mb-3">Incentivising Public Transport</h3>
-                <p class="card-text">
-                  Encourages more people to take public transport through badges.
-                </p>
-              </div>
-              <a href="#" class="btn btn-success"> Learn More</a>
-            </div>
+            <button class="btn btn-success" @click="toggleDetails(index)">
+              {{ card.showDetails ? "Show Less" : "Learn More" }}
+            </button>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
+	<!-- refer friend now-->
+	<section class="bg-success text-light">
+		<div class="container">
+			<div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
+				<h4 class="news-input">Refer a friend now!</h4> <!-- Apply the "news-input" class -->
+				<div class="input-group news-input">
+					<input type="text" class="form-control news-input" placeholder="Friend's Email Address" aria-label="Friend's Email Address" aria-describedby="button-addon2">
+					<button class="btn btn-lg" id="button-addon2">Send</button>
+				</div>
+			</div>
+		</div>
+	</section>
 
     <!-- Question Accordion -->
 	<section id = "questions" class = "p-5">
@@ -177,18 +147,41 @@ export default {
   setup() {
     const { loginWithRedirect, user, isAuthenticated } = useAuth0();
 
-    console.log('Setup method is called');
-
     return {
       login: async () => {
-        console.log('Login button clicked');
         try {
           await loginWithRedirect();
         } catch (e) {
           alert('Failed to login');
           console.error('Failed to login:', e);
         }
-      }
+      },
+      cards: [
+        {
+          icon: "fa-solid fa-leaf",
+          title: "Eco-friendly Navigation",
+          description: "this is so great and green! change writeup at the end.",
+          details: "Additional details about Eco-friendly Navigation.",
+          showDetails: false,
+        },
+        {
+          icon: "fa-solid fa-shoe-prints",
+          title: "Traffic Optimization",
+          description: "This reduces our carbon footprint.",
+          details: "Additional details about Traffic Optimization.",
+          showDetails: false,
+        },
+        {
+          icon: "fa-solid fa-bus",
+          title: "Incentivising Public Transport",
+          description: "Encourages more people to take public transport through badges.",
+          details: "Additional details about Incentivising Public Transport.",
+          showDetails: false,
+        },
+      ],
+      toggleDetails(index) {
+        this.cards[index].showDetails = !this.cards[index].showDetails;
+      },
     };
   },
 };
