@@ -276,7 +276,7 @@ export default defineComponent({
 			departureTime.value = `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
 		};
 		const fetchRouteDetails = async () => {
-			this.triggerConfetti();
+			// this.triggerConfetti();
 			const [hours, minutes] = departureTime.value.split(':').map(Number);
 			const departureDate = new Date();
 			departureDate.setHours(hours);
