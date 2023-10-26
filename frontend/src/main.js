@@ -18,6 +18,7 @@ import authConfig from "../auth_config.json";
 
 // animations
 import 'animate.css'
+import './components/likebuttontest.scss'
 
 // Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'

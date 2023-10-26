@@ -59,7 +59,7 @@
 <div class="row justify-content-center mt-5">
 
 	<div class="col-8 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user" class="mt-3"></font-awesome-icon> User<br><br>
-	<p>Post text</p></div>
+	<heart_btn></heart_btn><p>Post text</p></div>
 
 </div>
 
@@ -87,7 +87,7 @@
 import NavBar from "../components/Navbar.vue";
 // import Login from '../components/Login.vue'
 import { useAuth0 } from '@auth0/auth0-vue';
-
+import heart_btn from "../components/like_button.vue";
 import Share_badge from "../components/Share_badge.vue";
 export default {
 	name: 'Community',
@@ -97,7 +97,8 @@ export default {
 	components: {
 		NavBar,  // Register the NavBar component
 		// Login
-		Share_badge
+		Share_badge,
+		heart_btn
 	},
 	setup() {
 		const { loginWithRedirect, user, isAuthenticated } = useAuth0();
