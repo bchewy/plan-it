@@ -398,14 +398,16 @@ def add_level(user_email):
     current_user = user_collection.find_one({"email": user_email})
     if current_user:
         level = request.json.get('level')
-        exp = request.json.get('exp')
-        if level and exp:
-            current_user['level'] += level
-            current_user['exp'] += exp
+        if level:
+            # If the user doesn't have a level field, create it and set it to the provided level
+            if 'level' not in current_user:
+                current_user['level'] = level
+            else:
+                current_user['level'] += level
             user_collection.update_one({"email": user_email}, {"$set": current_user})
-            return jsonify({"message": "Level and exp added successfully."}), 200
+            return jsonify({"message": "Level added successfully."}), 200
         else:
-            return jsonify({"message": "Level and exp are required."}), 400
+            return jsonify({"message": "Level is required."}), 400
     else:
         return jsonify({"message": "User not found."}), 404
 
