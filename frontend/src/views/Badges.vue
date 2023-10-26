@@ -17,8 +17,7 @@
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">{{badge.name}}</h5>
           <p class="card-text">{{badge.description}}</p>
-          <button class="btn btn-primary mt-auto">Share Badge</button>
-          <Share_badge></Share_badge>
+          <a href="community" class="btn btn-primary mt-auto">Share Badge</a>
         </div>
       </div>
     </div>
@@ -27,7 +26,6 @@
 
 <script>
 import Navbar from "../components/Navbar.vue";
-import Share_badge from "../components/Share_badge.vue";
 import axios from "axios";
 
 export default {
@@ -92,8 +90,7 @@ export default {
     //this.fetchData();
   },
   components: {
-    Navbar,
-    Share_badge
+    Navbar
   },
   methods: {
     fetchData() {
