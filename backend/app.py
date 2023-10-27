@@ -6,10 +6,44 @@ from config import Config
 from datetime import datetime
 from functools import wraps
 from bson import ObjectId
+from flasgger import Flasgger
+from flasgger.utils import swag_from
+
 app = Flask(__name__)
+
+swagger_config = {
+    "headers": [],
+    "specs": [
+        {
+            "endpoint": "apispec_1",
+            "route": "/apispec_1.json",
+            "rule_filter": lambda rule: True,
+            "model_filter": lambda tag: True,
+        }
+    ],
+    "static_url_path": "/flasgger_static",
+    "swagger_ui": True,
+    "specs_route": "/apidocs/",
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "x-api-key",
+            "in": "header"
+        }
+    },
+}
+
+swagger = Flasgger(app, config=swagger_config)
+# swagger = Flasgger(app)
+
+
+
+
 app.config.from_object(Config)
+
 client = MongoClient(app.config['MONGO_URI'])
-API_KEY = "PlanItIsTheBestProjectEverXYZ"
+# API_KEY = "PlanItIsTheBestProjectEverXYZ"
+API_KEY="abc"
 db = client.wad2
 collection = db.routes
 user_collection = db.users
@@ -52,14 +86,50 @@ def require_api_key(f):
 
 
 @app.route("/")
+# @swag_from('docs/get_api_endpoints.yml')
 def get_all_routes():
+    """Endpoint returning a list of all available API routes in the application.
+    This is using docstrings for specifications.
+    ---
+    responses:
+      200:
+        description: A list of all available routes
+        schema:
+          type: object
+          properties:
+            routes:
+              type: array
+              items:
+                type: object
+                properties:
+                  rule:
+                    type: string
+                  methods:
+                    type: array
+                    items:
+                      type: string
+    """
     routes = [{"rule": str(rule), "methods": ', '.join([method for method in rule.methods if method in ['GET', 'POST', 'PUT', 'DELETE']])} for rule in app.url_map.iter_rules()]
-    return jsonify({"routes": routes}), 200
+    response = jsonify({"routes": routes})
+    response.headers['Content-Type'] = 'application/json'
+    return response, 200
 
 
 @app.route("/db")
 @require_api_key
 def db_check():
+    """
+    Endpoint to check the health of the database.
+    This is using docstrings for specifications.
+    ---
+    security:
+      - api_key: []
+    responses:
+      200:
+        description: Database is healthy.
+      500:
+        description: Database is unhealthy.
+    """
     client = MongoClient('localhost', serverSelectionTimeoutMS=1000)
     try:
         # The ismaster command is cheap and does not require auth.
@@ -74,6 +144,71 @@ def db_check():
 @app.route("/routes", methods=['POST'])
 @require_api_key
 def create_route():
+    """
+    Endpoint to create a new route.
+    This endpoint accepts a JSON object containing the route details.
+    ---
+    tags:
+    - Routes
+    parameters:
+      - name: _id
+        in: body
+        required: true
+        type: string
+        example: "653912cb8f5ad5e4f064762e"
+      - name: route_id
+        in: body
+        required: true
+        type: string
+        example: "route_1698239179224"
+      - name: start_point_lat_lng
+        in: body
+        required: true
+        type: string
+        example: "Point(1.3690023, 103.8481594)"
+      - name: end_point_lat_lng
+        in: body
+        required: true
+        type: string
+        example: "Point(1.3341353, 103.8866115)"
+      - name: start_point_name
+        in: body
+        required: true
+        type: string
+        example: "53 Ang Mo Kio Ave 3, #03-18/19, Singapore 569933"
+      - name: end_point_name
+        in: body
+        required: true
+        type: string
+        example: "FGA@Playfair 15, Playfair Rd, #03-01, Singapore 367987"
+      - name: transport_mode
+        in: body
+        required: true
+        type: string
+        example: "DRIVE"
+      - name: carbon_emission
+        in: body
+        required: true
+        type: number
+        example: 0.94692
+      - name: timestamp
+        in: body
+        required: true
+        type: string
+        example: "2023-10-25T21:06:19.425+00:00"
+      - name: user_id
+        in: body
+        required: true
+        type: string
+        example: "brian@bchewy.com"
+    security:
+      - api_key: []
+    responses:
+      201:
+        description: Route created successfully.
+      400:
+        description: Bad request.
+    """
     data = request.json
     data['timestamp'] = datetime.now()
     collection.insert_one(data)
@@ -83,6 +218,42 @@ def create_route():
 @app.route("/routes", methods=['GET'])
 @require_api_key
 def read_all_routes():
+    """
+    Get all routes
+    ---
+    tags:
+      - Routes
+    security:
+      - api_key: []
+    responses:
+      200:
+        description: A list of all available routes
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              carbon_emission:
+                type: number
+              end_point_lat_lng:
+                type: string
+              end_point_name:
+                type: string
+              route_id:
+                type: string
+              start_point_lat_lng:
+                type: string
+              start_point_name:
+                type: string
+              timestamp:
+                type: string
+              transport_mode:
+                type: string
+              user_id:
+                type: string
+    """
     all_routes = list(collection.find())
     for route in all_routes:
         route["_id"] = str(route["_id"])
@@ -92,6 +263,48 @@ def read_all_routes():
 @app.route("/routes/email", methods=['GET'])
 @require_api_key
 def read_all_routes_email():
+    """
+    Get all routes for a specific user
+    ---
+    tags:
+      - Routes
+    security:
+      - api_key: []
+    parameters:
+      - name: email
+        in: query
+        type: string
+        required: true
+        description: The email of the user
+    responses:
+      200:
+        description: A list of all available routes for the user
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              carbon_emission:
+                type: number
+              end_point_lat_lng:
+                type: string
+              end_point_name:
+                type: string
+              route_id:
+                type: string
+              start_point_lat_lng:
+                type: string
+              start_point_name:
+                type: string
+              timestamp:
+                type: string
+              transport_mode:
+                type: string
+              user_id:
+                type: string
+    """
     email = request.args.get('email')
     if email:
         all_routes = list(collection.find({"user_id": email}))
@@ -105,6 +318,28 @@ def read_all_routes_email():
 @app.route("/routes/<route_id>", methods=['GET'])
 @require_api_key
 def read_one_route(route_id):
+    """
+    Get a specific route by its route_id
+    ---
+    tags:
+      - Routes
+    security:
+      - api_key: []
+    parameters:
+      - name: route_id
+        in: path
+        type: string
+        required: true
+        description: The id of the route
+    responses:
+      200:
+        description: The route details
+        schema:
+          $ref: '#/definitions/Route'
+      404:
+        description: Route not found
+    """
+
     route = collection.find_one({"route_id": route_id})
     if route:
         route["_id"] = str(route["_id"])
@@ -141,11 +376,39 @@ def delete_route(route_id):
 @require_api_key
 def create_or_update_user():
     """
-    This function handles the POST and PUT request at the /users endpoint.
-    It either creates a new user or updates an existing user based on the provided auth0_user_id.
-    If the auth0_user_id, email, or handle are not provided in the request, it returns a 400 error with a message.
-    If the user already exists, it updates the user's data and returns a 200 status code with a success message and the updated user data.
-    If the user does not exist, it creates a new user with the provided data, current timestamp, and empty friends and friendRequests lists, and returns a 201 status code with a success message.
+    Create or update a user
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: auth0_user_id
+        in: body
+        type: string
+        required: true
+        description: The auth0 id of the user
+      - name: email
+        in: body
+        type: string
+        required: true
+        description: The email of the user
+      - name: handle
+        in: body
+        type: string
+        required: true
+        description: The handle of the user
+    responses:
+      200:
+        description: User updated successfully
+        schema:
+          $ref: '#/definitions/User'
+      201:
+        description: User created successfully
+        schema:
+          $ref: '#/definitions/User'
+      400:
+        description: auth0_user_id, email, and handle are required
     """
     data = request.json
     auth0_user_id = data.get('auth0_user_id')
@@ -172,10 +435,25 @@ def create_or_update_user():
 @require_api_key
 def get_user_handle(user_handle):
     """
-    This function handles the GET request at the /users/handle/<user_handle> endpoint.
-    It retrieves the user with the given handle.
-    If the user is found, it returns a JSON object containing the user data.
-    If the user is not found, it returns a 404 error with a message.
+    Get a specific user by their handle
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: user_handle
+        in: path
+        type: string
+        required: true
+        description: The handle of the user
+    responses:
+      200:
+        description: User found successfully
+        schema:
+          $ref: '#/definitions/User'
+      404:
+        description: User not found
     """
     user = user_collection.find_one({"handle": user_handle})
     if user:
@@ -190,10 +468,25 @@ def get_user_handle(user_handle):
 @require_api_key
 def get_user(user_email):
     """
-    This function handles the GET request at the /users/iz/<user_email> endpoint.
-    It retrieves the user with the given email.
-    If the user is found, it returns a JSON object containing the user data.
-    If the user is not found, it returns a 404 error with a message.
+    Get a specific user by their email
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user
+    responses:
+      200:
+        description: User found successfully
+        schema:
+          $ref: '#/definitions/User'
+      404:
+        description: User not found
     """
     user = user_collection.find_one({"email": user_email})
     if user:
@@ -206,10 +499,36 @@ def get_user(user_email):
 @app.route("/users/ez/<user_email>", methods=['GET'])
 def ez_get_user(user_email):
     """
-    This function handles the GET request at the /users/ez/<user_email> endpoint.
-    It retrieves the user with the given email.
-    If the user is found, it returns a JSON object containing the user's email, exp, and friends level.
-    If the user is not found, it returns a 404 error with a message.
+    Get a specific user by their email (external)
+    ---
+    tags:
+      - Users
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user
+    responses:
+      200:
+        description: User found successfully
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+            pictureurl:
+              type: string
+            exp:
+              type: integer
+            level:
+              type: integer
+            friends:
+              type: array
+              items:
+                type: string
+      404:
+        description: User not found
     """
     user = user_collection.find_one({"email": user_email})
     if user:
@@ -228,10 +547,40 @@ def ez_get_user(user_email):
 @require_api_key
 def search_users(search_term):
     """
-    This function handles the GET request at the /users/search/<search_term> endpoint.
-    It retrieves the users that match the given search term.
-    If any users are found, it returns a JSON array containing the user data.
-    If no users are found, it returns a 404 error with a message.
+    Search for users by a given term
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: search_term
+        in: path
+        type: string
+        required: true
+        description: The term to search for users
+    responses:
+      200:
+        description: Users found successfully
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+              pictureurl:
+                type: string
+              exp:
+                type: integer
+              level:
+                type: integer
+              friends:
+                type: array
+                items:
+                  type: string
+      404:
+        description: No users found
     """
     if len(search_term) < 5:
         return jsonify({"message": "Please enter at least 5 characters."}), 400
@@ -248,10 +597,34 @@ def search_users(search_term):
 @require_api_key
 def get_friend_requests(user_email):
     """
-    This function handles the GET request at the /users/<user_email>/friend_requests endpoint.
-    It retrieves the friend requests of a user with the given email.
-    If the user is found, it returns a JSON object containing the friend requests.
-    If the user is not found, it returns a 404 error with a message.
+    Get the friend requests of a user
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user
+    responses:
+      200:
+        description: Friend requests retrieved successfully
+        schema:
+          type: object
+          properties:
+            sent:
+              type: array
+              items:
+                type: string
+            received:
+              type: array
+              items:
+                type: string
+      404:
+        description: User not found
     """
     # Find the user in the database using the provided email
     user = user_collection.find_one({"email": user_email})
@@ -274,11 +647,45 @@ def get_friend_requests(user_email):
 @require_api_key
 def send_friend_request(user_email):
     """
-    This function handles the POST request at the /users/<user_email>/friend_requests/send endpoint.
-    It sends a friend request from the current user to the user with the given email.
-    If both users are found, it adds the friend request to the current user's friendRequests.sent list
-    and the receiving user's friendRequests.received list.
-    If any user is not found, it returns a 404 error with a message.
+    Send a friend request from the current user to another user
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the current user
+      - name: friend_email
+        in: body
+        type: string
+        required: true
+        description: The email of the user to send the friend request to
+    responses:
+      200:
+        description: Friend request sent successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Invalid request (e.g., trying to add oneself or friend request already sent)
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: User not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
     """
     # Find the current user in the database using the provided email
     current_user = user_collection.find_one({"email": user_email})
@@ -316,10 +723,49 @@ def send_friend_request(user_email):
 @require_api_key
 def decline_friend_request(user_email):
     """
-    This function handles the POST request at the /users/<user_email>/friend_requests/decline endpoint.
-    It declines a friend request from the current user to the user with the given email.
-    If the user is found, it removes the friend request from the user's friendRequests.received list.
-    If the user is not found, it returns a 404 error with a message.
+    Decline a friend request.
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user who is declining the friend request
+      - name: friend_email
+        in: body
+        schema:
+          type: object
+          properties:
+            friend_email:
+              type: string
+        required: true
+        description: The email of the user who sent the friend request
+    responses:
+      200:
+        description: Friend request declined successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Friend request already declined or not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: User not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
     """
     # Find the current user in the database using the provided email
     current_user = user_collection.find_one({"email": user_email})
@@ -353,11 +799,40 @@ def decline_friend_request(user_email):
 @require_api_key
 def accept_friend_request(user_email):
     """
-    This function handles the POST request at the /users/<user_email>/friend_requests/accept endpoint.
-    It accepts a friend request from the current user to the user with the given email.
-    If the user is found, it adds the current user to the user's friends list and removes the friend request
-    from the user's friendRequests.received list.
-    If the user is not found, it returns a 404 error with a message.
+    Accept a friend request from the current user to another user
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user
+    responses:
+      200:
+        description: Friend request accepted successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Friend request already accepted or not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: User not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
     """
     # Find the current user in the database using the provided email
     current_user = user_collection.find_one({"email": user_email})
@@ -395,6 +870,42 @@ def accept_friend_request(user_email):
 @app.route("/users/<user_email>/level", methods=['POST'])
 @require_api_key
 def add_level(user_email):
+    """
+    Add level to a user
+    ---
+    tags:
+      - Games
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user
+    responses:
+      200:
+        description: Level added successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Level is required
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: User not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     current_user = user_collection.find_one({"email": user_email})
     if current_user:
         level = request.json.get('level')
@@ -414,6 +925,47 @@ def add_level(user_email):
 @app.route("/users/<user_email>/exp", methods=['POST'])
 @require_api_key
 def add_exp(user_email):
+    """
+    Add experience points to the user.
+    ---
+    tags:
+      - Games
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user
+      - name: exp
+        in: body
+        type: integer
+        required: true
+        description: The amount of experience points to add
+    responses:
+      200:
+        description: EXP added successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: EXP is required
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: User not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     current_user = user_collection.find_one({"email": user_email})
     if current_user:
         exp = request.json.get('exp')
@@ -435,6 +987,47 @@ def add_exp(user_email):
 @app.route("/users/<user_email>/posts", methods=['POST'])
 @require_api_key
 def create_post(user_email):
+    """
+    Create a post for a user
+    ---
+    tags:
+      - Posts
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user who is creating the post
+      - name: content
+        in: body
+        type: string
+        required: true
+        description: The content of the post
+    responses:
+      200:
+        description: Post created successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Post content is required
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: User not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     current_user = user_collection.find_one({"email": user_email})
     if current_user:
         post_content = request.json.get('content')
@@ -451,6 +1044,44 @@ def create_post(user_email):
 @app.route("/users/<user_email>/posts", methods=['GET'])
 @require_api_key
 def get_posts(user_email):
+    """
+    Get all posts of a user.
+    ---
+    tags:
+      - Posts
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user whose posts are to be fetched
+    responses:
+      200:
+        description: Posts fetched successfully
+        schema:
+          type: object
+          properties:
+            posts:
+              type: array
+              items:
+                type: object
+                properties:
+                  content:
+                    type: string
+                  author:
+                    type: string
+                  timestamp:
+                    type: string
+      404:
+        description: User not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     current_user = user_collection.find_one({"email": user_email})
     if current_user:
         return jsonify({"posts": current_user['posts']}), 200
@@ -461,6 +1092,42 @@ def get_posts(user_email):
 @app.route("/users/<user_email>/groups", methods=['POST'])
 @require_api_key
 def create_group(user_email):
+    """
+    Create a new group.
+    ---
+    tags:
+      - Groups
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user who is creating the group
+    responses:
+      200:
+        description: Group created successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Bad request
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: User not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     current_user = user_collection.find_one({"email": user_email})
     user_group = db.groups.find_one({"owner_email": user_email})
     group_name = request.json.get('group_name')
@@ -482,10 +1149,93 @@ def create_group_success(user_email, group_name):
     db.groups.insert_one(group)
     return jsonify({"message": "Group created successfully."}), 200
 
+
+@app.route("/groups", methods=['GET'])
+@require_api_key
+def list_all_groups():
+    """
+    List all groups
+    ---
+    tags:
+      - Groups
+    security:
+      - api_key: []
+    responses:
+      200:
+        description: List of all groups
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              owner_email:
+                type: string
+              members:
+                type: array
+                items:
+                  type: string
+      404:
+        description: No groups found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    groups = db.groups.find()
+    if not groups:
+        return jsonify({"message": "No groups found."}), 404
+    return jsonify({"groups": [convert_objectid_to_string(group) for group in groups]}), 200
+
+
+
 # Join Group
 @app.route("/users/<user_email>/groups/<group_name>/join", methods=['POST'])
 @require_api_key
 def join_group(user_email, group_name):
+    """
+    Join a group
+    ---
+    tags:
+      - Groups
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user who wants to join the group
+      - name: group_name
+        in: path
+        type: string
+        required: true
+        description: The name of the group to join
+    responses:
+      200:
+        description: Joined group successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Bad request
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: User or Group not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     current_user = user_collection.find_one({"email": user_email})
     group = db.groups.find_one({"name": group_name})
     
@@ -507,6 +1257,47 @@ def join_group_success(user_email, group_name):
 @app.route("/users/<user_email>/groups/<group_name>/leave", methods=['POST'])
 @require_api_key
 def leave_group(user_email, group_name):
+    """
+    Leave a group
+    ---
+    tags:
+      - Groups
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user who wants to leave the group
+      - name: group_name
+        in: path
+        type: string
+        required: true
+        description: The name of the group to leave
+    responses:
+      200:
+        description: Left group successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Bad request
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: User or Group not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     current_user = user_collection.find_one({"email": user_email})
     if current_user:
         group = db.groups.find_one({"name": group_name})
@@ -528,6 +1319,44 @@ def leave_group(user_email, group_name):
 @app.route("/badges", methods=['POST'])
 @require_api_key
 def create_badge():
+    """
+    ---
+    tags:
+      - Badges
+    security:
+      - api_key: []
+    parameters:
+      - name: name
+        in: body
+        type: string
+        required: true
+        description: The name of the badge
+      - name: description
+        in: body
+        type: string
+        required: true
+        description: The description of the badge
+      - name: image
+        in: body
+        type: string
+        required: true
+        description: The image of the badge
+    responses:
+      200:
+        description: Badge created successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Name, description and image are required
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     name = request.json.get('name')
     description = request.json.get('description')
     image = request.json.get('image')
@@ -542,6 +1371,35 @@ def create_badge():
 @app.route("/badges/<badge_id>", methods=['GET'])
 @require_api_key
 def read_badge(badge_id):
+    """
+    Read a badge
+    ---
+    tags:
+      - Badges
+    security:
+      - api_key: []
+    parameters:
+      - name: badge_id
+        in: path
+        type: string
+        required: true
+        description: The id of the badge
+    responses:
+      200:
+        description: Badge found successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: Badge not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     badge = db.badges.find_one({"_id": ObjectId(badge_id)})
     if badge:
         return jsonify(badge), 200
@@ -552,6 +1410,35 @@ def read_badge(badge_id):
 @app.route("/users/<user_email>/badges", methods=['GET'])
 # @require_api_key
 def get_user_badges(user_email):
+    """
+    Get all badges for a user
+    ---
+    tags:
+      - Badges
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user
+    responses:
+      200:
+        description: Badges found successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: Badges not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     if user_email == "brian@bchewy.com":
         badges = [
         {
@@ -613,6 +1500,50 @@ def get_user_badges(user_email):
 @app.route("/badges/<badge_id>", methods=['PUT'])
 @require_api_key
 def update_badge(badge_id):
+    """
+    Update a badge
+    ---
+    tags:
+      - Badges
+    security:
+      - api_key: []
+    parameters:
+      - name: badge_id
+        in: path
+        type: string
+        required: true
+        description: The id of the badge
+      - name: name
+        in: body
+        type: string
+        required: true
+        description: The new name of the badge
+      - name: description
+        in: body
+        type: string
+        required: true
+        description: The new description of the badge
+      - name: image
+        in: body
+        type: string
+        required: true
+        description: The new image of the badge
+    responses:
+      200:
+        description: Badge updated successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Name, description and image are required
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     name = request.json.get('name')
     description = request.json.get('description')
     image = request.json.get('image')
@@ -627,6 +1558,35 @@ def update_badge(badge_id):
 @app.route("/badges/<badge_id>", methods=['DELETE'])
 @require_api_key
 def delete_badge(badge_id):
+    """
+    Delete a badge
+    ---
+    tags:
+      - Badges
+    security:
+      - api_key: []
+    parameters:
+      - name: badge_id
+        in: path
+        type: string
+        required: true
+        description: The id of the badge to delete
+    responses:
+      200:
+        description: Badge deleted successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: Badge not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
     db.badges.delete_one({"_id": ObjectId(badge_id)})
     return jsonify({"message": "Badge deleted successfully."}), 200
 
@@ -634,3 +1594,4 @@ def delete_badge(badge_id):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8888, debug=True)  # must be same as gunicorn
+
