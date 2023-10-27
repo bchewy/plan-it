@@ -57,7 +57,7 @@
 </section>
 
 	<!-- refer friend now-->
-	<section class="bg-success text-light">
+	<section class="text-muted">
 		<div class="container">
 			<div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
 				<h4 class="news-input">Refer a friend now!</h4> <!-- Apply the "news-input" class -->
