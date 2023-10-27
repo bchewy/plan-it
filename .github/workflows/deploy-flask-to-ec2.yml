@@ -3,24 +3,31 @@ name: Deploy Flask to EC2
 on:
   push:
     branches:
-      - main  # Trigger the workflow on push to the main branch
+      - main # Trigger the workflow on push to the main branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Deploy to EC2
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ubuntu
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          cd /home/ubuntu/sustainable-singapore/backend
-          git pull git@github.com:bchewy/sustainable-singapore.git main
-          pip3 install -r requirements.txt
-          sudo systemctl restart backend.service
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/sustainable-singapore/backend
+            git pull git@github.com:bchewy/sustainable-singapore.git main
+            pip3 install -r requirements.txt
+            sudo systemctl restart backend.service
+            if systemctl is-active --quiet backend.service
+            then
+              echo "Gunicorn is running, deployment succeeded."
+            else
+              echo "Gunicorn is not running, deployment failed."
+              exit 1
+            fi
