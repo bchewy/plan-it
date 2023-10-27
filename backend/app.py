@@ -462,35 +462,49 @@ def get_posts(user_email):
 @require_api_key
 def create_group(user_email):
     current_user = user_collection.find_one({"email": user_email})
-    if current_user:
-        group_name = request.json.get('group_name')
-        if group_name:
-            group = {"name": group_name, "owner_email": user_email, "members": [user_email]}
-            db.groups.insert_one(group)
-            return jsonify({"message": "Group created successfully."}), 200
-        else:
-            return jsonify({"message": "Group name is required."}), 400
-    else:
+    user_group = db.groups.find_one({"owner_email": user_email})
+    group_name = request.json.get('group_name')
+    group = db.groups.find_one({"name": group_name})
+    
+    if not current_user:
         return jsonify({"message": "User not found."}), 404
+    if not group_name:
+        return jsonify({"message": "Group name is required."}), 400
+    if user_group:
+        return jsonify({"message": "User has already created a group."}), 400
+    if group:
+        return jsonify({"message": "Group name already exists."}), 400
+    return create_group_success(user_email, group_name)
+
+
+def create_group_success(user_email, group_name):
+    group = {"name": group_name, "owner_email": user_email, "members": [user_email]}
+    db.groups.insert_one(group)
+    return jsonify({"message": "Group created successfully."}), 200
 
 # Join Group
 @app.route("/users/<user_email>/groups/<group_name>/join", methods=['POST'])
 @require_api_key
 def join_group(user_email, group_name):
     current_user = user_collection.find_one({"email": user_email})
-    if current_user:
-        group = db.groups.find_one({"name": group_name})
-        if group:
-            if user_email not in group['members']:
-                group['members'].append(user_email)
-                db.groups.update_one({"name": group_name}, {"$set": group})
-                return jsonify({"message": "Joined group successfully."}), 200
-            else:
-                return jsonify({"message": "Already a member of the group."}), 400
-        else:
-            return jsonify({"message": "Group not found."}), 404
-    else:
-        return jsonify({"message": "User not found."}), 404
+    user_group = db.groups.find_one({"owner_email": user_email})
+    group = db.groups.find_one({"name": group_name})
+    
+    switch = {
+        not current_user: (lambda: jsonify({"message": "User not found."}), 404),
+        not group: (lambda: jsonify({"message": "Group not found."}), 404),
+        user_email in group['members']: (lambda: jsonify({"message": "Already a member of the group."}), 400),
+        user_group: (lambda: jsonify({"message": "User has already created a group."}), 400),
+        db.groups.find_one({"name": group_name}): (lambda: jsonify({"message": "Group name already exists."}), 400),
+        True: lambda: join_group_success(user_email, group_name)
+    }
+    return switch[True]()
+
+def join_group_success(user_email, group_name):
+    group = db.groups.find_one({"name": group_name})
+    group['members'].append(user_email)
+    db.groups.update_one({"name": group_name}, {"$set": group})
+    return jsonify({"message": "Joined group successfully."}), 200
 
 # Leave Group
 @app.route("/users/<user_email>/groups/<group_name>/leave", methods=['POST'])

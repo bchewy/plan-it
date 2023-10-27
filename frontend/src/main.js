@@ -26,10 +26,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faArrowRightFromBracket, faCar, faCircleUser, faTruckFast, faCog } from '@fortawesome/free-solid-svg-icons'
 import { faPlusSquare, faShare, faTag, faPlus, faUsers, faUser } from '@fortawesome/free-solid-svg-icons'
 import { faLeaf, faShoePrints, faBus } from '@fortawesome/free-solid-svg-icons';
-
-// Main.js
-
-
 library.add(faCar)
 library.add(faCircleUser)
 library.add(faTruckFast)

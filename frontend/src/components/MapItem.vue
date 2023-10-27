@@ -98,31 +98,12 @@
 					</div>
 				</div>
 
-
-				<!-- <div v-if="routeDetails" class="d-flex justify-content-center align-items-center">
-					<div class="modal fade" id="makePostModal" tabindex="-1" aria-labelledby="makePostModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="makePostModalLabel">Post about this route</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								</div>
-								<div class="modal-body">
-									<p class="my-4">Would you like to make a post about this route?</p>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-									<button type="button" class="btn btn-primary" @click="confirmPost">Confirm</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#makePostModal">Make a Post</button>
-				</div> -->
 			</div>
 		</div>
 	</div>
 </template>
+
+
 
 <script>
 import { ref, defineComponent, computed, reactive } from "vue";
