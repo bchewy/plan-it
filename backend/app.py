@@ -487,18 +487,15 @@ def create_group_success(user_email, group_name):
 @require_api_key
 def join_group(user_email, group_name):
     current_user = user_collection.find_one({"email": user_email})
-    user_group = db.groups.find_one({"owner_email": user_email})
     group = db.groups.find_one({"name": group_name})
     
-    switch = {
-        not current_user: (lambda: jsonify({"message": "User not found."}), 404),
-        not group: (lambda: jsonify({"message": "Group not found."}), 404),
-        user_email in group['members']: (lambda: jsonify({"message": "Already a member of the group."}), 400),
-        user_group: (lambda: jsonify({"message": "User has already created a group."}), 400),
-        db.groups.find_one({"name": group_name}): (lambda: jsonify({"message": "Group name already exists."}), 400),
-        True: lambda: join_group_success(user_email, group_name)
-    }
-    return switch[True]()
+    if not current_user:
+        return jsonify({"message": "User not found."}), 404
+    if not group:
+        return jsonify({"message": "Group not found."}), 404
+    if user_email in group['members']:
+        return jsonify({"message": "Already a member of the group."}), 400
+    return join_group_success(user_email, group_name)
 
 def join_group_success(user_email, group_name):
     group = db.groups.find_one({"name": group_name})
