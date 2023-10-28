@@ -38,10 +38,6 @@ const router = createRouter({
 			component: () => import('./views/Admin.vue')
 		},
 		{
-			path: '/badges',
-			component: () => import('./views/Badges.vue')
-		},
-		{
 			path: '/community/createGroup',
 			component: () => import('./views/CreateGroup.vue')
 		},

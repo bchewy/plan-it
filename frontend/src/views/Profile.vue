@@ -102,6 +102,13 @@
     </div>
     <!-- </div> -->
 
+    <div class="card mt-4 mb-4">
+      <div class="card-header">
+        <h3 class="mb-0">Game Stats</h3>
+      </div>
+      <Badges></Badges>
+    </div>
+
 
   </div>
 </template>
@@ -111,6 +118,7 @@ import MapItem from "../components/MapItem.vue";
 import AddFriend from "../components/AddFriends.vue";
 import Navbar from "../components/Navbar.vue";
 import FriendRequest from '../components/FriendRequest.vue';
+import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
 
@@ -167,6 +175,7 @@ export default {
     MapItem,
     AddFriend,
     FriendRequest,
+    Badges,
   },
   methods: {
     fetchData() {
