@@ -6,30 +6,7 @@
     <body class="position-relative">
         <div class="container-fluid">
             <div class="row">
-
-                <nav class="col-2 position-fixed h-100" style="background-color: rgb(209, 244, 209)">
-
-                    <div class="container-fluid">
-                        <br>
-                        <span class="h5 text-muted">Plan-it Community</span>
-
-                        <ul class="navbar-nav flex-column mt-5">
-
-                            <li class="active nav-item"><a class="h3 nav-link" href="#">For you</a></li>
-                            <hr>
-                            <li class="nav-item dropdown"><a class="h3 nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Groups</a>
-                                <ul class="dropdown-menu bg-light">
-                                    <li><router-link class="dropdown-item" to="/community/createGroup"><font-awesome-icon icon="fa-solid fa-plus" /> Create group</router-link></li>
-                                    <li><router-link class="dropdown-item" to="/community/yourGroups"><font-awesome-icon icon="fa-solid fa-users" /> Your groups</router-link></li>
-                                </ul>
-                            </li>
-                            <hr>
-                            <li class="nav-item"><router-link class="h3 nav-link" to="/community/friendCommunity">Friends</router-link></li>
-                            <hr>
-
-                        </ul>
-                    </div>
-                </nav>
+                <CommunitySidebar></CommunitySidebar>
                 <div class="col-2"></div>
                 <div class="col-10 h-100" style="background-color: rgb(232, 251, 240);">
 
@@ -76,7 +53,7 @@
 </template>
 
 <script>
-
+import CommunitySidebar from "../components/CommunitySidebar.vue";
 import NavBar from "../components/Navbar.vue";
 // import Login from '../components/Login.vue'
 import { useAuth0 } from '@auth0/auth0-vue';
@@ -88,9 +65,9 @@ export default {
 
     },
     components: {
-        NavBar,  // Register the NavBar component
-        // Login
-        Share_badge
+        NavBar,
+        Share_badge,
+        CommunitySidebar
     },
     setup() {
         const { loginWithRedirect, user, isAuthenticated } = useAuth0();

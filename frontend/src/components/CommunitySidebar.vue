@@ -1,8 +1,8 @@
 <template>
-	<nav class="col-2 position-fixed h-100">
-		<div class="container-fluid">
+	<nav class="col-md-2 position-fixed h-100 bg-supergreen">
+		<div class="container-fluid text-light">
 			<br>
-			<span class="h5 text-muted">Plan-it Community</span>
+			<span class="h5 text-light">Plan-it Community</span>
 			<ul class="navbar-nav flex-column mt-5">
 				<li class="active nav-item"><router-link class="h3 nav-link" to="/community">For you</router-link></li>
 				<hr>
@@ -19,3 +19,8 @@
 		</div>
 	</nav>
 </template>
+<style scoped>
+.bg-supergreen {
+	background-color: #739072;
+}
+</style>

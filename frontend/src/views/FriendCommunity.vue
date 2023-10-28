@@ -1,13 +1,11 @@
 <template>
     <!-- nav -->
     <NavBar />
-
-
-    <body class="position-relative">
+    <div class="position-relative">
         <div class="container-fluid">
             <div class="row">
-
-                <nav class="col-2 position-fixed h-100" style="background-color: rgb(209, 244, 209)">
+                <CommunitySidebar></CommunitySidebar>
+                <!-- <nav class="col-2 position-fixed h-100" style="background-color: rgb(209, 244, 209)">
 
                     <div class="container-fluid">
                         <br>
@@ -29,7 +27,9 @@
 
                         </ul>
                     </div>
-                </nav>
+                </nav> -->
+
+
                 <div class="col-2"></div>
                 <div class="col-10 h-100" style="background-color: rgb(232, 251, 240);">
 
@@ -72,15 +72,12 @@
 
 
 
-    </body>
-    <footer>
-        <!-- footer -->
-    </footer>
+    </div>
 </template>
 <script>
 
 import NavBar from "../components/Navbar.vue";
-// import Login from '../components/Login.vue'
+import CommunitySidebar from "../components/CommunitySidebar.vue";
 import { useAuth0 } from '@auth0/auth0-vue';
 
 import Share_badge from "../components/Share_badge.vue";
@@ -90,8 +87,8 @@ export default {
 
     },
     components: {
-        NavBar,  // Register the NavBar component
-        // Login
+        NavBar,
+        CommunitySidebar,
         Share_badge
     },
     setup() {
