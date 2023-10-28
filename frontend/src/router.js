@@ -1,6 +1,8 @@
 // router.js
 
 import { createRouter, createWebHistory } from 'vue-router'
+import { authGuard } from "@auth0/auth0-vue";
+
 
 const router = createRouter({
 	history: createWebHistory(),
@@ -11,7 +13,8 @@ const router = createRouter({
 		},
 		{
 			path: '/route',
-			component: () => import('./views/Route.vue')
+			component: () => import('./views/Route.vue'),
+			beforeEnter: authGuard
 		},
 		{
 			path: '/debug',
@@ -19,7 +22,9 @@ const router = createRouter({
 		},
 		{
 			path: '/profile',
-			component: () => import('./views/Profile.vue')
+			component: () => import('./views/Profile.vue'),
+			beforeEnter: authGuard
+
 		},
 		{
 			path: '/profile/public/:userEmail',
@@ -27,23 +32,31 @@ const router = createRouter({
 		},
 		{
 			path: '/community',
-			component: () => import('./views/Community.vue')
+			component: () => import('./views/Community.vue'),
+			beforeEnter: authGuard
+
 		},
 		{
 			path: '/settings',
-			component: () => import('./views/Settings.vue')
+			component: () => import('./views/Settings.vue'),
+			beforeEnter: authGuard
+
 		},
 		{
 			path: '/admin',
-			component: () => import('./views/Admin.vue')
+			component: () => import('./views/Admin.vue'),
+			beforeEnter: authGuard
+
 		},
 		{
 			path: '/badges',
-			component: () => import('./views/Badges.vue')
+			component: () => import('./views/Badges.vue'),
+			beforeEnter: authGuard
+
 		},
 		{
 			path: '/community/createGroup',
-			component: () => import('./views/CreateGroup.vue')
+			component: () => import('./views/CreateGroup.vue'),
 		},
 		,
 		{
