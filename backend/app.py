@@ -463,6 +463,71 @@ def get_user_handle(user_handle):
         return jsonify({"message": "User not found."}), 404
 
 
+@app.route("/users", methods=['GET'])
+# @require_api_key
+def get_all_users():
+    """
+    Get all users
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    responses:
+      200:
+        description: Users found successfully
+        schema:
+          $ref: '#/definitions/User'
+      404:
+        description: No users found
+    """
+    users = list(user_collection.find({}, {"email": 1, "handle": 1, "level": 1, "pictureurl": 1, "exp": 1, "carbonsavings":1}).sort("level", -1))
+    if users:
+        users = [convert_objectid_to_string(user) for user in users]
+        return jsonify(users), 200
+    else:
+        return jsonify({"message": "No users found."}), 404
+
+@app.route("/users/<user_email>/carbonsavings", methods=['POST'])
+@require_api_key
+def add_carbon_savings(user_email):
+    """
+    Add carbon savings for a user
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            carbonsavings:
+              type: number
+              description: The carbon savings to add
+    responses:
+      200:
+        description: Carbon savings added successfully
+      404:
+        description: User not found
+    """
+    data = request.get_json()
+    user = user_collection.find_one({"email": user_email})
+    if user:
+        user_collection.update_one({"email": user_email}, {"$inc": {"carbonsavings": data['carbonsavings']}})
+        return jsonify({"message": "Carbon savings added successfully."}), 200
+    else:
+        return jsonify({"message": "User not found."}), 404
+
+
 # Users get individual user ## Internal 
 @app.route("/users/iz/<user_email>", methods=['GET'])
 @require_api_key

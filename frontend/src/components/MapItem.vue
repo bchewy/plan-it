@@ -508,6 +508,20 @@ export default defineComponent({
 			const expToAdd = BASE_EXP + (emissionSavings.value * BONUS_EXP_PER_SAVED_KG);
 
 
+			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/carbonsavings`, { carbonsavings: emissionSavings.value }, {
+				headers: {
+					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+				}
+			})
+				.then(response => {
+					console.log(response.data.message);
+					logUserActivity(`saved :${emissionSavings.value} co2`)
+				})
+				.catch(error => {
+					console.error(error);
+				});
+
+			// Update the user exp in the backend
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/exp`, { exp: expToAdd }, {
 				headers: {
 					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
@@ -515,7 +529,7 @@ export default defineComponent({
 			})
 				.then(response => {
 					console.log(response.data.message);
-					logUserActivity(`gained-exp:${expToAdd}`)
+					logUserActivity(`gained ${expToAdd} exp`)
 				})
 				.catch(error => {
 					console.error(error);

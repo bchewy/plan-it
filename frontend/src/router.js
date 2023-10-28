@@ -27,6 +27,12 @@ const router = createRouter({
 
 		},
 		{
+			path: '/leaderboard',
+			component: () => import('./views/Leaderboards.vue'),
+			beforeEnter: authGuard
+
+		},
+		{
 			path: '/profile/public/:userEmail',
 			component: () => import('./views/ProfilePublic.vue')
 		},
