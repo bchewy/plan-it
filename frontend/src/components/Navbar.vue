@@ -1,11 +1,71 @@
-<template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <a class="navbar-brand" href="#">
-        <font-awesome-icon icon="fa-solid fa-car" bounce style="color: green" /> Plan-It
-      </a>
-      <!-- <font-awesome-icon icon="fa-solid fa-user-secret" /> -->
+<style scoped>
+.bg-green {
+  background-color: #3a5a40;
+}
 
+.bg-green2 {
+  background-color: #a3b18a;
+}
+
+.text-evenlight {
+  color: #a3b18a;
+}
+
+.text-evenlighter {
+  color: white;
+}
+
+.text-supergreen {
+  color: #a7c957;
+}
+
+.nav-item .dropdown-menu {
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  /* Add shadow to dropdown */
+}
+
+.nav-item .dropdown-menu .dropdown-item:hover {
+  background-color: #006400;
+}
+
+.nav-item {
+  margin: 0;
+  /* Reset margin for nav item */
+  padding: 0;
+  /* Reset padding for nav item */
+}
+
+
+.navbar-nav .nav-link {
+  display: block;
+  /* Make sure the link takes up the full width and height of its container */
+  line-height: 1.5;
+  /* Adjust line height if necessary */
+  padding: 0.5rem 1rem;
+  /* Adjust padding as per your design */
+  margin: 0;
+  /* Reset margin for nav link */
+  transition: background-color 0.3s, color 0.3s;
+  /* Smooth hover transition */
+}
+
+
+/* .navbar-nav .nav-link:hover {
+  background-color: #a3b18a;
+  color: #3a5a40;
+} */
+
+.dropdown-toggle::after {
+  color: #a3b18a;
+  /* Change dropdown arrow color */
+}
+</style>
+<template>
+  <nav class="navbar navbar-expand-lg navbar-light bg-green">
+    <div class="container">
+      <a class="navbar-brand text-supergreen" href="#">
+        <font-awesome-icon icon="fa-solid fa-car" bounce style="color: #a7c957" /> Plan-It
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -13,35 +73,32 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <router-link class="nav-link" to="/" active-class="active">Home</router-link>
+            <router-link class="nav-link text-evenlighter" to="/">Home</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/route" active-class="active">Routing</router-link>
+            <router-link class="nav-link text-evenlighter" to="/route">Routing</router-link>
           </li>
-          <!-- <li class="nav-item">
-            <router-link class="nav-link" to="/debug">Debug</router-link>
-          </li> -->
           <li class="nav-item">
-            <router-link class="nav-link" to="/community" active-class="active">Community</router-link>
+            <router-link class="nav-link text-evenlighter" to="/community">Community</router-link>
           </li>
         </ul>
         <ul class="navbar-nav">
           <li v-if="!isAuthenticated" class="nav-item">
-            <a class="nav-link" @click.prevent="login">Login</a>
+            <a class="nav-link text-evenlighter" @click.prevent="login">Login</a>
           </li>
           <li v-else class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle text-evenlighter d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img :src="user.picture" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px" />
-              Welcome, {{ user.name }}!
+              <span class="text-evenlighter">Welcome, {{ user.name }}!</span>
             </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <ul class="dropdown-menu bg-green2 text-evenlighter" aria-labelledby="navbarDropdown">
               <li>
-                <router-link class="dropdown-item" to="/profile">
+                <router-link class="dropdown-item text-light" to="/profile">
                   <font-awesome-icon icon="fa-solid fa-circle-user" />
                   Profile</router-link>
               </li>
               <li>
-                <router-link class="dropdown-item" to="/settings">
+                <router-link class="dropdown-item text-light" to="/settings">
                   <font-awesome-icon icon="fa-cog" />
                   Settings</router-link>
                 <!-- <router-link class="dropdown-item" :to="`/profile/public/${user.email}`">
@@ -56,7 +113,7 @@
                 <hr class="dropdown-divider" />
               </li>
               <li>
-                <a class="dropdown-item" @click="logout">Logout
+                <a class="dropdown-item text-light" @click="logout">Logout
                   <font-awesome-icon icon="fa-solid fa-arrow-right-from-bracket" />
                 </a>
               </li>
@@ -65,6 +122,7 @@
         </ul>
       </div>
     </div>
+    <div class="overlay bg-white" style="height: 20px;"></div>
   </nav>
   <!-- User handle modal -->
   <div class="modal" tabindex="-1" role="dialog" id="handleModal">
@@ -96,18 +154,12 @@ import { watch, computed, defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'NavBar',
-  // props: {
-  //   pictureurl: String
-  // },
+
   setup() {
     const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
     const userHandle = ref('');
-    // const pictureurl = user.picture
-
     watch(user, async (newValue) => {
-      // If the user is authenticated
       if (newValue) {
-        // Create or update the user in your database
         console.log('new value here', newValue)
         try {
           const handleResponse = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/users/handle/${newValue.nickname}`, {
@@ -118,7 +170,6 @@ export default defineComponent({
           });
           const handleData = await handleResponse.json();
           if (handleData.message === "User not found.") {
-            // If the user doesn't have a handle, prompt them to enter one
             console.log('handle not found')
             $('#handleModal').modal('show');
           }
