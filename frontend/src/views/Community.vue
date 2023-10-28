@@ -61,23 +61,10 @@
 							<heart_btn></heart_btn>
 							<p>Post text</p>
 						</div>
-
 					</div>
-
-
 				</div>
-
 			</div>
 		</div>
-
-
-
-
-
-
-
-
-
 	</div>
 	<footer>
 		<!-- footer -->
