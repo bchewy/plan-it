@@ -1,5 +1,5 @@
 <template>
-	<nav class="col-md-2 position-fixed h-100 bg-supergreen">
+	<div class="col-2 bg-supergreen">
 		<div class="container-fluid text-light">
 			<br>
 			<span class="h5 text-light">Plan-it Community</span>
@@ -17,7 +17,7 @@
 				<hr>
 			</ul>
 		</div>
-	</nav>
+	</div>
 </template>
 <style scoped>
 .bg-supergreen {

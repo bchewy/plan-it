@@ -5,33 +5,7 @@
         <div class="container-fluid">
             <div class="row">
                 <CommunitySidebar></CommunitySidebar>
-                <!-- <nav class="col-2 position-fixed h-100" style="background-color: rgb(209, 244, 209)">
-
-                    <div class="container-fluid">
-                        <br>
-                        <span class="h5 text-muted">Plan-it Community</span>
-
-                        <ul class="navbar-nav flex-column mt-5">
-
-                            <li class="active nav-item"><a class="h3 nav-link" href="/community">For you</a></li>
-                            <hr>
-                            <li class="nav-item dropdown"><a class="h3 nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Groups</a>
-                                <ul class="dropdown-menu bg-light">
-                                    <li><router-link class="dropdown-item" to="/community/createGroup"><font-awesome-icon icon="fa-solid fa-plus" /> Create group</router-link></li>
-                                    <li><router-link class="dropdown-item" to="/community/yourGroups"><font-awesome-icon icon="fa-solid fa-users" /> Your groups</router-link></li>
-                                </ul>
-                            </li>
-                            <hr>
-                            <li class="nav-item"><router-link class="h3 nav-link" to="/community/friendCommunity">Friends</router-link></li>
-                            <hr>
-
-                        </ul>
-                    </div>
-                </nav> -->
-
-
-                <div class="col-2"></div>
-                <div class="col-10 h-100" style="background-color: rgb(232, 251, 240);">
+                <div class="col-10 vh-100" style="background-color: rgb(232, 251, 240);">
 
                     <h1 class="text-center py-3 text-muted" style="font-weight: bold;">Your Friends Page</h1>
                     <div class="row justify-content-center">

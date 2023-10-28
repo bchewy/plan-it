@@ -1,18 +1,12 @@
-<style scoped>
-.container-fluid {
-	min-height: 100vh;
-	/* padding-top: 3rem; */
-	background-color: #d1f4d1;
-}
-</style>
+<style scoped></style>
 <template>
 	<!-- nav -->
 	<NavBar />
 	<div class="container-fluid bg-supergreen pb-3">
 		<div class="row">
+			<!-- Community sidebar uses col-2 -->
 			<CommunitySidebar></CommunitySidebar>
-			<div class="col-2"></div>
-			<div class="col-10 h-100" style="background-color: rgb(232, 251, 240);">
+			<div class="col-10 vh-100" style="background-color: rgb(232, 251, 240);">
 				<h1 class="text-center py-3 text-muted" style="font-weight: bold;">For You Page</h1>
 				<div class="row justify-content-center">
 					<div class="col-8 rounded border bg-white">

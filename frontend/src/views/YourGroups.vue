@@ -7,12 +7,8 @@
         <div class="container-fluid">
             <div class="row">
                 <CommunitySidebar></CommunitySidebar>
-                <div class="col-2"></div>
-                <div class="col-10 h-100" style="background-color: rgb(232, 251, 240);">
-
+                <div class="col-10 vh-100" style="background-color: rgb(232, 251, 240);">
                     <h1 class="text-center py-3 text-muted" style="font-weight: bold;">Your Groups Page</h1>
-
-
                 </div>
 
             </div>
