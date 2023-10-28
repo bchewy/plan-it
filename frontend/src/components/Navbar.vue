@@ -83,10 +83,15 @@
             <router-link class="nav-link text-evenlighter" to="/route">Routing</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-evenlighter" to="/community">Community</router-link>
+            <router-link class="nav-link text-evenlighter" to="/community">
+
+              Community
+            </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-evenlighter" to="/leaderboard">Leaderboards</router-link>
+            <router-link class="nav-link text-evenlighter" to="/leaderboard">
+              Leaderboards
+            </router-link>
           </li>
         </ul>
         <ul class="navbar-nav">

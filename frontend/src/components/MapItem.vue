@@ -7,7 +7,7 @@
 			<GMapMap class="w-100 vh-100" :center="center" :zoom="zoom" map-type-id="terrain">
 				<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 				<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
-				<GMapPolyline :path="decodedPolyline" :editable="true" ref="polyline" />
+				<GMapPolyline :path="decodedPolyline" :editable="false" ref="polyline" :options="{ strokeColor: '#00FF00' }" />
 			</GMapMap>
 		</div>
 		<div class="col-lg-4 col-md-12 p-4">
@@ -115,8 +115,13 @@
 						<span>{{ userLvl }}</span>
 					</div>
 					<div class="d-flex justify-content-between mb-3">
-						<span><strong>Experience Progress:</strong></span>
-						<span>{{ userExp }} / 100</span>
+						<!-- <span><strong>Experience Progress:</strong></span>
+						<span>{{ userExp }} / 100</span> -->
+
+					</div>
+					<div class="d-flex justify-content-between mb-3">
+						<span><strong>Experience Added:</strong></span>
+						<span>+{{ expAdded }}</span>
 					</div>
 					<div class="d-flex justify-content-between mb-3">
 						<span><strong>Emission Savings:</strong></span>
@@ -187,6 +192,7 @@ export default defineComponent({
 		const userExp = ref(0);
 		const expToNextLevel = ref(0);
 		const userLvl = ref(0)
+		const expAdded = ref(0)
 
 		// Retrieve user EXP
 		axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/ez/${props.userme.email}`)
@@ -506,6 +512,7 @@ export default defineComponent({
 
 			// Calculate the total EXP to add based on the base EXP and the bonus for saved emissions
 			const expToAdd = BASE_EXP + (emissionSavings.value * BONUS_EXP_PER_SAVED_KG);
+			expAdded.value = expToAdd
 
 
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/carbonsavings`, { carbonsavings: emissionSavings.value }, {
@@ -573,7 +580,8 @@ export default defineComponent({
 			emissionSavings,
 			userExp,
 			expToNextLevel,
-			userLvl
+			userLvl,
+			expAdded,
 		};
 	}
 });
