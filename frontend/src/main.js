@@ -44,7 +44,6 @@ library.add(faBus)
 import PrimeVue from 'primevue/config';
 
 
-
 const app = createApp(App)
 app.use(VueGoogleMaps, {
 	load: {

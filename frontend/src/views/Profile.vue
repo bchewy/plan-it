@@ -1,112 +1,99 @@
+<style scoped>
+.profile-container {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bg-supergreen {
+  background-color: #d1f4d1;
+}
+</style>
+
 <template>
   <Navbar />
-  <div v-if="isLoading || !isAuthenticated" class="loading-screen">
-    <div v-if="isLoading">Loading...</div>
-    <div v-else class="row justify-content-center align-items-center" style="height: 100vh">
-      <h3 class="text-center p-5">Please log in to use this feature</h3>
-    </div>
-  </div>
-  <div v-else class="container">
+  <div class="container-fluid mt-5">
     <div class="row">
-      <div class="col-12 text-center mt-5">
-        <h1>User Profile</h1>
+      <!-- Left Sidebar: Tabs -->
+      <div class="col-md-3">
+        <ul class="nav flex-column nav-pills" id="myTabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link" :class="{ 'active': activeTab === 'profile' }" @click="activeTab = 'profile'" href="#" role="tab">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" :class="{ 'active': activeTab === 'routes' }" @click="activeTab = 'routes'" href="#" role="tab">Routes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" :class="{ 'active': activeTab === 'friends' }" @click="activeTab = 'friends'" href="#" role="tab">Friends</a>
+          </li>
+        </ul>
       </div>
-    </div>
-    <!-- User Profile and Routes -->
-    <div class="row justify-content-center mt-5">
-      <!-- User Profile Column -->
-      <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
-        <div class="card">
-          <div class="card-header">
-            <h3>{{ user.name }}</h3>
-          </div>
-          <div class="card-body">
-            <div class="text-center mb-3">
-              <img :src="user.picture" class="rounded-circle" alt="User profile picture" width="128" height="128" />
+
+      <!-- Main Content Area -->
+      <div class="col-md-9">
+        <div v-if="activeTab === 'profile'" class="tab-pane show active">
+          <!-- Profile Content -->
+          <div class="profile-container bg-light p-3 rounded d-flex flex-column flex-md-row">
+            <!-- User Profile Image -->
+            <div class="pr-4 pb-3 pb-md-0">
+              <img :src="user.picture" class="img-fluid px-3" alt="User profile picture">
             </div>
-            <div class="mb-3"><b>Given Name:</b> {{ user.given_name }}</div>
-            <div class="mb-3"><b>Family Name:</b> {{ user.family_name }}</div>
-            <div class="mb-3"><b>Nickname:</b> {{ user.nickname }}</div>
-            <div class="mb-3"><b>Email:</b> {{ user.email }}</div>
-            <div class="mb-3"><b>Locale:</b> {{ user.locale }}</div>
-            <div class="mb-3"><b>Last Updated:</b> {{ user.updated_at }}</div>
-          </div>
-        </div>
-        <div class="card mt-4 mb-4">
-          <div class="card-header">
-            <h3 class="mb-0">Friends</h3>
-          </div>
-          <div class="card-body">
-            <div v-for="friend in friends" :key="friend" class="mb-4">
-              <h5>{{ friend }}</h5>
+            <div class="pl-md-4">
+              <h3 class="mb-2 glowing-text">{{ user.name }}</h3>
+              <p class="mb-2"><b>Handle:</b> @{{ user.nickname }}</p>
+              <p class="mb-2"><b>Email:</b> {{ user.email }}</p>
             </div>
           </div>
         </div>
-      </div>
-      <!-- Routes Column -->
-      <div class="col-lg-9 col-md-6 col-sm-12 mb-4">
-        <div class="card">
-          <div class="card-header">
-            <h3>Routes</h3>
-          </div>
-          <div class="card-body">
-            <!-- Shows if empty -->
-            <div v-if="routes && routes.length == 0">
-              <p class="text-center text-muted">
-                Your route list is empty. You need to commit more.
-              </p>
+        <div v-if="activeTab === 'routes'" class="tab-pane">
+          <!-- Routes Content -->
+          <div class="bg-light p-3 rounded d-flex flex-column flex-md-row">
+            <!-- User Routes -->
+            <div class="pr-4 pb-3 pb-md-0">
+              <h3 class="mb-2">Your Routes</h3>
+              <!-- Here you can add the code to display the user's routes -->
+              <div class="chart-container">
+                <canvas id="carbonFootprintChart"></canvas>
+              </div>
+
+              <div v-if="routes && routes.length == 0">
+                <p class="text-center">
+                  Your route list is empty. You need to commit more.
+                </p>
+              </div>
+              <div v-else>
+                <div v-for="route in paginatedRoutes" :key="route.route_id" class="route-item">
+                  <h4>{{ route.start_point_name }} to {{ route.end_point_name }}</h4>
+                  <p><b>Mode of Transport:</b> {{ route.transport_mode }}</p>
+                  <p><b>Carbon Emission:</b> {{ route.carbon_emission }}</p>
+                  <p><b>Timestamp:</b> {{ new Date(route.timestamp).toLocaleString() }}</p>
+                </div>
+              </div>
             </div>
-            <div v-for="route in paginatedRoutes" :key="route.route_id" class="mb-4">
-              <h5>{{ route.start_point_name }} to {{ route.end_point_name }}</h5>
-              <p><b>Mode of Transport:</b> {{ route.transport_mode }}</p>
-              <p><b>Carbon Emission:</b> {{ route.carbon_emission }}</p>
-              <p><b>Timestamp:</b> {{ new Date(route.timestamp).toLocaleString() }}</p>
-            </div>
-            <!-- Pagination controls -->
-            <nav aria-label="Pagination-for-routes">
-              <ul class="pagination justify-content-center">
-                <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                  <a class="page-link" href="#" @click.prevent="currentPage--">Previous</a>
-                </li>
-                <!-- Page count -->
-                <li class="page-item disabled">
-                  <span class="page-link">{{ currentPage }} / {{ totalPages }}</span>
-                </li>
-                <li class="page-item" :class="{ disabled: currentPage >= totalPages }">
-                  <a class="page-link" href="#" @click.prevent="currentPage++">Next</a>
-                </li>
-              </ul>
-            </nav>
           </div>
+          <div class="pl-md-4">
+            <!-- Here you can add the code to display details about the selected route -->
+          </div>
+          <nav aria-label="Pagination-for-routes">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                <a class="page-link" href="#" @click.prevent="currentPage--">Previous</a>
+              </li>
+              <!-- Page count -->
+              <li class="page-item disabled">
+                <span class="page-link">{{ currentPage }} / {{ totalPages }}</span>
+              </li>
+              <li class="page-item" :class="{ disabled: currentPage >= totalPages }">
+                <a class="page-link" href="#" @click.prevent="currentPage++">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div v-if="activeTab === 'friends'" class="tab-pane">
+          <!-- Friends Content -->
+
         </div>
       </div>
+
     </div>
-    <!-- Friends -->
-    <!-- <div class="row justify-content-center mt-5"> -->
-
-    <div class="card mt-4 mb-4">
-      <div class="card-header">
-        <h3 class="mb-0">Friend Requests</h3>
-      </div>
-      <div class="card-body">
-        <AddFriend :user="user" />
-        <h4>Received Requests</h4>
-        <FriendRequest v-for="request in receivedRequests" :key="request" :friend="request" :user="user" :receivedRequests="receivedRequests" type="received" />
-
-        <h4>Sent Requests</h4>
-        <FriendRequest v-for="request in sentRequests" :key="request" :friend="request" :user="user" :sentRequests="sentRequests" type="sent" />
-      </div>
-    </div>
-    <!-- </div> -->
-
-    <div class="card mt-4 mb-4">
-      <div class="card-header">
-        <h3 class="mb-0">Game Stats</h3>
-      </div>
-      <Badges></Badges>
-    </div>
-
-
   </div>
 </template>
 
@@ -118,34 +105,38 @@ import FriendRequest from '../components/FriendRequest.vue';
 import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
+import { Chart, registerables } from 'chart.js/auto';
+import 'chartjs-adapter-date-fns';
+import { format } from 'date-fns';
+
+Chart.register(...registerables);
+
+
 
 export default {
   created() {
     this.fetchData();
-  },
-  mounted() {
-    this.fetchData();
+
   },
   watch: {
-    isAuthenticated: {
+    activeTab: {
       immediate: true,
-      handler() {
-        this.fetchData();
-      },
-    },
-    user: {
-      immediate: true,
-      handler() {
-        this.fetchData();
+      handler(newVal, oldVal) {
+        if (newVal === 'routes') {
+          this.$nextTick(() => {
+            this.fetchData();
+          });
+        }
       },
     },
   },
   data() {
     const { user, isAuthenticated } = useAuth0();
     return {
+      activeTab: 'profile',
       isLoading: false,
       currentPage: 1,
-      itemsPerPage: 3,
+      itemsPerPage: 6,
       user,
       isAuthenticated,
       routes: [],
@@ -175,14 +166,67 @@ export default {
     Badges,
   },
   methods: {
-    fetchData() {
-      this.isLoading = true;
-      if (this.isAuthenticated) {
-        this.fetchRoutes();
-        this.fetchUser();
-        this.fetchFriendRequests();
+    async drawChart() {
+
+      this.routes.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+      const labels = this.routes.map(route => format(new Date(route.timestamp), 'yyyy-MM-dd HH:mm:ss'));
+      const data = this.routes.map(route => parseFloat(route.carbon_emission.toFixed(1)));
+
+      console.log(labels)
+      console.log(data)
+      const canvas = document.getElementById('carbonFootprintChart');
+      if (canvas) {
+        const ctx = document.getElementById('carbonFootprintChart').getContext('2d');
+
+
+        if (this.myChart) {
+          this.myChart.destroy();
+        }
+        this.myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Carbon Emission',
+              data: data,
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              x: {
+                type: 'time',
+                time: {
+                  unit: 'hour',  // Changed from 'day' to 'hour'
+                  displayFormats: {
+                    hour: 'HH:mm'
+                  }
+                },
+                ticks: {
+                  source: 'data'
+                }
+              },
+              y: {
+                min: 0,
+                suggestedMax: 5,
+                ticks: {
+                  stepSize: 0.5
+                }
+              }
+            }
+          }
+        });
       }
-      this.isLoading = false;
+    },
+    fetchData() {
+      this.fetchRoutes().then(() => {
+        this.drawChart();
+      });
+      this.fetchUser();
+      this.fetchFriendRequests();
     },
     async fetchUser() {
       const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
@@ -223,6 +267,7 @@ export default {
       try {
         const response = await axios.get(url, { headers });
         this.routes = response.data.reverse(); // Assign the fetched routes to the routes data property
+        console.log('Successfully fetched routes.')
       } catch (error) {
         console.error("Error fetching routes:", error);
       }
