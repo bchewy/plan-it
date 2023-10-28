@@ -35,7 +35,7 @@ export default {
 		async acceptRequest() {
 			try {
 				const email = this.user.email;
-				const url = `https://api.bchwy.com/users/${encodeURIComponent(email)}/friend_requests/accept`;
+				const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(email)}/friend_requests/accept`;
 				const body = { friend_email: this.friend };
 				const headers = {
 					'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export default {
 		async declineRequest() {
 			try {
 				const email = this.user.email;
-				const url = `https://api.bchwy.com/users/${encodeURIComponent(email)}/friend_requests/decline`;
+				const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(email)}/friend_requests/decline`;
 				const body = { friend_email: this.friend };
 				const headers = {
 					'Content-Type': 'application/json',

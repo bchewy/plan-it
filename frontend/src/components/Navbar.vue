@@ -110,7 +110,7 @@ export default defineComponent({
         // Create or update the user in your database
         console.log('new value here', newValue)
         try {
-          const handleResponse = await fetch(`https://api.bchwy.com/users/handle/${newValue.nickname}`, {
+          const handleResponse = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/users/handle/${newValue.nickname}`, {
             method: 'GET',
             headers: {
               'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
@@ -126,7 +126,7 @@ export default defineComponent({
           console.error('Failed to check handle:', e);
         }
         try {
-          const response = await fetch('https://api.bchwy.com/users', {
+          const response = await fetch('${import.meta.env.VITE_API_ENDPOINT}/users', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

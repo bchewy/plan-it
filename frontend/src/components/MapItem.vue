@@ -109,8 +109,6 @@
 import { ref, defineComponent, computed, reactive } from "vue";
 import axios from "axios";
 import { useAuth0 } from '@auth0/auth0-vue';
-import confetti from 'canvas-confetti';
-
 
 export default defineComponent({
 	components: {
@@ -350,7 +348,7 @@ export default defineComponent({
 					const headers = {
 						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
 					};
-					await axios.post('https://api.bchwy.com/routes', routeData, { headers });
+					await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/routes`, routeData, { headers });
 				} catch (error) {
 					console.error('Failed to store route data:', error);
 					errorMessage.value = error.message += ' Please try again.';
