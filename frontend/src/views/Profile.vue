@@ -100,7 +100,7 @@
         </div>
         <div v-if="activeTab === 'routes'" class="tab-pane">
           <!-- Routes Content -->
-          <div class="bg-light p-3 rounded d-flex flex-column flex-md-row">
+          <div class="bg-light p-3 rounded d-flex flex-column flex-md-row mb-2">
             <!-- User Routes -->
             <div class="pr-4 pb-3 pb-md-0">
               <h3 class="mb-2">Your Routes</h3>
@@ -254,7 +254,7 @@ export default {
           options: {
             responsive: true,
             maintainAspectRatio: true,
-            aspectRatio: 2,
+            aspectRatio: 1,
             scales: {
               x: {
                 type: 'category',
