@@ -131,6 +131,9 @@
 						<button class="btn btn-primary rounded-pill shadow-sm" @click="openGoogleMaps">
 							<i class="fas fa-map-marker-alt"></i> Open on Google Maps
 						</button>
+						<button class="btn btn-green rounded-pill shadow-sm" @click="openCityMapper">
+							<i class="fas fa-map-marker-alt"></i> Open on CityMapper
+						</button>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -141,7 +144,12 @@
 		</div>
 	</div>
 </template>
-
+<style scoped>
+.btn-green {
+	background-color: #a7c957;
+	color: white;
+}
+</style>
 
 
 <script>
@@ -155,6 +163,10 @@ export default defineComponent({
 	methods: {
 		openGoogleMaps() {
 			window.open(this.googleMapsUrl, '_blank');
+		},
+		openCityMapper() {
+			window.open(this.citymapperUrl, '_blank');
+
 		},
 		getUserLocation() {
 			console.log("getuserLocation called")
@@ -184,6 +196,11 @@ export default defineComponent({
 			if (travelmode === 'drive') travelmode = 'driving';
 			if (travelmode === 'two_wheeler') travelmode = 'driving';
 			return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=${travelmode}`;
+		},
+		citymapperUrl() {
+			const origin = `${this.startLocation.lat},${this.startLocation.lng}`;
+			const destination = `${this.destination.lat},${this.destination.lng}`;
+			return `https://citymapper.com/directions?startcoord=${origin}&endcoord=${destination}`;
 		},
 	},
 	props: ['userme'],
