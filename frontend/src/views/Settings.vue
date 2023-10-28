@@ -1,12 +1,6 @@
 <template>
   <Navbar />
-  <div v-if="isLoading || !isAuthenticated" class="loading-screen">
-    <div v-if="isLoading">Loading...</div>
-    <div v-else class="row justify-content-center align-items-center" style="height: 100vh">
-      <h3 class="text-center p-5">Please log in to use this feature</h3>
-    </div>
-  </div>
-  <div v-else class="container">
+  <div class="container">
     <div class="row">
       <div class="col-12 mt-5">
         <h1>Notification Settings</h1>
@@ -30,10 +24,7 @@
 </template>
   
 <script>
-import MapItem from "../components/MapItem.vue";
-import AddFriend from "../components/AddFriends.vue";
 import Navbar from "../components/Navbar.vue";
-// import NotAuthenticated from '../components/NotAuthenticated.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
 
@@ -60,8 +51,6 @@ export default {
   },
   data() {
     const { user, isAuthenticated } = useAuth0();
-    // console.log('Profile.vue: is authenticated?', isAuthenticated)
-    // console.log('Profile.vue user', user)
     return {
       isLoading: false,
       currentPage: 1,
@@ -82,8 +71,6 @@ export default {
   },
   components: {
     Navbar,
-    MapItem,
-    AddFriend,
   },
   methods: {
     submit() {
@@ -96,45 +83,6 @@ export default {
       this.lostPlace = true;
     },
 
-
-    fetchData() {
-      this.isLoading = true;
-      if (this.isAuthenticated) {
-        this.fetchRoutes();
-        this.fetchFriends();
-      }
-      this.isLoading = false;
-    },
-    async fetchRoutes() {
-      console.log("Fetchin Routes!");
-      const email = this.user.email; // Get the email from user object
-      const url = `${import.meta.env.VITE_API_ENDPOINT}/routes/email?email=${encodeURIComponent(email)}`;
-      const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
-      };
-      try {
-        const response = await axios.get(url, { headers });
-        this.routes = response.data; // Assign the fetched routes to the routes data property
-        console.log("Fetched routes!", response.data)
-      } catch (error) {
-        console.error("Error fetching routes:", error);
-      }
-    },
-    async fetchFriends() {
-      console.log("Fetching Friends!");
-      const email = this.user.email; // Get the email from user object
-      const url = `${import.meta.env.VITE_API_ENDPOINT}/friends?email=${encodeURIComponent(email)}`;
-      const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
-      };
-      try {
-        const response = await axios.get(url, { headers });
-        console.log('Fetched Friends!', response.data)
-        this.friends = response.data; // Assign the fetched friends to the friends data property
-      } catch (error) {
-        console.error("Error fetching friends:", error);
-      }
-    },
   },
 };
 </script>

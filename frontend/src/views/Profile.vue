@@ -60,6 +60,12 @@
                 <path d="m15.742 10.71-1.408-1.42-3.331 3.299-1.296-1.296-1.414 1.414 2.704 2.704z"></path>
               </svg> My Badges</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" :class="{ 'active': activeTab === 'settings' }" @click="activeTab = 'settings'" href="#" role="tab">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(236, 227, 206, 1);transform: ;msFilter:;">
+                <path d="m2.344 15.271 2 3.46a1 1 0 0 0 1.366.365l1.396-.806c.58.457 1.221.832 1.895 1.112V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.598a8.094 8.094 0 0 0 1.895-1.112l1.396.806c.477.275 1.091.11 1.366-.365l2-3.46a1.004 1.004 0 0 0-.365-1.366l-1.372-.793a7.683 7.683 0 0 0-.002-2.224l1.372-.793c.476-.275.641-.89.365-1.366l-2-3.46a1 1 0 0 0-1.366-.365l-1.396.806A8.034 8.034 0 0 0 15 4.598V3a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v1.598A8.094 8.094 0 0 0 7.105 5.71L5.71 4.904a.999.999 0 0 0-1.366.365l-2 3.46a1.004 1.004 0 0 0 .365 1.366l1.372.793a7.683 7.683 0 0 0 0 2.224l-1.372.793c-.476.275-.641.89-.365 1.366zM12 8c2.206 0 4 1.794 4 4s-1.794 4-4 4-4-1.794-4-4 1.794-4 4-4z"></path>
+              </svg> Settings</a>
+          </li>
         </ul>
       </div>
 
@@ -163,6 +169,38 @@
           </div>
 
         </div>
+        <div v-if="activeTab === 'settings'" class="tab-pane">
+          <!-- Friends Content -->
+          <div class="card mt-4 mb-4">
+            <div class="card-header">
+              <h3 class="mb-0">Settings</h3>
+            </div>
+            <div class="container m-2">
+              <div class="row">
+                <div class="col-12 mt-5">
+                  <h1>Notification Settings</h1>
+                </div>
+              </div>
+              <div v-if="this.isSubmitted" class="alert alert-info" role="alert">
+                Settings saved!
+              </div>
+              <div class="control-group col-12 mt-5">
+                <div class="controls">
+                  <label><input type="checkbox" v-model="newFriends" />Notify me about new friends who signed up with my friend code </label>
+                  <br>
+                  <label><input type="checkbox" v-model="newFeatures" />Nofity me about new features of PlanIt! </label>
+                  <br>
+                  <label><input type="checkbox" v-model="lostPlace" />Notify me if I lose my place in the leaderboard</label>
+                </div>
+                <button class="btn btn-light" @click="reset()">Reset</button>
+                <button class="btn btn-success" @click="submit()">Save</button>
+              </div>
+            </div>
+            <!-- <Badges></Badges> -->
+          </div>
+
+        </div>
+
       </div>
 
     </div>
@@ -301,6 +339,8 @@ export default {
             aspectRatio: 1,
             scales: {
               x: {
+                barPercentage: 0.5,
+                categoryPercentage: 0.5,
                 type: 'time',
                 time: {
                   unit: 'day',
