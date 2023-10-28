@@ -8,6 +8,7 @@ from functools import wraps
 from bson import ObjectId
 from flasgger import Flasgger
 from flasgger.utils import swag_from
+import datetime
 
 app = Flask(__name__)
 
@@ -40,7 +41,6 @@ app.config.from_object(Config)
 
 client = MongoClient(app.config['MONGO_URI'])
 API_KEY = "PlanItIsTheBestProjectEverXYZ"
-# API_KEY="abc"
 db = client.wad2
 collection = db.routes
 user_collection = db.users
@@ -207,7 +207,7 @@ def create_route():
         description: Bad request.
     """
     data = request.json
-    data['timestamp'] = datetime.now()
+    data['timestamp'] = datetime.datetime.now()
     collection.insert_one(data)
     return jsonify({"message": "Route created successfully."}), 201
 
@@ -408,6 +408,9 @@ def create_or_update_user():
         description: auth0_user_id, email, and handle are required
     """
     data = request.json
+    print('User create/update here, data below')
+    print(data)
+    print('\n')
     auth0_user_id = data.get('auth0_user_id')
     email = data.get('email')
     handle = data.get('handle')
@@ -972,6 +975,10 @@ def add_exp(user_email):
                 current_user['exp'] = exp
             else:
                 current_user['exp'] += exp
+
+            if current_user['exp'] >= 100:
+              current_user['level'] += 1  # Increment level
+              current_user['exp'] = 0  # Reset exp
             user_collection.update_one({"email": user_email}, {"$set": current_user})
             return jsonify({"message": "EXP added successfully."}), 200
         else:
@@ -1587,6 +1594,80 @@ def delete_badge(badge_id):
     db.badges.delete_one({"_id": ObjectId(badge_id)})
     return jsonify({"message": "Badge deleted successfully."}), 200
 
+
+
+@app.route("/users/<user_id>/log", methods=['POST'])
+@require_api_key
+def log_user_activity(user_id):
+    """
+    Log user activity
+    ---
+    tags:
+      - Logs
+    security:
+      - api_key: []
+    parameters:
+      - name: user_id
+        in: path
+        type: string
+        required: true
+        description: The email of the user
+      - name: activity
+        in: body
+        type: string
+        required: true
+        description: The activity of the user
+    responses:
+      200:
+        description: User activity logged successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    activity = request.json.get('activity')
+    if activity:
+        log = {"user_id": user_id, "activity": activity, "timestamp": datetime.datetime.utcnow()}
+        db.user_logs.insert_one(log)
+        return jsonify({"message": "User activity logged successfully."}), 200
+    else:
+        return jsonify({"message": "Activity is required."}), 400
+
+
+@app.route("/users/<user_id>/logs", methods=['GET'])
+@require_api_key
+def get_user_logs(user_id):
+    """
+    Retrieve user logs
+    ---
+    tags:
+      - Logs
+    security:
+      - api_key: []
+    parameters:
+      - name: user_id
+        in: path
+        type: string
+        required: true
+        description: The id of the user
+    responses:
+      200:
+        description: User logs retrieved successfully
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              user_id:
+                type: string
+              activity:
+                type: string
+              timestamp:
+                type: string
+    """
+    logs = db.user_logs.find({"user_id": user_id})
+    return jsonify({"logs": list(logs)}), 200
 
 
 if __name__ == '__main__':
