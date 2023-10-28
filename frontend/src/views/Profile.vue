@@ -12,9 +12,6 @@
         <h1>User Profile</h1>
       </div>
     </div>
-    <!-- <div class="alert alert-info" role="alert">
-      You are signed in with Google. Profile editing is disabled.
-    </div> -->
     <!-- User Profile and Routes -->
     <div class="row justify-content-center mt-5">
       <!-- User Profile Column -->

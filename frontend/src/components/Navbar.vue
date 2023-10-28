@@ -19,6 +19,10 @@
   color: #a7c957;
 }
 
+.router-link-active {
+  color: #a7c957;
+}
+
 .nav-item .dropdown-menu {
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   /* Add shadow to dropdown */
@@ -50,10 +54,10 @@
 }
 
 
-/* .navbar-nav .nav-link:hover {
-  background-color: #a3b18a;
-  color: #3a5a40;
-} */
+.navbar-nav .nav-link:hover {
+  /* background-color: #a3b18a; */
+  color: #a7c957;
+}
 
 .dropdown-toggle::after {
   color: #a3b18a;
