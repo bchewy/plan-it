@@ -42,8 +42,8 @@ swagger = Flasgger(app, config=swagger_config)
 app.config.from_object(Config)
 
 client = MongoClient(app.config['MONGO_URI'])
-# API_KEY = "PlanItIsTheBestProjectEverXYZ"
-API_KEY="abc"
+API_KEY = "PlanItIsTheBestProjectEverXYZ"
+# API_KEY="abc"
 db = client.wad2
 collection = db.routes
 user_collection = db.users
