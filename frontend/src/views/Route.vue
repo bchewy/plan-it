@@ -17,10 +17,13 @@ export default {
 	}
 }
 </script>
-
+<style scoped></style>
 
 <template>
 	<Navbar />
-	<MapItem :userme="user" />
+	<div class="container-fluid">
+		<MapItem :userme="user" />
+
+	</div>
 </template>
 

@@ -44,7 +44,7 @@ export default {
       }
       try {
         const response = await axios.post(
-          `https://api.bchwy.com/users/${this.user.email}/friend_requests/send`,
+          `${import.meta.env.VITE_API_ENDPOINT}/users/${this.user.email}/friend_requests/send`,
           {
             friend_email: this.friendEmail,
           },
@@ -74,7 +74,7 @@ export default {
     async searchFriends() {
       try {
         const response = await axios.get(
-          `https://api.bchwy.com/users/search/${this.friendEmail}`,
+          `${import.meta.env.VITE_API_ENDPOINT}/users/search/${this.friendEmail}`,
           {
             headers: {
               "Content-Type": "application/json",

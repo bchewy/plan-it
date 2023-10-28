@@ -36,21 +36,18 @@ swagger_config = {
 swagger = Flasgger(app, config=swagger_config)
 # swagger = Flasgger(app)
 
-
-
-
 app.config.from_object(Config)
 
 client = MongoClient(app.config['MONGO_URI'])
-# API_KEY = "PlanItIsTheBestProjectEverXYZ"
-API_KEY="abc"
+API_KEY = "PlanItIsTheBestProjectEverXYZ"
+# API_KEY="abc"
 db = client.wad2
 collection = db.routes
 user_collection = db.users
 
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.set('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type, x-api-key')
     response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH')
     return response

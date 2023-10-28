@@ -69,7 +69,7 @@ export default {
       this.isLoading = false;
     },
     async fetchUser() {
-      const url = `https://api.bchwy.com/users/ez/${this.$route.params.userEmail}`;
+      const url = `${import.meta.env.VITE_API_ENDPOINT}/users/ez/${this.$route.params.userEmail}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };

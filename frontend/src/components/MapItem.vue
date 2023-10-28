@@ -1,104 +1,102 @@
 <template>
-	<div class="container-fluid">
-		<div v-if="!isAuthenticated" class="row justify-content-center align-items-center" style="height: 100vh;">
-			<h3 class="text-center p-5">Please log in to use this feature</h3>
+	<div v-if="!isAuthenticated" class="row justify-content-center align-items-center" style="height: 100vh;">
+		<h3 class="text-center p-5">Please log in to use this feature</h3>
+	</div>
+	<div v-else class="row">
+		<div v-if="errorMessage" class="alert alert-danger" role="alert">
+			{{ errorMessage }}
 		</div>
-		<div v-else class="row">
-			<div v-if="errorMessage" class="alert alert-danger" role="alert">
-				{{ errorMessage }}
+		<div class="col-lg-8 col-md-12 p-0">
+			<GMapMap class="w-100 vh-100" :center="center" :zoom="zoom" map-type-id="terrain">
+				<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
+				<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
+				<GMapPolyline :path="decodedPolyline" :editable="true" ref="polyline" />
+			</GMapMap>
+		</div>
+		<div class="col-lg-4 col-md-12 p-4">
+
+			<div class="mb-4">
+				<!-- Start Location -->
+				<div class="input-group mb-3">
+					<span class="input-group-text font-weight-bold" id="autocomplete-label">Start Location</span>
+					<GMapAutocomplete ref="autocomplete" v-model="startLocation.value" placeholder="Starting point" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+					<button class="btn btn-outline-secondary" type="button" @click="getUserLocation">Here</button>
+				</div>
+
+				<!-- End Location -->
+				<div class="input-group mb-3">
+					<span class="input-group-text font-weight-bold" id="autocomplete-label">End Location</span>
+					<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
+				</div>
+
+				<!-- Travel Mode -->
+				<div class="input-group mb-3">
+					<span class="input-group-text font-weight-bold">Travel Mode</span>
+					<select v-model="travelMode" class="form-control">
+						<option value="DRIVE">Drive</option>
+						<option value="TWO_WHEELER">Motorbike</option>
+						<option value="TRANSIT">Public Transport</option>
+						<option value="BICYCLE">Bicycle</option>
+						<option value="WALK">Walk</option>
+					</select>
+				</div>
+
+				<!-- Departure Time -->
+				<div class="input-group mb-3">
+					<span class="input-group-text font-weight-bold">Departure Time</span>
+					<input type="time" v-model="departureTime" class="form-control">
+					<button class="btn btn-outline-secondary" type="button" @click="addMinutes(5)">+5m</button>
+				</div>
 			</div>
-			<div class="col-lg-8 col-md-12 p-0">
-				<GMapMap class="w-100 vh-100" :center="center" :zoom="zoom" map-type-id="terrain">
-					<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
-					<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
-					<GMapPolyline :path="decodedPolyline" :editable="true" ref="polyline" />
-				</GMapMap>
+
+			<!-- Route Modifiers -->
+			<div class="mb-4">
+				<span class="d-block mb-2 font-weight-bold">Route Modifiers</span>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="avoidTolls" v-model="routeModifiers.avoidTolls">
+					<label class="form-check-label" for="avoidTolls">Avoid Tolls</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="avoidHighways" v-model="routeModifiers.avoidHighways">
+					<label class="form-check-label" for="avoidHighways">Avoid Highways</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" value="" id="avoidFerries" v-model="routeModifiers.avoidFerries">
+					<label class="form-check-label" for="avoidFerries">Avoid Ferries</label>
+				</div>
 			</div>
-			<div class="col-lg-4 col-md-12 p-4">
 
-				<div class="mb-4">
-					<!-- Start Location -->
-					<div class="input-group mb-3">
-						<span class="input-group-text font-weight-bold" id="autocomplete-label">Start Location</span>
-						<GMapAutocomplete ref="autocomplete" v-model="startLocation.value" placeholder="Starting point" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
-						<button class="btn btn-outline-secondary" type="button" @click="getUserLocation">Here</button>
-					</div>
-
-					<!-- End Location -->
-					<div class="input-group mb-3">
-						<span class="input-group-text font-weight-bold" id="autocomplete-label">End Location</span>
-						<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
-					</div>
-
-					<!-- Travel Mode -->
-					<div class="input-group mb-3">
-						<span class="input-group-text font-weight-bold">Travel Mode</span>
-						<select v-model="travelMode" class="form-control">
-							<option value="DRIVE">Drive</option>
-							<option value="TWO_WHEELER">Motorbike</option>
-							<option value="TRANSIT">Public Transport</option>
-							<option value="BICYCLE">Bicycle</option>
-							<option value="WALK">Walk</option>
-						</select>
-					</div>
-
-					<!-- Departure Time -->
-					<div class="input-group mb-3">
-						<span class="input-group-text font-weight-bold">Departure Time</span>
-						<input type="time" v-model="departureTime" class="form-control">
-						<button class="btn btn-outline-secondary" type="button" @click="addMinutes(5)">+5m</button>
-					</div>
-				</div>
-
-				<!-- Route Modifiers -->
-				<div class="mb-4">
-					<span class="d-block mb-2 font-weight-bold">Route Modifiers</span>
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="avoidTolls" v-model="routeModifiers.avoidTolls">
-						<label class="form-check-label" for="avoidTolls">Avoid Tolls</label>
-					</div>
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="avoidHighways" v-model="routeModifiers.avoidHighways">
-						<label class="form-check-label" for="avoidHighways">Avoid Highways</label>
-					</div>
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="avoidFerries" v-model="routeModifiers.avoidFerries">
-						<label class="form-check-label" for="avoidFerries">Avoid Ferries</label>
-					</div>
-				</div>
-
-				<!-- Log Route Button -->
-				<div class="mb-4">
-					<button class="btn btn-primary w-100" @click="fetchRouteDetails">Log Route</button>
-				</div>
-
-				<div v-if="routeDetails" class="card border-0 shadow p-4">
-					<div class="card-body">
-						<h5 class="card-title mb-4">Route Details</h5>
-						<div class="mb-2">
-							<strong>Distance:</strong>
-							<div class="row">
-								<div class="col-6">Meters: {{ routeDetails.distanceMeters }}</div>
-								<div class="col-6">Kilometers: {{ routeDetails.distanceMeters / 1000 }}</div>
-							</div>
-						</div>
-						<div class="d-flex justify-content-between mb-2">
-							<span><strong>Duration:</strong></span>
-							<span>{{ routeDetails.duration }} seconds</span>
-						</div>
-						<div class="d-flex justify-content-between mb-3">
-							<span><strong>Carbon Emission:</strong></span>
-							<span>{{ calculateCarbonEmission() }} kg CO2</span>
-						</div>
-						<div class="d-flex justify-content-center">
-							<button class="btn btn-primary rounded-pill shadow-sm" @click="openGoogleMaps">
-								<i class="fas fa-map-marker-alt"></i> Open on Google Maps
-							</button>
-						</div>
-					</div>
-				</div>
-
+			<!-- Log Route Button -->
+			<div class="mb-4">
+				<button class="btn btn-primary w-100" @click="fetchRouteDetails">Log Route</button>
 			</div>
+
+			<div v-if="routeDetails" class="card border-0 shadow p-4">
+				<div class="card-body">
+					<h5 class="card-title mb-4">Route Details</h5>
+					<div class="mb-2">
+						<strong>Distance:</strong>
+						<div class="row">
+							<div class="col-6">Meters: {{ routeDetails.distanceMeters }}</div>
+							<div class="col-6">Kilometers: {{ routeDetails.distanceMeters / 1000 }}</div>
+						</div>
+					</div>
+					<div class="d-flex justify-content-between mb-2">
+						<span><strong>Duration:</strong></span>
+						<span>{{ routeDetails.duration }} seconds</span>
+					</div>
+					<div class="d-flex justify-content-between mb-3">
+						<span><strong>Carbon Emission:</strong></span>
+						<span>{{ calculateCarbonEmission() }} kg CO2</span>
+					</div>
+					<div class="d-flex justify-content-center">
+						<button class="btn btn-primary rounded-pill shadow-sm" @click="openGoogleMaps">
+							<i class="fas fa-map-marker-alt"></i> Open on Google Maps
+						</button>
+					</div>
+				</div>
+			</div>
+
 		</div>
 	</div>
 </template>
@@ -109,8 +107,6 @@
 import { ref, defineComponent, computed, reactive } from "vue";
 import axios from "axios";
 import { useAuth0 } from '@auth0/auth0-vue';
-import confetti from 'canvas-confetti';
-
 
 export default defineComponent({
 	components: {
@@ -350,7 +346,7 @@ export default defineComponent({
 					const headers = {
 						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
 					};
-					await axios.post('https://api.bchwy.com/routes', routeData, { headers });
+					await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/routes`, routeData, { headers });
 				} catch (error) {
 					console.error('Failed to store route data:', error);
 					errorMessage.value = error.message += ' Please try again.';
