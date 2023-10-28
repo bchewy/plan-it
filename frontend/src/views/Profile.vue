@@ -28,6 +28,11 @@
   padding-top: 3rem;
   background-color: #739072;
 }
+
+.pr-4.pb-3.pb-md-0 {
+  flex: 2;
+  /* Adjust as needed */
+}
 </style>
 
 <template>
@@ -51,9 +56,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" :class="{ 'active': activeTab === 'progress' }" @click="activeTab = 'progress'" href="#" role="tab"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(236, 227, 206, 1);transform: ;msFilter:;">
-                <circle cx="17" cy="4" r="2"></circle>
-                <path d="M15.777 10.969a2.007 2.007 0 0 0 2.148.83l3.316-.829-.483-1.94-3.316.829-1.379-2.067a2.01 2.01 0 0 0-1.272-.854l-3.846-.77a1.998 1.998 0 0 0-2.181 1.067l-1.658 3.316 1.789.895 1.658-3.317 1.967.394L7.434 17H3v2h4.434c.698 0 1.355-.372 1.715-.971l1.918-3.196 5.169 1.034 1.816 5.449 1.896-.633-1.815-5.448a2.007 2.007 0 0 0-1.506-1.33l-3.039-.607 1.772-2.954.417.625z"></path>
-              </svg> My Progress</a>
+                <path d="M4.035 15.479A3.976 3.976 0 0 0 4 16c0 2.378 2.138 4.284 4.521 3.964C9.214 21.198 10.534 22 12 22s2.786-.802 3.479-2.036C17.857 20.284 20 18.378 20 16c0-.173-.012-.347-.035-.521C21.198 14.786 22 13.465 22 12s-.802-2.786-2.035-3.479C19.988 8.347 20 8.173 20 8c0-2.378-2.143-4.288-4.521-3.964C14.786 2.802 13.466 2 12 2s-2.786.802-3.479 2.036C6.138 3.712 4 5.622 4 8c0 .173.012.347.035.521C2.802 9.214 2 10.535 2 12s.802 2.786 2.035 3.479zm1.442-5.403 1.102-.293-.434-1.053A1.932 1.932 0 0 1 6 8c0-1.103.897-2 2-2 .247 0 .499.05.73.145l1.054.434.293-1.102a1.99 1.99 0 0 1 3.846 0l.293 1.102 1.054-.434C15.501 6.05 15.753 6 16 6c1.103 0 2 .897 2 2 0 .247-.05.5-.145.73l-.434 1.053 1.102.293a1.993 1.993 0 0 1 0 3.848l-1.102.293.434 1.053c.095.23.145.483.145.73 0 1.103-.897 2-2 2-.247 0-.499-.05-.73-.145l-1.054-.434-.293 1.102a1.99 1.99 0 0 1-3.846 0l-.293-1.102-1.054.434A1.935 1.935 0 0 1 8 18c-1.103 0-2-.897-2-2 0-.247.05-.5.145-.73l.434-1.053-1.102-.293a1.993 1.993 0 0 1 0-3.848z"></path>
+                <path d="m15.742 10.71-1.408-1.42-3.331 3.299-1.296-1.296-1.414 1.414 2.704 2.704z"></path>
+              </svg> My Badges</a>
           </li>
         </ul>
       </div>
@@ -64,11 +69,15 @@
           <!-- Profile Content -->
           <div class="profile-container bg-light p-3 rounded d-flex flex-column flex-md-row mb-4">
             <!-- User Profile Image -->
-            <div class="pr-4 pb-3 pb-md-0">
+            <div class="pb-3 pb-md-0">
               <img :src="user.picture" class="img-fluid px-3" alt="User profile picture">
             </div>
             <div class="pl-md-4">
               <h3 class="mb-2 glowing-text">{{ user.name }}</h3>
+              <p class="mb-2"><b>Level:</b> {{ userLvl }}</p>
+              <div class="progress stylish-progress-bar mb-4">
+                <div class="progress-bar bg-supergreen" role="progressbar" :style="{ width: `${userExp.toFixed(2)}%` }" aria-valuenow="" aria-valuemin="0" aria-valuemax="100">{{ userExp.toFixed(2) }}%</div>
+              </div>
               <p class="mb-2"><b>Handle:</b> @{{ user.nickname }}</p>
               <p class="mb-2"><b>Email:</b> {{ user.email }}</p>
             </div>
@@ -171,6 +180,8 @@ import axios from "axios";
 import { Chart, registerables } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import { format } from 'date-fns';
+import { ref, defineComponent, computed, reactive } from "vue";
+
 
 Chart.register(...registerables);
 
@@ -195,7 +206,16 @@ export default {
   },
   data() {
     const { user, isAuthenticated } = useAuth0();
+    const userExp = ref(0);
+    const expToNextLevel = ref(0);
+    const userLvl = ref(0)
+
+    // Retrieve user EXP
+
     return {
+      userExp,
+      expToNextLevel,
+      userLvl,
       activeTab: 'profile',
       isLoading: false,
       currentPage: 1,
@@ -230,17 +250,41 @@ export default {
   },
   methods: {
     async drawChart() {
+      if (!Array.isArray(this.routes) || this.routes.length === 0) {
+        console.error('No routes available.');
+        return;
+      }
+
       this.routes.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-      const labels = this.routes.map(route => format(new Date(route.timestamp), 'yyyy-MM-dd HH:mm:ss'));
+      const labels = this.routes.map(route => new Date(route.timestamp).toISOString());
       const data = this.routes.map(route => parseFloat(route.carbon_emission.toFixed(1)));
+
       const canvas = document.getElementById('carbonFootprintChart');
       if (canvas) {
         const ctx = document.getElementById('carbonFootprintChart').getContext('2d');
         if (this.myChart) {
           this.myChart.destroy();
         }
+
+        console.log('Labels:', labels);
+        console.log('Count of Labels:', labels.length);
+        console.log('Data:', data);
+        console.log('Count of Data:', data.length);
+
+        console.log('Fake Data', [2, 4, 3],)
+        console.log('Fake Labels', ["2023-10-26T00:00:00.000Z", "2023-10-27T00:00:00.000Z", "2023-10-28T00:00:00.000Z"],)
         this.myChart = new Chart(ctx, {
           type: 'bar',
+          // data: {
+          //   labels: parsedLabels,
+          //   datasets: [{
+          //     label: 'Carbon Emission',
+          //     data: data,
+          //     backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          //     borderColor: 'rgba(75, 192, 192, 1)',
+          //     borderWidth: 1
+          //   }]
+          // },
           data: {
             labels: labels,
             datasets: [{
@@ -257,18 +301,19 @@ export default {
             aspectRatio: 1,
             scales: {
               x: {
-                type: 'category',
+                type: 'time',
                 time: {
-                  unit: 'hour', // Changed from 'hour' to 'minute'
+                  unit: 'day',
                   displayFormats: {
-                    hour: 'HH:mm'
-                  }
+                    day: 'mmm d'
+                  },
                 },
+                bounds: 'data',
                 ticks: {
                   source: 'data',
-                  autoSkip: false // Force it to display all data points
-                },
-                distribution: 'linear'  // Set to linear for even distribution of ticks
+                  autoSkip: true,
+                  minUnit: 'day'
+                }
               },
               y: {
                 min: 0,
@@ -337,6 +382,8 @@ export default {
       try {
         const response = await axios.get(url, { headers });
         this.friends = response.data.friends;
+        this.userLvl = response.data.level;
+        this.userExp = response.data.exp;
 
       } catch (error) {
         console.error("Error fetching user", error);
