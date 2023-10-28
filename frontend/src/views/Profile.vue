@@ -89,6 +89,29 @@
         </div>
         <div v-if="activeTab === 'friends'" class="tab-pane">
           <!-- Friends Content -->
+          <div class="bg-white rounded shadow-sm p-3">
+            <h3 class="mb-0">Friends</h3>
+            <div class="mt-3">
+              <div v-for="friend in friends" :key="friend" class="mb-3 p-2 bg-light rounded">
+                <h5 class="m-0">{{ friend }}</h5>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded shadow-sm p-3 mt-4 mb-4">
+            <h3 class="mb-0">Friend Requests</h3>
+            <div class="mt-3">
+              <AddFriend :user="user" />
+              <h4 class="mt-2">Received Requests</h4>
+              <div v-for="request in receivedRequests" :key="request" class="mb-2 p-2 bg-light rounded">
+                <FriendRequest :friend="request" :user="user" :receivedRequests="receivedRequests" type="received" />
+              </div>
+
+              <h4 class="mt-2">Sent Requests</h4>
+              <div v-for="request in sentRequests" :key="request" class="mb-2 p-2 bg-light rounded">
+                <FriendRequest :friend="request" :user="user" :sentRequests="sentRequests" type="sent" />
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>
@@ -184,7 +207,7 @@ export default {
           this.myChart.destroy();
         }
         this.myChart = new Chart(ctx, {
-          type: 'line',
+          type: 'bar',
           data: {
             labels: labels,
             datasets: [{
@@ -198,16 +221,18 @@ export default {
           options: {
             scales: {
               x: {
-                type: 'time',
+                type: 'category',
                 time: {
-                  unit: 'hour',  // Changed from 'day' to 'hour'
+                  unit: 'hour', // Changed from 'hour' to 'minute'
                   displayFormats: {
                     hour: 'HH:mm'
                   }
                 },
                 ticks: {
-                  source: 'data'
-                }
+                  source: 'data',
+                  autoSkip: false // Force it to display all data points
+                },
+                distribution: 'linear'  // Set to linear for even distribution of ticks
               },
               y: {
                 min: 0,
@@ -216,7 +241,7 @@ export default {
                   stepSize: 0.5
                 }
               }
-            }
+            },
           }
         });
       }
