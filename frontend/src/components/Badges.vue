@@ -10,16 +10,16 @@
     </div>
     <!-- All Badges -->
     <div class="row justify-content-center mt-5">
-      <div v-for="(badge,index) in badgesLoaded" :key=index class="card" style="width: 18rem; margin:0.5rem">
-        
-        <img :src="'src/assets/badges/' + badge.icon"  class="card-img-top">
+      <div v-for="(badge, index) in badgesLoaded" :key=index class="card" style="width: 18rem; margin:0.5rem">
+
+        <img :src="'src/assets/badges/' + badge.icon" class="card-img-top">
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title">{{badge.name}}</h5>
-          <p class="card-text">{{badge.description}}</p>
+          <h5 class="card-title">{{ badge.name }}</h5>
+          <p class="card-text">{{ badge.description }}</p>
           <a href="community" class="btn btn-primary mt-auto">Share Badge</a>
         </div>
       </div>
-      <button v-if="this.length==3" @click="loadMore()" class="btn btn-link">Load More</button>
+      <button v-if="this.length == 3" @click="loadMore()" class="btn btn-link">Load More</button>
       <button v-else @click="showLess()" class="btn btn-link">Show Less</button>
     </div>
   </div>
@@ -35,56 +35,56 @@ export default {
       isLoading: false,
       length: 3,
       badges: [
-    {
-      "description": "Congratulations on taking your first step toward a greener planet!",
-      "icon": "green_newbie_icon.png",
-      "id": "badge_1",
-      "milestone": "First carbon footprint calculation",
-      "name": "Green Newbie"
-    },
-    {
-      "description": "You've offset the carbon footprint of your travels for one month!",
-      "icon": "eco_friendly_traveler_icon.png",
-      "id": "badge_2",
-      "milestone": "Offset one month of travel",
-      "name": "Eco-Friendly Traveler"
-    },
-    {
-      "description": "One week of sustainable eating choices. Way to go!",
-      "icon": "foodprint_fighter_icon.png",
-      "id": "badge_3",
-      "milestone": "One week of sustainable food choices",
-      "name": "Foodprint Fighter"
-    },
-    {
-      "description": "You've converted to using solar energy at home.",
-      "icon": "solar_superstar_icon.png",
-      "id": "badge_4",
-      "milestone": "Switch to solar energy",
-      "name": "Solar Superstar"
-    },
-    {
-      "description": "Recycled items for 30 consecutive days!",
-      "icon": "recycle_ranger_icon.png",
-      "id": "badge_5",
-      "milestone": "30 days of recycling",
-      "name": "Recycle Ranger"
-    },
-    {
-      "description": "You've inspired 5 friends to join the app and start tracking their footprint.",
-      "icon": "community_catalyst_icon.png",
-      "id": "badge_6",
-      "milestone": "Refer 5 friends",
-      "name": "Community Catalyst"
-    },
-    {
-      "description": "Achieved a zero-waste lifestyle for one month.",
-      "icon": "zero_waste_warrior_icon.png",
-      "id": "badge_7",
-      "milestone": "One month of zero-waste",
-      "name": "Zero-Waste Warrior"
-    }
-  ]
+        {
+          "description": "Congratulations on taking your first step toward a greener planet!",
+          "icon": "green_newbie_icon.png",
+          "id": "badge_1",
+          "milestone": "First carbon footprint calculation",
+          "name": "Green Newbie"
+        },
+        {
+          "description": "You've offset the carbon footprint of your travels for one month!",
+          "icon": "eco_friendly_traveler_icon.png",
+          "id": "badge_2",
+          "milestone": "Offset one month of travel",
+          "name": "Eco-Friendly Traveler"
+        },
+        {
+          "description": "One week of sustainable eating choices. Way to go!",
+          "icon": "foodprint_fighter_icon.png",
+          "id": "badge_3",
+          "milestone": "One week of sustainable food choices",
+          "name": "Foodprint Fighter"
+        },
+        {
+          "description": "You've converted to using solar energy at home.",
+          "icon": "solar_superstar_icon.png",
+          "id": "badge_4",
+          "milestone": "Switch to solar energy",
+          "name": "Solar Superstar"
+        },
+        {
+          "description": "Recycled items for 30 consecutive days!",
+          "icon": "recycle_ranger_icon.png",
+          "id": "badge_5",
+          "milestone": "30 days of recycling",
+          "name": "Recycle Ranger"
+        },
+        {
+          "description": "You've inspired 5 friends to join the app and start tracking their footprint.",
+          "icon": "community_catalyst_icon.png",
+          "id": "badge_6",
+          "milestone": "Refer 5 friends",
+          "name": "Community Catalyst"
+        },
+        {
+          "description": "Achieved a zero-waste lifestyle for one month.",
+          "icon": "zero_waste_warrior_icon.png",
+          "id": "badge_7",
+          "milestone": "One month of zero-waste",
+          "name": "Zero-Waste Warrior"
+        }
+      ]
 
     };
   },
@@ -95,8 +95,8 @@ export default {
     Navbar
   },
   computed: {
-    badgesLoaded(){
-      return this.badges.slice(0,this.length);
+    badgesLoaded() {
+      return this.badges.slice(0, this.length);
     }
   },
   methods: {
@@ -105,13 +105,13 @@ export default {
       this.fetchBadges();
       this.isLoading = false;
     },
-    loadMore(){
+    loadMore() {
       console.log(this.length)
       console.log(this.badges.length)
       this.length = this.badges.length;
       console.log(this.length)
     },
-    showLess(){
+    showLess() {
       this.length = 3;
     },
     async fetchBadges() {

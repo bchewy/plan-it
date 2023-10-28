@@ -1,79 +1,78 @@
 <template>
-
     <!-- nav -->
     <NavBar />
 
 
-<body class="position-relative" >
-<div class="container-fluid">
-<div class="row">
+    <body class="position-relative">
+        <div class="container-fluid">
+            <div class="row">
 
-<nav class="col-2 position-fixed h-100"  style="background-color: rgb(209, 244, 209)">
+                <nav class="col-2 position-fixed h-100" style="background-color: rgb(209, 244, 209)">
 
-<div class="container-fluid">
-    <br>
-    <span class="h5 text-muted">Plan-it Community</span>
-    
-<ul class="navbar-nav flex-column mt-5">
+                    <div class="container-fluid">
+                        <br>
+                        <span class="h5 text-muted">Plan-it Community</span>
 
-<li class="active nav-item"><a class="h3 nav-link" href="#">For you</a></li>
-<hr>
-    <li class="nav-item dropdown"><a class="h3 nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Groups</a>
-	<ul class="dropdown-menu bg-light">
-		<li><router-link class="dropdown-item" to="/community/createGroup" ><font-awesome-icon icon="fa-solid fa-plus"/>   Create group</router-link></li>
-		<li><router-link class="dropdown-item" to="/community/yourGroups" ><font-awesome-icon icon="fa-solid fa-users"/>   Your groups</router-link></li>
-	</ul>
-	</li>
-	<hr>
-    <li class="nav-item"><router-link class="h3 nav-link" to="/community/friendCommunity">Friends</router-link></li>
-	<hr>
+                        <ul class="navbar-nav flex-column mt-5">
 
-</ul>
-</div>
-</nav>
-<div class="col-2"></div>
-<div class="col-10 h-100" style="background-color: rgb(232, 251, 240);">
+                            <li class="active nav-item"><a class="h3 nav-link" href="#">For you</a></li>
+                            <hr>
+                            <li class="nav-item dropdown"><a class="h3 nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Groups</a>
+                                <ul class="dropdown-menu bg-light">
+                                    <li><router-link class="dropdown-item" to="/community/createGroup"><font-awesome-icon icon="fa-solid fa-plus" /> Create group</router-link></li>
+                                    <li><router-link class="dropdown-item" to="/community/yourGroups"><font-awesome-icon icon="fa-solid fa-users" /> Your groups</router-link></li>
+                                </ul>
+                            </li>
+                            <hr>
+                            <li class="nav-item"><router-link class="h3 nav-link" to="/community/friendCommunity">Friends</router-link></li>
+                            <hr>
 
-<h1 class="text-center py-3 text-muted" style="font-weight: bold;">Create your very group!</h1>
-<div class="row justify-content-center">
-<div class="col-8 rounded border bg-white">
-    <div class="mb-3 mt-3">
-    <label for="grpName" class="form-label">Enter your group name:</label>
-    <input type="text" class="form-control" id="grpName" placeholder="Group name" name="grpName">
-  </div>
-  <div class="mb-3">
-    <label for="grpImg" class="form-label">Select your group profile image:</label>
-    <img src="../assets/badges/community_catalyst_icon.png"> <!--v-model for grpImg here-->
-    <select class="form-control" id="grpImg" name="grpImg">
-        <option selected>1</option>
-        <option>2</option>
-    </select>
-  </div>
-  <div class="form-check mb-3">
-    <label for="addFriends" class="form-label">Add your friends!</label>
-    
-    <select class="form-control" id="addFriends" name="addFriends">
-        <option selected>1</option>
-        <option>2</option>  <!--friends list-->
-    </select>
-  </div>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="col-2"></div>
+                <div class="col-10 h-100" style="background-color: rgb(232, 251, 240);">
 
-  <button type="submit" class="btn btn-primary"><font-awesome-icon icon="fa-solid fa-plus-square"></font-awesome-icon>  Create group!</button>
-</div>
-</div>
+                    <h1 class="text-center py-3 text-muted" style="font-weight: bold;">Create your very group!</h1>
+                    <div class="row justify-content-center">
+                        <div class="col-8 rounded border bg-white">
+                            <div class="mb-3 mt-3">
+                                <label for="grpName" class="form-label">Enter your group name:</label>
+                                <input type="text" class="form-control" id="grpName" placeholder="Group name" name="grpName">
+                            </div>
+                            <div class="mb-3">
+                                <label for="grpImg" class="form-label">Select your group profile image:</label>
+                                <img src="../assets/badges/community_catalyst_icon.png"> <!--v-model for grpImg here-->
+                                <select class="form-control" id="grpImg" name="grpImg">
+                                    <option selected>1</option>
+                                    <option>2</option>
+                                </select>
+                            </div>
+                            <div class="form-check mb-3">
+                                <label for="addFriends" class="form-label">Add your friends!</label>
 
+                                <select class="form-control" id="addFriends" name="addFriends">
+                                    <option selected>1</option>
+                                    <option>2</option> <!--friends list-->
+                                </select>
+                            </div>
 
+                            <button type="submit" class="btn btn-primary"><font-awesome-icon icon="fa-solid fa-plus-square"></font-awesome-icon> Create group!</button>
+                        </div>
+                    </div>
 
 
-</div>
 
-</div>
-</div>
 
-</body>
-<footer>
-    <!-- footer -->
-</footer>
+                </div>
+
+            </div>
+        </div>
+
+    </body>
+    <footer>
+        <!-- footer -->
+    </footer>
 </template>
 
 <script>
@@ -85,36 +84,36 @@ import { useAuth0 } from '@auth0/auth0-vue';
 import Share_badge from "../components/Share_badge.vue";
 export default {
 
-data(){
+    data() {
 
-},
-components: {
-    NavBar,  // Register the NavBar component
-    // Login
-    Share_badge
-},
-setup() {
-    const { loginWithRedirect, user, isAuthenticated } = useAuth0();
-    const badges=false
+    },
+    components: {
+        NavBar,  // Register the NavBar component
+        // Login
+        Share_badge
+    },
+    setup() {
+        const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+        const badges = false
 
-    console.log('Setup method is called');
+        console.log('Setup method is called');
 
-    return {
-        login: async () => {
-            console.log('Login button clicked');
-            try {
-                await loginWithRedirect();
-                // console.log('User:', user);
-                // console.log('Authenticated:', isAuthenticated);
-            } catch (e) {
-                alert('Failed to login');
-                console.error('Failed to login:', e);
-            }
-        },
-        user,
-        isAuthenticated,
-        badges
-    };
-}
+        return {
+            login: async () => {
+                console.log('Login button clicked');
+                try {
+                    await loginWithRedirect();
+                    // console.log('User:', user);
+                    // console.log('Authenticated:', isAuthenticated);
+                } catch (e) {
+                    alert('Failed to login');
+                    console.error('Failed to login:', e);
+                }
+            },
+            user,
+            isAuthenticated,
+            badges
+        };
+    }
 }
 </script>
