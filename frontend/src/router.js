@@ -48,12 +48,12 @@ const router = createRouter({
 			beforeEnter: authGuard
 
 		},
-		{
-			path: '/badges',
-			component: () => import('./views/Badges.vue'),
-			beforeEnter: authGuard
+		// {
+		// 	path: '/badges',
+		// 	component: () => import('./views/Badges.vue'),
+		// 	// beforeEnter: authGuard
 
-		},
+		// },
 		{
 			path: '/community/createGroup',
 			component: () => import('./views/CreateGroup.vue')
