@@ -70,7 +70,7 @@
       </div>
 
       <!-- Main Content Area -->
-      <div class="col-md-9">
+      <div class="col-md-9 my-4">
         <div v-if="activeTab === 'profile'" class="tab-pane show active">
           <!-- Profile Content -->
           <div class="profile-container bg-light p-3 rounded d-flex flex-column flex-md-row mb-4">
@@ -303,14 +303,14 @@ export default {
         if (this.myChart) {
           this.myChart.destroy();
         }
+        // console.log('Labels:', labels);
+        // console.log('Count of Labels:', labels.length);
+        // console.log('Data:', data);
+        // console.log('Count of Data:', data.length);
+        // console.log('Fake Data', [2, 4, 3],)
+        // console.log('Fake Labels', ["2023-10-26T00:00:00.000Z", "2023-10-27T00:00:00.000Z", "2023-10-28T00:00:00.000Z"],)
 
-        console.log('Labels:', labels);
-        console.log('Count of Labels:', labels.length);
-        console.log('Data:', data);
-        console.log('Count of Data:', data.length);
-
-        console.log('Fake Data', [2, 4, 3],)
-        console.log('Fake Labels', ["2023-10-26T00:00:00.000Z", "2023-10-27T00:00:00.000Z", "2023-10-28T00:00:00.000Z"],)
+        const routes = this.routes;
         this.myChart = new Chart(ctx, {
           type: 'bar',
           // data: {
@@ -341,7 +341,7 @@ export default {
               x: {
                 barPercentage: 0.5,
                 categoryPercentage: 0.5,
-                type: 'time',
+                type: 'category',
                 time: {
                   unit: 'day',
                   displayFormats: {
@@ -363,7 +363,30 @@ export default {
                 }
               }
             },
+            tooltips: {
+              callbacks: {
+                title: function (tooltipItem, data) {
+                  // Get the route corresponding to the hovered bar
+                  const route = routes[tooltipItem[0].index];
+                  // Return the title for the tooltip
+                  return `Route: ${route.start_point_name} to ${route.end_point_name}`;
+                },
+                label: function (tooltipItem, data) {
+                  // Get the route corresponding to the hovered bar
+                  const route = routes[tooltipItem.index];
+                  // Return the label for the tooltip
+                  return `Carbon Emission: ${route.carbon_emission}`;
+                },
+                afterLabel: function (tooltipItem, data) {
+                  // Get the route corresponding to the hovered bar
+                  const route = routes[tooltipItem.index];
+                  // Return additional information for the tooltip
+                  return `Mode of Transport: ${route.transport_mode}`;
+                }
+              }
+            }
           }
+
         });
 
         // Pie chart for travel mode

@@ -1,228 +1,221 @@
 <template>
-	<header>
-	  <!-- nav -->
-	  <NavBar />
-	</header>
-  
-	<!--showcase-->
-	<section class="text-center col-12 m-0 p-0 light-green" style=" margin: 0; padding: 0;">
-	  <div class="container" style="max-width: 100%; padding: 0;">
-		<h1 v-if="isAuthenticated" class="mt-3">Hi, {{ user.name }}!</h1>
-	  </div>
-	</section>
-  
-  
-	<!--flexbox thingy!-->
-	<!--section class="text-muted text-center d-flex align-items-center justify-content-center"-->
-  <section class="text-muted text-center vh-100 d-flex align-items-center justify-content-center bg-supergreen" style="background-image: url('@/assets/homepage/background.png'); background-size: cover;"> 
-	  <div class="container">
-		<div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
-		  <div class="text-center">
-			<h1><span class="text-success">Carbon-First </span> Routing.</h1>
-			<p class="lead">
-			  Account for your own carbon footprint for your traffic taken, value-add and commit to reducing your carbon footprint and reduce your personal impact.
-			</p>
-		  </div>
-	  <!--div class="text-center"--> <!-- Center the image horizontally -->
-			<!--img class="img-fluid" src="@/assets/homepage/co2.jpg" alt=""-->
-		  </div>
-		</div>
-	  <!--/div-->
-	</section>
-  
-	<!-- boxes-->
-	<section class="p-5 bg-supergreen">
-	  <div class="container">
-		<div class="row text-center">
-		  <div class="col-md" v-for="(card, index) in cards" :key="index">
-			<div class="card text-muted h-100 beige-colour">
-			  <div class="card-body d-flex flex-column justify-content-between">
-				<div class="text-center">
-				  <div class="h1 mb-3">
-					<font-awesome-icon :icon="card.icon"></font-awesome-icon>
-				  </div>
-				  <h3 class="card-title mb-3">{{ card.title }}</h3>
-				  <p class="card-text">{{ card.description }}</p>
-				  <!-- "Learn More" button for each card -->
-				  <button class="btn btn-success" @click="openModal(index)">Learn More</button>
-				</div>
-			  </div>
-			</div>
-		  </div>
-		</div>
-	  </div>
-	</section>
-  
-  
-    <div v-if="isAuthenticated">
-      <LearnMore v-if="currentCardIndex !== -1" :card="currentCardIndex !== -1 ? cards[currentCardIndex] : {}" @close="closeModal" :visible="true" />
+  <header>
+    <!-- nav -->
+    <NavBar />
+  </header>
+
+  <!--showcase-->
+  <section class="text-center col-12 m-0 p-0 light-green" style=" margin: 0; padding: 0;">
+    <div class="container" style="max-width: 100%; padding: 0;">
+      <h1 v-if="isAuthenticated" class="mt-3">Hi, {{ user.name }}!</h1>
+    </div>
+  </section>
+
+
+  <!--flexbox thingy!-->
+  <!--section class="text-muted text-center d-flex align-items-center justify-content-center"-->
+  <section class="text-muted text-center vh-100 d-flex align-items-center justify-content-center bg-supergreen" style="background-image: url('@/assets/homepage/background.png'); background-size: cover;">
+    <div class="container">
+      <div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
+        <div class="text-center">
+          <h1><span class="text-success">Carbon-First </span> Routing.</h1>
+          <p class="lead">
+            Account for your own carbon footprint for your traffic taken, value-add and commit to reducing your carbon footprint and reduce your personal impact.
+          </p>
+        </div>
+        <!--div class="text-center"--> <!-- Center the image horizontally -->
+        <!--img class="img-fluid" src="@/assets/homepage/co2.jpg" alt=""-->
       </div>
- 
+    </div>
+    <!--/div-->
+  </section>
+
+  <!-- boxes-->
+  <section class="p-5 bg-supergreen">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md" v-for="(card, index) in cards" :key="index">
+          <div class="card text-muted h-100 beige-colour">
+            <div class="card-body d-flex flex-column justify-content-between">
+              <div class="text-center">
+                <div class="h1 mb-3">
+                  <font-awesome-icon :icon="card.icon"></font-awesome-icon>
+                </div>
+                <h3 class="card-title mb-3">{{ card.title }}</h3>
+                <p class="card-text">{{ card.description }}</p>
+                <!-- "Learn More" button for each card -->
+                <button class="btn btn-success" @click="openModal(index)">Learn More</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
-  
-  
-  
-	<!-- Question Accordion -->
-	<section id="questions" class="p-5 bg-supergreen">
-	  <div class="container">
-		<h2 class="text-center text-muted mb-4">Frequently Asked Questions</h2>
-		<div class="accordion accordion-flush " id="questions">
-		  <!--Item 1-->
-		  <div class="accordion-item ">
-			<h2 class="accordion-header ">
-			  <button class="accordion-button collapsed beige-colour" type="button" data-bs-toggle="collapse" data-bs-target="#question-one">
-				Q1
-			  </button>
-			</h2>
-			<div id="question-one" class="accordion-collapse collapse" data-bs-parent="#questions">
-			  <div class="accordion-body">Add answers later</div>
-			</div>
-		  </div>
-		  <!--Item 2-->
-		  <div class="accordion-item">
-			<h2 class="accordion-header">
-			  <button class="accordion-button collapsed beige-colour" type="button" data-bs-toggle="collapse" data-bs-target="#question-two">
-				Q2
-			  </button>
-			</h2>
-			<div id="question-two" class="accordion-collapse collapse " data-bs-parent="#questions">
-			  <div class="accordion-body">Add answers later</div>
-			</div>
-		  </div>
-		  <!--Item 3-->
-		  <div class="accordion-item">
-			<h2 class="accordion-header">
-			  <button class="accordion-button collapsed beige-colour" type="button" data-bs-toggle="collapse" data-bs-target="#question-three">
-				Q3
-			  </button>
-			</h2>
-			<div id="question-three" class="accordion-collapse collapse" data-bs-parent="#questions">
-			  <div class="accordion-body">Add answers later</div>
-			</div>
-		  </div>
-		</div>
-	  </div>
-	</section>
-  
-	  <!-- refer friend now-->
-	  <section class="text-muted bg-supergreen ">
-	  <div class="container">
-		<div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
-		  <h4 class="news-input">Refer a friend now!</h4> <!-- Apply the "news-input" class -->
-		  <div class="input-group news-input">
-			<input type="text" class="form-control news-input" placeholder="Friend's Email Address" aria-label="Friend's Email Address" aria-describedby="button-addon2">
-			<button class="btn btn-lg beige-colour" id="button-addon2">Send</button>
-		  </div>
-		</div>
-	  </div>
-	</section>
-  
-	  <!-- Add space between "Refer a friend" section and footer -->
-	  <div class="bg-supergreen" style="height: 30px;"></div> <!-- Adjust the height as needed -->
-  
-	<footer class="p-5 text-center position-relative" style="background-color: rgb(209, 244, 209);">
-	  <!-- footer -->
-	  <div class="container">
-		<p class="lead">Copyright &copy; 2023 wad2winners</p>
-		<a href="#" class="position-absolute bottom-0 end-0 p-5 text-center">
-		  <i class="bi bi-arrow-up-circle h1 text-success" style="background-color: transparent;"></i>
-		</a>
-	  </div>
-	</footer>
-	</template>
-  
-  <script>
-  import NavBar from '../components/Navbar.vue';
-  import { useAuth0 } from '@auth0/auth0-vue';
-  import LearnMore from '../components/LearnMore.vue';
-  import { ref } from 'vue';
-  
-  export default {
-	name: 'Home',
-	components: {
-	  NavBar,
-	  LearnMore
-	},
-	setup() {
-	  const { loginWithRedirect, user, isAuthenticated } = useAuth0();
-  
-	  // Initialize the currentCardIndex property with a default value of 0
-	  const currentCardIndex = ref(0);
-  
-	  const cards = [
-		{
-		  icon: "fa-solid fa-leaf",
-		  title: "Eco-friendly Navigation",
-		  description: "this is so great and green! change writeup at the end.",
-		  details: "Additional details about Eco-friendly Navigation.",
-		  variant: "success",
-		},
-		{
-		  icon: "fa-solid fa-shoe-prints",
-		  title: "Traffic Optimization",
-		  description: "This reduces our carbon footprint.",
-		  details: "Additional details about Traffic Optimization.",
-		  variant: "success",
-		},
-		{
-		  icon: "fa-solid fa-bus",
-		  title: "Incentivising Public Transport",
-		  description: "Encourages more people to take public transport through badges.",
-		  details: "Additional details about Incentivising Public Transport.",
-		  variant: "success",
-		},
-	  ];
-  
-	  const openModal = (index) => {
-		currentCardIndex.value = index;
-	  };
-  
-	  const closeModal = () => {
-		currentCardIndex.value = -1;
-	  };
-  
-	  return {
-		login: async () => {
-		  try {
-			await loginWithRedirect();
-		  } catch (e) {
-			alert('Failed to login');
-			console.error('Failed to login:', e);
-		  }
-		},
-		cards,
-		currentCardIndex,
-		openModal,
-		closeModal,
-		isAuthenticated,
-		user
-	  };
-	}
-  };
-  </script>
-  
+  <LearnMore :visible="currentCardIndex !== -1" :card="currentCardIndex !== -1 ? cards[currentCardIndex] : {}" @close="closeModal" />
 
-  
-  
-  <style scoped>
-  /* Other component-specific styles */
-  
-  .news-input {
-	width: 50%;
-	/* Set the width to 50% */
-  }
-  .bg-supergreen {
-	background-color: #739072;
-  }
-  .beige-colour {
-	/* background-color: ; */
-	background-color: #ECE3CE;
-  }
-  
-  .light-green {
-	  background-color: rgb(209, 244, 209)
-  }
-  
-  /* Additional styles if needed */
-  </style>
+
+
+  <!-- Question Accordion -->
+  <section id="questions" class="p-5 bg-supergreen">
+    <div class="container">
+      <h2 class="text-center text-muted mb-4">Frequently Asked Questions</h2>
+      <div class="accordion accordion-flush " id="questions">
+        <!--Item 1-->
+        <div class="accordion-item ">
+          <h2 class="accordion-header ">
+            <button class="accordion-button collapsed beige-colour" type="button" data-bs-toggle="collapse" data-bs-target="#question-one">
+              Q1
+            </button>
+          </h2>
+          <div id="question-one" class="accordion-collapse collapse" data-bs-parent="#questions">
+            <div class="accordion-body">Add answers later</div>
+          </div>
+        </div>
+        <!--Item 2-->
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed beige-colour" type="button" data-bs-toggle="collapse" data-bs-target="#question-two">
+              Q2
+            </button>
+          </h2>
+          <div id="question-two" class="accordion-collapse collapse " data-bs-parent="#questions">
+            <div class="accordion-body">Add answers later</div>
+          </div>
+        </div>
+        <!--Item 3-->
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed beige-colour" type="button" data-bs-toggle="collapse" data-bs-target="#question-three">
+              Q3
+            </button>
+          </h2>
+          <div id="question-three" class="accordion-collapse collapse" data-bs-parent="#questions">
+            <div class="accordion-body">Add answers later</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- refer friend now-->
+  <section class="text-muted bg-supergreen ">
+    <div class="container">
+      <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
+        <h4 class="news-input">Refer a friend now!</h4> <!-- Apply the "news-input" class -->
+        <div class="input-group news-input">
+          <input type="text" class="form-control news-input" placeholder="Friend's Email Address" aria-label="Friend's Email Address" aria-describedby="button-addon2">
+          <button class="btn btn-lg beige-colour" id="button-addon2">Send</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Add space between "Refer a friend" section and footer -->
+  <div class="bg-supergreen" style="height: 30px;"></div> <!-- Adjust the height as needed -->
+
+  <footer class="p-5 text-center position-relative" style="background-color: rgb(209, 244, 209);">
+    <!-- footer -->
+    <div class="container">
+      <p class="lead">Copyright &copy; 2023 wad2winners</p>
+      <a href="#" class="position-absolute bottom-0 end-0 p-5 text-center">
+        <i class="bi bi-arrow-up-circle h1 text-success" style="background-color: transparent;"></i>
+      </a>
+    </div>
+  </footer>
+</template>
+
+<script>
+import NavBar from '../components/Navbar.vue';
+import { useAuth0 } from '@auth0/auth0-vue';
+import LearnMore from '../components/LearnMore.vue';
+import { ref } from 'vue';
+
+export default {
+  name: 'Home',
+  components: {
+    NavBar,
+    LearnMore
+  },
+  setup() {
+    const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+    const cards = [
+      {
+        icon: "fa-solid fa-leaf",
+        title: "Eco-friendly Navigation",
+        description: "this is so great and green! change writeup at the end.",
+        details: "Additional details about Eco-friendly Navigation.",
+        variant: "success",
+      },
+      {
+        icon: "fa-solid fa-shoe-prints",
+        title: "Traffic Optimization",
+        description: "This reduces our carbon footprint.",
+        details: "Additional details about Traffic Optimization.",
+        variant: "success",
+      },
+      {
+        icon: "fa-solid fa-bus",
+        title: "Incentivising Public Transport",
+        description: "Encourages more people to take public transport through badges.",
+        details: "Additional details about Incentivising Public Transport.",
+        variant: "success",
+      },
+    ];
+
+    const currentCardIndex = ref(-1); // Track the currently selected card
+
+    const openModal = (index) => {
+      currentCardIndex.value = index;
+    };
+
+    const closeModal = () => {
+      currentCardIndex.value = -1;
+    };
+
+    return {
+      login: async () => {
+        try {
+          await loginWithRedirect();
+        } catch (e) {
+          alert('Failed to login');
+          console.error('Failed to login:', e);
+        }
+      },
+      cards,
+      currentCardIndex,
+      openModal,
+      closeModal,
+      isAuthenticated,
+      user,
+    }
+  },
+};
+</script>
+
+
+<style scoped>
+/* Other component-specific styles */
+
+.news-input {
+  width: 50%;
+  /* Set the width to 50% */
+}
+
+.bg-supergreen {
+  background-color: #739072;
+}
+
+.beige-colour {
+  /* background-color: ; */
+  background-color: #ECE3CE;
+}
+
+.light-green {
+  background-color: rgb(209, 244, 209)
+}
+
+/* Additional styles if needed */
+</style>

@@ -94,6 +94,7 @@
             </router-link>
           </li>
         </ul>
+
         <ul class="navbar-nav">
           <li v-if="!isAuthenticated" class="nav-item">
             <a class="nav-link text-evenlighter" @click.prevent="login">Login</a>
@@ -103,6 +104,12 @@
               <img :src="user.picture" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px" />
               <span class="text-evenlighter">Welcome, {{ user.name }}!</span>
             </a>
+            <!-- <div v-if="showGamification" class="text-evenlighter d-flex align-items-center">
+              <div>Level: {{ userMe.value.level }}</div>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" :style="{ width: `${userMe.value.exp}%` }" aria-valuenow="user.progress" aria-valuemin="0" aria-valuemax="100">{{ userMe.value.exp }}%</div>
+              </div>
+            </div> -->
             <ul class="dropdown-menu bg-green2 text-evenlighter" aria-labelledby="navbarDropdown">
               <li>
                 <router-link class="dropdown-item text-light" to="/profile">
@@ -125,12 +132,16 @@
                   <font-awesome-icon icon="fa-solid fa-circle-user" />
                   Your Public Profile</router-link> -->
               </li>
-              <!-- <li><router-link class="dropdown-item" to="/journey">
-								<font-awesome-icon icon="fa-solid fa-truck-fast" />
-								Journey</router-link>
-							</li> -->
+              <hr class="dropdown-divider" />
+
+              <li>
+                <button class="dropdown-item text-light" @click="toggleGamification">
+                  Toggle Gamification
+                </button>
+              </li>
               <li>
                 <hr class="dropdown-divider" />
+
               </li>
               <li>
                 <a class="dropdown-item text-light" @click="logout">Logout
@@ -171,13 +182,23 @@
 <script>
 import { useAuth0 } from '@auth0/auth0-vue';
 import { watch, computed, defineComponent, ref } from 'vue';
+import axios from "axios";
+
 
 export default defineComponent({
   name: 'NavBar',
-
   setup() {
     const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
     const userHandle = ref('');
+    const showGamification = ref(false);
+    const userMe = ref({});
+
+
+    const toggleGamification = () => {
+      fetchUser();
+      showGamification.value = !showGamification.value;
+    };
+
     watch(user, async (newValue) => {
       if (newValue) {
         console.log('new value here', newValue)
@@ -223,6 +244,24 @@ export default defineComponent({
       $('#handleModal').modal('hide');
     };
 
+    const fetchUser = async () => {
+      const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(user.value.email)}`;
+      const headers = {
+        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+      };
+
+      try {
+        const response = await axios.get(url, { headers });
+        console.log(response.data);
+        userMe.value = response.data;
+        console.log(userMe.value.level)
+
+      } catch (error) {
+        console.error("Error fetching user", error);
+      }
+    };
+
+
     return {
       login: async () => {
         try {
@@ -240,6 +279,10 @@ export default defineComponent({
       isAuthenticated,
       userHandle,
       saveHandle,
+      showGamification,
+      toggleGamification,
+      fetchUser,
+      userMe,
     };
   }
 });
