@@ -130,6 +130,8 @@
                 <canvas id="travelCategoryChart"></canvas>
               </div>
 
+              <Compare v-if="user" :user="user"></Compare>
+
               <!-- <div v-if="routes && routes.length == 0">
                 <p class="text-center">
                   Your route list is empty. You need to commit more.
@@ -212,6 +214,7 @@ import MapItem from "../components/MapItem.vue";
 import AddFriend from "../components/AddFriends.vue";
 import Navbar from "../components/Navbar.vue";
 import FriendRequest from '../components/FriendRequest.vue';
+import Compare from "../components/Compare.vue";
 import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
@@ -228,7 +231,6 @@ Chart.register(...registerables);
 export default {
   created() {
     this.fetchData();
-
   },
   watch: {
     activeTab: {
@@ -285,6 +287,7 @@ export default {
     AddFriend,
     FriendRequest,
     Badges,
+    Compare,
   },
   methods: {
     async drawChart() {
@@ -447,6 +450,7 @@ export default {
         this.friends = response.data.friends;
         this.userLvl = response.data.level;
         this.userExp = response.data.exp;
+        this.userEmail = response.data.email
 
       } catch (error) {
         console.error("Error fetching user", error);
