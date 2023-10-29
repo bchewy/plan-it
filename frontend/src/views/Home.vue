@@ -54,7 +54,7 @@
 
   <LearnMore :visible="currentCardIndex !== -1" :card="currentCardIndex !== -1 ? cards[currentCardIndex] : {}" @close="closeModal" />
 
-
+  <div class="bg-supergreen" style="height: 50px;"></div> <!-- Adjust the height as needed -->
 
   <!-- Question Accordion -->
   <section id="questions" class="p-5 bg-supergreen ">
@@ -90,13 +90,15 @@
 			<b> 3: Can I use your platform internationally, or is it limited to specific regions?</b>
             </button>
           </h2>
-          <div id="question-three" class="accordion-collapse collapse text-muted" data-bs-parent="#questions">
+          <div id="question-three" class="accordion-collapse collapse " data-bs-parent="#questions">
             <div class="accordion-body">Our eco-friendly navigation platform is currently tailored to Singapore. While we're focused on providing the best eco-friendly navigation experience in Singapore, we have plans to expand to other regions in the future. Stay tuned for updates on our international availability!</div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <div class="bg-supergreen" style="height: 80px;"></div> <!-- Adjust the height as needed -->
 
   <!-- refer friend now-->
   <section class="text-muted bg-supergreen ">
@@ -112,7 +114,7 @@
   </section>
 
   <!-- Add space between "Refer a friend" section and footer -->
-  <div class="bg-supergreen" style="height: 30px;"></div> <!-- Adjust the height as needed -->
+  <div class="bg-supergreen" style="height: 71px;"></div> <!-- Adjust the height as needed -->
 
   <footer class="p-5 text-center position-relative" style="background-color: rgb(209, 244, 209);">
     <!-- footer -->
