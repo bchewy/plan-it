@@ -15,7 +15,7 @@
                                 <span class="col-1"></span>
 
 
-                                <Share_badge></Share_badge>
+                           
                                 <button class="btn btn-secondary col-3" type="button"><font-awesome-icon icon="fa-solid fa-tag" /> Tag a friend</button>
                                 <button class="btn btn-secondary col-3" type="button"><font-awesome-icon icon="fa-solid fa-plus-square" /> Create post!</button>
                                 <span class="col-1"></span>
@@ -54,7 +54,7 @@ import NavBar from "../components/Navbar.vue";
 import CommunitySidebar from "../components/CommunitySidebar.vue";
 import { useAuth0 } from '@auth0/auth0-vue';
 
-import Share_badge from "../components/Share_badge.vue";
+
 export default {
 
     data() {
@@ -63,7 +63,7 @@ export default {
     components: {
         NavBar,
         CommunitySidebar,
-        Share_badge
+        
     },
     setup() {
         const { loginWithRedirect, user, isAuthenticated } = useAuth0();
