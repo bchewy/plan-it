@@ -186,14 +186,14 @@ export default {
         } catch (e) {
           alert('Failed to login');
           console.error('Failed to login:', e);
-        },
+        }
         cards,
         currentCardIndex,
         openModal,
         closeModal,
         isAuthenticated,
         user,
-      };
+      },
     }
   },
 };
