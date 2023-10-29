@@ -25,7 +25,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faArrowRightFromBracket, faCar, faCircleUser, faTruckFast, faCog } from '@fortawesome/free-solid-svg-icons'
 import { faPlusSquare, faShare, faTag, faPlus, faUsers, faUser } from '@fortawesome/free-solid-svg-icons'
-import { faLeaf, faShoePrints, faBus } from '@fortawesome/free-solid-svg-icons';
+import { faLeaf, faShoePrints, faBus, faHouse, faBars } from '@fortawesome/free-solid-svg-icons';
 library.add(faCar)
 library.add(faCircleUser)
 library.add(faTruckFast)
@@ -40,9 +40,11 @@ library.add(faUser)
 library.add(faLeaf)
 library.add(faShoePrints)
 library.add(faBus)
+library.add(faHouse)
+library.add(faBars)
+
 // Prima Vue
 import PrimeVue from 'primevue/config';
-
 
 const app = createApp(App)
 app.use(VueGoogleMaps, {
