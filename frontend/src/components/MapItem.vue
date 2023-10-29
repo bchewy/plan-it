@@ -47,22 +47,30 @@
 
 		<!-- <div class="form-overlay" draggable="true" @dragstart="dragStart" @dragend="dragEnd"> -->
 		<!-- <vue-draggable-resizable :zIndex="1000"> -->
-		<Vue3DraggableResizable v-if="show" :x="20" :y="0" :w="200" :h="200" :z="1" :draggable="true" :resizable="false" :referenceLineVisible="false">
-			<div class="form-overlay">
-				<div class="row mb-4">
-					<div class="col-sm-12 col-md-3 input-group mb-3">
+		<Vue3DraggableResizable v-if="show" :x="20" :y="0" :w="300" :h="200" :z="1" :draggable="true" :resizable="false" :referenceLineVisible="false">
+			<div class="form-overlay rounded">
+				<div class="row p-0 my-1 mx-1">
+					<!-- Start Location -->
+					<div class="col-sm-12 col-md-3 input-group mb-2">
 						<!-- <span class="input-group-text font-weight-bold" id="autocomplete-label">From</span> -->
 						<GMapAutocomplete ref="autocomplete" v-model="startLocation.value" placeholder="Origin" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
-						<!-- <button class="btn btn-green" type="button" @click="getUserLocation">Here</button> -->
+						<button class="btn btn-green" type="button" @click="getUserLocation">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
+								<circle cx="12" cy="12" r="4"></circle>
+								<path d="M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z"></path>
+							</svg>
+						</button>
 					</div>
-					<div class="col-sm-12 col-md-3 input-group mb-3">
+					<!-- Destination Field -->
+					<div class="col-sm-12 col-md-3 input-group mb-2">
 						<!-- <span class="input-group-text font-weight-bold" id="autocomplete-label">To</span> -->
 						<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
 					</div>
-					<div class="col-sm-12 col-md-3 input-group mb-3">
+					<!-- Travel Mode -->
+					<div class="col-sm-12 col-md-3 input-group mb-2">
 						<!-- <span class="input-group-text font-weight-bold">Transporation</span> -->
 						<select v-model="travelMode" class="form-control">
-							<option value="" disabled selected>select</option>
+							<option value="" disabled selected>select transport</option>
 							<option value="DRIVE">Drive</option>
 							<option value="TWO_WHEELER">Motorbike</option>
 							<option value="TRANSIT">Public Transport</option>
@@ -76,7 +84,7 @@
 						<!-- <button class="btn btn-green" type="button" @click="addMinutes(5)">+5m</button> -->
 					</div>
 				</div>
-				<div class="mb-4">
+				<div class="mb-0 p-0">
 					<button class="btn btn-green w-100" @click="fetchRouteDetails" data-bs-toggle="modal" data-bs-target="#progressModal">Log Route</button>
 				</div>
 			</div>
@@ -221,23 +229,34 @@ export default defineComponent({
 
 		},
 		getUserLocation() {
-			console.log("getuserLocation called")
-			if (navigator.geolocation) {
-				console.log("Browser supports nav-geolocation?: ", navigator.geolocation)
+			console.log('user location clicked')
+			const geoLoc = navigator.geolocation;
 
-				navigator.geolocation.getCurrentPosition((position) => {
-					console.log("Attempting to get current location")
-					const lat = position.coords.latitude;
-					const lng = position.coords.longitude;
-					const locationString = `${lat}, ${lng}`;
-					console.log("LocationString: ", locationString)
-
-				});
-
-
-			} else {
-				this.errorMessage = "Geolocation is not supported by this browser.";
+			// Clear the cache
+			if (navigator.geolocation.clearWatch) {
+				navigator.geolocation.clearWatch(0);
 			}
+			geoLoc.getCurrentPosition(async (position) => {
+				const lat = position.coords.latitude;
+				const lng = position.coords.longitude;
+				try {
+					console.log('trying');
+					// Ensure lat and lng are valid numbers
+					if (typeof lat === 'number' && typeof lng === 'number') {
+						const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
+
+						if (response.data.results && response.data.results.length > 0) {
+							this.startLocation.value = response.data.results[0].formatted_address;
+						} else {
+							console.error('No results found');
+						}
+					} else {
+						console.error('Invalid lat or lng values');
+					}
+				} catch (error) {
+					console.error('Error making request:', error);
+				}
+			});
 		},
 
 		//html5 dragn drop API resizable things, still works
