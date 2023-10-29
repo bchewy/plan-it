@@ -1,8 +1,4 @@
 <style scoped>
-.profile-container {
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
 .bg-supergreen {
 	background-color: #739072;
 }
@@ -28,11 +24,6 @@
 	padding-top: 3rem;
 	background-color: #739072;
 }
-
-.pr-4.pb-3.pb-md-0 {
-	flex: 2;
-	/* Adjust as needed */
-}
 </style>
 
 <template>
@@ -40,17 +31,67 @@
 	<div class="container-fluid pt-3 bg-supergreen pb-3">
 		<div class="row">
 			<div class="col-lg-12">
-				<div class="card">
+				<div class="card mt-4 mb-4">
 					<div class="card-header">
-						<h4 class="card-title">Admin Dashboard</h4>
+						<h3 class="mb-0">User Management</h3>
 					</div>
-					<div class="card-body">
-						<p>Admin dashboard content goes here...</p>
+					<div class="container m-2">
+						<div class="row">
+							<div class="col-12 mt-5">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th scope="col">#</th>
+											<th scope="col">Handle</th>
+											<th scope="col">Progress</th>
+											<th scope="col">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(user, index) in users" :key="user">
+											<th scope="row">{{ index + 1 }}</th>
+											<td>@{{ user.handle }}</td>
+											<td v-if="user.level">Lvl {{ user.level }}, EXP: {{ user.exp }}/100</td>
+											<td v-else>-</td>
+											<!-- <td>{{ user.email }}</td> -->
+											<td>
+												<button class="btn btn-primary" @click="openModal(user)" data-bs-toggle="modal" data-bs-target="#addUserModal">Edit</button>
+												<button disabled class="btn btn-danger" @click="deleteUser(user.id)">Delete</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true" ref="addUserModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addUserModalLabel">Update User Level and EXP</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<form @submit.prevent="updateUser">
+							<div class="mb-3">
+								<label for="user-level" class="form-label">Level</label>
+								<input type="number" class="form-control" id="user-level" v-model="updatedUser.level">
+							</div>
+							<div class="mb-3">
+								<label for="user-exp" class="form-label">EXP</label>
+								<input disabled type="number" class="form-control" id="user-exp" v-model="updatedUser.exp">
+							</div>
+							<button type="submit" class="btn btn-primary">Update</button>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
-
 
 
 	</div>
@@ -64,13 +105,8 @@ import FriendRequest from '../components/FriendRequest.vue';
 import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
-import { Chart, registerables } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
-import { format } from 'date-fns';
 import { ref, defineComponent, computed, reactive } from "vue";
-Chart.register(...registerables);
-
-
 
 export default {
 	created() {
@@ -112,20 +148,14 @@ export default {
 			friendRequests: [],
 			receivedRequests: [],
 			sentRequests: [],
+			updatedUser: {
+				email: '',
+				level: 0,
+				exp: 0,
+			},
 		};
 	},
-	computed: {
-		// For pagination
-		paginatedRoutes() {
-			const start = (this.currentPage - 1) * this.itemsPerPage;
-			const end = start + this.itemsPerPage;
-			return this.routes.slice(start, end);
-		},
-		// Total pages
-		totalPages() {
-			return Math.ceil(this.routes.length / this.itemsPerPage);
-		},
-	},
+	computed: {},
 	components: {
 		Navbar,
 		MapItem,
@@ -134,122 +164,39 @@ export default {
 		Badges,
 	},
 	methods: {
-		async drawChart() {
-			if (!Array.isArray(this.routes) || this.routes.length === 0) {
-				console.error('No routes available.');
-				return;
-			}
+		openModal(user) {
+			this.updatedUser.email = user.email;
+			this.updatedUser.level = user.level;
+			this.updatedUser.exp = user.exp;
+		},
+		updateUser() {
+			const urlLevel = `${import.meta.env.VITE_API_ENDPOINT}/users/${this.updatedUser.email}/replace/level`;
+			// const urlExp = `${import.meta.env.VITE_API_ENDPOINT}/users/${this.updatedUser.email}/exp`;
+			const headers = {
+				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+			};
 
-			this.routes.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-			const labels = this.routes.map(route => new Date(route.timestamp).toISOString());
-			const data = this.routes.map(route => parseFloat(route.carbon_emission.toFixed(1)));
+			// Update level
+			axios.post(urlLevel, { level: this.updatedUser.level }, { headers })
+				.then(response => {
+					console.log(response.data);
+					// let modal = new bootstrap.Modal(this.$refs.addUserModal);
+					// modal.hide();
+					this.fetchUsers();
 
-			const canvas = document.getElementById('carbonFootprintChart');
-			if (canvas) {
-				const ctx = document.getElementById('carbonFootprintChart').getContext('2d');
-				if (this.myChart) {
-					this.myChart.destroy();
-				}
-
-				console.log('Labels:', labels);
-				console.log('Count of Labels:', labels.length);
-				console.log('Data:', data);
-				console.log('Count of Data:', data.length);
-
-				console.log('Fake Data', [2, 4, 3],)
-				console.log('Fake Labels', ["2023-10-26T00:00:00.000Z", "2023-10-27T00:00:00.000Z", "2023-10-28T00:00:00.000Z"],)
-				this.myChart = new Chart(ctx, {
-					type: 'bar',
-					// data: {
-					//   labels: parsedLabels,
-					//   datasets: [{
-					//     label: 'Carbon Emission',
-					//     data: data,
-					//     backgroundColor: 'rgba(75, 192, 192, 0.2)',
-					//     borderColor: 'rgba(75, 192, 192, 1)',
-					//     borderWidth: 1
-					//   }]
-					// },
-					data: {
-						labels: labels,
-						datasets: [{
-							label: 'Carbon Emission',
-							data: data,
-							backgroundColor: 'rgba(75, 192, 192, 0.2)',
-							borderColor: 'rgba(75, 192, 192, 1)',
-							borderWidth: 1
-						}]
-					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: true,
-						aspectRatio: 1,
-						scales: {
-							x: {
-								type: 'time',
-								time: {
-									unit: 'day',
-									displayFormats: {
-										day: 'mmm d'
-									},
-								},
-								bounds: 'data',
-								ticks: {
-									source: 'data',
-									autoSkip: true,
-									minUnit: 'day'
-								}
-							},
-							y: {
-								min: 0,
-								suggestedMax: 5,
-								ticks: {
-									stepSize: 0.5
-								}
-							}
-						},
-					}
+				})
+				.catch(error => {
+					console.error("Error updating level:", error);
 				});
 
-				// Pie chart for travel mode
-				const travelModes = this.routes.map(route => route.transport_mode);
-				const travelModeCounts = {};
-				travelModes.forEach(mode => {
-					if (!travelModeCounts[mode]) {
-						travelModeCounts[mode] = 1;
-					} else {
-						travelModeCounts[mode]++;
-					}
-				});
-				const travelModeLabels = Object.keys(travelModeCounts);
-				const travelModeData = Object.values(travelModeCounts);
-				const travelModeCanvas = document.getElementById('travelCategoryChart');
-				if (travelModeCanvas) {
-					const travelModeCtx = document.getElementById('travelCategoryChart').getContext('2d');
-					if (this.myTravelModeChart) {
-						this.myTravelModeChart.destroy();
-					}
-					this.myTravelModeChart = new Chart(travelModeCtx, {
-						type: 'pie',
-						data: {
-							labels: travelModeLabels,
-							datasets: [{
-								data: travelModeData,
-								backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
-								borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
-								borderWidth: 1
-							}]
-						},
-						options: {
-							responsive: true,
-							maintainAspectRatio: true,
-							aspectRatio: 2
-						}
-					});
-				}
-
-
-			}
+			// // Update exp
+			// axios.post(urlExp, { exp: this.updatedUser.exp }, { headers })
+			// 	.then(response => {
+			// 		console.log(response.data);
+			// 	})
+			// 	.catch(error => {
+			// 		console.error("Error updating exp:", error);
+			// 	});
 		},
 		fetchData() {
 			this.fetchUsers();
@@ -258,51 +205,6 @@ export default {
 			// });
 			// this.fetchUser();
 			// this.fetchFriendRequests();
-		},
-		async fetchUser() {
-			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
-			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
-			};
-
-			try {
-				const response = await axios.get(url, { headers });
-				this.friends = response.data.friends;
-				this.userLvl = response.data.level;
-				this.userExp = response.data.exp;
-
-			} catch (error) {
-				console.error("Error fetching user", error);
-			}
-		},
-		async fetchFriendRequests() {
-			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(this.user.email)}/friend_requests`;
-			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
-			};
-
-			try {
-				const response = await axios.get(url, { headers });
-				this.receivedRequests = response.data.received;
-				this.sentRequests = response.data.sent;
-
-			} catch (error) {
-				console.error("Error fetching friend requests", error);
-			}
-
-		},
-		async fetchRoutes() {
-			const email = this.user.email; // Get the email from user object
-			const url = `${import.meta.env.VITE_API_ENDPOINT}/routes/email?email=${encodeURIComponent(email)}`;
-			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
-			};
-			try {
-				const response = await axios.get(url, { headers });
-				this.routes = response.data.reverse(); // Assign the fetched routes to the routes data property
-			} catch (error) {
-				console.error("Error fetching routes:", error);
-			}
 		},
 		async fetchUsers() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users`;

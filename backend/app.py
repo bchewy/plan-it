@@ -1052,6 +1052,64 @@ def add_exp(user_email):
         return jsonify({"message": "User not found."}), 404
 
 
+
+@app.route("/users/<user_email>/replace/level", methods=['POST'])
+@require_api_key
+def update_level(user_email):
+    """
+    Update the level of a user
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user whose level is being updated
+      - name: level
+        in: body
+        type: integer
+        required: true
+        description: The new level of the user
+    responses:
+      200:
+        description: Level updated successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Level is required
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: User not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        level = request.json.get('level')
+        if level is not None:
+            current_user['level'] = level
+            user_collection.update_one({"email": user_email}, {"$set": current_user})
+            return jsonify({"message": "Level updated successfully."}), 200
+        else:
+            return jsonify({"message": "Level is required."}), 400
+    else:
+        return jsonify({"message": "User not found."}), 404
+
+
 # Post section
 @app.route("/users/<user_email>/posts", methods=['POST'])
 @require_api_key
