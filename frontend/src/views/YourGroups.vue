@@ -32,7 +32,7 @@
 import NavBar from "../components/Navbar.vue";
 import CommunitySidebar from "../components/CommunitySidebar.vue";
 import { useAuth0 } from '@auth0/auth0-vue';
-import Share_badge from "../components/Share_badge.vue";
+
 export default {
 
     data() {
@@ -40,8 +40,8 @@ export default {
     },
     components: {
         NavBar,
-        CommunitySidebar,
-        Share_badge
+        CommunitySidebar
+       
     },
     setup() {
         const { loginWithRedirect, user, isAuthenticated } = useAuth0();
