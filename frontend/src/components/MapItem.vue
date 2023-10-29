@@ -1,45 +1,89 @@
+<style scoped>
+.btn-green {
+	background-color: #a7c957;
+	color: white;
+}
+
+.bg-supergreen {
+	background-color: #739072;
+}
+
+.map-container {
+	position: relative;
+}
+
+.map {
+	width: 100%;
+	height: 100vh;
+}
+
+.form-overlay {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 100%;
+	background-color: #739072;
+	padding: 7px;
+	/* border-radius: 5px; */
+}
+
+.top-right {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+}
+</style>
+
 <template>
-	<div class="row">
+	<div class="map-container" ref="mapContainer">
 		<div v-if="errorMessage" class="alert alert-danger" role="alert">
 			{{ errorMessage }}
 		</div>
-		<div class="col-lg-8 col-md-12 p-0">
-			<GMapMap class="w-100 vh-100" :center="center" :zoom="zoom" map-type-id="terrain">
-				<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
-				<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
-				<GMapPolyline :path="decodedPolyline" :editable="false" ref="polyline" :options="{ strokeColor: '#00FF00' }" />
-			</GMapMap>
-		</div>
-		<div class="col-lg-4 col-md-12 p-4">
+		<GMapMap class="map" :center="center" :zoom="zoom" map-type-id="terrain">
+			<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
+			<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
+			<GMapPolyline :path="decodedPolyline" :editable="false" ref="polyline" :options="{ strokeColor: '#00FF00' }" />
+		</GMapMap>
 
-			<div class="mb-4">
-				<div class="input-group mb-3">
-					<span class="input-group-text font-weight-bold" id="autocomplete-label">Start Location</span>
-					<GMapAutocomplete ref="autocomplete" v-model="startLocation.value" placeholder="Starting point" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
-					<!-- <button class="btn btn-outline-secondary" type="button" @click="getUserLocation">Here</button> -->
+		<!-- <div class="form-overlay" draggable="true" @dragstart="dragStart" @dragend="dragEnd"> -->
+		<!-- <vue-draggable-resizable :zIndex="1000"> -->
+		<Vue3DraggableResizable v-if="show" :x="20" :y="0" :w="200" :h="200" :z="1" :draggable="true" :resizable="false" :referenceLineVisible="false">
+			<div class="form-overlay">
+				<div class="row mb-4">
+					<div class="col-sm-12 col-md-3 input-group mb-3">
+						<!-- <span class="input-group-text font-weight-bold" id="autocomplete-label">From</span> -->
+						<GMapAutocomplete ref="autocomplete" v-model="startLocation.value" placeholder="Origin" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+						<button class="btn btn-green" type="button" @click="getUserLocation">Here</button>
+					</div>
+					<div class="col-sm-12 col-md-3 input-group mb-3">
+						<!-- <span class="input-group-text font-weight-bold" id="autocomplete-label">To</span> -->
+						<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
+					</div>
+					<div class="col-sm-12 col-md-3 input-group mb-3">
+						<!-- <span class="input-group-text font-weight-bold">Transporation</span> -->
+						<select v-model="travelMode" class="form-control">
+							<option value="DRIVE" disabled>Transport</option>
+							<option value="DRIVE">Drive</option>
+							<option value="TWO_WHEELER">Motorbike</option>
+							<option value="TRANSIT">Public Transport</option>
+							<option value="BICYCLE">Bicycle</option>
+							<option value="WALK">Walk</option>
+						</select>
+					</div>
+					<div class="col-sm-12 col-md-3 input-group mb-3">
+						<!-- <span class="input-group-text font-weight-bold"></span> -->
+						<input type="time" v-model="departureTime" class="form-control">
+						<!-- <button class="btn btn-green" type="button" @click="addMinutes(5)">+5m</button> -->
+					</div>
 				</div>
-				<div class="input-group mb-3">
-					<span class="input-group-text font-weight-bold" id="autocomplete-label">End Location</span>
-					<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
-				</div>
-				<div class="input-group mb-3">
-					<span class="input-group-text font-weight-bold">Travel Mode</span>
-					<select v-model="travelMode" class="form-control">
-						<option value="DRIVE">Drive</option>
-						<option value="TWO_WHEELER">Motorbike</option>
-						<option value="TRANSIT">Public Transport</option>
-						<option value="BICYCLE">Bicycle</option>
-						<option value="WALK">Walk</option>
-					</select>
-				</div>
-				<div class="input-group mb-3">
-					<span class="input-group-text font-weight-bold">Departure Time</span>
-					<input type="time" v-model="departureTime" class="form-control">
-					<button class="btn btn-outline-secondary" type="button" @click="addMinutes(5)">+5m</button>
+				<div class="mb-4">
+					<button class="btn btn-green w-100" @click="fetchRouteDetails" data-bs-toggle="modal" data-bs-target="#progressModal">Log Route</button>
 				</div>
 			</div>
 
-			<div class="mb-4">
+
+			<!-- Route modifiers -->
+			<!-- <div class="mb-4">
 				<span class="d-block mb-2 font-weight-bold">Route Modifiers</span>
 				<div class="form-check">
 					<input class="form-check-input" type="checkbox" value="" id="avoidTolls" v-model="routeModifiers.avoidTolls">
@@ -53,11 +97,9 @@
 					<input class="form-check-input" type="checkbox" value="" id="avoidFerries" v-model="routeModifiers.avoidFerries">
 					<label class="form-check-label" for="avoidFerries">Avoid Ferries</label>
 				</div>
-			</div>
+			</div> -->
 
-			<div class="mb-4">
-				<button class="btn btn-primary w-100" @click="fetchRouteDetails" data-bs-toggle="modal" data-bs-target="#progressModal">Log Route</button>
-			</div>
+
 
 			<!-- <div v-if="routeDetails" class="card border-0 shadow p-4">
 				<div class="card-body">
@@ -84,8 +126,9 @@
 					</div>
 				</div>
 			</div> -->
+			<!-- </vue-draggable-resizable> -->
+		</Vue3DraggableResizable>
 
-		</div>
 	</div>
 	<!-- Modal for log completion -->
 	<div class="modal fade" id="progressModal" tabindex="-1" aria-labelledby="progressModalLabel" aria-hidden="true">
@@ -144,21 +187,30 @@
 		</div>
 	</div>
 </template>
-<style scoped>
-.btn-green {
-	background-color: #a7c957;
-	color: white;
-}
-</style>
 
 
 <script>
 import { ref, defineComponent, computed, reactive } from "vue";
 import axios from "axios";
 import { useAuth0 } from '@auth0/auth0-vue';
+// import VueDraggableResizable from 'vue-draggable-resizable'
+import Vue3DraggableResizable from 'vue3-draggable-resizable';
+// import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css';
+
 
 export default defineComponent({
+	data() {
+		return {
+			parentWidth: 0,  // this will be updated once the component mounts
+			componentWidth: 300,
+		}
+	},
+	mounted() {
+		this.parentWidth = this.$refs.mapContainer.clientWidth;
+	},
 	components: {
+		// VueDraggableResizable
+		Vue3DraggableResizable
 	},
 	methods: {
 		openGoogleMaps() {
@@ -186,6 +238,33 @@ export default defineComponent({
 			} else {
 				this.errorMessage = "Geolocation is not supported by this browser.";
 			}
+		},
+
+		//html5 dragn drop API resizable things, still works
+		dragStart(event) {
+			// Store the starting position
+			this.startX = event.clientX;
+			this.startY = event.clientY;
+		},
+
+		dragEnd(event) {
+			let left = parseInt(event.target.style.left || 0);
+			let top = parseInt(event.target.style.top || 0);
+
+			// Calculate the distance moved
+			const deltaX = event.clientX - this.startX;
+			const deltaY = event.clientY - this.startY;
+
+			// Set new position
+			event.target.style.left = (left + deltaX) + "px";
+			event.target.style.top = (top + deltaY) + "px";
+		},
+		// Vue3 reiszable
+		onResize(x, y, width, height) {
+			console.log("Resizing: ", { x, y, width, height });
+		},
+		onDrag(x, y) {
+			console.log("Dragging: ", { x, y });
 		}
 	},
 	computed: {
@@ -202,6 +281,21 @@ export default defineComponent({
 			const destination = `${this.destination.lat},${this.destination.lng}`;
 			return `https://citymapper.com/directions?startcoord=${origin}&endcoord=${destination}`;
 		},
+		computedX() {
+			// For smaller screens, we adjust the component width to fit the parent width
+			if (window.innerWidth <= 768) {
+				this.componentWidth = this.parentWidth;
+			}
+			// For medium screens, we adjust the component width to be 3/4 of the parent width
+			else if (window.innerWidth <= 1024) {
+				this.componentWidth = this.parentWidth * 0.75;
+			}
+			// For larger screens, we adjust the component width to be 1/2 of the parent width
+			else {
+				this.componentWidth = this.parentWidth * 0.5;
+			}
+			return this.parentWidth - this.componentWidth;
+		}
 	},
 	props: ['userme'],
 	setup(props) {
@@ -210,8 +304,7 @@ export default defineComponent({
 		const expToNextLevel = ref(0);
 		const userLvl = ref(0)
 		const expAdded = ref(0)
-
-		// Retrieve user EXP
+		const show = ref(true);
 		axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/ez/${props.userme.email}`)
 			.then(response => {
 				userExp.value = response.data.exp;
@@ -221,9 +314,6 @@ export default defineComponent({
 			.catch(error => {
 				console.error(error);
 			});
-
-
-
 		const errorMessage = ref('');
 		const { user, isAuthenticated } = useAuth0();
 		const travelMode = ref("DRIVE");  // Default is "DRIVE"
@@ -599,6 +689,7 @@ export default defineComponent({
 			expToNextLevel,
 			userLvl,
 			expAdded,
+			show,
 		};
 	}
 });

@@ -21,7 +21,7 @@ export default {
 
 <template>
 	<Navbar />
-	<div class="container-fluid">
+	<div class="container-fluid w-100 bg-supergreen p-0">
 		<MapItem :userme="user" />
 
 	</div>
