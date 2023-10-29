@@ -1,8 +1,10 @@
 <template>
-	<div class="col-2 bg-supergreen">
-		<div class="container-fluid text-light">
-			<br>
-			<span class="h5 text-light">Plan-it Community</span>
+	
+	<Sidebar v-model:visible="visible" style="background-color: #739072">
+		
+		<div class="p-sidebar-content px-3 pt-3">
+			<span class="h5 text-light">Plan-it Community <font-awesome-icon icon="fa-solid fa-house"></font-awesome-icon></span>
+			
 			<ul class="navbar-nav flex-column mt-5">
 				<li class="active nav-item"><router-link class="h3 nav-link" to="/community">For you</router-link></li>
 				<hr>
@@ -16,11 +18,28 @@
 				<li class="nav-item"><router-link class="h3 nav-link" to="/community/friendCommunity">Friends</router-link></li>
 				<hr>
 			</ul>
+	
 		</div>
-	</div>
+	</Sidebar>
+	
+	<button class="btn mt-2 border" @click="visible=true"><font-awesome-icon icon="fa-solid fa-bars"></font-awesome-icon></button>
+
 </template>
-<style scoped>
-.bg-supergreen {
-	background-color: #739072;
-}
-</style>
+
+
+<script>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Sidebar from 'primevue/sidebar'
+import { defineComponent , ref } from 'vue';
+
+export default defineComponent({
+	name:"CommunitySidebar",
+	components: { Sidebar, FontAwesomeIcon },
+	data(){
+		return{
+			visible: false
+		}
+	}
+	
+})
+</script>
