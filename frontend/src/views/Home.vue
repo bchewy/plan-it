@@ -4,11 +4,9 @@
     <NavBar />
   </header>
 
-  <!--showcase-->
-  <section class="text-center col-12 m-0 p-0 light-green" style=" margin: 0; padding: 0;">
-    <div class="container" style="max-width: 100%; padding: 0;">
-      <h1 v-if="isAuthenticated" class="mt-3">Hi, {{ user.name }}!</h1>
-    </div>
+  <!--username content-->
+  <section class="text-center col-12 m-0 p-0 beige-colour" style=" margin: 0; padding: 0;">
+      <h2 v-if="isAuthenticated" class="text-muted" style = "padding:1%">Ready to go <span class = "text-success">green </span>, {{ user.name }}?</h2>
   </section>
 
 
@@ -59,41 +57,41 @@
 
 
   <!-- Question Accordion -->
-  <section id="questions" class="p-5 bg-supergreen">
+  <section id="questions" class="p-5 bg-supergreen ">
     <div class="container">
       <h2 class="text-center text-muted mb-4">Frequently Asked Questions</h2>
       <div class="accordion accordion-flush " id="questions">
         <!--Item 1-->
         <div class="accordion-item ">
           <h2 class="accordion-header ">
-            <button class="accordion-button collapsed beige-colour" type="button" data-bs-toggle="collapse" data-bs-target="#question-one">
-              Q1
+            <button class="accordion-button collapsed beige-colour text-muted" type="button" data-bs-toggle="collapse" data-bs-target="#question-one">
+             <b>1: How does your eco-friendly navigation system work?</b>
             </button>
           </h2>
-          <div id="question-one" class="accordion-collapse collapse" data-bs-parent="#questions">
-            <div class="accordion-body">Add answers later</div>
+          <div id="question-one" class="accordion-collapse collapse text-muted" data-bs-parent="#questions">
+            <div class="accordion-body">Our eco-friendly navigation system combines advanced routing algorithms with real-time environmental data. It considers factors like traffic conditions, emissions, and more to suggest the most eco-friendly route. This reduces your carbon footprint and helps you make sustainable travel choices effortlessly.</div>
           </div>
         </div>
         <!--Item 2-->
         <div class="accordion-item">
           <h2 class="accordion-header">
-            <button class="accordion-button collapsed beige-colour" type="button" data-bs-toggle="collapse" data-bs-target="#question-two">
-              Q2
+            <button class="accordion-button collapsed beige-colour text-muted" type="button" data-bs-toggle="collapse" data-bs-target="#question-two">
+				<b>2: What types of rewards can I earn through the Incentivising Public Transport feature?</b>
             </button>
           </h2>
-          <div id="question-two" class="accordion-collapse collapse " data-bs-parent="#questions">
-            <div class="accordion-body">Add answers later</div>
+          <div id="question-two" class="accordion-collapse collapse text-muted " data-bs-parent="#questions">
+            <div class="accordion-body">With our Incentivising Public Transport feature, you can earn various rewards such as discounts on future journeys, eco-friendly badges, and even contributions to environmental causes. The more you choose public transport, the greater your rewards become.</div>
           </div>
         </div>
         <!--Item 3-->
         <div class="accordion-item">
           <h2 class="accordion-header">
-            <button class="accordion-button collapsed beige-colour" type="button" data-bs-toggle="collapse" data-bs-target="#question-three">
-              Q3
+            <button class="accordion-button collapsed beige-colour text-muted" type="button" data-bs-toggle="collapse" data-bs-target="#question-three">
+			<b> 3: Can I use your platform internationally, or is it limited to specific regions?</b>
             </button>
           </h2>
-          <div id="question-three" class="accordion-collapse collapse" data-bs-parent="#questions">
-            <div class="accordion-body">Add answers later</div>
+          <div id="question-three" class="accordion-collapse collapse text-muted" data-bs-parent="#questions">
+            <div class="accordion-body">Our eco-friendly navigation platform is currently tailored to Singapore. While we're focused on providing the best eco-friendly navigation experience in Singapore, we have plans to expand to other regions in the future. Stay tuned for updates on our international availability!</div>
           </div>
         </div>
       </div>
@@ -145,22 +143,22 @@ export default {
       {
         icon: "fa-solid fa-leaf",
         title: "Eco-friendly Navigation",
-        description: "this is so great and green! change writeup at the end.",
-        details: "Additional details about Eco-friendly Navigation.",
+        description: "Navigate with a conscience! Discover a greener way to plan your journeys.",
+        details: "Experience eco-friendly navigation that goes beyond the usual routes. Our app empowers you to make sustainable choices, reduce your carbon footprint, and explore eco-conscious alternatives. Discover routes that prioritize public transport, carpooling, biking, and walking while offering insights into your environmental impact. With us, every journey is a step towards a cleaner, greener future.",
         variant: "success",
       },
       {
         icon: "fa-solid fa-shoe-prints",
         title: "Traffic Optimization",
-        description: "This reduces our carbon footprint.",
-        details: "Additional details about Traffic Optimization.",
+        description: "Efficient routes, cleaner air. Optimize traffic for a greener planet.",
+        details: "Traffic Optimization is about more than just getting from A to B. It's about creating a sustainable future. Our app intelligently manages traffic to minimize congestion and emissions. By prioritizing eco-friendly modes of transport and offering real-time traffic insights, we help you reduce your carbon footprint and contribute to cleaner, healthier communities. Discover the details behind our innovative traffic solutions and take a step towards a more sustainable world.",
         variant: "success",
       },
       {
         icon: "fa-solid fa-bus",
         title: "Incentivising Public Transport",
-        description: "Encourages more people to take public transport through badges.",
-        details: "Additional details about Incentivising Public Transport.",
+        description: "Unlock rewards while saving the environment. Embrace public transport with badges.",
+        details: "Our 'Incentivising Public Transport' feature revolutionizes the way you commute. We believe that public transport should not only be convenient but also rewarding. Our badge system encourages you to choose eco-friendly options like buses, subways, and trams. Each journey you make brings you closer to earning valuable rewards, while collectively we make our cities cleaner and greener. Learn more about how we're making public transport an attractive choice for you and a better choice for the planet.",
         variant: "success",
       },
     ];
@@ -216,6 +214,9 @@ export default {
 .light-green {
   background-color: rgb(209, 244, 209)
 }
+
+
+
 
 /* Additional styles if needed */
 </style>
