@@ -1,7 +1,7 @@
 <template>
    
-   <div class="row justify-content-center">
-					<div class="col-11 rounded border bg-white">
+   <div class="row justify-content-center mt-4">
+					<div class="col-10 rounded border bg-white">
                         <p class="mt-3 text-muted">&nbsp Share something with the community!</p>
 						<Editor class="mb-4" editorStyle="height: 100px"></Editor>
 

@@ -5,47 +5,36 @@
 	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: rgb(232, 251, 240);">
 
 		
-		<div class="row">
-			<div style="position:sticky">
-			<div class="col">
-			<CommunitySidebar></CommunitySidebar>
+		<div class="sticky-top border-bottom" style="background-color: rgb(232, 251, 240)">
+		<CommunitySidebar ></CommunitySidebar>
+	
+			
+			<div class="text-center h2 mb-3 py-4">
+			<span class="text-muted" style="font-weight: bold;">For You</span>
 			</div>
-			<span class="text-center py-3 text-muted h3" style="font-weight: bold;">For You</span>
-			</div>
+		</div>	
 				<CreatePostComponent></CreatePostComponent>
 				
 	
 				
 				<div class="row justify-content-center my-4">
 					
-					<div class="col-11 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user" class="mt-3"></font-awesome-icon> User<br><br>
+					<div class="col-10 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user" class="mt-3"></font-awesome-icon> User<br><br>
 						<heart_btn></heart_btn>
 						<p>Post text</p>
 					</div>
 				</div>
 
 				<div class="row justify-content-center my-4">
-					<div class="col-11 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user" class="mt-3"></font-awesome-icon> User<br><br>
+					<div class="col-10 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user" class="mt-3"></font-awesome-icon> User<br><br>
 						<heart_btn></heart_btn>
 						<p>Post text</p>
 					</div>
 				</div>
 
-				<div class="row justify-content-center my-4">
-					<div class="col-11 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user" class="mt-3"></font-awesome-icon> User<br><br>
-						<heart_btn></heart_btn>
-						<p>Post text</p>
-					</div>
-				</div>
-
-				<div class="row justify-content-center my-4">
-					<div class="col-11 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user" class="mt-3"></font-awesome-icon> User<br><br>
-						<heart_btn></heart_btn>
-						<p>Post text</p>
-					</div>
-				</div>
+				
 			</div>
-		</div>
+		
 	<footer>
 		<!-- footer -->
 	</footer>
