@@ -53,7 +53,7 @@
 					<div class="col-sm-12 col-md-3 input-group mb-3">
 						<!-- <span class="input-group-text font-weight-bold" id="autocomplete-label">From</span> -->
 						<GMapAutocomplete ref="autocomplete" v-model="startLocation.value" placeholder="Origin" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
-						<button class="btn btn-green" type="button" @click="getUserLocation">Here</button>
+						<!-- <button class="btn btn-green" type="button" @click="getUserLocation">Here</button> -->
 					</div>
 					<div class="col-sm-12 col-md-3 input-group mb-3">
 						<!-- <span class="input-group-text font-weight-bold" id="autocomplete-label">To</span> -->
@@ -62,7 +62,7 @@
 					<div class="col-sm-12 col-md-3 input-group mb-3">
 						<!-- <span class="input-group-text font-weight-bold">Transporation</span> -->
 						<select v-model="travelMode" class="form-control">
-							<option value="DRIVE" disabled>Transport</option>
+							<option value="" disabled selected>select</option>
 							<option value="DRIVE">Drive</option>
 							<option value="TWO_WHEELER">Motorbike</option>
 							<option value="TRANSIT">Public Transport</option>
@@ -316,7 +316,7 @@ export default defineComponent({
 			});
 		const errorMessage = ref('');
 		const { user, isAuthenticated } = useAuth0();
-		const travelMode = ref("DRIVE");  // Default is "DRIVE"
+		const travelMode = ref("");  // Default is "DRIVE"
 		const confetti = ref(null);
 		const zoom = ref(12);  // Default zoom level
 		const center = reactive({ lat: 1.3331, lng: 103.7428 });
@@ -418,6 +418,26 @@ export default defineComponent({
 		};
 		const fetchRouteDetails = async () => {
 			// this.triggerConfetti();
+
+			// if (!startLocation.value.lat || !startLocation.value.lng) {
+			// 	alert('Please enter a valid start location.');
+			// 	return;
+			// }
+
+			// if (!destination.value.lat || !destination.value.lng) {
+			// 	alert('Please enter a valid destination.');
+			// 	return;
+			// }
+
+			// if (!departureTime.value) {
+			// 	alert('Please enter a valid departure time.');
+			// 	return;
+			// }
+
+			if (!travelMode.value) {
+				alert('Please select a valid travel mode.');
+				return;
+			}
 			const [hours, minutes] = departureTime.value.split(':').map(Number);
 			const departureDate = new Date();
 			departureDate.setHours(hours);
