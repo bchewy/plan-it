@@ -7,14 +7,14 @@
   <!--showcase-->
   <section class="text-center col-12 m-0 p-0 light-green" style=" margin: 0; padding: 0;">
     <div class="container" style="max-width: 100%; padding: 0;">
-	  <h1 v-if="isAuthenticated" class="mt-3">Hi, {{ user.name }}!</h1>
+      <h1 v-if="isAuthenticated" class="mt-3">Hi, {{ user.name }}!</h1>
     </div>
   </section>
 
 
   <!--flexbox thingy!-->
   <!--section class="text-muted text-center d-flex align-items-center justify-content-center"-->
-<section class="text-muted text-center vh-100 d-flex align-items-center justify-content-center bg-supergreen" style="background-image: url('@/assets/homepage/background.png'); background-size: cover;"> 
+  <section class="text-muted text-center vh-100 d-flex align-items-center justify-content-center bg-supergreen" style="background-image: url('@/assets/homepage/background.png'); background-size: cover;">
     <div class="container">
       <div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
         <div class="text-center">
@@ -23,10 +23,10 @@
             Account for your own carbon footprint for your traffic taken, value-add and commit to reducing your carbon footprint and reduce your personal impact.
           </p>
         </div>
-	<!--div class="text-center"--> <!-- Center the image horizontally -->
-          <!--img class="img-fluid" src="@/assets/homepage/co2.jpg" alt=""-->
-        </div>
+        <!--div class="text-center"--> <!-- Center the image horizontally -->
+        <!--img class="img-fluid" src="@/assets/homepage/co2.jpg" alt=""-->
       </div>
+    </div>
     <!--/div-->
   </section>
 
@@ -54,11 +54,7 @@
   </section>
 
 
-  <LearnMore
-    :visible="currentCardIndex !== -1"
-    :card="currentCardIndex !== -1 ? cards[currentCardIndex] : {}"
-    @close="closeModal"
-  />
+  <LearnMore :visible="currentCardIndex !== -1" :card="currentCardIndex !== -1 ? cards[currentCardIndex] : {}" @close="closeModal" />
 
 
 
@@ -104,8 +100,8 @@
     </div>
   </section>
 
-    <!-- refer friend now-->
-	<section class="text-muted bg-supergreen ">
+  <!-- refer friend now-->
+  <section class="text-muted bg-supergreen ">
     <div class="container">
       <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
         <h4 class="news-input">Refer a friend now!</h4> <!-- Apply the "news-input" class -->
@@ -117,8 +113,8 @@
     </div>
   </section>
 
-    <!-- Add space between "Refer a friend" section and footer -->
-    <div class="bg-supergreen" style="height: 30px;"></div> <!-- Adjust the height as needed -->
+  <!-- Add space between "Refer a friend" section and footer -->
+  <div class="bg-supergreen" style="height: 30px;"></div> <!-- Adjust the height as needed -->
 
   <footer class="p-5 text-center position-relative" style="background-color: rgb(209, 244, 209);">
     <!-- footer -->
@@ -129,7 +125,7 @@
       </a>
     </div>
   </footer>
-  </template>
+</template>
 
 <script>
 import NavBar from '../components/Navbar.vue';
@@ -187,13 +183,13 @@ export default {
           alert('Failed to login');
           console.error('Failed to login:', e);
         }
-        cards,
-        currentCardIndex,
-        openModal,
-        closeModal,
-        isAuthenticated,
-        user,
       },
+      cards,
+      currentCardIndex,
+      openModal,
+      closeModal,
+      isAuthenticated,
+      user,
     }
   },
 };
@@ -207,16 +203,18 @@ export default {
   width: 50%;
   /* Set the width to 50% */
 }
+
 .bg-supergreen {
   background-color: #739072;
 }
+
 .beige-colour {
   /* background-color: ; */
   background-color: #ECE3CE;
 }
 
 .light-green {
-	background-color: rgb(209, 244, 209)
+  background-color: rgb(209, 244, 209)
 }
 
 /* Additional styles if needed */

@@ -1,1 +1,0 @@
-import{N as a}from"./Navbar-fedd7a70.js";import{_ as t,r,o as n,c as s,a as e,b as c,d as m,F as l}from"./index-376a842c.js";const _={name:"Home",components:{NavBar:a}},p=e("footer",null,null,-1);function d(f,u,N,i,B,v){const o=r("NavBar");return n(),s(l,null,[e("header",null,[c(o)]),m(" Welcome Home. "),p],64)}const h=t(_,[["render",d]]);export{h as default};
