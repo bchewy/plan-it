@@ -1232,6 +1232,11 @@ def create_group(user_email):
         type: string
         required: true
         description: The email of the user who is creating the group
+      - name: group_name
+        in: path
+        type: string
+        required: true
+        description: Group Name
     responses:
       200:
         description: Group created successfully

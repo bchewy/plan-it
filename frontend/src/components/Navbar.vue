@@ -80,11 +80,16 @@
             <router-link class="nav-link text-evenlighter" to="/">Home</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-evenlighter" to="/route">Routing</router-link>
+            <router-link class="nav-link text-evenlighter" to="/how">
+              How it Works
+            </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-evenlighter" to="/community">
+            <router-link class="nav-link text-evenlighter" to="/route">Routing</router-link>
+          </li>
 
+          <li class="nav-item">
+            <router-link class="nav-link text-evenlighter" to="/community">
               Community
             </router-link>
           </li>
