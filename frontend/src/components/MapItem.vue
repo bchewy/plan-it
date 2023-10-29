@@ -7,7 +7,7 @@
 			<GMapMap class="w-100 vh-100" :center="center" :zoom="zoom" map-type-id="terrain">
 				<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 				<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
-				<GMapPolyline :path="decodedPolyline" :editable="true" ref="polyline" />
+				<GMapPolyline :path="decodedPolyline" :editable="false" ref="polyline" :options="{ strokeColor: '#00FF00' }" />
 			</GMapMap>
 		</div>
 		<div class="col-lg-4 col-md-12 p-4">
@@ -115,8 +115,13 @@
 						<span>{{ userLvl }}</span>
 					</div>
 					<div class="d-flex justify-content-between mb-3">
-						<span><strong>Experience Progress:</strong></span>
-						<span>{{ userExp }} / 100</span>
+						<!-- <span><strong>Experience Progress:</strong></span>
+						<span>{{ userExp }} / 100</span> -->
+
+					</div>
+					<div class="d-flex justify-content-between mb-3">
+						<span><strong>Experience Added:</strong></span>
+						<span>+{{ expAdded }}</span>
 					</div>
 					<div class="d-flex justify-content-between mb-3">
 						<span><strong>Emission Savings:</strong></span>
@@ -125,6 +130,9 @@
 					<div class="d-flex justify-content-center">
 						<button class="btn btn-primary rounded-pill shadow-sm" @click="openGoogleMaps">
 							<i class="fas fa-map-marker-alt"></i> Open on Google Maps
+						</button>
+						<button class="btn btn-green rounded-pill shadow-sm" @click="openCityMapper">
+							<i class="fas fa-map-marker-alt"></i> Open on CityMapper
 						</button>
 					</div>
 				</div>
@@ -136,7 +144,12 @@
 		</div>
 	</div>
 </template>
-
+<style scoped>
+.btn-green {
+	background-color: #a7c957;
+	color: white;
+}
+</style>
 
 
 <script>
@@ -150,6 +163,10 @@ export default defineComponent({
 	methods: {
 		openGoogleMaps() {
 			window.open(this.googleMapsUrl, '_blank');
+		},
+		openCityMapper() {
+			window.open(this.citymapperUrl, '_blank');
+
 		},
 		getUserLocation() {
 			console.log("getuserLocation called")
@@ -180,6 +197,11 @@ export default defineComponent({
 			if (travelmode === 'two_wheeler') travelmode = 'driving';
 			return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=${travelmode}`;
 		},
+		citymapperUrl() {
+			const origin = `${this.startLocation.lat},${this.startLocation.lng}`;
+			const destination = `${this.destination.lat},${this.destination.lng}`;
+			return `https://citymapper.com/directions?startcoord=${origin}&endcoord=${destination}`;
+		},
 	},
 	props: ['userme'],
 	setup(props) {
@@ -187,6 +209,7 @@ export default defineComponent({
 		const userExp = ref(0);
 		const expToNextLevel = ref(0);
 		const userLvl = ref(0)
+		const expAdded = ref(0)
 
 		// Retrieve user EXP
 		axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/ez/${props.userme.email}`)
@@ -506,6 +529,7 @@ export default defineComponent({
 
 			// Calculate the total EXP to add based on the base EXP and the bonus for saved emissions
 			const expToAdd = BASE_EXP + (emissionSavings.value * BONUS_EXP_PER_SAVED_KG);
+			expAdded.value = expToAdd
 
 
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/carbonsavings`, { carbonsavings: emissionSavings.value }, {
@@ -573,7 +597,8 @@ export default defineComponent({
 			emissionSavings,
 			userExp,
 			expToNextLevel,
-			userLvl
+			userLvl,
+			expAdded,
 		};
 	}
 });

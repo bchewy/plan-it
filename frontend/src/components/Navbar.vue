@@ -83,10 +83,15 @@
             <router-link class="nav-link text-evenlighter" to="/route">Routing</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-evenlighter" to="/community">Community</router-link>
+            <router-link class="nav-link text-evenlighter" to="/community">
+
+              Community
+            </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-evenlighter" to="/leaderboard">Leaderboards</router-link>
+            <router-link class="nav-link text-evenlighter" to="/leaderboard">
+              Leaderboards
+            </router-link>
           </li>
         </ul>
         <ul class="navbar-nav">
@@ -101,13 +106,21 @@
             <ul class="dropdown-menu bg-green2 text-evenlighter" aria-labelledby="navbarDropdown">
               <li>
                 <router-link class="dropdown-item text-light" to="/profile">
-                  <font-awesome-icon icon="fa-solid fa-circle-user" />
-                  Profile</router-link>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
+                    <path d="M12 2C6.579 2 2 6.579 2 12s4.579 10 10 10 10-4.579 10-10S17.421 2 12 2zm0 5c1.727 0 3 1.272 3 3s-1.273 3-3 3c-1.726 0-3-1.272-3-3s1.274-3 3-3zm-5.106 9.772c.897-1.32 2.393-2.2 4.106-2.2h2c1.714 0 3.209.88 4.106 2.2C15.828 18.14 14.015 19 12 19s-3.828-.86-5.106-2.228z"></path>
+                  </svg> Profile</router-link>
               </li>
               <li>
-                <router-link class="dropdown-item text-light" to="/settings">
+                <router-link class="dropdown-item text-light" to="/admin">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(255, 255, 255);transform: ;msFilter:;">
+                    <path d="m2.344 15.271 2 3.46a1 1 0 0 0 1.366.365l1.396-.806c.58.457 1.221.832 1.895 1.112V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.598a8.094 8.094 0 0 0 1.895-1.112l1.396.806c.477.275 1.091.11 1.366-.365l2-3.46a1.004 1.004 0 0 0-.365-1.366l-1.372-.793a7.683 7.683 0 0 0-.002-2.224l1.372-.793c.476-.275.641-.89.365-1.366l-2-3.46a1 1 0 0 0-1.366-.365l-1.396.806A8.034 8.034 0 0 0 15 4.598V3a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v1.598A8.094 8.094 0 0 0 7.105 5.71L5.71 4.904a.999.999 0 0 0-1.366.365l-2 3.46a1.004 1.004 0 0 0 .365 1.366l1.372.793a7.683 7.683 0 0 0 0 2.224l-1.372.793c-.476.275-.641.89-.365 1.366zM12 8c2.206 0 4 1.794 4 4s-1.794 4-4 4-4-1.794-4-4 1.794-4 4-4z"></path>
+                  </svg>
+                  Admin</router-link>
+              </li>
+              <li>
+                <!-- <router-link class="dropdown-item text-light" to="/settings">
                   <font-awesome-icon icon="fa-cog" />
-                  Settings</router-link>
+                  Settings</router-link> -->
                 <!-- <router-link class="dropdown-item" :to="`/profile/public/${user.email}`">
                   <font-awesome-icon icon="fa-solid fa-circle-user" />
                   Your Public Profile</router-link> -->
