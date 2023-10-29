@@ -32,9 +32,9 @@
 
   <!-- boxes-->
   <section class="p-5 bg-supergreen">
-    <div class="container ">
+    <div class="container">
       <div class="row text-center">
-        <div class="col-md " v-for="(card, index) in cards" :key="index">
+        <div class="col-md" v-for="(card, index) in cards" :key="index">
           <div class="card text-muted h-100 beige-colour">
             <div class="card-body d-flex flex-column justify-content-between">
               <div class="text-center">
@@ -43,17 +43,23 @@
                 </div>
                 <h3 class="card-title mb-3">{{ card.title }}</h3>
                 <p class="card-text">{{ card.description }}</p>
-                <p class="card-details" v-show="card.showDetails">{{ card.details }}</p>
+                <!-- "Learn More" button for each card -->
+                <button class="btn btn-success" @click="openModal(index)">Learn More</button>
               </div>
-              <button class="btn btn-success" @click="toggleDetails(index)">
-                {{ card.showDetails ? "Show Less" : "Learn More" }}
-              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+
+  <LearnMore
+    :visible="currentCardIndex !== -1"
+    :card="currentCardIndex !== -1 ? cards[currentCardIndex] : {}"
+    @close="closeModal"
+  />
+
 
 
   <!-- Question Accordion -->
@@ -123,21 +129,55 @@
       </a>
     </div>
   </footer>
-</template>
-  
+  </template>
+
 <script>
 import NavBar from '../components/Navbar.vue';
 import { useAuth0 } from '@auth0/auth0-vue';
-
+import LearnMore from '../components/LearnMore.vue';
+import { ref } from 'vue';
 
 export default {
   name: 'Home',
   components: {
     NavBar,
-
+    LearnMore
   },
   setup() {
     const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+    const cards = [
+      {
+        icon: "fa-solid fa-leaf",
+        title: "Eco-friendly Navigation",
+        description: "this is so great and green! change writeup at the end.",
+        details: "Additional details about Eco-friendly Navigation.",
+        variant: "success",
+      },
+      {
+        icon: "fa-solid fa-shoe-prints",
+        title: "Traffic Optimization",
+        description: "This reduces our carbon footprint.",
+        details: "Additional details about Traffic Optimization.",
+        variant: "success",
+      },
+      {
+        icon: "fa-solid fa-bus",
+        title: "Incentivising Public Transport",
+        description: "Encourages more people to take public transport through badges.",
+        details: "Additional details about Incentivising Public Transport.",
+        variant: "success",
+      },
+    ];
+
+    const currentCardIndex = ref(-1); // Track the currently selected card
+
+    const openModal = (index) => {
+      currentCardIndex.value = index;
+    };
+
+    const closeModal = () => {
+      currentCardIndex.value = -1;
+    };
 
     return {
       login: async () => {
@@ -146,38 +186,19 @@ export default {
         } catch (e) {
           alert('Failed to login');
           console.error('Failed to login:', e);
-        }
-      },
-      cards: [
-        {
-          icon: "fa-solid fa-leaf",
-          title: "Eco-friendly Navigation",
-          description: "this is so great and green! change writeup at the end.",
-          details: "Additional details about Eco-friendly Navigation.",
-          showDetails: false,
         },
-        {
-          icon: "fa-solid fa-shoe-prints",
-          title: "Traffic Optimization",
-          description: "This reduces our carbon footprint.",
-          details: "Additional details about Traffic Optimization.",
-          showDetails: false,
-        },
-        {
-          icon: "fa-solid fa-bus",
-          title: "Incentivising Public Transport",
-          description: "Encourages more people to take public transport through badges.",
-          details: "Additional details about Incentivising Public Transport.",
-          showDetails: false,
-        },
-      ],
-      toggleDetails(index) {
-        this.cards[index].showDetails = !this.cards[index].showDetails;
-      },
-    };
+        cards,
+        currentCardIndex,
+        openModal,
+        closeModal,
+        isAuthenticated,
+        user,
+      };
+    }
   },
 };
 </script>
+
 
 <style scoped>
 /* Other component-specific styles */
