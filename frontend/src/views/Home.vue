@@ -4,6 +4,8 @@
 		<NavBar />
 	</header>
 
+
+
 <!--showcase-->
 <section class="text-center col-12 m-0 p-0" style="background-color: rgb(209, 244, 209); margin: 0; padding: 0;">
   <div class="container" style="max-width: 100%; padding: 0;">
@@ -13,7 +15,7 @@
 
 
 <!--flexbox thingy!-->
-<section class="text-muted p-5 text-center">
+<section class="text-muted p-5 text-center bg-supergreen">
   <div class="container">
     <div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
       <div class="text-center">
@@ -31,12 +33,12 @@
 </section>
 
 
-  <!-- boxes-->
- <section class="p-5">
+<!-- boxes-->
+ <section class="p-5 bg-supergreen">
   <div class="container">
     <div class="row text-center">
       <div class="col-md" v-for="(card, index) in cards" :key="index">
-        <div class="card text-muted h-100">
+        <div class="card text-muted h-100 beige-colour">
           <div class="card-body d-flex flex-column justify-content-between">
             <div class="text-center">
               <div class="h1 mb-3">
@@ -56,8 +58,8 @@
   </div>
 </section>
 
-	<!-- refer friend now-->
-	<section class="text-muted">
+<!-- refer friend now-->
+	<section class="text-muted bg-supergreen">
 		<div class="container">
 			<div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
 				<h4 class="news-input">Refer a friend now!</h4> <!-- Apply the "news-input" class -->
@@ -69,13 +71,13 @@
 		</div>
 	</section>
 
-    <!-- Question Accordion -->
-	<section id = "questions" class = "p-5">
-	<div class = "container">
-		<h2 class = "text-center mb-4">Frequently Asked Questions</h2>
-		<div class="accordion accordion-flush" id="questions">
-	<!--Item 1-->
-  <div class="accordion-item">
+<!-- Question Accordion -->
+	<section id = "questions" class = "p-5 bg-supergreen">
+	<div class = "container ">
+		<h2 class = "text-center mb-4 ">Frequently Asked Questions</h2>
+		<div class="accordion accordion-flush beige-colour " id="questions">
+<!--Item 1-->
+  <div class="accordion-item ">
     <h2 class="accordion-header">
       <button 
 	  class="accordion-button collapsed" 
@@ -89,7 +91,7 @@
       <div class="accordion-body">Add answers later</div>
     </div>
   </div>
-	<!--Item 2-->
+<!--Item 2-->
 	<div class="accordion-item">
     <h2 class="accordion-header">
       <button 
@@ -123,6 +125,8 @@
 </div>
 </section>
 
+
+
 <footer class="p-5 text-center position-relative" style="background-color: rgb(209, 244, 209);">
   <!-- footer -->
   <div class="container">
@@ -139,10 +143,12 @@
 import NavBar from '../components/Navbar.vue';
 import { useAuth0 } from '@auth0/auth0-vue';
 
+
 export default {
   name: 'Home',
   components: {
     NavBar,
+
   },
   setup() {
     const { loginWithRedirect, user, isAuthenticated } = useAuth0();
@@ -193,6 +199,13 @@ export default {
 .news-input {
   width: 50%;
   /* Set the width to 50% */
+}
+.bg-supergreen {
+  background-color: #739072;
+}
+.beige-colour {
+  /* background-color: ; */
+  background-color: #ECE3CE;
 }
 
 /* Additional styles if needed */
