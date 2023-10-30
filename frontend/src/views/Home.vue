@@ -17,7 +17,7 @@
     <div class="container">
       <div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
         <div class="text-center">
-          <h1><span class="text-supergreen">Carbon-First </span> Routing.</h1>
+          <h1><span class="text-supergreen element"></span></h1>
           <p class="lead">
             Account for your own carbon footprint for your traffic taken, <br>value-add and commit to reducing your carbon footprint <br>and reduce your personal impact.
           </p>
@@ -132,6 +132,7 @@ import NavBar from '../components/Navbar.vue';
 import { useAuth0 } from '@auth0/auth0-vue';
 import LearnMore from '../components/LearnMore.vue';
 import { ref } from 'vue';
+import Typed from 'typed.js';
 // import Parallaxy from '@lucien144/vue3-parallaxy';
 
 
@@ -142,7 +143,16 @@ export default {
     LearnMore,
     // Parallaxy,
   },
+  mounted() {
+    new Typed('.element', {
+      strings: ["Carbon-First Routing.", "Take the green route.", "Your footprint matters.", "Drive less, save more."],
+      typeSpeed: 50,
+      backSpeed: 50,
+      loop: true
+    });
+  },
   setup() {
+
     const { loginWithRedirect, user, isAuthenticated } = useAuth0();
     const cards = [
       {
