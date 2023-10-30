@@ -2,10 +2,10 @@
 <template>
 	<!-- nav -->
 	<NavBar />
-	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: rgb(232, 251, 240);">
+	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: rgb(211, 233, 220);">
 
 		
-		<div class="sticky-top border-bottom" style="background-color: rgb(232, 251, 240)">
+		<div class="sticky-top border-bottom" style="background-color: rgb(211, 233, 220)">
 		<CommunitySidebar ></CommunitySidebar>
 	
 			
@@ -13,6 +13,10 @@
 			<span class="text-muted" style="font-weight: bold;">For You</span>
 			</div>
 		</div>	
+		<div class="row justify-content-center mt-4">
+			
+			<div class="col fw-bold h4 text-center" >Welcome, <u class="h2 fw-bold"> {{ user.name }}</u> !</div>
+			</div>
 				<CreatePostComponent></CreatePostComponent>
 				
 	
