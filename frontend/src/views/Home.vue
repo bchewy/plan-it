@@ -5,8 +5,8 @@
   </header>
 
   <!--username content-->
-  <section class="text-center col-12 beige-colour p-1">
-    <h2 v-if="isAuthenticated" class="text-muted">Ready to go <span class="text-success">green </span>, {{ user.name }}?</h2>
+  <section v-if="isAuthenticated" class="text-center col-12 beige-colour p-1">
+    <h2 class="text-muted">Ready to go <span class="text-success">green </span>, {{ user.name }}?</h2>
   </section>
 
 
