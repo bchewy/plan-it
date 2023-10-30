@@ -33,14 +33,14 @@
     <div class="container">
       <div class="row text-center">
         <div class="col-md" v-for="(card, index) in cards" :key="index">
-          <div class="card text-muted h-100 beige-colour">
+          <div class="card h-100 beige-colour">
             <div class="card-body d-flex flex-column justify-content-between">
               <div class="text-center">
                 <div class="h1 mb-3">
                   <font-awesome-icon :icon="card.icon"></font-awesome-icon>
                 </div>
-                <h3 class="card-title mb-3">{{ card.title }}</h3>
-                <p class="card-text">{{ card.description }}</p>
+                <h3 class="card-title mb-3 ">{{ card.title }}</h3>
+                <p class="card-text text-muted">{{ card.description }}</p>
                 <!-- "Learn More" button for each card -->
                 <button class="btn btn-success" @click="openModal(index)">Learn More</button>
               </div>
@@ -59,7 +59,7 @@
   <!-- Question Accordion -->
   <section id="questions" class="p-5 bg-supergreen ">
     <div class="container">
-      <h2 class="text-center text-muted mb-4">Frequently Asked Questions</h2>
+      <h2 class="text-center mb-4">Frequently Asked Questions</h2>
       <div class="accordion accordion-flush " id="questions">
         <!--Item 1-->
         <div class="accordion-item ">
