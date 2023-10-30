@@ -138,18 +138,31 @@ import Typed from 'typed.js';
 
 export default {
   name: 'Home',
+  data() {
+    return {
+      isTypedInitialized: false
+
+    };
+  },
   components: {
     NavBar,
     LearnMore,
     // Parallaxy,
   },
   mounted() {
-    new Typed('.element', {
-      strings: ["Carbon-First Routing.", "Take the green route.", "Your footprint matters.", "Drive less, save more."],
-      typeSpeed: 50,
-      backSpeed: 50,
-      loop: true
-    });
+    const element = document.querySelector('.element');
+    const cursors = document.querySelectorAll('.typed-cursor');
+    cursors.forEach(cursor => cursor.remove());  // Remove existing cursors
+
+    if (!this.isTypedInitialized) {
+      new Typed(element, {
+        strings: ["Carbon-First Routing.", "Take the green route.", "Your footprint matters.", "Drive less, save more."],
+        typeSpeed: 50,
+        backSpeed: 50,
+        loop: true
+      });
+      this.isTypedInitialized = true;
+    }
   },
   setup() {
 
