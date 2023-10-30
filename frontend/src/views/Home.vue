@@ -5,8 +5,8 @@
   </header>
 
   <!--username content-->
-  <section class="text-center col-12 m-0 p-0 beige-colour" style=" margin: 0; padding: 0;">
-      <h2 v-if="isAuthenticated" class="text-muted" style = "padding:1%">Ready to go <span class = "text-success">green </span>, {{ user.name }}?</h2>
+  <section v-if="isAuthenticated" class="text-center col-12 beige-colour p-1">
+    <h2 class="text-muted">Ready to go <span class="text-success">green </span>, {{ user.name }}?</h2>
   </section>
 
 
@@ -65,7 +65,7 @@
         <div class="accordion-item ">
           <h2 class="accordion-header ">
             <button class="accordion-button collapsed beige-colour text-muted" type="button" data-bs-toggle="collapse" data-bs-target="#question-one">
-             <b>1: How does your eco-friendly navigation system work?</b>
+              <b>1: How does your eco-friendly navigation system work?</b>
             </button>
           </h2>
           <div id="question-one" class="accordion-collapse collapse text-muted" data-bs-parent="#questions">
@@ -76,7 +76,7 @@
         <div class="accordion-item">
           <h2 class="accordion-header">
             <button class="accordion-button collapsed beige-colour text-muted" type="button" data-bs-toggle="collapse" data-bs-target="#question-two">
-				<b>2: What types of rewards can I earn through the Incentivising Public Transport feature?</b>
+              <b>2: What types of rewards can I earn through the Incentivising Public Transport feature?</b>
             </button>
           </h2>
           <div id="question-two" class="accordion-collapse collapse text-muted " data-bs-parent="#questions">
@@ -87,7 +87,7 @@
         <div class="accordion-item">
           <h2 class="accordion-header">
             <button class="accordion-button collapsed beige-colour text-muted" type="button" data-bs-toggle="collapse" data-bs-target="#question-three">
-			<b> 3: Can I use your platform internationally, or is it limited to specific regions?</b>
+              <b> 3: Can I use your platform internationally, or is it limited to specific regions?</b>
             </button>
           </h2>
           <div id="question-three" class="accordion-collapse collapse " data-bs-parent="#questions">

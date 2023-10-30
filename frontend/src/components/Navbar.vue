@@ -81,7 +81,7 @@
           </li>
           <li class="nav-item">
             <router-link class="nav-link text-evenlighter" to="/how">
-              How it Works
+              About
             </router-link>
           </li>
           <li class="nav-item">

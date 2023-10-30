@@ -41,7 +41,8 @@
 		<div class="row justify-content-center">
 			<div class="col-lg-8">
 				<h2 class="text-center">How It Works</h2>
-				<img src="../assets/how-it-works.png" alt="How it works" class="img-fluid rounded mx-auto d-block">
+				<!-- <img src="../assets/how-it-works.png" alt="How it works" class="img-fluid rounded mx-auto d-block"> -->
+				<img src="../assets/product_demo_real.gif" alt="How it works" class="img-fluid rounded mx-auto d-block">
 				<p class="text-center mt-3">Our application provides a unique way to navigate your city. It uses advanced algorithms to find the most efficient routes, and it also includes a gamification system to make your journey more fun. Earn badges, level up, and compete with your friends!</p>
 			</div>
 		</div>
