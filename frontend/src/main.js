@@ -45,6 +45,9 @@ library.add(faBars)
 
 // Prima Vue
 import PrimeVue from 'primevue/config';
+// import VueParallaxJs from 'vue-parallax-js'
+
+
 
 const app = createApp(App)
 app.use(VueGoogleMaps, {
@@ -66,6 +69,8 @@ app.use(
 	})
 );
 app.use(PrimeVue);
+// app.use(VueParallaxJs)
+
 
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)

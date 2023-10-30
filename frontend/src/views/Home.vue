@@ -5,28 +5,28 @@
   </header>
 
   <!--username content-->
-  <section v-if="isAuthenticated" class="text-center col-12 beige-colour p-1">
-    <h2 class="text-muted">Ready to go <span class="text-success">green </span>, {{ user.name }}?</h2>
-  </section>
+  <!-- <section v-if="isAuthenticated" class="text-center col-12 beige-colour p-1">
+    <h2 class="text-muted">Ready to go <span class="text-success">green</span>, {{ user.name }}?</h2>
+  </section> -->
 
 
   <!--flexbox thingy!-->
   <!--section class="text-muted text-center d-flex align-items-center justify-content-center"-->
-  <section class="text-muted text-center vh-100 d-flex align-items-center justify-content-center bg-supergreen" style="background-image: url('@/assets/homepage/background.png'); background-size: cover;">
+  <!-- <Parallaxy :speed="20" :animation="delta => `transform: translate3d(0, ${delta}px, 0);`"> -->
+  <section class="text-light text-center vh-100 d-flex align-items-center justify-content-center bg-supergreen" style="background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/planit.png'); background-size: cover;" v-parallax="0.3">
     <div class="container">
       <div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
         <div class="text-center">
-          <h1><span class="text-success">Carbon-First </span> Routing.</h1>
+          <h1><span class="text-supergreen">Carbon-First </span> Routing.</h1>
           <p class="lead">
-            Account for your own carbon footprint for your traffic taken, value-add and commit to reducing your carbon footprint and reduce your personal impact.
+            Account for your own carbon footprint for your traffic taken, <br>value-add and commit to reducing your carbon footprint <br>and reduce your personal impact.
           </p>
         </div>
-        <!--div class="text-center"--> <!-- Center the image horizontally -->
-        <!--img class="img-fluid" src="@/assets/homepage/co2.jpg" alt=""-->
       </div>
     </div>
     <!--/div-->
   </section>
+  <!-- </Parallaxy> -->
 
   <!-- boxes-->
   <section class="p-5 bg-supergreen">
@@ -132,12 +132,15 @@ import NavBar from '../components/Navbar.vue';
 import { useAuth0 } from '@auth0/auth0-vue';
 import LearnMore from '../components/LearnMore.vue';
 import { ref } from 'vue';
+// import Parallaxy from '@lucien144/vue3-parallaxy';
+
 
 export default {
   name: 'Home',
   components: {
     NavBar,
-    LearnMore
+    LearnMore,
+    // Parallaxy,
   },
   setup() {
     const { loginWithRedirect, user, isAuthenticated } = useAuth0();
@@ -211,6 +214,10 @@ export default {
 .beige-colour {
   /* background-color: ; */
   background-color: #ECE3CE;
+}
+
+.text-supergreen {
+  color: #a7c957;
 }
 
 .light-green {

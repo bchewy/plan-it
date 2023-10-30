@@ -16,6 +16,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/vue-fontawesome": "^3.0.3",
+    "@lucien144/vue3-parallaxy": "^0.1.1",
     "@popperjs/core": "^2.11.8",
     "@skilltree/skills-client-vue": "^3.5.0",
     "@vue/cli-plugin-eslint": "^5.0.8",
@@ -32,6 +33,7 @@
     "quill": "^1.3.7",
     "vue": "^3.3.4",
     "vue-draggable-resizable": "^2.3.0",
+    "vue-parallax-js": "^0.2.3",
     "vue-router": "^4.2.5",
     "vue3-draggable-resizable": "^1.6.5",
     "vue3-google-map": "^0.18.0"
