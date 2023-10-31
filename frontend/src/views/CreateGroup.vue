@@ -1,10 +1,11 @@
 <template>
     <!-- nav -->
     <NavBar />
-    <div class="container-fluid">
-        <div class="row">
-            <CommunitySidebar></CommunitySidebar>
-            <div class="col-10 vh-100" style="background-color: rgb(232, 251, 240);">
+    <CommunitySidebar></CommunitySidebar>
+    <div class="container-fluid" style="background-color: rgb(232, 251, 240);">
+        <div class="row justify-content-center">
+            
+            <div class="col-10 vh-100" >
 
                 <h1 class="text-center py-3 text-muted" style="font-weight: bold;">Create your very group!</h1>
                 <div class="row justify-content-center">
