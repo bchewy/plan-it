@@ -72,6 +72,7 @@
   margin-left: 8px;
 }
 
+
 </style>
 
 <template>
@@ -223,7 +224,7 @@
                   <h1>Notification Settings</h1>
                 </div>
               </div>
-              <div v-if="this.isSubmitted" class="alert alert-info" role="alert">
+              <div v-if="this.isSubmitted" class="alert alert-info" role="alert" style="margin: 1rem 1rem 1rem 0rem;">
                 Settings saved!
               </div>
               <div class="control-group col-12">
@@ -243,7 +244,7 @@
                     <label>Notify me if I lose my place in the leaderboard</label>
                   </div>
                 </div>
-                <button class="border border-success btn btn-light m-1 mt-3 mb-2" @click="reset()">Reset</button>
+                <button class="border border-success btn btn-light m-1 mt-3 mb-2" @click="reset()">Clear All</button>
                 <button class="border border-success btn btn-success m-1 mt-3 mb-2" @click="submit()">Save</button>
               </div>
             </div>
@@ -316,6 +317,10 @@ export default {
       friendRequests: [],
       receivedRequests: [],
       sentRequests: [],
+      isSubmitted: false,
+      newFriends: false,
+      newFeatures: false,
+      lostPlace: false
     };
   },
   computed: {
@@ -534,6 +539,14 @@ export default {
         console.error("Error fetching routes:", error);
       }
     },
+    submit(){
+      this.isSubmitted = true;
+    },
+    reset(){
+      this.newFeatures = false;
+      this.newFriends = false;
+      this.lostPlace = false;
+    }
   },
 };
 </script>
