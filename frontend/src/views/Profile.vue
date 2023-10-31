@@ -82,7 +82,8 @@
               <h3 class="mb-2 glowing-text">{{ user.name }}</h3>
               <p class="mb-2"><b>Level:</b> {{ userLvl }}</p>
               <div class="progress stylish-progress-bar mb-4">
-                <div class="progress-bar bg-supergreen" role="progressbar" :style="{ width: `${userExp.toFixed(2)}%` }" aria-valuenow="" aria-valuemin="0" aria-valuemax="100">{{ userExp.toFixed(2) }}%</div>
+                <div v-if="userExp" class="progress-bar bg-supergreen" role="progressbar" :style="{ width: `${userExp.toFixed(2)}%` }" aria-valuenow="" aria-valuemin="0" aria-valuemax="100">{{ userExp.toFixed(2) }}%</div>
+                <div v-else="userExp" class="progress-bar bg-supergreen" role="progressbar"></div>
               </div>
               <p class="mb-2"><b>Handle:</b> @{{ user.nickname }}</p>
               <p class="mb-2"><b>Email:</b> {{ user.email }}</p>
