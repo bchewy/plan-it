@@ -8,10 +8,11 @@
   </div>
 </template>
 
+
 <script>
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
-import { ref, onMounted, watch, reactive } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import axios from 'axios';
 
 export default {
@@ -103,6 +104,23 @@ export default {
       carbonEmissionChart.value.update();
 
     }
+    const fetchFriendData = async (selectedFriendEmail) => {
+      try {
+        const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(selectedFriendEmail)}`;
+        const headers = {
+          "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+        };
+
+        const response = await axios.get(url, { headers });
+
+        const selectedFriendData = response.data;
+
+        return selectedFriendData;
+      } catch (error) {
+        console.error("Error fetching selected friend's data", error);
+        throw error;
+      }
+    };
 
     // watch(selectedFriend, (newFriend) => {
     //   if (newFriend === 'friend') {
@@ -116,14 +134,18 @@ export default {
     //   }
     // });
 
+    onMounted(fetchFriendData);
 
-    const updateChart = () => {
-      if (selectedFriend.value === 'friend') {
-        setTimeout(() => {
-          // Update 'friendData' with friend's carbon emissions data
-          friendData.data = [/* Ask brian */];
-          carbonEmissionChart.value.update(); // Update the chart
-        }, 1000);
+    const updateChart = async () => {
+      if (selectedFriend.value !== 'user') {
+        try {
+          const selectedFriendData = await fetchFriendData(selectedFriend.value);
+
+          friendData.data = selectedFriendData.carbonsavings;
+          carbonEmissionChart.value.update();
+        } catch (error) {
+          console.error("Error updating chart with friend's data", error);
+        }
       }
     };
 
