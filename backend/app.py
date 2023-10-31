@@ -424,7 +424,7 @@ def create_or_update_user():
             updated_user["_id"] = str(updated_user["_id"])
             return jsonify({"message": "User updated successfully.", "user": updated_user}), 200
     else:
-        data['timestamp'] = datetime.now()
+        data['timestamp'] = datetime.datetime.now()
         data['friends'] = []
         data['friendRequests'] = {"sent": [], "received": []}
         user_collection.insert_one(data)
