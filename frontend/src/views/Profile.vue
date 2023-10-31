@@ -33,6 +33,45 @@
   flex: 2;
   /* Adjust as needed */
 }
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-label input[type="checkbox"]{
+  appearance: none;
+  width: 32px;
+  height: 14px;
+  background-color: #cadcca;
+  border-radius: 14px;
+  position: relative;
+}
+.checkbox-label input[type="checkbox"]::before {
+  content: "";
+  width: 14px; /* Width of the switch handle */
+  height: 14px; /* Height of the switch handle */
+  background-color: #ebedf0; /* Color of the switch handle */
+  border-radius: 50%; /* Make it a circle */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 2px; /* Adjust the position as needed */
+  transition: 0.4s; /* Add a smooth transition effect */
+}
+
+.checkbox-label input[type="checkbox"]:checked {
+  background-color: #4CAF50; /* Background color for the "on" state */
+}
+
+.checkbox-label input[type="checkbox"]:checked::before {
+  left: calc(100% - 14px); /* Position the handle to the right when checked */
+}
+
+.checkbox-label label{
+  margin-left: 8px;
+}
+
 </style>
 
 <template>
@@ -180,23 +219,32 @@
             </div>
             <div class="container m-2">
               <div class="row">
-                <div class="col-12 mt-5">
+                <div class="col-12 m2-2">
                   <h1>Notification Settings</h1>
                 </div>
               </div>
               <div v-if="this.isSubmitted" class="alert alert-info" role="alert">
                 Settings saved!
               </div>
-              <div class="control-group col-12 mt-5">
+              <div class="control-group col-12">
                 <div class="controls">
-                  <label><input type="checkbox" v-model="newFriends" />Notify me about new friends who signed up with my friend code </label>
+                  <div class="checkbox-label">
+                    <input type="checkbox" v-model="newFriends" />
+                    <label>Notify me about new friends who signed up with my friend code</label>
+                  </div>
                   <br>
-                  <label><input type="checkbox" v-model="newFeatures" />Nofity me about new features of PlanIt! </label>
+                  <div class="checkbox-label">
+                    <input type="checkbox" v-model="newFeatures" />
+                    <label>Nofity me about new features of PlanIt!</label>
+                  </div>
                   <br>
-                  <label><input type="checkbox" v-model="lostPlace" />Notify me if I lose my place in the leaderboard</label>
+                  <div class="checkbox-label">
+                    <input type="checkbox" v-model="lostPlace" />
+                    <label>Notify me if I lose my place in the leaderboard</label>
+                  </div>
                 </div>
-                <button class="btn btn-light" @click="reset()">Reset</button>
-                <button class="btn btn-success" @click="submit()">Save</button>
+                <button class="border border-success btn btn-light m-1 mt-3 mb-2" @click="reset()">Reset</button>
+                <button class="border border-success btn btn-success m-1 mt-3 mb-2" @click="submit()">Save</button>
               </div>
             </div>
             <!-- <Badges></Badges> -->
