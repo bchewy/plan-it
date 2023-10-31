@@ -4,23 +4,14 @@
 	<NavBar />
 	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: rgb(211, 233, 220);">
 
-<<<<<<< HEAD
 		
 		<div class="sticky-top border-bottom" style="background-color: rgb(211, 233, 220); z-index: 1;">
 		<CommunitySidebar ></CommunitySidebar>
 	
 			
-=======
-
-		<div class="sticky-top border-bottom" style="background-color: rgb(211, 233, 220)">
-			<CommunitySidebar></CommunitySidebar>
-
-
->>>>>>> 2fdbea528582d116c30c10ab89cac83f6135e0a2
 			<div class="text-center h2 mb-3 py-4">
 				<span class="text-muted" style="font-weight: bold;">For You</span>
 			</div>
-<<<<<<< HEAD
 		</div>	
 		
 		
@@ -39,14 +30,6 @@
 				>Check out my new badge!</PostComponent>
 	
 				
-=======
-		</div>
-		<div class="row justify-content-center mt-4">
-
-			<div class="col fw-bold h4 text-center">Welcome, <u class="h2 fw-bold"> {{ user.name }}</u> !</div>
-		</div>
-		<CreatePostComponent></CreatePostComponent>
->>>>>>> 2fdbea528582d116c30c10ab89cac83f6135e0a2
 
 
 
@@ -56,22 +39,7 @@
 				<heart_btn></heart_btn>
 				<p>Post text</p>
 			</div>
-<<<<<<< HEAD
 	</div>
-=======
-		</div>
-
-		<div class="row justify-content-center my-4">
-			<div class="col-10 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user" class="mt-3"></font-awesome-icon> User<br><br>
-				<heart_btn></heart_btn>
-				<p>Post text</p>
-			</div>
-		</div>
-
-
-	</div>
-
->>>>>>> 2fdbea528582d116c30c10ab89cac83f6135e0a2
 	<footer>
 		<!-- footer -->
 	</footer>
