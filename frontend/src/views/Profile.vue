@@ -121,6 +121,36 @@
             <div class="pr-4 pb-3 pb-md-0">
               <h3 class="mb-2">Your Routes</h3>
               <!-- Here you can add the code to display the user's routes -->
+              <div class="container">
+                <div v-if="routes && routes.length == 0">
+                  <p class="text-center">
+                    Your route list is empty. You need to commit more.
+                  </p>
+                </div>
+                <div v-else>
+                  <div v-for="route in paginatedRoutes" :key="route.route_id" class="route-item">
+                    <h4>{{ route.start_point_name }} to {{ route.end_point_name }}</h4>
+                    <p><b>Mode of Transport:</b> {{ route.transport_mode }}</p>
+                    <p><b>Carbon Emission:</b> {{ route.carbon_emission }}</p>
+                    <p><b>Timestamp:</b> {{ route.timestamp }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <nav aria-label="Pagination-for-routes">
+                <ul class="pagination justify-content-center">
+                  <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                    <a class="page-link" href="#" @click.prevent="currentPage--">Previous</a>
+                  </li>
+                  <li class="page-item disabled">
+                    <span class="page-link">{{ currentPage }} / {{ totalPages }}</span>
+                  </li>
+                  <li class="page-item" :class="{ disabled: currentPage >= totalPages }">
+                    <a class="page-link" href="#" @click.prevent="currentPage++">Next</a>
+                  </li>
+                </ul>
+              </nav>
+              <hr>
               <div class="chart-container">
                 <h4 class="mb-2">Carbon emissions</h4>
                 <canvas id="carbonFootprintChart"></canvas>
@@ -133,34 +163,10 @@
 
               <Compare v-if="user" :user="user"></Compare>
 
-              <!-- <div v-if="routes && routes.length == 0">
-                <p class="text-center">
-                  Your route list is empty. You need to commit more.
-                </p>
-              </div>
-              <div v-else>
-                <div v-for="route in paginatedRoutes" :key="route.route_id" class="route-item">
-                  <h4>{{ route.start_point_name }} to {{ route.end_point_name }}</h4>
-                  <p><b>Mode of Transport:</b> {{ route.transport_mode }}</p>
-                  <p><b>Carbon Emission:</b> {{ route.carbon_emission }}</p>
-                  <p><b>Timestamp:</b> {{ new Date(route.timestamp).toLocaleString() }}</p>
-                </div>
-              </div> -->
+
             </div>
           </div>
-          <!-- <nav aria-label="Pagination-for-routes">
-            <ul class="pagination justify-content-center">
-              <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                <a class="page-link" href="#" @click.prevent="currentPage--">Previous</a>
-              </li>
-              <li class="page-item disabled">
-                <span class="page-link">{{ currentPage }} / {{ totalPages }}</span>
-              </li>
-              <li class="page-item" :class="{ disabled: currentPage >= totalPages }">
-                <a class="page-link" href="#" @click.prevent="currentPage++">Next</a>
-              </li>
-            </ul>
-          </nav> -->
+
         </div>
         <div v-if="activeTab === 'progress'" class="tab-pane">
           <!-- Friends Content -->
