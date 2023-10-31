@@ -161,20 +161,21 @@
 						<span>{{ calculateCarbonEmission().toFixed(2) }} kg CO2</span>
 					</div>
 					<hr>
-					<div class="d-flex justify-content-between mb-3">
+					<h5 class="card-title mb-4">User Details</h5>
+
+					<div class="d-flex justify-content-between">
 						<span><strong>User Level:</strong></span>
 						<span>{{ userLvl }}</span>
 					</div>
-					<div class="d-flex justify-content-between mb-3">
-						<!-- <span><strong>Experience Progress:</strong></span>
-						<span>{{ userExp }} / 100</span> -->
-
-					</div>
-					<div class="d-flex justify-content-between mb-3">
+					<!-- <div class="d-flex justify-content-between mb-2">
+						<span><strong>Experience Progress:</strong></span>
+						<span>{{ userExp }} / 100</span>
+					</div> -->
+					<div class="d-flex justify-content-between mb-2">
 						<span><strong>Experience Added:</strong></span>
 						<span>+{{ expAdded }}</span>
 					</div>
-					<div class="d-flex justify-content-between mb-3">
+					<div class="d-flex justify-content-between mb-2">
 						<span><strong>Emission Savings:</strong></span>
 						<span>{{ emissionSavings.toFixed(2) }} kg CO2</span>
 					</div>
