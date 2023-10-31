@@ -227,7 +227,6 @@ export default defineComponent({
 
 		},
 		getUserLocation() {
-			console.log('user location clicked')
 			const geoLoc = navigator.geolocation;
 
 			// Clear the cache
@@ -238,7 +237,6 @@ export default defineComponent({
 				const lat = position.coords.latitude;
 				const lng = position.coords.longitude;
 				try {
-					console.log('trying');
 					// Ensure lat and lng are valid numbers
 					if (typeof lat === 'number' && typeof lng === 'number') {
 						const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
@@ -256,34 +254,6 @@ export default defineComponent({
 				}
 			});
 		},
-
-		//html5 dragn drop API resizable things, still works
-		// dragStart(event) {
-		// 	// Store the starting position
-		// 	this.startX = event.clientX;
-		// 	this.startY = event.clientY;
-		// },
-
-		// dragEnd(event) {
-		// 	let left = parseInt(event.target.style.left || 0);
-		// 	let top = parseInt(event.target.style.top || 0);
-
-		// 	// Calculate the distance moved
-		// 	const deltaX = event.clientX - this.startX;
-		// 	const deltaY = event.clientY - this.startY;
-
-		// 	// Set new position
-		// 	event.target.style.left = (left + deltaX) + "px";
-		// 	event.target.style.top = (top + deltaY) + "px";
-		// },
-
-		// Vue3 reiszable
-		// onResize(x, y, width, height) {
-		// 	console.log("Resizing: ", { x, y, width, height });
-		// },
-		// onDrag(x, y) {
-		// 	console.log("Dragging: ", { x, y });
-		// }
 	},
 	computed: {
 		// External API calls for displaying on map apps
@@ -618,7 +588,6 @@ export default defineComponent({
 		const calculateCarbonEmissionForEXP = () => {
 			const distanceInKm = routeDetails.value.distanceMeters / 1000;
 			let carbonEmissionPerKm;
-			console.log(travelMode.value)
 			switch (travelMode.value) {
 				case 'driving':
 					carbonEmissionPerKm = 0.12;  // Assume 0.12 kg CO2 emitted per km for a car
@@ -643,14 +612,11 @@ export default defineComponent({
 
 		const addExpBasedOnCarbonEmission = (carbonList) => {
 			emissionSavings.value = carbonList[1] - carbonList[0];
-			console.log(carbonList[0])
-			console.log(carbonList[1])
-			console.log(emissionSavings.value)
 			const BASE_EXP = 10;
 			const BONUS_EXP_PER_SAVED_KG = 10;
 
 			// Calculate the total EXP to add based on the base EXP and the bonus for saved emissions
-			const expToAdd = BASE_EXP + (emissionSavings.value * BONUS_EXP_PER_SAVED_KG);
+			const expToAdd = Math.ceil(BASE_EXP + (emissionSavings.value * BONUS_EXP_PER_SAVED_KG));
 			expAdded.value = expToAdd
 
 
