@@ -122,6 +122,13 @@
                     <path d="M12 2C6.579 2 2 6.579 2 12s4.579 10 10 10 10-4.579 10-10S17.421 2 12 2zm0 5c1.727 0 3 1.272 3 3s-1.273 3-3 3c-1.726 0-3-1.272-3-3s1.274-3 3-3zm-5.106 9.772c.897-1.32 2.393-2.2 4.106-2.2h2c1.714 0 3.209.88 4.106 2.2C15.828 18.14 14.015 19 12 19s-3.828-.86-5.106-2.228z"></path>
                   </svg> Profile</router-link>
               </li>
+              <li>
+                <router-link class="dropdown-item text-light" to="/verify">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
+                    <circle cx="13" cy="4" r="2"></circle>
+                    <path d="M13.978 12.27c.245.368.611.647 1.031.787l2.675.892.633-1.896-2.675-.892-1.663-2.495a2.016 2.016 0 0 0-.769-.679l-1.434-.717a1.989 1.989 0 0 0-1.378-.149l-3.193.797a2.002 2.002 0 0 0-1.306 1.046l-1.794 3.589 1.789.895 1.794-3.589 2.223-.556-1.804 8.346-3.674 2.527 1.133 1.648 3.675-2.528c.421-.29.713-.725.82-1.225l.517-2.388 2.517 1.888.925 4.625 1.961-.393-.925-4.627a2 2 0 0 0-.762-1.206l-2.171-1.628.647-3.885 1.208 1.813z"></path>
+                  </svg> Verify</router-link>
+              </li>
               <!-- <li>
                 <router-link class="dropdown-item text-light" to="/admin">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(255, 255, 255);transform: ;msFilter:;">
@@ -234,7 +241,7 @@ export default defineComponent({
             pictureurl: newValue.picture,
           };
 
-
+          // Always do initial check to see if user exists
           const response1 = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/ez/${encodeURIComponent(newValue.email)}`, {
             headers: {
               'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
@@ -274,6 +281,7 @@ export default defineComponent({
     //   // $('#handleModal').modal('hide');
     // };
 
+    // Initial API call to check if the user exists. (for @handle checking)
     const fetchUser = async () => {
       const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(user.value.email)}`;
       const headers = {
@@ -282,9 +290,7 @@ export default defineComponent({
 
       try {
         const response = await axios.get(url, { headers });
-        // console.log(response.data);
         userMe.value = response.data;
-        // console.log(userMe.value.level)
 
       } catch (error) {
         console.error("Error fetching user", error);

@@ -40,7 +40,7 @@ span{
 	font-weight: bold;
 }
 
-h6{
+h6 {
 	text-decoration: underline;
 }
 
@@ -215,7 +215,6 @@ export default {
 			try {
 				const response = await axios.get(url, { headers });
 				this.users = response.data;
-				console.log('test');
 			} catch (error) {
 				console.error("Error fetching users:", error);
 			}

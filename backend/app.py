@@ -355,6 +355,18 @@ def update_route(route_id):
         return jsonify({"message": "Route updated successfully."}), 200
     else:
         return jsonify({"message": "Route not found."}), 404
+    
+@app.route("/routes/<route_id>/validate", methods=['PUT'])
+@require_api_key
+def validate_route(route_id):
+    print(route_id)
+    updated_route = collection.find_one_and_update(
+        {"route_id": route_id}, {"$set": {"validated": True}})
+    if updated_route:
+        return jsonify({"message": "Route validated successfully."}), 200
+    else:
+        return jsonify({"message": "Route not found."}), 404
+
 
 # Delete (DELETE)
 @app.route("/routes/<route_id>", methods=['DELETE'])

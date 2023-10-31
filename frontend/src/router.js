@@ -21,6 +21,12 @@ const router = createRouter({
 			beforeEnter: authGuard
 		},
 		{
+			path: '/verify',
+			component: () => import('./views/Verify.vue'),
+			beforeEnter: authGuard
+
+		},
+		{
 			path: '/debug',
 			component: () => import('./views/Debug.vue')
 		},
