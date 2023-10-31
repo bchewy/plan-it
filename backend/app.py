@@ -408,9 +408,9 @@ def create_or_update_user():
         description: auth0_user_id, email, and handle are required
     """
     data = request.json
-    print('User create/update here, data below')
-    print(data)
-    print('\n')
+    # print('User create/update here, data below')
+    # print(data)
+    # print('\n')
     auth0_user_id = data.get('auth0_user_id')
     email = data.get('email')
     handle = data.get('handle')
@@ -603,9 +603,9 @@ def ez_get_user(user_email):
                 "exp": user["exp"], 
                 "level": user["level"], 
                 "friends": user["friends"] }
-        return jsonify(user), 200
+        return jsonify(user), 201
     else:
-        return jsonify({"message": "User not found."}), 404
+        return jsonify({"message": "User not found."}), 200
 
 # Users search for multiple users
 @app.route("/users/search/<search_term>", methods=['GET'])
