@@ -238,55 +238,7 @@ export default {
 
 			return d;
 		},
-		checkEndLocation(route) {
-			const { latitude, longitude } = this.coords;
 
-			// Get the route's end location
-			const [endLat, endLng] = route.end_point_lat_lng.split(', ').map(Number);
-
-			// Calculate the distance between the two locations in kilometers
-			const distance = this.haversineDistance([latitude, longitude], [endLat, endLng]);
-
-			// Check if the distance is less than 0.5 kilometers (500 meters)
-			if (distance < 0.5) {
-				console.log('User is within 500 meters of the end location');
-				var myModalEl = document.getElementById('modalGood');
-				var myModal = new Modal(myModalEl);
-				myModal.show();
-
-				// Update the route to validated true:
-				this.updateRoute(route.route_id, true)
-				// Remove route from routes array
-				this.routes = this.routes.filter(r => r.route_id !== route.route_id);
-
-			} else {
-				console.log('User is not within 500 meters of the end location');
-				var myModalEl = document.getElementById('modalBad');
-				var myModal = new Modal(myModalEl);
-				myModal.show();
-			}
-
-			myModalEl.addEventListener('hidden.bs.modal', function () {
-				// When the modal is hidden, remove the 'modal-open' class from the body
-				document.body.classList.remove('modal-open');
-				// Remove padding-right added by Bootstrap modal
-				document.body.style.removeProperty('padding-right');
-				// Remove padding-right from fixed navbar if exists
-				let fixedNavbar = document.querySelector('.navbar.fixed-top');
-				if (fixedNavbar) {
-					fixedNavbar.style.removeProperty('padding-right');
-				}
-			});
-
-
-			// if (route.end_point_name === `${latitude}, ${longitude}`) {
-			// 	console.log('User is at the end location');
-			// } else {
-			// 	console.log('users current coords', this.coords.latitude, this.coords.longitude)
-			// 	console.log('validating against route lat lng', route.end_point_lat_lng)
-			// 	console.log('User is not at the end location');
-			// }
-		},
 		async fetchUser() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
 			const headers = {
@@ -346,6 +298,7 @@ export default {
 				console.error("Error fetching users:", error);
 			}
 		},
+		// This method is only used to validate a route
 		async updateRoute(routeId) {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/routes/${routeId}/validate`;
 			const headers = {
@@ -359,6 +312,120 @@ export default {
 			}
 		},
 
+		calculateCarbonEmissionForEXP(distance, travelMode) {
+			const distanceInKm = distance
+			let carbonEmissionPerKm;
+			switch (travelMode) {
+				case 'driving':
+					carbonEmissionPerKm = 0.12;  // Assume 0.12 kg CO2 emitted per km for a car
+					break;
+				case 'BICYCLE':
+					carbonEmissionPerKm = 0;
+					break;
+				case 'WALK':
+					carbonEmissionPerKm = 0;
+					break;
+				case 'TRANSIT':
+					carbonEmissionPerKm = 0;
+					break
+				default:
+					carbonEmissionPerKm = 0.12;  // Default to car emission if travel mode is not recognized
+
+
+					const carbonFootprintDriving = distanceInKm * 0.12;
+					const carbonFootprint = distanceInKm * carbonEmissionPerKm;
+					return [carbonFootprint, carbonFootprintDriving];
+			}
+		},
+		addExpBasedOnCarbonEmission(carbonList) {
+			emissionSavings.value = carbonList[1] - carbonList[0];
+			const BASE_EXP = 10; // is 1 on the routing page
+			const BONUS_EXP_PER_SAVED_KG = 1; // is 1 on the routing page
+
+			// Calculate the total EXP to add based on the base EXP and the bonus for saved emissions
+			const expToAdd = Math.ceil(BASE_EXP + (emissionSavings.value * BONUS_EXP_PER_SAVED_KG));
+			expAdded.value = expToAdd
+
+
+			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/carbonsavings`, { carbonsavings: emissionSavings.value }, {
+				headers: {
+					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+				}
+			})
+				.then(response => {
+					console.log(response.data.message);
+					logUserActivity(`saved :${emissionSavings.value} co2`)
+				})
+				.catch(error => {
+					console.error(error);
+				});
+
+			// Update the user exp in the backend
+			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/exp`, { exp: expToAdd }, {
+				headers: {
+					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+				}
+			})
+				.then(response => {
+					console.log(response.data.message);
+					logUserActivity(`gained ${expToAdd} exp`)
+				})
+				.catch(error => {
+					console.error(error);
+				});
+		},
+		checkEndLocation(route) {
+			const { latitude, longitude } = this.coords;
+
+			// Get the route's end location
+			const [endLat, endLng] = route.end_point_lat_lng.split(', ').map(Number);
+
+			// Calculate the distance between the two locations in kilometers
+			const distance = this.haversineDistance([latitude, longitude], [endLat, endLng]);
+
+			// Check if the distance is less than 0.5 kilometers (500 meters)
+			if (distance < 0.5) {
+				console.log('User is within 500 meters of the end location');
+				var myModalEl = document.getElementById('modalGood');
+				var myModal = new Modal(myModalEl);
+				myModal.show();
+
+				// Update the route to validated true:
+				this.updateRoute(route.route_id, true)
+				// Remove route from routes array
+				this.routes = this.routes.filter(r => r.route_id !== route.route_id);
+
+				// Final addition for EXP
+				this.addExpBasedOnCarbonEmission(this.calculateCarbonEmissionForEXP(route.distance, route.transport_mode))
+
+			} else {
+				console.log('User is not within 500 meters of the end location');
+				var myModalEl = document.getElementById('modalBad');
+				var myModal = new Modal(myModalEl);
+				myModal.show();
+			}
+
+			myModalEl.addEventListener('hidden.bs.modal', function () {
+				// When the modal is hidden, remove the 'modal-open' class from the body
+				document.body.classList.remove('modal-open');
+				// Remove padding-right added by Bootstrap modal
+				document.body.style.removeProperty('padding-right');
+				// Remove padding-right from fixed navbar if exists
+				let fixedNavbar = document.querySelector('.navbar.fixed-top');
+				if (fixedNavbar) {
+					fixedNavbar.style.removeProperty('padding-right');
+				}
+			});
+
+
+			// if (route.end_point_name === `${latitude}, ${longitude}`) {
+			// 	console.log('User is at the end location');
+			// } else {
+			// 	console.log('users current coords', this.coords.latitude, this.coords.longitude)
+			// 	console.log('validating against route lat lng', route.end_point_lat_lng)
+			// 	console.log('User is not at the end location');
+			// }
+		},
 
 
 

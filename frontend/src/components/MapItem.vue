@@ -151,6 +151,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
+					<p> Congratulations. You've logged your route! Please proceed to verify it later in <strong>Profile > Verify</strong> to get maximum EXP.</p>
 					<h5 class="card-title mb-4">Route Details</h5>
 					<div class="d-flex justify-content-between mb-2">
 						<strong>Distance:</strong>
@@ -528,7 +529,8 @@ export default defineComponent({
 							'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
 						};
 						await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/routes`, routeData, { headers });
-						// await addExpBasedOnCarbonEmission(calculateCarbonEmissionForEXP(), distanceInKm, travelMode.value);
+						// EXP Given here is not the most and incomplete.
+						await addExpBasedOnCarbonEmission(calculateCarbonEmissionForEXP(), distanceInKm, travelMode.value);
 
 
 					} catch (error) {
@@ -682,8 +684,8 @@ export default defineComponent({
 
 		const addExpBasedOnCarbonEmission = (carbonList) => {
 			emissionSavings.value = carbonList[1] - carbonList[0];
-			const BASE_EXP = 10;
-			const BONUS_EXP_PER_SAVED_KG = 10;
+			const BASE_EXP = 1; //previously 10
+			const BONUS_EXP_PER_SAVED_KG = 1; //previously 10
 
 			// Calculate the total EXP to add based on the base EXP and the bonus for saved emissions
 			const expToAdd = Math.ceil(BASE_EXP + (emissionSavings.value * BONUS_EXP_PER_SAVED_KG));
