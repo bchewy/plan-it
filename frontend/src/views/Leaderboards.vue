@@ -46,7 +46,7 @@
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
-							<table class="table table-striped">
+							<table class="table">
 								<thead>
 									<tr>
 										<th>Rank</th>
@@ -58,6 +58,43 @@
 								</thead>
 								<tbody>
 									<tr v-for="(user, index) in users" :key="user.email">
+										<td>{{ index + 1 }}</td>
+										<td>
+											<img :src="user.pictureurl" alt="User Image" width="50" height="50">
+											<br><span>{{ user.handle }}</span>
+										</td>
+										<td>{{ user.level }}</td>
+										<!-- <td>{{ user.exp }}</td> -->
+										<td v-if="user.carbonsavings">{{ user.carbonsavings }} Co2 kg</td>
+										<td v-else></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Friends leaderboard -->
+			<div class="col-lg-12 mt-5">
+				<div class="card">
+					<div class="card-header">
+						<h4 class="card-title">Friends Leaderboard</h4>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Rank</th>
+										<th>Name</th>
+										<th>Level</th>
+										<!-- <th>EXP to next level</th> -->
+										<th>CO2 Saved</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="(user, index) in friends" :key="user.email">
+										{{ friends }}
 										<td>{{ index + 1 }}</td>
 										<td>
 											<img :src="user.pictureurl" alt="User Image" width="50" height="50">
@@ -119,6 +156,7 @@ export default {
 		const expToNextLevel = ref(0);
 		const userLvl = ref(0)
 		const users = [];
+		const friends = ref([]);
 
 		return {
 			users,
@@ -132,7 +170,7 @@ export default {
 			user,
 			isAuthenticated,
 			routes: [],
-			friends: [],
+			friends,
 			friendRequests: [],
 			receivedRequests: [],
 			sentRequests: [],
@@ -277,6 +315,8 @@ export default {
 		},
 		fetchData() {
 			this.fetchUsers();
+			this.fetchUser();
+			this.fetchFriendStats(this.friends);
 			// this.fetchRoutes().then(() => {
 			// 	this.drawChart();
 			// });
@@ -294,6 +334,7 @@ export default {
 				this.friends = response.data.friends;
 				this.userLvl = response.data.level;
 				this.userExp = response.data.exp;
+				// console.log(this.friends);
 
 			} catch (error) {
 				console.error("Error fetching user", error);
@@ -340,7 +381,26 @@ export default {
 			} catch (error) {
 				console.error("Error fetching users:", error);
 			}
+		},
+		async fetchFriendStats(friends) {
+			try {
+				console.log('Fetching friend data')
+				console.log(friends)
+				for (let friend of friends) {
+					console.log('friend')
+					const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(friend)}`;
+					const headers = {
+						"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+					};
+					const response = await axios.get(url, { headers });
+					friend.stats = response.data;
+					console.log(response.data)
+				}
+			} catch (error) {
+				console.error("Error fetching friend stats:", error);
+			}
 		}
+
 
 	},
 };
