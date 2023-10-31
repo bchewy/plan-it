@@ -33,13 +33,11 @@
 
 
 
-		<div class="row justify-content-center my-4">
-
-			<div class="col-10 rounded border bg-white"><font-awesome-icon icon="fa-solid fa-user" class="mt-3"></font-awesome-icon> User<br><br>
-				<heart_btn></heart_btn>
-				<p>Post text</p>
-			</div>
+	
 	</div>
+		</div>
+		
+	
 	<footer>
 		<!-- footer -->
 	</footer>
