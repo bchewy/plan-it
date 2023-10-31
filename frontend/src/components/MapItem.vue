@@ -260,31 +260,32 @@ export default defineComponent({
 		},
 
 		//html5 dragn drop API resizable things, still works
-		dragStart(event) {
-			// Store the starting position
-			this.startX = event.clientX;
-			this.startY = event.clientY;
-		},
+		// dragStart(event) {
+		// 	// Store the starting position
+		// 	this.startX = event.clientX;
+		// 	this.startY = event.clientY;
+		// },
 
-		dragEnd(event) {
-			let left = parseInt(event.target.style.left || 0);
-			let top = parseInt(event.target.style.top || 0);
+		// dragEnd(event) {
+		// 	let left = parseInt(event.target.style.left || 0);
+		// 	let top = parseInt(event.target.style.top || 0);
 
-			// Calculate the distance moved
-			const deltaX = event.clientX - this.startX;
-			const deltaY = event.clientY - this.startY;
+		// 	// Calculate the distance moved
+		// 	const deltaX = event.clientX - this.startX;
+		// 	const deltaY = event.clientY - this.startY;
 
-			// Set new position
-			event.target.style.left = (left + deltaX) + "px";
-			event.target.style.top = (top + deltaY) + "px";
-		},
+		// 	// Set new position
+		// 	event.target.style.left = (left + deltaX) + "px";
+		// 	event.target.style.top = (top + deltaY) + "px";
+		// },
+
 		// Vue3 reiszable
-		onResize(x, y, width, height) {
-			console.log("Resizing: ", { x, y, width, height });
-		},
-		onDrag(x, y) {
-			console.log("Dragging: ", { x, y });
-		}
+		// onResize(x, y, width, height) {
+		// 	console.log("Resizing: ", { x, y, width, height });
+		// },
+		// onDrag(x, y) {
+		// 	console.log("Dragging: ", { x, y });
+		// }
 	},
 	computed: {
 		googleMapsUrl() {
@@ -300,6 +301,7 @@ export default defineComponent({
 			const destination = `${this.destination.lat},${this.destination.lng}`;
 			return `https://citymapper.com/directions?startcoord=${origin}&endcoord=${destination}`;
 		},
+		// Used for the vue3 drag and drop
 		computedX() {
 			// For smaller screens, we adjust the component width to fit the parent width
 			if (window.innerWidth <= 768) {
@@ -335,9 +337,8 @@ export default defineComponent({
 			});
 		const errorMessage = ref('');
 		const { user, isAuthenticated } = useAuth0();
-		const travelMode = ref("");  // Default is "DRIVE"
-		const confetti = ref(null);
-		const zoom = ref(12);  // Default zoom level
+		const travelMode = ref("");
+		const zoom = ref(13);
 		const center = reactive({ lat: 1.3331, lng: 103.7428 });
 		const startLocation = ref({
 			lat: 0,
@@ -391,11 +392,11 @@ export default defineComponent({
 		}
 
 		function getZoomLevel(distance) {
-			if (distance > 10000) return 10;
-			if (distance > 5000) return 12;
-			if (distance > 2000) return 12;
-			if (distance > 1000) return 12;
-			if (distance > 500) return 12;
+			if (distance > 10000) return 12;
+			if (distance > 5000) return 13;
+			if (distance > 2000) return 13;
+			if (distance > 1000) return 13;
+			if (distance > 500) return 13;
 			return 18;
 		}
 
@@ -463,6 +464,7 @@ export default defineComponent({
 			departureDate.setMinutes(minutes);
 			const departureTimeISO = departureDate.toISOString();
 
+			// Google Routes Request Data
 			let requestData = {
 				origin: {
 					location: {
@@ -504,6 +506,7 @@ export default defineComponent({
 					}
 				});
 
+				// Retrieve direction steps, but we don't use this
 				if (response.data.routes[0]?.legs[0]?.steps) {
 					directionSteps.value = response.data.routes[0].legs[0].steps;
 				}
@@ -544,6 +547,8 @@ export default defineComponent({
 					user_id: props.userme.email
 				};
 
+				// Update our route database (backend call)
+				// Update user's EXP based on carbon emission calculation
 				try {
 					const headers = {
 						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
