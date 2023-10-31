@@ -35,11 +35,11 @@
 	/* Adjust as needed */
 }
 
-span{
+span {
 	color: #3a5a40;
 }
 
-h6{
+h6 {
 	text-decoration: underline;
 }
 </style>
@@ -168,7 +168,6 @@ export default {
 			try {
 				const response = await axios.get(url, { headers });
 				this.users = response.data;
-				console.log('test');
 			} catch (error) {
 				console.error("Error fetching users:", error);
 			}

@@ -4,6 +4,7 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js'
 
+// import 'bootstrap'
 // Importing the main App component
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -72,9 +73,6 @@ app.use(
 	})
 );
 app.use(PrimeVue);
-// app.use(VueParallaxJs)
-
-
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)
 app.mount('#app')

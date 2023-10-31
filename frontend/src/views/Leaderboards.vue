@@ -337,7 +337,6 @@ export default {
 			try {
 				const response = await axios.get(url, { headers });
 				this.users = response.data;
-				console.log('test');
 			} catch (error) {
 				console.error("Error fetching users:", error);
 			}

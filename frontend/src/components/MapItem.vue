@@ -50,23 +50,9 @@
 		<Vue3DraggableResizable v-if="show" :x="20" :y="0" :w="300" :h="200" :z="1" :draggable="true" :resizable="false" :referenceLineVisible="false">
 			<div class="form-overlay rounded">
 				<div class="row p-0 my-1 mx-1">
-					<!-- Start Location -->
-					<div class="col-sm-12 col-md-3 input-group mb-2">
-						<!-- <span class="input-group-text font-weight-bold" id="autocomplete-label">From</span> -->
-						<GMapAutocomplete ref="autocomplete" v-model="startLocation.value" placeholder="Origin" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
-						<button class="btn btn-green" type="button" @click="getUserLocation">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
-								<circle cx="12" cy="12" r="4"></circle>
-								<path d="M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z"></path>
-							</svg>
-						</button>
-					</div>
-					<!-- Destination Field -->
-					<div class="col-sm-12 col-md-3 input-group mb-2">
-						<!-- <span class="input-group-text font-weight-bold" id="autocomplete-label">To</span> -->
-						<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
-					</div>
+
 					<!-- Travel Mode -->
+
 					<div class="col-sm-12 col-md-3 input-group mb-2">
 						<!-- <span class="input-group-text font-weight-bold">Transporation</span> -->
 						<select v-model="travelMode" class="form-control">
@@ -78,6 +64,24 @@
 							<option value="WALK">Walk</option>
 						</select>
 					</div>
+					<!-- Start Location -->
+					<div class="col-sm-12 col-md-3 input-group mb-2">
+						<!-- <span class="input-group-text font-weight-bold" id="autocomplete-label">From</span> -->
+						<GMapAutocomplete ref="autocomplete" v-model="startLocation.value" placeholder="Origin" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+						<button class="btn btn-green" type="button" @click="getUserLocation">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
+								<circle cx="12" cy="12" r="4"></circle>
+								<path d="M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z"></path>
+							</svg>
+						</button>
+					</div>
+
+					<!-- Destination Field -->
+					<div class="col-sm-12 col-md-3 input-group mb-2">
+						<!-- <span class="input-group-text font-weight-bold" id="autocomplete-label">To</span> -->
+						<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
+					</div>
+
 					<div class="col-sm-12 col-md-3 input-group mb-3">
 						<!-- <span class="input-group-text font-weight-bold"></span> -->
 						<input type="time" v-model="departureTime" class="form-control">
@@ -297,6 +301,7 @@ export default defineComponent({
 		const userLvl = ref(0)
 		const expAdded = ref(0)
 		const show = ref(true);
+		// Call to check user's exp and level, if any.
 		axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/ez/${props.userme.email}`)
 			.then(response => {
 				userExp.value = response.data.exp;
@@ -306,6 +311,7 @@ export default defineComponent({
 			.catch(error => {
 				console.error(error);
 			});
+
 		const errorMessage = ref('');
 		const { user, isAuthenticated } = useAuth0();
 		const travelMode = ref("");
@@ -408,9 +414,15 @@ export default defineComponent({
 
 			departureTime.value = `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
 		};
+
+
+		// # ================================================================================================================================================================================================================================================================================================
+
+
 		const fetchRouteDetails = async () => {
 			if (startLocation.value.lat && startLocation.value.lng && destination.value.lat && destination.value.lng) {
 				if (!travelMode.value) {
+					// TODO: Replace with toast feature
 					alert('Please select a valid travel mode.');
 					return;
 				}
@@ -449,8 +461,11 @@ export default defineComponent({
 					languageCode: "en-US",
 					units: "IMPERIAL"
 				};
+
+				// Declare values for GoogleAPI, traffic aware routing
 				if (travelMode.value === "DRIVE") {
 					requestData.routingPreference = "TRAFFIC_AWARE";
+					requestData.departureTime = departureTimeISO;
 				}
 
 				try {
@@ -493,6 +508,7 @@ export default defineComponent({
 					const distanceInKm = routeDetails.value.distanceMeters / 1000;
 					const routeData = {
 						route_id: 'route_' + Date.now(),  // You will need a way to generate unique route IDs
+						distance: distanceInKm,
 						start_point_lat_lng: `${startLocation.value.lat},${startLocation.value.lng}`,
 						end_point_lat_lng: `${destination.value.lat}, ${destination.value.lng}`,
 						start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
@@ -500,7 +516,9 @@ export default defineComponent({
 						transport_mode: travelMode.value,
 						carbon_emission: carbonEms,
 						timestamp: new Date().toISOString(),
-						user_id: props.userme.email
+						user_id: props.userme.email,
+						validated: false, // Validation here is for users to confirm the route via GeoLocation
+						checkedStartLocation: false //Validation here is for users to ensure that they selected currentLocation as start location.
 					};
 
 					// Update our route database (backend call)
@@ -510,7 +528,7 @@ export default defineComponent({
 							'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
 						};
 						await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/routes`, routeData, { headers });
-						await addExpBasedOnCarbonEmission(calculateCarbonEmissionForEXP(), distanceInKm, travelMode.value);
+						// await addExpBasedOnCarbonEmission(calculateCarbonEmissionForEXP(), distanceInKm, travelMode.value);
 
 
 					} catch (error) {
@@ -527,6 +545,57 @@ export default defineComponent({
 				}
 			}
 		};
+
+		const fetchPolylineOnly = async () => {
+			if (startLocation.value.lat && startLocation.value.lng && destination.value.lat && destination.value.lng) {
+				if (!travelMode.value) {
+					alert('Please select a valid travel mode.');
+					return;
+				}
+				try {
+					const requestData = {
+						origin: {
+							location: {
+								latLng: {
+									latitude: startLocation.value.lat,
+									longitude: startLocation.value.lng
+								}
+							}
+						},
+						destination: {
+							location: {
+								latLng: {
+									latitude: destination.value.lat,
+									longitude: destination.value.lng
+								}
+							}
+						},
+						travelMode: travelMode.value
+					};
+					const response = await axios.post("https://routes.googleapis.com/directions/v2:computeRoutes", requestData, {
+						headers: {
+							'Content-Type': 'application/json',
+							'X-Goog-Api-Key': 'AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM',
+							'X-Goog-FieldMask': 'routes.polyline.encodedPolyline'
+						}
+					});
+					if (response.data.routes && response.data.routes.length > 0) {
+						const route = response.data.routes[0];
+						const polyline = route.polyline.encodedPolyline;
+						decodedPolyline.value = decodePolyline(polyline);
+					}
+				} catch (error) {
+					console.error('Failed to fetch polyline:', error);
+				}
+			}
+		};
+
+
+
+		// # ================================================================================================================================================================================================================================================================================================
+
+
+
 
 		const decodePolyline = (encoded) => {
 			let index = 0;
@@ -666,7 +735,7 @@ export default defineComponent({
 
 		// Auto update as long as destination is updated.
 		// travelMode needs to be set.
-		// watch(destination, fetchRouteDetails);
+		watch(destination, fetchPolylineOnly);
 
 
 
