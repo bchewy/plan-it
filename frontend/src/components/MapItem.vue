@@ -198,18 +198,16 @@
 
 
 <script>
-import { ref, defineComponent, computed, reactive } from "vue";
+import { ref, defineComponent, computed, reactive, watch } from "vue";
 import axios from "axios";
 import { useAuth0 } from '@auth0/auth0-vue';
-// import VueDraggableResizable from 'vue-draggable-resizable'
 import Vue3DraggableResizable from 'vue3-draggable-resizable';
-// import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css';
 
 
 export default defineComponent({
 	data() {
 		return {
-			parentWidth: 0,  // this will be updated once the component mounts
+			parentWidth: 0,
 			componentWidth: 300,
 		}
 	},
@@ -288,6 +286,7 @@ export default defineComponent({
 		// }
 	},
 	computed: {
+		// External API calls for displaying on map apps
 		googleMapsUrl() {
 			const origin = `${this.startLocation.lat},${this.startLocation.lng}`;
 			const destination = `${this.destination.lat},${this.destination.lng}`;
@@ -301,6 +300,7 @@ export default defineComponent({
 			const destination = `${this.destination.lat},${this.destination.lng}`;
 			return `https://citymapper.com/directions?startcoord=${origin}&endcoord=${destination}`;
 		},
+
 		// Used for the vue3 drag and drop
 		computedX() {
 			// For smaller screens, we adjust the component width to fit the parent width
@@ -391,6 +391,7 @@ export default defineComponent({
 			return distance;
 		}
 
+
 		function getZoomLevel(distance) {
 			if (distance > 10000) return 12;
 			if (distance > 5000) return 13;
@@ -437,135 +438,122 @@ export default defineComponent({
 			departureTime.value = `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
 		};
 		const fetchRouteDetails = async () => {
-			// this.triggerConfetti();
+			if (startLocation.value.lat && startLocation.value.lng && destination.value.lat && destination.value.lng) {
+				if (!travelMode.value) {
+					alert('Please select a valid travel mode.');
+					return;
+				}
+				const [hours, minutes] = departureTime.value.split(':').map(Number);
+				const departureDate = new Date();
+				departureDate.setHours(hours);
+				departureDate.setMinutes(minutes);
+				const departureTimeISO = departureDate.toISOString();
 
-			// if (!startLocation.value.lat || !startLocation.value.lng) {
-			// 	alert('Please enter a valid start location.');
-			// 	return;
-			// }
-
-			// if (!destination.value.lat || !destination.value.lng) {
-			// 	alert('Please enter a valid destination.');
-			// 	return;
-			// }
-
-			// if (!departureTime.value) {
-			// 	alert('Please enter a valid departure time.');
-			// 	return;
-			// }
-
-			if (!travelMode.value) {
-				alert('Please select a valid travel mode.');
-				return;
-			}
-			const [hours, minutes] = departureTime.value.split(':').map(Number);
-			const departureDate = new Date();
-			departureDate.setHours(hours);
-			departureDate.setMinutes(minutes);
-			const departureTimeISO = departureDate.toISOString();
-
-			// Google Routes Request Data
-			let requestData = {
-				origin: {
-					location: {
-						latLng: {
-							latitude: startLocation.value.lat,
-							longitude: startLocation.value.lng
+				// Google Routes Request Data
+				let requestData = {
+					origin: {
+						location: {
+							latLng: {
+								latitude: startLocation.value.lat,
+								longitude: startLocation.value.lng
+							}
 						}
-					}
-				},
-				destination: {
-					location: {
-						latLng: {
-							latitude: destination.value.lat,
-							longitude: destination.value.lng
+					},
+					destination: {
+						location: {
+							latLng: {
+								latitude: destination.value.lat,
+								longitude: destination.value.lng
+							}
 						}
-					}
-				},
-				travelMode: travelMode.value,
-				departureTime: departureTimeISO,
-				computeAlternativeRoutes: false,
-				routeModifiers: {
-					avoidTolls: routeModifiers.value.avoidTolls,
-					avoidHighways: routeModifiers.value.avoidHighways,
-					avoidFerries: routeModifiers.value.avoidFerries
-				},
-				languageCode: "en-US",
-				units: "IMPERIAL"
-			};
-			if (travelMode.value === "DRIVE") {
-				requestData.routingPreference = "TRAFFIC_AWARE";
-			}
-
-			try {
-				const response = await axios.post("https://routes.googleapis.com/directions/v2:computeRoutes", requestData, {
-					headers: {
-						'Content-Type': 'application/json',
-						'X-Goog-Api-Key': 'AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM',
-						'X-Goog-FieldMask': 'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs.steps'
-					}
-				});
-
-				// Retrieve direction steps, but we don't use this
-				if (response.data.routes[0]?.legs[0]?.steps) {
-					directionSteps.value = response.data.routes[0].legs[0].steps;
+					},
+					travelMode: travelMode.value,
+					departureTime: departureTimeISO,
+					computeAlternativeRoutes: false,
+					routeModifiers: {
+						avoidTolls: routeModifiers.value.avoidTolls,
+						avoidHighways: routeModifiers.value.avoidHighways,
+						avoidFerries: routeModifiers.value.avoidFerries
+					},
+					languageCode: "en-US",
+					units: "IMPERIAL"
+				};
+				if (travelMode.value === "DRIVE") {
+					requestData.routingPreference = "TRAFFIC_AWARE";
 				}
 
-				routeDetails.value = response.data.routes[0];
-				const encodedPolyline = response.data.routes[0].polyline.encodedPolyline;
-				decodedPolyline.value = decodePolyline(encodedPolyline);
-
-				// Directions
-				directionSteps.value = response.data.routes[0].legs[0].steps.map(step => step);
-
-
-				// Helper Function to get names
-				const getLocationName = async (lat, lng) => {
-					try {
-						const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
-						if (response.data.results && response.data.results.length > 0) {
-							// Return the formatted address of the first result
-							return response.data.results[0].formatted_address;
-						}
-					} catch (error) {
-						console.error('Failed to fetch location name:', error);
-					}
-					return '';  // Return an empty string if the location name could not be fetched
-				};
-
-				const carbonEms = calculateCarbonEmission(travelMode.value, routeDetails.value.distanceMeters)
-				const distanceInKm = routeDetails.value.distanceMeters / 1000;
-				const routeData = {
-					route_id: 'route_' + Date.now(),  // You will need a way to generate unique route IDs
-					start_point_lat_lng: `Point(${startLocation.value.lat}, ${startLocation.value.lng})`,
-					end_point_lat_lng: `Point(${destination.value.lat}, ${destination.value.lng})`,
-					start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
-					end_point_name: await getLocationName(destination.value.lat, destination.value.lng),
-					transport_mode: travelMode.value,
-					carbon_emission: carbonEms,  // Assume calculateCarbonEmission is a function to calculate the carbon emission
-					timestamp: new Date().toISOString(),
-					user_id: props.userme.email
-				};
-
-				// Update our route database (backend call)
-				// Update user's EXP based on carbon emission calculation
 				try {
-					const headers = {
-						'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+					const response = await axios.post("https://routes.googleapis.com/directions/v2:computeRoutes", requestData, {
+						headers: {
+							'Content-Type': 'application/json',
+							'X-Goog-Api-Key': 'AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM',
+							'X-Goog-FieldMask': 'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs.steps'
+						}
+					});
+
+					// Retrieve direction steps, but we don't use this
+					if (response.data.routes[0]?.legs[0]?.steps) {
+						directionSteps.value = response.data.routes[0].legs[0].steps;
+					}
+
+					routeDetails.value = response.data.routes[0];
+					const encodedPolyline = response.data.routes[0].polyline.encodedPolyline;
+					decodedPolyline.value = decodePolyline(encodedPolyline);
+
+					// Directions
+					directionSteps.value = response.data.routes[0].legs[0].steps.map(step => step);
+
+
+					// Helper Function to get names
+					const getLocationName = async (lat, lng) => {
+						try {
+							const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
+							if (response.data.results && response.data.results.length > 0) {
+								// Return the formatted address of the first result
+								return response.data.results[0].formatted_address;
+							}
+						} catch (error) {
+							console.error('Failed to fetch location name:', error);
+						}
+						return '';  // Return an empty string if the location name could not be fetched
 					};
-					await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/routes`, routeData, { headers });
-					await addExpBasedOnCarbonEmission(calculateCarbonEmissionForEXP(), distanceInKm, travelMode.value);
+
+					const carbonEms = calculateCarbonEmission(travelMode.value, routeDetails.value.distanceMeters)
+					const distanceInKm = routeDetails.value.distanceMeters / 1000;
+					const routeData = {
+						route_id: 'route_' + Date.now(),  // You will need a way to generate unique route IDs
+						start_point_lat_lng: `${startLocation.value.lat},${startLocation.value.lng}`,
+						end_point_lat_lng: `${destination.value.lat}, ${destination.value.lng}`,
+						start_point_name: await getLocationName(startLocation.value.lat, startLocation.value.lng),
+						end_point_name: await getLocationName(destination.value.lat, destination.value.lng),
+						transport_mode: travelMode.value,
+						carbon_emission: carbonEms,
+						timestamp: new Date().toISOString(),
+						user_id: props.userme.email
+					};
+
+					// Update our route database (backend call)
+					// Update user's EXP based on carbon emission calculation
+					try {
+						const headers = {
+							'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+						};
+						await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/routes`, routeData, { headers });
+						await addExpBasedOnCarbonEmission(calculateCarbonEmissionForEXP(), distanceInKm, travelMode.value);
+
+
+					} catch (error) {
+						console.error('Failed to store route data:', error);
+						errorMessage.value = error.message += ' Please try again.';
+
+
+					}
 				} catch (error) {
-					console.error('Failed to store route data:', error);
+					console.error("Failed to fetch route details:", error);
 					errorMessage.value = error.message += ' Please try again.';
 
 
 				}
-			} catch (error) {
-				console.error("Failed to fetch route details:", error);
-				errorMessage.value = error.message += ' Please try again.';
-
-
 			}
 		};
 
@@ -693,6 +681,7 @@ export default defineComponent({
 					console.error(error);
 				});
 		};
+
 		const logUserActivity = (activity) => {
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/log`, { activity: activity }, {
 				headers: {
@@ -706,6 +695,12 @@ export default defineComponent({
 					console.error(error);
 				});
 		};
+
+
+		// Auto update as long as destination is updated.
+		// travelMode needs to be set.
+		// watch(destination, fetchRouteDetails);
+
 
 
 		return {
