@@ -137,13 +137,13 @@
                   <font-awesome-icon icon="fa-solid fa-circle-user" />
                   Your Public Profile</router-link> -->
               </li>
-              <hr class="dropdown-divider" />
+              <!-- <hr class="dropdown-divider" /> -->
 
-              <li>
+              <!-- <li>
                 <button class="dropdown-item text-light" @click="toggleGamification">
                   Toggle Gamification
                 </button>
-              </li>
+              </li> -->
               <li>
                 <hr class="dropdown-divider" />
 
@@ -227,21 +227,42 @@ export default defineComponent({
 
 
         try {
-          const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/users`, {
-            method: 'POST',
+          let requestBody = {
+            auth0_user_id: newValue.sub,
+            email: newValue.email,
+            handle: newValue.nickname,
+            pictureurl: newValue.picture,
+          };
+
+
+          const response1 = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/ez/${encodeURIComponent(newValue.email)}`, {
             headers: {
-              'Content-Type': 'application/json',
               'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
-            },
-            body: JSON.stringify({
-              auth0_user_id: newValue.sub,
-              email: newValue.email,
-              handle: newValue.nickname,
-              pictureurl: newValue.picture,
-            })
+            }
           });
-          const data = await response.json();
-          console.log('User upserted:', data);
+          const msg = await response1.data;
+          console.log(response1.data)
+          if (response1.status === 200) {
+            // Initialize exp and level if it does not exist on first-time creation.
+            console.log('User not found in the database');
+            requestBody.exp = 0;
+            requestBody.level = 0;
+            // When user is not found we create it.
+            const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/users`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+              },
+              body: JSON.stringify(requestBody)
+
+            });
+            const data = await response.json();
+            console.log('User upserted:', data);
+
+          } else {
+            console.log('User found in the database');
+          }
         } catch (e) {
           console.error('Failed to upsert user:', e);
         }
@@ -261,9 +282,9 @@ export default defineComponent({
 
       try {
         const response = await axios.get(url, { headers });
-        console.log(response.data);
+        // console.log(response.data);
         userMe.value = response.data;
-        console.log(userMe.value.level)
+        // console.log(userMe.value.level)
 
       } catch (error) {
         console.error("Error fetching user", error);
