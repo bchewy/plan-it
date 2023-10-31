@@ -35,52 +35,99 @@
 	/* Adjust as needed */
 }
 
-span {
-	color: #3a5a40;
+span{
+	color: #70484a;
+	font-weight: bold;
 }
 
 h6 {
 	text-decoration: underline;
 }
+
+.title{
+	color: black;
+	position:relative;
+	text-decoration: none;
+}
+
+.title::before{
+	content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    border-radius: 4px;
+    background-color: #18272F;
+    bottom: 0;
+    left: 0;
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: transform .3s ease-in-out;
+}
+
+.title:hover::before{
+	color: #70484a;
+	transform-origin: left;
+  	transform: scaleX(1);
+}
+
+a{
+	color: #70484a;
+}
+
+a:hover{
+	color: #5c4344;
+}
+
+ul li{
+	margin-left: 5px;
+}
+
+.block{
+	padding-top: 10px;
+}
+
+
 </style>
 
 <template>
 	<Navbar />
 	<div class="container-fluid pt-3 bg-supergreen pb-3">
 		<div class="row justify-content-center">
-			<div class="col-lg-8">
-				<h2 class="text-center">What is It?</h2>
+			<div class="block col-lg-8">
+				<h2 class="text-center"><a class="title">What is It?</a></h2>
 				<!-- <img src="../assets/how-it-works.png" alt="How it works" class="img-fluid rounded mx-auto d-block"> -->
-				<p id="whatisit" class="text-center mt-3">PlanIt is a <span>gamified </span>route planner app aimed at encouraging users to reduce transport carbon emissions. This can be done through the adoption of eco-friendly transport options, like walking, or taking public transport over driving.</p>
+				<p id="whatisit" class="text-center mt-3">PlanIt is a <span>gamified </span>route planner app aimed at encouraging users to reduce transport carbon emissions. This can be done through the adoption of eco-friendly transport options, like <span>walking</span> or <span>taking public transport</span> over driving.</p>
 			</div>
-			<div class="col-lg-8">
-				<h2 class="text-center">Why PlanIt?</h2>
+			<div class="block col-lg-8">
+				<h2 class="text-center"><a class="title">Why PlanIt?</a></h2>
 				<!-- <img src="../assets/how-it-works.png" alt="How it works" class="img-fluid rounded mx-auto d-block"> -->
 				<h6>Carbon Emissions from Urban Transportation</h6>
 				<ul>
-					<li>Contributes to about 15% of total carbon emissions in Singapore</li>
-					<li>Government aims to reduce transport emissions by 80% (from 2016 levels) by mid-century</li>
+					<li>Contributes to about <span>15% of total carbon emissions </span> in Singapore</li>
+					<li>Government aims to <span> reduce transport emissions by 80% </span>(from 2016 levels) by mid-century</li>
 				</ul>
 				<h6>Growing Trend of Gamification</h6>
 				<ul>
-					<li>Gamification market in Singapore projected to expand from 2023 - 2028</li>
-					<li>New and innovative way to drive awareness, motivation, and engagement</li>
+					<li>Gamification market in Singapore <span>projected to expand from 2023 - 2028</span></li>
+					<li>New and innovative way to <span>drive awareness</span>,<span> motivation</span>, and <span>engagement</span></li>
 				</ul>
 			</div>
-			<div class="col-lg-8">
-				<h2 class="text-center">How It Works</h2>
+			<div class="block col-lg-8">
+				<h2 class="text-center"><a class="title">How It Works</a></h2>
 				<!-- <img src="../assets/how-it-works.png" alt="How it works" class="img-fluid rounded mx-auto d-block"> -->
 				<img src="../assets/product_demo_real.gif" alt="How it works" class="img-fluid rounded mx-auto d-block">
 				<p class="text-center mt-3">Our application provides a unique way to navigate your city. It uses advanced algorithms to find the most efficient routes, and it also includes a gamification system to make your journey more fun. Earn badges, level up, and compete with your friends!</p>
 			</div>
-		</div>
-		<div class="container-fluid pt-3 bg-supergreen pb-3">
+			<div class="col-lg-8">
 			<h6>Additional Reading Links</h6>
-			<ol>
-				<li><a href="https://www.lta.gov.sg/content/ltagov/en/newsroom/2022/3/news-releases/reducing-peak-land-transport-emissions-by-80-.html">Land Transport Authority: Reducing Peak Land Transport Emissions by 80%</a></li>
-				<li><a href="https://www.nccs.gov.sg/singapores-climate-action/mitigation-efforts/transport/#:~:text=TRANSPORT,A%20significant%20needle">National Climate Change Secretariat Singapore: Making Walk-Cycle-Ride the Preferred Mode to Travel</a></li>
-			</ol>
+				<ol>
+					<li>Land Transport Authority: <a href="https://www.lta.gov.sg/content/ltagov/en/newsroom/2022/3/news-releases/reducing-peak-land-transport-emissions-by-80-.html" target="_blank">Reducing Peak Land Transport Emissions by 80%</a></li>
+					<li>Land Transpoer Authority: <a href="https://www.lta.gov.sg/content/ltagov/en/who_we_are/our_work/land_transport_master_plan_2040.html" target="_blank">Land Transport Master Plan 2040</a></li>
+					<li>National Climate Change Secretariat Singapore: <a href="https://www.nccs.gov.sg/singapores-climate-action/mitigation-efforts/transport/#:~:text=TRANSPORT,A%20significant%20needle" target="_blank">Making Walk-Cycle-Ride the Preferred Mode to Travel</a></li>
+				</ol>
+			</div>
 		</div>
+		
 
 	</div>
 </template>
