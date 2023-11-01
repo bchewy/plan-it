@@ -242,7 +242,7 @@
                   <br>
                   <div class="checkbox-label">
                     <input type="checkbox" v-model="newFeatures" />
-                    <label>Nofity me about new features of PlanIt!</label>
+                    <label>Notify me about new features of PlanIt!</label>
                   </div>
                   <br>
                   <div class="checkbox-label">
