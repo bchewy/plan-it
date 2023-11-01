@@ -64,7 +64,7 @@
 											<br><span>{{ user.handle }}</span>
 										</td>
 										<td v-for="badge in badges">
-											<img :src="badge.image" width="40" height="40">
+											<img :src="'../src/assets/badges/' + badge.icon" width="40" height="40">
 										</td>
 										<td>{{ user.level }}</td>
 										<!-- <td>{{ user.exp }}</td> -->
