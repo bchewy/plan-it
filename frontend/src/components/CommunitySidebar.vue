@@ -1,5 +1,10 @@
-<template>
+<style>
 
+
+</style>
+
+
+<template>
 	<Sidebar v-model:visible="visible" style="background-color: #739072">
 		
 		<div class="p-sidebar-content px-3 pt-3">

@@ -53,7 +53,6 @@
   /* Smooth hover transition */
 }
 
-
 .navbar-nav .nav-link:hover {
   /* background-color: #a3b18a; */
   color: #a7c957;

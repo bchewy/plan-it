@@ -1,16 +1,18 @@
-<style scoped></style>
+<style scoped>
+</style>
+
 <template>
 	<!-- nav -->
 	<NavBar />
-	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: rgb(211, 233, 220);">
+	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: #739072;">
 
 		
-		<div class="sticky-top border-bottom" style="background-color: rgb(211, 233, 220); z-index: 1;">
+		<div class="sticky-top border-bottom" style="background-color: #739072; z-index: 1;">
 		<CommunitySidebar ></CommunitySidebar>
 	
 			
-			<div class="text-center h2 mb-3 py-4">
-				<span class="text-muted" style="font-weight: bold;">For You</span>
+			<div class="text-center h2 mb-3 pt-4">
+				<span class="header" style="font-weight: bold;">For You</span>
 			</div>
 		</div>	
 		
