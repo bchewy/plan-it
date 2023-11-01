@@ -12,7 +12,7 @@
     <div class="row justify-content-center mt-5">
       <div v-for="(badge, index) in badgesLoaded" :key=index class="card" style="width: 18rem; margin:0.5rem">
 
-        <img :src="'../src/assets/badges/' + badge.icon" class="card-img-top">
+        <img :src="'src/assets/badges/' + badge.icon" class="card-img-top">
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">{{ badge.name }}</h5>
           <p class="card-text">{{ badge.description }}</p>

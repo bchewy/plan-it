@@ -63,9 +63,11 @@
 											<img :src="user.pictureurl" alt="User Image" width="50" height="50">
 											<br><span>{{ user.handle }}</span>
 										</td>
+										<!--
 										<td v-for="badge in badges">
 											<img :src="'../src/assets/badges/' + badge.icon" width="40" height="40">
 										</td>
+										-->
 										<td>{{ user.level }}</td>
 										<!-- <td>{{ user.exp }}</td> -->
 										<td v-if="user.carbonsavings">{{ user.carbonsavings }} Co2 kg</td>
@@ -177,7 +179,7 @@ export default {
 			friendRequests: [],
 			receivedRequests: [],
 			sentRequests: [],
-			badges,
+			//badges,
 		};
 	},
 	computed: {
@@ -321,28 +323,28 @@ export default {
 			this.fetchUsers();
 			this.fetchUser();
 			this.fetchFriendStats(this.friends);
-			this.fetchBadges();
+			// this.fetchBadges();
 			// this.fetchRoutes().then(() => {
 			// 	this.drawChart();
 			// });
 			// this.fetchUser();
 			// this.fetchFriendRequests();
 		},
-		async fetchBadges() {
-			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}/badges`;
-			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
-			};
+		// async fetchBadges() {
+		// 	const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}/badges`;
+		// 	const headers = {
+		// 		"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+		// 	};
 
-			try {
-				const response = await axios.get(url, { headers });
-				this.badges = response.data.badges;
-				// console.log(this.friends);
+		// 	try {
+		// 		const response = await axios.get(url, { headers });
+		// 		this.badges = response.data.badges;
+		// 		// console.log(this.friends);
 
-			} catch (error) {
-				console.error("Error fetching user", error);
-			}
-		},
+		// 	} catch (error) {
+		// 		console.error("Error fetching user", error);
+		// 	}
+		// },
 		async fetchUser() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
 			const headers = {
