@@ -66,10 +66,9 @@
 										</td>
 										<!-- add pictures of badges-->
 										<td>
-											<div v-for="badge in user.badges" :key="badge.id">
+											<span v-for="badge in user.badges" :key="badge.id">
 												<img :src="badge.image" alt="Badge Image" width="50" height="50">
-												<br><span>{{ badge.name }}</span>
-											</div>
+											</span>
 											<!-- <img v-for="badge in badges" :key="badge.id" :src="'../src/assets/badges/' + badge.icon" width="30" height="30"> -->
 										</td>
 										<td>{{ user.level }}</td>
