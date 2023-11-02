@@ -63,11 +63,10 @@
 											<img :src="user.pictureurl" alt="User Image" width="50" height="50">
 											<br><span>{{ user.handle }}</span>
 										</td>
-										<!--
-										<td v-for="badge in badges">
-											<img :src="'../src/assets/badges/' + badge.icon" width="40" height="40">
+										<!-- add pictures of badges-->
+										<td>
+											<img v-for="badge in badges" :key="badge.id" :src="'../src/assets/badges/'+badge.icon" width="30" height="30">
 										</td>
-										-->
 										<td>{{ user.level }}</td>
 										<!-- <td>{{ user.exp }}</td> -->
 										<td v-if="user.carbonsavings">{{ user.carbonsavings }} Co2 kg</td>
@@ -179,8 +178,8 @@ export default {
 			friendRequests: [],
 			receivedRequests: [],
 			sentRequests: [],
-			//badges,
-		};
+			badges
+			}
 	},
 	computed: {
 		// For pagination
@@ -323,7 +322,7 @@ export default {
 			this.fetchUsers();
 			this.fetchUser();
 			this.fetchFriendStats(this.friends);
-			// this.fetchBadges();
+			this.fetchBadges();
 			// this.fetchRoutes().then(() => {
 			// 	this.drawChart();
 			// });
@@ -372,6 +371,21 @@ export default {
 				const response = await axios.get(url, { headers });
 				this.receivedRequests = response.data.received;
 				this.sentRequests = response.data.sent;
+
+			} catch (error) {
+				console.error("Error fetching friend requests", error);
+			}
+
+		},
+		async fetchBadges() {
+			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(this.user.email)}/badges`;
+			const headers = {
+				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+			};
+
+			try {
+				const response = await axios.get(url, { headers });
+				this.badges = response.data.badges;
 
 			} catch (error) {
 				console.error("Error fetching friend requests", error);
