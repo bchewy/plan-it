@@ -388,7 +388,7 @@ export default {
 				this.badges = response.data.badges;
 
 			} catch (error) {
-				console.error("Error fetching friend requests", error);
+				console.error("Error fetching badges", error);
 			}
 
 		},
