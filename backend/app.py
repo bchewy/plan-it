@@ -9,9 +9,11 @@ from bson import ObjectId
 from flasgger import Flasgger
 from flasgger.utils import swag_from
 import datetime
+import boto3
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-
+CORS(app)
 swagger_config = {
     "headers": [],
     "specs": [
@@ -33,6 +35,7 @@ swagger_config = {
         }
     },
 }
+
 
 swagger = Flasgger(app, config=swagger_config)
 # swagger = Flasgger(app)
@@ -64,6 +67,32 @@ def convert_objectid_to_string(data):
         return str(data)
     return data
 
+
+def upload_file_to_s3(file_name, object_name=None):
+    """Upload a file to an S3 bucket
+
+    :param file_name: File to upload
+    :param bucket: Bucket to upload to
+    :param object_name: S3 object name. If not specified then file_name is used
+    :return: True if file was uploaded, else False
+    """
+
+    # If S3 object_name was not specified, use file_name
+    if object_name is None:
+        object_name = 'plan-it/'+file_name
+
+    s3_client = boto3.client('s3')
+    try:
+        response = s3_client.upload_file(
+            file_name, 
+            'bchewy-images', 
+            object_name,
+            ExtraArgs={'ACL': 'public-read'}  # Set the ACL to 'public-read'
+        )
+    except Exception as e:
+        print("Error uploading file: ", e)
+        return False
+    return True
 
 # API Key
 
@@ -135,7 +164,8 @@ def db_check():
     except ServerSelectionTimeoutError:
         return jsonify({"message": "Database is unhealthy."}), 500
 
-# CRUD Operations
+
+# Routes ============================================================
 
 # Create (POST)
 @app.route("/routes", methods=['POST'])
@@ -378,7 +408,9 @@ def delete_route(route_id):
     else:
         return jsonify({"message": "Route not found."}), 404
 
-# User Operations
+# =====================================================================================
+
+# User Operations ======================================================================
 
 # Update or create user init into our backend, since we're using auth0
 @app.route("/users", methods=['POST', 'PUT'])
@@ -1063,8 +1095,7 @@ def add_exp(user_email):
     else:
         return jsonify({"message": "User not found."}), 404
 
-
-
+# Replace level
 @app.route("/users/<user_email>/replace/level", methods=['POST'])
 @require_api_key
 def update_level(user_email):
@@ -1121,8 +1152,11 @@ def update_level(user_email):
     else:
         return jsonify({"message": "User not found."}), 404
 
+# =====================================================================================
 
-# Post section
+
+
+# Post section ======================================================================
 @app.route("/users/<user_email>/posts", methods=['POST'])
 @require_api_key
 def create_post(user_email):
@@ -1227,7 +1261,11 @@ def get_posts(user_email):
     else:
         return jsonify({"message": "User not found."}), 404
 
-# Groups section
+# =====================================================================================
+
+
+
+# Groups section ======================================================================
 @app.route("/users/<user_email>/groups", methods=['POST'])
 @require_api_key
 def create_group(user_email):
@@ -1457,7 +1495,11 @@ def leave_group(user_email, group_name):
     else:
         return jsonify({"message": "User not found."}), 404
 
-# Badges CRUD
+# =====================================================================================
+
+
+
+# Badges CRUD =========================================================================================================
 
 # Create Badge
 @app.route("/badges", methods=['POST'])
@@ -1501,15 +1543,60 @@ def create_badge():
             message:
               type: string
     """
-    name = request.json.get('name')
-    description = request.json.get('description')
-    image = request.json.get('image')
+    data = request.form
+    name = data.get('name')
+    description = data.get('description')
+    image = request.files.get('image')
+
+
+    # Upload the image to S3 and get the public URL
+    image_filename = secure_filename(image.filename)
+    image.save(image_filename)
+    upload_file_to_s3(image_filename)
+    image_url = f"https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/{image_filename}"
+    image = image_url
+
     if name and description and image:
         badge = {"name": name, "description": description, "image": image}
         db.badges.insert_one(badge)
         return jsonify({"message": "Badge created successfully."}), 200
     else:
         return jsonify({"message": "Name, description and image are required."}), 400
+
+
+@app.route("/badges", methods=['GET'])
+@require_api_key
+def get_all_badges():
+    """
+    Get all badges
+    ---
+    tags:
+      - Badges
+    responses:
+      200:
+        description: Badges retrieved successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: No badges found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    badges = list(db.badges.find())
+    for badge in badges:
+        badge["_id"] = str(badge["_id"])
+    if badges:
+        return jsonify(badges), 200
+    else:
+        return jsonify({"message": "No badges found."}), 404
+
+
 
 # Read Badge
 @app.route("/badges/<badge_id>", methods=['GET'])
@@ -1635,6 +1722,7 @@ def get_user_badges(user_email):
             "milestone": "One month of zero-waste"
             }
         ]
+        
         return jsonify({"badges": badges}), 200
     else:
         return jsonify({"message": "User not found."}), 404
@@ -1731,9 +1819,13 @@ def delete_badge(badge_id):
             message:
               type: string
     """
-    db.badges.delete_one({"_id": ObjectId(badge_id)})
+    db.badges.delete_one({"_id": badge_id})
     return jsonify({"message": "Badge deleted successfully."}), 200
 
+#  =========================================================================================================
+
+
+# Logging: User Activity Logs =========================================================================================================
 
 
 @app.route("/users/<user_id>/log", methods=['POST'])
@@ -1808,6 +1900,9 @@ def get_user_logs(user_id):
     """
     logs = db.user_logs.find({"user_id": user_id})
     return jsonify({"logs": list(logs)}), 200
+
+
+# =========================================================================================================
 
 
 if __name__ == '__main__':

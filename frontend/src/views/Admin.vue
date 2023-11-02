@@ -70,6 +70,49 @@
 			</div>
 		</div>
 
+		<!-- Badges ================================================== -->
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card mt-4 mb-4">
+					<div class="card-header">
+						<h3 class="mb-0">Badge Management</h3>
+					</div>
+					<div class="container m-2">
+						<div class="row">
+							<div class="col-12 mt-5">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th scope="col">#</th>
+											<th scope="col">Badge</th>
+											<th scope="col">Description</th>
+											<th scope="col">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(badge, index) in badges" :key="badge">
+											<th scope="row">{{ index + 1 }}</th>
+											<td>
+												{{ badge.name }}
+											</td>
+											<td> <img :src="badge.image" class="w-25 h-25">
+												{{ badge.description }}
+											</td>
+											<td>
+												<!-- <button class="btn btn-primary" @click="openBadgeModal(badge)" data-bs-toggle="modal" data-bs-target="#editBadgeModal">Edit</button> -->
+												<button class="btn btn-danger" @click="deleteBadge(badge._id)">Delete</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#addBadgeModal">Add New Badge</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true" ref="addUserModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -94,8 +137,35 @@
 			</div>
 		</div>
 
+		<div class="modal fade" id="addBadgeModal" tabindex="-1" aria-labelledby="addBadgeModalLabel" aria-hidden="true" ref="addBadgeModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addBadgeModalLabel">Add New Badge</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<form @submit.prevent="addBadge">
+							<div class="mb-3">
+								<label for="badge-name" class="form-label">Name</label>
+								<input type="text" class="form-control" id="badge-name" v-model="newBadge.name">
+							</div>
+							<div class="mb-3">
+								<label for="badge-description" class="form-label">Description</label>
+								<input type="text" class="form-control" id="badge-description" v-model="newBadge.description">
+							</div>
+							<div class="mb-3">
+								<label for="badge-image" class="form-label">Image</label>
+								<input type="file" class="form-control" id="badge-image" @change="handleFileUpload" accept=".png, .jpg, .jpeg">
+							</div>
+							<button type="submit" class="btn btn-primary">Add</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 
-		
+
 
 	</div>
 </template>
@@ -108,8 +178,20 @@ import FriendRequest from '../components/FriendRequest.vue';
 import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
-import 'chartjs-adapter-date-fns';
 import { ref, defineComponent, computed, reactive } from "vue";
+import Modal from 'bootstrap/js/dist/modal';
+
+// import S3 from 'aws-sdk/clients/s3';
+
+// import AWS from 'aws-sdk/dist/aws-sdk'
+
+// AWS.config.update({
+// 	region: 'ap-southeast-1',
+// 	accessKeyId: `${process.env.VITE_APP_AWS_ACCESS_KEY_ID}`,
+// 	secretAccessKey: `${process.env.VITE_APP_AWS_SECRET_ACCESS_KEY}`,
+// });
+
+
 
 export default {
 	created() {
@@ -140,21 +222,18 @@ export default {
 			userExp,
 			expToNextLevel,
 			userLvl,
-			activeTab: 'profile',
-			isLoading: false,
-			currentPage: 1,
-			itemsPerPage: 3,
 			user,
+			badges: [],
 			isAuthenticated,
-			routes: [],
-			friends: [],
-			friendRequests: [],
-			receivedRequests: [],
-			sentRequests: [],
 			updatedUser: {
 				email: '',
 				level: 0,
 				exp: 0,
+			},
+			newBadge: {
+				name: '',
+				description: '',
+				image: null,
 			},
 		};
 	},
@@ -167,10 +246,44 @@ export default {
 		Badges,
 	},
 	methods: {
+		// handle file upload
+		handleFileUpload(event) {
+			this.newBadge.image = event.target.files[0];
+		},
 		openModal(user) {
 			this.updatedUser.email = user.email;
 			this.updatedUser.level = user.level;
 			this.updatedUser.exp = user.exp;
+		},
+		async addBadge() {
+
+			var myModalEl = document.getElementById('addBadgeModal');
+			var myModal = new Modal(myModalEl);
+			myModal.show();
+
+
+			console.log("Adding badge");
+			console.log(this.newBadge);
+			console.log(this.newBadge.image);
+			const formData = new FormData();
+
+			formData.append('name', this.newBadge.name);
+			formData.append('description', this.newBadge.description);
+			formData.append('image', this.newBadge.image);
+
+			try {
+				const response = await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/badges`, formData, {
+					headers: {
+						// 'Content-Type': 'application/json',
+						'x-api-key': 'PlanItIsTheBestProjectEverXYZ' // replace with your actual API key
+					}
+				});
+				console.log(response.data.message);
+
+				myModal.hide();
+			} catch (error) {
+				console.error(error);
+			}
 		},
 		updateUser() {
 			const urlLevel = `${import.meta.env.VITE_API_ENDPOINT}/users/${this.updatedUser.email}/replace/level`;
@@ -203,11 +316,7 @@ export default {
 		},
 		fetchData() {
 			this.fetchUsers();
-			// this.fetchRoutes().then(() => {
-			// 	this.drawChart();
-			// });
-			// this.fetchUser();
-			// this.fetchFriendRequests();
+			this.fetchBadges();
 		},
 		async fetchUsers() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users`;
@@ -221,7 +330,35 @@ export default {
 			} catch (error) {
 				console.error("Error fetching users:", error);
 			}
-		}
+		},
+		async fetchBadges() {
+			const url = `${import.meta.env.VITE_API_ENDPOINT}/badges`;
+			const headers = {
+				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+			};
+
+			try {
+				const response = await axios.get(url, { headers });
+				this.badges = response.data;
+			} catch (error) {
+				console.error("Error fetching badges:", error);
+			}
+		},
+		async deleteBadge(badgeId) {
+			const url = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badgeId}`;
+			const headers = {
+				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+			};
+
+			try {
+				await axios.delete(url, { headers });
+				console.log("Badge deleted");
+				this.fetchBadges();
+			} catch (error) {
+				console.error("Error deleting badge:", error);
+			}
+		},
+
 
 	},
 };
