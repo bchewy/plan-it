@@ -99,16 +99,19 @@
 		<div class="modal fade" id="modalGood" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Congratulations!</h5>
+					<!-- <div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel"></h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
+					</div> -->
 					<div class="modal-body">
 						<!-- <p>You have validated this route. EXP has been added into your profile.</p> -->
 						<!-- <img src="../assets/levelup.png" alt="level up" width="100px" height="100px"> -->
-						<div v-if="dancingGif">
-							<img src="dancingGif" alt="Dancing Gif" width="100px" height="100px">
+						<!-- <div v-if="dancingGif"> -->
+						<div class="text-center">
+							<img :src="dancingGif" alt="Dancing Gif"><br>
+							<h2>Congratulations!</h2>
 						</div>
+
 
 						<table class="table table-hover">
 							<tr>
@@ -148,15 +151,15 @@
 		<div class="modal fade" id="modalBad" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<div class="modal-header">
+					<!-- <div class="modal-header">
 						<h5 class="modal-title" id="exampleModalLabel">Uh oh!</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
+					</div> -->
+					<div class="modal-body text-center">
 						<!-- <div v-if="dancingGif"> -->
 						<img :src="dancingGif" alt="Dancing Gif"><br>
 						<!-- </div> -->
-						You don't seem to be telling the truth...
+						It appears there may be some inaccuracies in your routes...
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
