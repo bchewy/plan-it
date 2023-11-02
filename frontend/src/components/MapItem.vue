@@ -201,12 +201,18 @@
 						<span><strong>Emission Savings:</strong></span>
 						<span>{{ emissionSavings.toFixed(2) }} kg CO2</span>
 					</div>
-					<div class="d-flex justify-content-center">
+					<!-- Open in GMaps/CityMapper -->
+					<!-- <div class="d-flex justify-content-center">
 						<button class="btn btn-primary rounded-pill shadow-sm" @click="openGoogleMaps">
 							<i class="fas fa-map-marker-alt"></i> Open on Google Maps
 						</button>
 						<button class="btn btn-green rounded-pill shadow-sm" @click="openCityMapper">
 							<i class="fas fa-map-marker-alt"></i> Open on CityMapper
+						</button>
+					</div> -->
+					<div class="d-flex justify-content-center mt-3">
+						<button data-bs-dismiss="modal" class="btn btn-primary rounded-pill shadow-sm" @click="$router.push('/verify')">
+							Go to Verify Page
 						</button>
 					</div>
 				</div>
@@ -507,7 +513,7 @@ export default defineComponent({
 						timestamp: new Date().toISOString(),
 						user_id: props.userme.email,
 						validated: false, // Validation here is for users to confirm the route via GeoLocation
-						checkedStartLocation: false //Validation here is for users to ensure that they selected currentLocation as start location.
+						checkedStartLocation: isDisabled.value //Validation here is for users to ensure that they selected currentLocation as start location.
 					};
 
 					// Update our route database (backend call)
@@ -583,22 +589,22 @@ export default defineComponent({
 		const startLocationRef = ref(null);
 
 		const getUserLocation = async () => {
-			console.log("Getting user location here")
-			console.log(coords.value)
+			// console.log("Getting user location here")
+			// console.log(coords.value)/
 			const lat = coords.value.latitude;
 			const lng = coords.value.longitude;
 			try {
 				const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
 				if (response.data.results && response.data.results.length > 0) {
-					console.log("Logging auto complete here!")
-					console.log(response.data.results[0].formatted_address)
+					// console.log("Logging auto complete here!")
+					// console.log(response.data.results[0].formatted_address)
 					// Replace the value of the startLocation input field with the formatted_address here!
 
 					startLocation.value = { lat, lng };
 					isDisabled.value = true;
 					placeholderText.value = response.data.results[0].formatted_address;
 					// console.log(autocomplete)
-					console.log("End of logging for auto complete")
+					// console.log("End of logging for auto complete")
 
 				} else {
 					console.error('No results found');

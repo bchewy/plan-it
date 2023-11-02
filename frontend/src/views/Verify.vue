@@ -336,6 +336,7 @@ export default {
 			}
 		},
 		addExpBasedOnCarbonEmission(carbonList) {
+			const emissionSavings = ref(0);
 			emissionSavings.value = carbonList[1] - carbonList[0];
 			const BASE_EXP = 10; // is 1 on the routing page
 			const BONUS_EXP_PER_SAVED_KG = 1; // is 1 on the routing page
