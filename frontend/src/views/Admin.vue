@@ -317,7 +317,6 @@ export default {
 					}
 				});
 				console.log(response.data.message);
-
 				myModal.hide();
 			} catch (error) {
 				console.error(error);

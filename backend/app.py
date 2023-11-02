@@ -1632,10 +1632,11 @@ def create_badge():
 
     # Upload the image to S3 and get the public URL
     image_filename = secure_filename(image.filename)
-    # image.save(image_filename)
-    upload_file_to_s3('badges/'+image_filename)
+    image.save(image_filename)
+    upload_file_to_s3(image_filename)
     image_url = f"https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/{image_filename}"
     image = image_url
+    os.remove(image_filename)
 
     if name and description and image:
         badge = {"name": name, "description": description, "image": image}
