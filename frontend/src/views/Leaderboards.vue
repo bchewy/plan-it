@@ -66,7 +66,11 @@
 										</td>
 										<!-- add pictures of badges-->
 										<td>
-											<img v-for="badge in badges" :key="badge.id" :src="'../src/assets/badges/'+badge.icon" width="30" height="30">
+											<div v-for="badge in user.badges" :key="badge.id">
+												<img :src="badge.image" alt="Badge Image" width="50" height="50">
+												<br><span>{{ badge.name }}</span>
+											</div>
+											<!-- <img v-for="badge in badges" :key="badge.id" :src="'../src/assets/badges/' + badge.icon" width="30" height="30"> -->
 										</td>
 										<td>{{ user.level }}</td>
 										<!-- <td>{{ user.exp }}</td> -->
@@ -130,13 +134,7 @@ import FriendRequest from '../components/FriendRequest.vue';
 import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
-import { Chart, registerables } from 'chart.js/auto';
-import 'chartjs-adapter-date-fns';
-import { format } from 'date-fns';
 import { ref, defineComponent, computed, reactive } from "vue";
-Chart.register(...registerables);
-
-
 
 export default {
 	created() {
@@ -168,10 +166,6 @@ export default {
 			userExp,
 			expToNextLevel,
 			userLvl,
-			activeTab: 'profile',
-			isLoading: false,
-			currentPage: 1,
-			itemsPerPage: 3,
 			user,
 			isAuthenticated,
 			routes: [],
@@ -179,8 +173,8 @@ export default {
 			friendRequests: [],
 			receivedRequests: [],
 			sentRequests: [],
-			badges:[]
-			}
+			badges: [],
+		}
 	},
 	computed: {
 		// For pagination
@@ -202,123 +196,6 @@ export default {
 		Badges,
 	},
 	methods: {
-		async drawChart() {
-			if (!Array.isArray(this.routes) || this.routes.length === 0) {
-				console.error('No routes available.');
-				return;
-			}
-
-			this.routes.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-			const labels = this.routes.map(route => new Date(route.timestamp).toISOString());
-			const data = this.routes.map(route => parseFloat(route.carbon_emission.toFixed(1)));
-
-			const canvas = document.getElementById('carbonFootprintChart');
-			if (canvas) {
-				const ctx = document.getElementById('carbonFootprintChart').getContext('2d');
-				if (this.myChart) {
-					this.myChart.destroy();
-				}
-
-				console.log('Labels:', labels);
-				console.log('Count of Labels:', labels.length);
-				console.log('Data:', data);
-				console.log('Count of Data:', data.length);
-
-				console.log('Fake Data', [2, 4, 3],)
-				console.log('Fake Labels', ["2023-10-26T00:00:00.000Z", "2023-10-27T00:00:00.000Z", "2023-10-28T00:00:00.000Z"],)
-				this.myChart = new Chart(ctx, {
-					type: 'bar',
-					// data: {
-					//   labels: parsedLabels,
-					//   datasets: [{
-					//     label: 'Carbon Emission',
-					//     data: data,
-					//     backgroundColor: 'rgba(75, 192, 192, 0.2)',
-					//     borderColor: 'rgba(75, 192, 192, 1)',
-					//     borderWidth: 1
-					//   }]
-					// },
-					data: {
-						labels: labels,
-						datasets: [{
-							label: 'Carbon Emission',
-							data: data,
-							backgroundColor: 'rgba(75, 192, 192, 0.2)',
-							borderColor: 'rgba(75, 192, 192, 1)',
-							borderWidth: 1
-						}]
-					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: true,
-						aspectRatio: 1,
-						scales: {
-							x: {
-								type: 'time',
-								time: {
-									unit: 'day',
-									displayFormats: {
-										day: 'mmm d'
-									},
-								},
-								bounds: 'data',
-								ticks: {
-									source: 'data',
-									autoSkip: true,
-									minUnit: 'day'
-								}
-							},
-							y: {
-								min: 0,
-								suggestedMax: 5,
-								ticks: {
-									stepSize: 0.5
-								}
-							}
-						},
-					}
-				});
-
-				// Pie chart for travel mode
-				const travelModes = this.routes.map(route => route.transport_mode);
-				const travelModeCounts = {};
-				travelModes.forEach(mode => {
-					if (!travelModeCounts[mode]) {
-						travelModeCounts[mode] = 1;
-					} else {
-						travelModeCounts[mode]++;
-					}
-				});
-				const travelModeLabels = Object.keys(travelModeCounts);
-				const travelModeData = Object.values(travelModeCounts);
-				const travelModeCanvas = document.getElementById('travelCategoryChart');
-				if (travelModeCanvas) {
-					const travelModeCtx = document.getElementById('travelCategoryChart').getContext('2d');
-					if (this.myTravelModeChart) {
-						this.myTravelModeChart.destroy();
-					}
-					this.myTravelModeChart = new Chart(travelModeCtx, {
-						type: 'pie',
-						data: {
-							labels: travelModeLabels,
-							datasets: [{
-								data: travelModeData,
-								backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
-								borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
-								borderWidth: 1
-							}]
-						},
-						options: {
-							responsive: true,
-							maintainAspectRatio: true,
-							aspectRatio: 2
-						}
-					});
-				}
-
-
-			}
-		},
 		fetchData() {
 			this.fetchUsers();
 			this.fetchUser();
@@ -415,6 +292,33 @@ export default {
 			try {
 				const response = await axios.get(url, { headers });
 				this.users = response.data;
+				for (let user of this.users) {
+					const badgeUrl = `${import.meta.env.VITE_API_ENDPOINT}/users/${user.email}/badges`;
+					try {
+						const badgeResponse = await axios.get(badgeUrl, { headers });
+						user.badges = [];
+
+						// user.badges = badgeResponse.data;
+						// for every badge, fetch the details
+						for (let badgeId of badgeResponse.data) {
+							const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badgeId}`;
+							try {
+								const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
+
+								user.badges.push({
+									id: badgeId,
+									image: badgeDetailsResponse.data.image
+								});
+								console.log(user.badges)
+
+							} catch (error) {
+								console.error("Error fetching details for badge:", error);
+							}
+						}
+					} catch (error) {
+						console.error("Error fetching badges for user:", error);
+					}
+				}
 			} catch (error) {
 				console.error("Error fetching users:", error);
 			}

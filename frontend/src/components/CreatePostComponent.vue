@@ -1,71 +1,68 @@
 <template>
-   
-   <div class="row justify-content-center mt-4">
-					<div class="col-10 rounded border bg-white">
-                        <p class="mt-3 text-muted">&nbsp Share something with the community!</p>
-						<Editor class="mb-4" editorStyle="height: 100px" v-model="content"></Editor>
-						{{ taggedfriends }}
+	<div class="row justify-content-center mt-4">
+		<div class="col-10 rounded border bg-white">
+			<p class="mt-3 text-muted">&nbsp Share something with the community!</p>
+			<Editor class="mb-4" editorStyle="height: 100px" v-model="content"></Editor>
+			{{ taggedfriends }}
 
-						<div class="row mb-3 justify-content-between">
-							<span class="col-1"></span>
-    <!--share badges button-->
-							<button class="btn btn-secondary col-3" type="button" @click="badges = !badges" data-bs-target="#badgesOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-share" /> Share a badge</button>
+			<div class="row mb-3 justify-content-between">
+				<span class="col-1"></span>
+				<!--share badges button-->
+				<button class="btn btn-secondary col-3" type="button" @click="badges = !badges" data-bs-target="#badgesOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-share" /> Share a badge</button>
 
-    <!--modal for share badges-->
-	<div v-if="badges" class="modal fade" id="badgesOverlay" tabindex="-1" aria-labelledby="badgesOverlayLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="BadgesModalLabel">Badges</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<ul>
-						<li>New recruit <input type="radio" name="badges" value="0" v-model="badge"> </li> 
-						<li>Advanced <input type="radio" name="badges" value="1" v-model="badge"> </li> 
-						<li>Expert <input type="radio" name="badges" value="2" v-model="badge"> </li> 
+				<!--modal for share badges-->
+				<div v-if="badges" class="modal fade" id="badgesOverlay" tabindex="-1" aria-labelledby="badgesOverlayLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="BadgesModalLabel">Badges</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<ul>
+									<li>New recruit <input type="radio" name="badges" value="0" v-model="badge"> </li>
+									<li>Advanced <input type="radio" name="badges" value="1" v-model="badge"> </li>
+									<li>Expert <input type="radio" name="badges" value="2" v-model="badge"> </li>
 
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="console.log(badge)" >Confirm</button>
-				</div>
-			</div>
-		</div>
-	</div>
-    <!--tag friend button-->
-							<button class="btn btn-secondary col-3" type="button" @click="friends=!friends" data-bs-target="#friendsOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-tag" /> Tag a friend</button>
-    <!--tag friend model-->
-    <div v-if="friends" class="modal fade" id="friendsOverlay" tabindex="-1" aria-labelledby="friendsOverlayLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="TagFriendsModalLabel">Friends</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<ul>
-						<li> Friend1 </li> <input type="checkbox" value="friend1"  v-model="taggedfriends">
-                        <li> Friend2 </li> <input type="checkbox" value="friend2"  v-model="taggedfriends">
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="console.log(taggedfriends)">Confirm</button> <!--yet to define-->
-				</div>
-			</div>
-		</div>
-	</div>
-    <!--Create post button-->
-    
-							<button class="btn btn-success col-3" type="button"  @click="createPost(user.email)"><font-awesome-icon icon="fa-solid fa-plus-square" /> Create post!</button>
-							<span class="col-1"></span>
+								</ul>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+								<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="console.log(badge)">Confirm</button>
+							</div>
 						</div>
 					</div>
+				</div>
+				<!--tag friend button-->
+				<button class="btn btn-secondary col-3" type="button" @click="friends = !friends" data-bs-target="#friendsOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-tag" /> Tag a friend</button>
+				<!--tag friend model-->
+				<div v-if="friends" class="modal fade" id="friendsOverlay" tabindex="-1" aria-labelledby="friendsOverlayLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="TagFriendsModalLabel">Friends</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<ul>
+									<li> Friend1 </li> <input type="checkbox" value="friend1" v-model="taggedfriends">
+									<li> Friend2 </li> <input type="checkbox" value="friend2" v-model="taggedfriends">
+								</ul>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+								<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="console.log(taggedfriends)">Confirm</button> <!--yet to define-->
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--Create post button-->
+
+				<button class="btn btn-success col-3" type="button" @click="createPost(user.email)"><font-awesome-icon icon="fa-solid fa-plus-square" /> Create post!</button>
+				<span class="col-1"></span>
+			</div>
 		</div>
-
-
+	</div>
 </template>
 
 <script>
@@ -97,63 +94,86 @@ export default defineComponent({
 
 		};
 	},
-    name:'CreatePostComponent',
-    components:{
-        Editor
-    },
-    data(){
-        return{
-        badges:false,
-        friends:false,
-		content:'',
-		badge:'',
-		taggedfriends:[]
-		
+	name: 'CreatePostComponent',
+	components: {
+		Editor
+	},
+	data() {
+		return {
+			badges: false,
+			friends: false,
+			content: '',
+			badge: '',
+			taggedfriends: []
 
-        }
-    },
-	methods:{
-		parseParams(params) {
-  		const keys = Object.keys(params)
-  let options = ''
 
-  keys.forEach((key) => {
-    const isParamTypeObject = typeof params[key] === 'object'
-    const isParamTypeArray = isParamTypeObject && params[key].length >= 0
-
-    if (!isParamTypeObject) {
-      options += `${key}=${params[key]}&`
-    }
-
-    if (isParamTypeObject && isParamTypeArray) {
-      params[key].forEach((element) => {
-        options += `${key}=${element}&`
-      })
-    }
-  })
-
-  return options ? options.slice(0, -1) : options
-},
-		createPost(useremail){
-			
-			const url=`http://127.0.0.1:5000/users/${encodeURIComponent(useremail)}/posts`
-			console.log(url)
-		
-			const response = axios.post(url,{
-			params:{
-				content:this.content,
-				badge:this.badge,
-				taggedfriends:this.taggedfriends
-				
-			},
-			paramsSerializer: (params) => this.parseParams(params)
-					})
-				
-			
-			.catch(error=>{console.log(error.message)})
-			console.log(response)
 		}
-		
+	},
+	methods: {
+		parseParams(params) {
+			const keys = Object.keys(params)
+			let options = ''
 
-} })
+			keys.forEach((key) => {
+				const isParamTypeObject = typeof params[key] === 'object'
+				const isParamTypeArray = isParamTypeObject && params[key].length >= 0
+
+				if (!isParamTypeObject) {
+					options += `${key}=${params[key]}&`
+				}
+
+				if (isParamTypeObject && isParamTypeArray) {
+					params[key].forEach((element) => {
+						options += `${key}=${element}&`
+					})
+				}
+			})
+
+			return options ? options.slice(0, -1) : options
+		},
+		async createPost(useremail) {
+			console.log('content')
+			console.log(this.content)
+			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(useremail)}/posts`;
+			const headers = {
+				"Content-Type": "application/json",
+				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+			};
+			const contentData = this.content;
+
+			const params = {
+				content: contentData,
+				badge: this.badge,
+				taggedfriends: this.taggedfriends
+			};
+			// Update level
+			axios.post(url, { params }, { headers })
+				.then(response => {
+					console.log('response data here')
+					console.log(response.data);
+
+				})
+				.catch(error => {
+					console.error("Error:", error);
+				});
+
+
+			//
+			// const response = await axios.post(url, {
+			// 	params: {
+			// 		content: this.content,
+			// 		badge: this.badge,
+			// 		taggedfriends: this.taggedfriends
+			// 	},
+			// 	paramsSerializer: (params) => this.parseParams(params)
+			// })
+
+
+			// 	.catch(error => { console.log(error.message) })
+			// console.log(response)
+		}
+
+
+	}
+})
 </script>
