@@ -131,16 +131,15 @@ import FriendRequest from '../components/FriendRequest.vue';
 import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
-import { Chart, registerables } from 'chart.js/auto';
-import 'chartjs-adapter-date-fns';
-import { format } from 'date-fns';
+// import { Chart, registerables } from 'chart.js/auto';
+// import 'chartjs-adapter-date-fns';
+// import { format } from 'date-fns';
 import { ref, defineComponent, computed, reactive } from "vue";
-Chart.register(...registerables);
 import { UseGeolocation } from '@vueuse/components'
 import { useGeolocation } from '@vueuse/core'
 import Modal from 'bootstrap/js/dist/modal';
 
-
+// Chart.register(...registerables);
 
 export default {
 	components: {
@@ -161,7 +160,6 @@ export default {
 		const users = [];
 		const { coords, locatedAt, error, resume, pause } = useGeolocation()
 		// const { latitude, longitude } = coords;
-
 
 		return {
 			users,

@@ -16,6 +16,12 @@ export default defineConfig({
 			'@': fileURLToPath(new URL('./src', import.meta.url))
 		}
 	},
+	optimizeDeps: {
+		include: [
+			"bchewy-maps",
+			"fast-deep-equal",
+		],
+	},
 	// Remove this for self-signed certificate
 	// server: {
 	// 	https: {

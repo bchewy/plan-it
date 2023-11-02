@@ -32,6 +32,19 @@
 	top: 20px;
 	right: 20px;
 }
+
+.autocomplete-container {
+	position: relative;
+}
+
+.disable-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(255, 255, 255, 0.5);
+}
 </style>
 
 <template>
@@ -52,22 +65,25 @@
 				<div class="row p-0 my-1 mx-1">
 
 					<!-- Travel Mode -->
-
 					<div class="col-sm-12 col-md-3 input-group mb-2">
 						<!-- <span class="input-group-text font-weight-bold">Transporation</span> -->
 						<select v-model="travelMode" class="form-control">
 							<option value="" disabled selected>select transport</option>
-							<option value="DRIVE">Drive</option>
-							<option value="TWO_WHEELER">Motorbike</option>
-							<option value="TRANSIT">Public Transport</option>
-							<option value="BICYCLE">Bicycle</option>
-							<option value="WALK">Walk</option>
+							<option value="DRIVE">🚗 Drive</option>
+							<!-- <option value="TWO_WHEELER">🏍️ Motorbike</option> -->
+							<option value="TRANSIT">🚌 Public Transport</option>
+							<option value="BICYCLE">🚲 Bicycle</option>
+							<option value="WALK">🚶‍♂️ Walk</option>
 						</select>
 					</div>
 					<!-- Start Location -->
 					<div class="col-sm-12 col-md-3 input-group mb-2">
 						<!-- <span class="input-group-text font-weight-bold" id="autocomplete-label">From</span> -->
-						<GMapAutocomplete ref="autocomplete" v-model="startLocation.value" placeholder="Origin" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+						<!-- <GMapAutocomplete :ref="startLocationRef" v-model="startLocation.value" placeholder="Origin" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" /> -->
+
+						<GMapAutocomplete v-if="!isDisabled" :ref="startLocationRef" v-model="startLocation.value" placeholder="Origin" :componentRestrictions="{ country: 'SG' }" @place_changed="setStartLocation" class="form-control" />
+						<input v-else :value="startLocation.value" :placeholder="placeholderText" class="form-control" disabled />
+
 						<button class="btn btn-green" type="button" @click="getUserLocation">
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
 								<circle cx="12" cy="12" r="4"></circle>
@@ -81,13 +97,14 @@
 						<!-- <span class="input-group-text font-weight-bold" id="autocomplete-label">To</span> -->
 						<GMapAutocomplete v-model="destination.value" placeholder="Destination" :componentRestrictions="{ country: 'SG' }" @place_changed="setDestination" class="form-control" />
 					</div>
-
+					<!-- Depature Time Field -->
 					<div class="col-sm-12 col-md-3 input-group mb-3">
 						<!-- <span class="input-group-text font-weight-bold"></span> -->
 						<input type="time" v-model="departureTime" class="form-control">
 						<!-- <button class="btn btn-green" type="button" @click="addMinutes(5)">+5m</button> -->
 					</div>
 				</div>
+				<!-- Log Route Button -->
 				<div class="mb-0 p-0">
 					<button class="btn btn-green w-100" @click="fetchRouteDetails" data-bs-toggle="modal" data-bs-target="#progressModal">Log Route</button>
 				</div>
@@ -204,24 +221,17 @@
 
 
 <script>
-import { ref, defineComponent, computed, reactive, watch } from "vue";
+import { ref, defineComponent, computed, reactive, watch, onMounted } from "vue";
 import axios from "axios";
 import { useAuth0 } from '@auth0/auth0-vue';
 import Vue3DraggableResizable from 'vue3-draggable-resizable';
-
+import { useGeolocation } from '@vueuse/core'
 
 export default defineComponent({
-	data() {
-		return {
-			parentWidth: 0,
-			componentWidth: 300,
-		}
-	},
 	mounted() {
 		this.parentWidth = this.$refs.mapContainer.clientWidth;
 	},
 	components: {
-		// VueDraggableResizable
 		Vue3DraggableResizable
 	},
 	methods: {
@@ -230,35 +240,6 @@ export default defineComponent({
 		},
 		openCityMapper() {
 			window.open(this.citymapperUrl, '_blank');
-
-		},
-		getUserLocation() {
-			const geoLoc = navigator.geolocation;
-
-			// Clear the cache
-			if (navigator.geolocation.clearWatch) {
-				navigator.geolocation.clearWatch(0);
-			}
-			geoLoc.getCurrentPosition(async (position) => {
-				const lat = position.coords.latitude;
-				const lng = position.coords.longitude;
-				try {
-					// Ensure lat and lng are valid numbers
-					if (typeof lat === 'number' && typeof lng === 'number') {
-						const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
-
-						if (response.data.results && response.data.results.length > 0) {
-							this.startLocation.value = response.data.results[0].formatted_address;
-						} else {
-							console.error('No results found');
-						}
-					} else {
-						console.error('Invalid lat or lng values');
-					}
-				} catch (error) {
-					console.error('Error making request:', error);
-				}
-			});
 		},
 	},
 	computed: {
@@ -320,7 +301,8 @@ export default defineComponent({
 		const center = reactive({ lat: 1.3331, lng: 103.7428 });
 		const startLocation = ref({
 			lat: 0,
-			lng: 0
+			lng: 0,
+			value: ''
 		});
 		const destination = ref({
 			lat: 0,
@@ -340,6 +322,11 @@ export default defineComponent({
 			}
 			return [];
 		});
+		const { coords, locatedAt, error, resume, pause } = useGeolocation()
+		const isDisabled = ref(false) // Set this to true when you want to disable the input
+		const placeholderText = ref('Origin')
+
+
 		const setStartLocation = (place) => {
 			const lat = Number(place.geometry.location.lat());
 			const lng = Number(place.geometry.location.lng());
@@ -403,6 +390,7 @@ export default defineComponent({
 			const minutes = String(now.getMinutes()).padStart(2, '0');
 			return `${hours}:${minutes}`;
 		};
+
 		const departureTime = ref(addFiveMinutesToCurrentTime());
 
 		const addMinutes = (minutesToAdd) => {
@@ -592,7 +580,37 @@ export default defineComponent({
 			}
 		};
 
+		const startLocationRef = ref(null);
 
+		const getUserLocation = async () => {
+			console.log("Getting user location here")
+			console.log(coords.value)
+			const lat = coords.value.latitude;
+			const lng = coords.value.longitude;
+			try {
+				const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
+				if (response.data.results && response.data.results.length > 0) {
+					console.log("Logging auto complete here!")
+					console.log(response.data.results[0].formatted_address)
+					// Replace the value of the startLocation input field with the formatted_address here!
+
+					startLocation.value = { lat, lng };
+					isDisabled.value = true;
+					placeholderText.value = response.data.results[0].formatted_address;
+					// console.log(autocomplete)
+					console.log("End of logging for auto complete")
+
+				} else {
+					console.error('No results found');
+				}
+
+			} catch (error) {
+				console.error('Error making request:', error);
+			}
+		};
+
+
+		// onMounted(getUserLocation);
 
 		// # ================================================================================================================================================================================================================================================================================================
 
@@ -767,6 +785,13 @@ export default defineComponent({
 			userLvl,
 			expAdded,
 			show,
+			getUserLocation,
+			coords,
+			parentWidth: 0,
+			componentWidth: 300,
+			startLocationRef,
+			isDisabled,
+			placeholderText
 		};
 	}
 });

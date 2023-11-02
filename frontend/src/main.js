@@ -11,7 +11,10 @@ import App from './App.vue'
 import router from './router'
 
 // Google Maps
-import VueGoogleMaps from '@fawmi/vue-google-maps'
+// import VueGoogleMaps from '@fawmi/vue-google-maps'
+// import VueGOogleMaps from '@bchewy/vue3-gmaps'
+// import VueGoogleMaps from 'vue-google-maps-community-fork'
+import VueGoogleMaps from 'bchewy-maps'
 
 // Auth0
 import { createAuth0 } from '@auth0/auth0-vue';

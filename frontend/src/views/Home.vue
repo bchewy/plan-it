@@ -13,7 +13,8 @@
   <!--flexbox thingy!-->
   <!--section class="text-muted text-center d-flex align-items-center justify-content-center"-->
   <!-- <Parallaxy :speed="20" :animation="delta => `transform: translate3d(0, ${delta}px, 0);`"> -->
-  <section class="text-light text-center vh-100 d-flex align-items-center justify-content-center bg-supergreen" style="background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/planit.png'); background-size: cover;" v-parallax="0.3">
+  <!-- <section class="text-light text-center vh-100 d-flex align-items-center justify-content-center bg-supergreen" style="background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/planit.png'); background-size: cover;" v-parallax="0.3"> -->
+  <section class="text-light text-center vh-100 d-flex align-items-center justify-content-center bg-supergreen" style="background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/planit.png'); background-size: cover;">
     <div class="container">
       <div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
         <div class="text-center">
