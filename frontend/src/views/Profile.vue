@@ -39,7 +39,7 @@
   align-items: center;
 }
 
-.checkbox-label input[type="checkbox"]{
+.checkbox-label input[type="checkbox"] {
   appearance: none;
   width: 32px;
   height: 14px;
@@ -47,32 +47,39 @@
   border-radius: 14px;
   position: relative;
 }
+
 .checkbox-label input[type="checkbox"]::before {
   content: "";
-  width: 14px; /* Width of the switch handle */
-  height: 14px; /* Height of the switch handle */
-  background-color: #ebedf0; /* Color of the switch handle */
-  border-radius: 50%; /* Make it a circle */
+  width: 14px;
+  /* Width of the switch handle */
+  height: 14px;
+  /* Height of the switch handle */
+  background-color: #ebedf0;
+  /* Color of the switch handle */
+  border-radius: 50%;
+  /* Make it a circle */
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  left: 2px; /* Adjust the position as needed */
-  transition: 0.4s; /* Add a smooth transition effect */
+  left: 2px;
+  /* Adjust the position as needed */
+  transition: 0.4s;
+  /* Add a smooth transition effect */
 }
 
 .checkbox-label input[type="checkbox"]:checked {
-  background-color: #4CAF50; /* Background color for the "on" state */
+  background-color: #4CAF50;
+  /* Background color for the "on" state */
 }
 
 .checkbox-label input[type="checkbox"]:checked::before {
-  left: calc(100% - 14px); /* Position the handle to the right when checked */
+  left: calc(100% - 14px);
+  /* Position the handle to the right when checked */
 }
 
-.checkbox-label label{
+.checkbox-label label {
   margin-left: 8px;
 }
-
-
 </style>
 
 <template>
@@ -80,7 +87,7 @@
   <div class="container-fluid pt-3 bg-supergreen">
     <div class="row">
       <!-- Left Sidebar: Tabs -->
-      <div class="col-md-3">
+      <div class="col-md-2">
         <ul class="nav flex-column nav-pills" id="myTabs" role="tablist">
           <li class="nav-item">
             <a class="nav-link" :class="{ 'active': activeTab === 'profile' }" @click="activeTab = 'profile'" href="#" role="tab">
@@ -110,7 +117,7 @@
       </div>
 
       <!-- Main Content Area -->
-      <div class="col-md-9 my-4">
+      <div class="col-md-10 my-4">
         <div v-if="activeTab === 'profile'" class="tab-pane show active">
           <!-- Profile Content -->
           <div class="profile-container bg-light p-3 rounded d-flex flex-column flex-md-row mb-4">
@@ -545,10 +552,10 @@ export default {
         console.error("Error fetching routes:", error);
       }
     },
-    submit(){
+    submit() {
       this.isSubmitted = true;
     },
-    reset(){
+    reset() {
       this.newFeatures = false;
       this.newFriends = false;
       this.lostPlace = false;
