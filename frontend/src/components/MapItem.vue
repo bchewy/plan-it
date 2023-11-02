@@ -513,7 +513,7 @@ export default defineComponent({
 						timestamp: new Date().toISOString(),
 						user_id: props.userme.email,
 						validated: false, // Validation here is for users to confirm the route via GeoLocation
-						checkedStartLocation: isDisabled.value //Validation here is for users to ensure that they selected currentLocation as start location.
+						checkedStartLocation: isDisabled.val //Validation here is for users to ensure that they selected currentLocation as start location.
 					};
 
 					// Update our route database (backend call)

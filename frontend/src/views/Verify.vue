@@ -92,6 +92,14 @@
 							</div>
 							<div class="modal-body">
 								You have validated this route. EXP has been added into your profile.
+								<p>Your current EXP: {{ userExp }}/100</p>
+								<p>{{ expToAddG }}exp has been added to your progress!</p>
+								<div class="progress">
+									<div class="progress-bar" role="progressbar" :style="{ width: userExp + expToAddG + '%' }" aria-valuenow="userExp" aria-valuemin="0" aria-valuemax="userLvl * 100">{{ ((userExp + expToAddG)).toFixed(2) }}%</div>
+								</div>
+								<p>Current Level: {{ userLvl }}</p>
+								<!-- <p>EXP gained from this validation: {{ expGained }}</p> -->
+								<!-- <p>Your new total EXP: {{ userExp + expGained }}</p> -->
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
@@ -131,67 +139,11 @@ import FriendRequest from '../components/FriendRequest.vue';
 import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
-// import { Chart, registerables } from 'chart.js/auto';
-// import 'chartjs-adapter-date-fns';
-// import { format } from 'date-fns';
 import { ref, defineComponent, computed, reactive } from "vue";
-import { UseGeolocation } from '@vueuse/components'
 import { useGeolocation } from '@vueuse/core'
 import Modal from 'bootstrap/js/dist/modal';
 
-// Chart.register(...registerables);
-
 export default {
-	components: {
-		UseGeolocation,
-	},
-	created() {
-		this.fetchData();
-
-	},
-	watch: {
-
-	},
-	data() {
-		const { user, isAuthenticated } = useAuth0();
-		const userExp = ref(0);
-		const expToNextLevel = ref(0);
-		const userLvl = ref(0)
-		const users = [];
-		const { coords, locatedAt, error, resume, pause } = useGeolocation()
-		// const { latitude, longitude } = coords;
-
-		return {
-			users,
-			userExp,
-			expToNextLevel,
-			userLvl,
-			activeTab: 'profile',
-			isLoading: false,
-			currentPage: 1,
-			itemsPerPage: 3,
-			user,
-			isAuthenticated,
-			routes: [],
-			friends: [],
-			friendRequests: [],
-			receivedRequests: [],
-			sentRequests: [],
-			coords,
-		};
-	},
-	computed: {
-		// For pagination
-		paginatedRoutes() {
-			const start = (this.currentPage - 1) * this.itemsPerPage;
-			const end = start + this.itemsPerPage;
-			return this.routes.slice(start, end);
-		},
-		// Total pages
-		totalPages() {
-			return Math.ceil(this.routes.length / this.itemsPerPage);
-		},
-	},
 	components: {
 		Navbar,
 		MapItem,
@@ -199,16 +151,35 @@ export default {
 		FriendRequest,
 		Badges,
 	},
+	created() {
+		this.fetchData();
+	},
+	data() {
+		const { user, isAuthenticated } = useAuth0();
+		const userExp = ref(0);
+		const userLvl = ref(0)
+		const { coords, locatedAt, error, resume, pause } = useGeolocation()
+		const emissionSavings = ref(0);
+		const expToAddG = ref(0);
+
+		return {
+			userExp,
+			userLvl,
+			user,
+			isAuthenticated,
+			routes: [],
+			coords,
+			emissionSavings,
+			expToAddG,
+		};
+	},
 	methods: {
 		fetchData() {
-			this.fetchUsers();
 			this.fetchRoutes();
-			// this.fetchRoutes().then(() => {
-			// 	this.drawChart();
-			// });
-			// this.fetchUser();
-			// this.fetchFriendRequests();
+			this.fetchUser();
 		},
+
+		// Method for calculating distance between two points
 		haversineDistance(coords1, coords2, isMiles = false) {
 			function toRad(x) {
 				return x * Math.PI / 180;
@@ -237,6 +208,7 @@ export default {
 			return d;
 		},
 
+		// ==================================================================================================
 		async fetchUser() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
 			const headers = {
@@ -245,7 +217,7 @@ export default {
 
 			try {
 				const response = await axios.get(url, { headers });
-				this.friends = response.data.friends;
+				// this.friends = response.data.friends;
 				this.userLvl = response.data.level;
 				this.userExp = response.data.exp;
 
@@ -253,22 +225,8 @@ export default {
 				console.error("Error fetching user", error);
 			}
 		},
-		async fetchFriendRequests() {
-			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(this.user.email)}/friend_requests`;
-			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
-			};
 
-			try {
-				const response = await axios.get(url, { headers });
-				this.receivedRequests = response.data.received;
-				this.sentRequests = response.data.sent;
-
-			} catch (error) {
-				console.error("Error fetching friend requests", error);
-			}
-
-		},
+		// Method for fetching routes from the backend
 		async fetchRoutes() {
 			const email = this.user.email; // Get the email from user object
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/routes/email?email=${encodeURIComponent(email)}`;
@@ -283,20 +241,9 @@ export default {
 				console.error("Error fetching routes:", error);
 			}
 		},
-		async fetchUsers() {
-			const url = `${import.meta.env.VITE_API_ENDPOINT}/users`;
-			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
-			};
 
-			try {
-				const response = await axios.get(url, { headers });
-				this.users = response.data;
-			} catch (error) {
-				console.error("Error fetching users:", error);
-			}
-		},
 		// This method is only used to validate a route
+		// ==================================================================================================
 		async updateRoute(routeId) {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/routes/${routeId}/validate`;
 			const headers = {
@@ -328,52 +275,63 @@ export default {
 					break
 				default:
 					carbonEmissionPerKm = 0.12;  // Default to car emission if travel mode is not recognized
-
-
-					const carbonFootprintDriving = distanceInKm * 0.12;
-					const carbonFootprint = distanceInKm * carbonEmissionPerKm;
-					return [carbonFootprint, carbonFootprintDriving];
 			}
+			const carbonFootprintDriving = distanceInKm * 0.12;
+			const carbonFootprint = distanceInKm * carbonEmissionPerKm;
+			// console.log("Carbon Footprint:", carbonFootprint);
+			// console.log("Carbon Footprint Driving:", carbonFootprintDriving);
+			return [carbonFootprint, carbonFootprintDriving];
 		},
 		addExpBasedOnCarbonEmission(carbonList) {
-			const emissionSavings = ref(0);
-			emissionSavings.value = carbonList[1] - carbonList[0];
+			// console.log("Entering the addEXP Function now...")
+
+			this.emissionSavings = carbonList[1] - carbonList[0];
+			// console.log("Emission Savings:", this.emissionSavings);
+
 			const BASE_EXP = 10; // is 1 on the routing page
-			const BONUS_EXP_PER_SAVED_KG = 1; // is 1 on the routing page
+			const BONUS_EXP_PER_SAVED_KG = 10; // is 1 on the routing page
 
 			// Calculate the total EXP to add based on the base EXP and the bonus for saved emissions
-			const expToAdd = Math.ceil(BASE_EXP + (emissionSavings.value * BONUS_EXP_PER_SAVED_KG));
-			expAdded.value = expToAdd
+			const expToAdd = Math.ceil(BASE_EXP + (this.emissionSavings * BONUS_EXP_PER_SAVED_KG));
 
+			// console.log("EXP added here:", expToAdd);
+			// expAdded.value = expToAdd;
+			this.expToAddG += expToAdd;
 
-			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/carbonsavings`, { carbonsavings: emissionSavings.value }, {
+			// Update the user's carbon savings in the backend
+			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${this.user.email}/carbonsavings`, { carbonsavings: this.emissionSavings }, {
 				headers: {
 					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
 				}
 			})
 				.then(response => {
 					console.log(response.data.message);
-					logUserActivity(`saved :${emissionSavings.value} co2`)
+					// logUserActivity(`saved :${this.emissionSavings} co2`)
 				})
 				.catch(error => {
 					console.error(error);
 				});
 
 			// Update the user exp in the backend
-			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/exp`, { exp: expToAdd }, {
+			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${this.user.email}/exp`, { exp: this.expToAddG }, {
 				headers: {
 					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
 				}
 			})
 				.then(response => {
 					console.log(response.data.message);
-					logUserActivity(`gained ${expToAdd} exp`)
+					// logUserActivity(`gained ${this.expToAddG} exp`)
 				})
 				.catch(error => {
 					console.error(error);
 				});
 		},
+
+		// Method for checking if the user is within 500 meters of the end location
 		checkEndLocation(route) {
+			// console.log("Route being checked:", route);
+			// console.log("Route distance", route.distance);
+			// console.log("Route travel mode", route.transport_mode);
 			const { latitude, longitude } = this.coords;
 
 			// Get the route's end location
@@ -385,17 +343,19 @@ export default {
 			// Check if the distance is less than 0.5 kilometers (500 meters)
 			if (distance < 0.5) {
 				console.log('User is within 500 meters of the end location');
+
+				this.updateRoute(route.route_id, true)
+				this.routes = this.routes.filter(r => r.route_id !== route.route_id);
+				this.addExpBasedOnCarbonEmission(this.calculateCarbonEmissionForEXP(route.distance, route.transport_mode))
+
+				console.log('Added EXP:', this.expToAddG)
 				var myModalEl = document.getElementById('modalGood');
 				var myModal = new Modal(myModalEl);
 				myModal.show();
 
 				// Update the route to validated true:
-				this.updateRoute(route.route_id, true)
-				// Remove route from routes array
-				this.routes = this.routes.filter(r => r.route_id !== route.route_id);
 
-				// Final addition for EXP
-				this.addExpBasedOnCarbonEmission(this.calculateCarbonEmissionForEXP(route.distance, route.transport_mode))
+
 
 			} else {
 				console.log('User is not within 500 meters of the end location');
@@ -426,6 +386,7 @@ export default {
 			// }
 		},
 
+		// ==================================================================================================
 
 
 	},
