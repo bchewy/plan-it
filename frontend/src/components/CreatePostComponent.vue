@@ -3,8 +3,8 @@
    <div class="row justify-content-center mt-4">
 					<div class="col-10 rounded border bg-white">
                         <p class="mt-3 text-muted">&nbsp Share something with the community!</p>
-						<Editor class="mb-4" editorStyle="height: 100px"></Editor>
-
+						<Editor class="mb-4" editorStyle="height: 100px" v-model="content"></Editor>
+						{{ taggedfriends }}
 
 						<div class="row mb-3 justify-content-between">
 							<span class="col-1"></span>
@@ -21,12 +21,15 @@
 				</div>
 				<div class="modal-body">
 					<ul>
-						<li> Badge1 </li> <input type="radio">
+						<li>New recruit <input type="radio" name="badges" value="0" v-model="badge"> </li> 
+						<li>Advanced <input type="radio" name="badges" value="1" v-model="badge"> </li> 
+						<li>Expert <input type="radio" name="badges" value="2" v-model="badge"> </li> 
+
 					</ul>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" @click="confirmShareBadge()">Confirm</button> <!--yet to define-->
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="console.log(badge)" >Confirm</button>
 				</div>
 			</div>
 		</div>
@@ -43,20 +46,20 @@
 				</div>
 				<div class="modal-body">
 					<ul>
-						<li> Friend1 </li> <input type="checkbox">
-                        <li> Friend2</li> <input type="checkbox">
+						<li> Friend1 </li> <input type="checkbox" value="friend1"  v-model="taggedfriends">
+                        <li> Friend2 </li> <input type="checkbox" value="friend2"  v-model="taggedfriends">
 					</ul>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" @click="confirmTagFriends()">Confirm</button> <!--yet to define-->
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="console.log(taggedfriends)">Confirm</button> <!--yet to define-->
 				</div>
 			</div>
 		</div>
 	</div>
     <!--Create post button-->
     
-							<button class="btn btn-success col-3" type="button"><font-awesome-icon icon="fa-solid fa-plus-square" @click="createPost()" /> Create post!</button>
+							<button class="btn btn-success col-3" type="button"  @click="createPost(user.email)"><font-awesome-icon icon="fa-solid fa-plus-square" /> Create post!</button>
 							<span class="col-1"></span>
 						</div>
 					</div>
@@ -66,10 +69,34 @@
 </template>
 
 <script>
+
 import Editor from 'primevue/editor';
 import { defineComponent } from 'vue';
+import { useAuth0 } from '@auth0/auth0-vue';
+import axios from 'axios';
 
 export default defineComponent({
+	setup() {
+		const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+
+
+		console.log('Setup method is called');
+
+		return {
+			login: async () => {
+				console.log('Login button clicked');
+				try {
+					await loginWithRedirect();
+				} catch (e) {
+					alert('Failed to login');
+					console.error('Failed to login:', e);
+				}
+			},
+			user,
+			isAuthenticated,
+
+		};
+	},
     name:'CreatePostComponent',
     components:{
         Editor
@@ -77,9 +104,56 @@ export default defineComponent({
     data(){
         return{
         badges:false,
-        friends:false
+        friends:false,
+		content:'',
+		badge:'',
+		taggedfriends:[]
+		
+
         }
+    },
+	methods:{
+		parseParams(params) {
+  		const keys = Object.keys(params)
+  let options = ''
+
+  keys.forEach((key) => {
+    const isParamTypeObject = typeof params[key] === 'object'
+    const isParamTypeArray = isParamTypeObject && params[key].length >= 0
+
+    if (!isParamTypeObject) {
+      options += `${key}=${params[key]}&`
     }
 
-})
+    if (isParamTypeObject && isParamTypeArray) {
+      params[key].forEach((element) => {
+        options += `${key}=${element}&`
+      })
+    }
+  })
+
+  return options ? options.slice(0, -1) : options
+},
+		createPost(useremail){
+			
+			const url=`http://127.0.0.1:5000/users/${encodeURIComponent(useremail)}/posts`
+			console.log(url)
+		
+			const response = axios.post(url,{
+			params:{
+				content:this.content,
+				badge:this.badge,
+				taggedfriends:this.taggedfriends
+				
+			},
+			paramsSerializer: (params) => this.parseParams(params)
+					})
+				
+			
+			.catch(error=>{console.log(error.message)})
+			console.log(response)
+		}
+		
+
+} })
 </script>

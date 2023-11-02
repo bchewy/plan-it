@@ -1124,7 +1124,7 @@ def update_level(user_email):
 
 # Post section
 @app.route("/users/<user_email>/posts", methods=['POST'])
-@require_api_key
+#@require_api_key
 def create_post(user_email):
     """
     Create a post for a user
@@ -1171,7 +1171,9 @@ def create_post(user_email):
     if current_user:
         post_content = request.json.get('content')
         if post_content:
-            post = {"content": post_content, "author": user_email, "timestamp": datetime.datetime.utcnow()}
+            badge=request.json.get('badge')
+            taggedfriends=request.json.get('taggedfriends')
+            post = {"content": post_content,"badge": badge,"taggedfriends":taggedfriends,"timestamp": datetime.datetime.utcnow()}
             current_user['posts'].append(post)
             user_collection.update_one({"email": user_email}, {"$set": current_user})
             return jsonify({"message": "Post created successfully."}), 200
