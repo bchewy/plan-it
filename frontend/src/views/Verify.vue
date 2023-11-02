@@ -3,6 +3,12 @@
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.map-container {
+	width: 80%;
+	/* or any other preferred percentage */
+	height: 200px;
+}
+
 .bg-supergreen {
 	background-color: #739072;
 }
@@ -45,7 +51,8 @@
 			<div class="col-lg-12">
 				<div class="card">
 					<div class="card-header">
-						<h4 class="card-title">Invalid Routes</h4>
+						<h4 class="card-title text-center">Invalid Routes</h4>
+						<p class="card-text">The invalid routes here do not have their end locations verified. <strong>Verify your end locations</strong> before the time limit to get more EXP.</p>
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
@@ -54,80 +61,109 @@
 									<tr>
 										<!-- <th>Route ID</th> -->
 										<!-- <th>Time</th> -->
-										<th>Start Location</th>
-										<th>End Location</th>
+										<th>Map</th>
+										<!-- <th>Start Location</th> -->
+										<!-- <th>End Location</th> -->
 										<!-- <th>Distance</th> -->
-										<th>Carbon Emission</th>
-										<th>Transport Mode</th>
-										<th>Validated</th>
-										<th>Checked Start Location</th>
+										<!-- <th>Carbon Emission</th> -->
+										<!-- <th>Transport Mode</th> -->
+										<th>Details</th>
+										<!-- <th>Checked Start Location</th> -->
 									</tr>
 								</thead>
 								<tbody v-if="routes">
 									<tr v-for=" route  in  routes " :key="route.id">
-										<td>{{ route.start_point_name }}</td>
-										<td>{{ route.end_point_name }}</td>
-										<td>{{ route.carbon_emission }}</td>
-										<td>{{ route.transport_mode }}</td>
-										<td>
-											{{ route.validated }}
-											<button @click="checkEndLocation(route)">Check Location</button>
+										<td class="col-9">
+											<GMapMap :center="{ lat: Number(route.start_point_lat_lng.split(',')[0]), lng: Number(route.start_point_lat_lng.split(',')[1]) }" :zoom="10" map-type-id="terrain" style="width: 100%; height: 200px;">
+												<GMapMarker :position="{ lat: Number(route.start_point_lat_lng.split(',')[0]), lng: Number(route.start_point_lat_lng.split(',')[1]) }" />
+												<GMapMarker :position="{ lat: Number(route.end_point_lat_lng.split(',')[0]), lng: Number(route.end_point_lat_lng.split(',')[1]) }" />
+											</GMapMap>
 										</td>
-										<td>{{ route.checkedStartLocation }}</td>
+										<td>
+											Start: <b>{{ route.start_point_name }} </b><br>
+											End: <b>{{ route.end_point_name }} </b><br>
+											<button class="btn btn-primary" @click="checkEndLocation(route)">Validate Route</button><br>
+
+										</td>
+										<!-- <td>{{ route.checkedStartLocation }}</td> -->
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
 
-
-				<!-- Success Modal template -->
-				<div class="modal fade" id="modalGood" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Congratulations!</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-							</div>
-							<div class="modal-body">
-								You have validated this route. EXP has been added into your profile.
-								<p>Your current EXP: {{ userExp }}/100</p>
-								<p>{{ expToAddG }}exp has been added to your progress!</p>
-								<div class="progress">
-									<div class="progress-bar" role="progressbar" :style="{ width: userExp + expToAddG + '%' }" aria-valuenow="userExp" aria-valuemin="0" aria-valuemax="userLvl * 100">{{ ((userExp + expToAddG)).toFixed(2) }}%</div>
-								</div>
-								<p>Current Level: {{ userLvl }}</p>
-								<!-- <p>EXP gained from this validation: {{ expGained }}</p> -->
-								<!-- <p>Your new total EXP: {{ userExp + expGained }}</p> -->
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
-							</div>
-						</div>
+		<!-- Success Modal template -->
+		<div class="modal fade" id="modalGood" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Congratulations!</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
-				</div>
-				<!-- Failure Modal template -->
-				<div class="modal fade" id="modalBad" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Uh oh!</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-							</div>
-							<div class="modal-body">
-								You don't seem to be telling the truth...
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-							</div>
+					<div class="modal-body">
+						<!-- <p>You have validated this route. EXP has been added into your profile.</p> -->
+						<!-- <img src="../assets/levelup.png" alt="level up" width="100px" height="100px"> -->
+						<div v-if="dancingGif">
+							<img src="dancingGif" alt="Dancing Gif" width="100px" height="100px">
 						</div>
+
+						<table class="table table-hover">
+							<tr>
+								<td>Your current EXP:</td>
+								<!-- <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;">
+										<path d="M5 21h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2zm5-14 6 5-6 5V7z"></path>
+									</svg></td> -->
+								<td>{{ userExp }}/100</td>
+							</tr>
+							<tr>
+								<td>Your new EXP:</td>
+								<!-- <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;">
+										<path d="M5 21h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2zm5-14 6 5-6 5V7z"></path>
+									</svg></td> -->
+								<td>{{ userExp + expToAddG }}/100 (+ {{ expToAddG }})</td>
+							</tr>
+							<tr>
+								<td>Level Progress:</td>
+								<td>{{ userLvl }}</td>
+							</tr>
+						</table>
+
+						<!-- <p>{{ expToAddG }}exp has been added to your progress!</p> -->
+
+						<div class="progress">
+							<div class="progress-bar bg-supergreen" role="progressbar" :style="{ width: userExp + expToAddG + '%' }" aria-valuenow="userExp" aria-valuemin="0" aria-valuemax="userLvl * 100">{{ ((userExp + expToAddG)).toFixed(2) }}%</div>
+						</div>
+						<!-- <p>Current Level: {{ userLvl }}</p> -->
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
 					</div>
 				</div>
 			</div>
 		</div>
-
-
+		<!-- Failure Modal template -->
+		<div class="modal fade" id="modalBad" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Uh oh!</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<!-- <div v-if="dancingGif"> -->
+						<img :src="dancingGif" alt="Dancing Gif"><br>
+						<!-- </div> -->
+						You don't seem to be telling the truth...
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -139,7 +175,7 @@ import FriendRequest from '../components/FriendRequest.vue';
 import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
-import { ref, defineComponent, computed, reactive } from "vue";
+import { ref, defineComponent, computed, reactive, watch } from "vue";
 import { useGeolocation } from '@vueuse/core'
 import Modal from 'bootstrap/js/dist/modal';
 
@@ -161,6 +197,8 @@ export default {
 		const { coords, locatedAt, error, resume, pause } = useGeolocation()
 		const emissionSavings = ref(0);
 		const expToAddG = ref(0);
+		const dancingGif = ref(null);
+
 
 		return {
 			userExp,
@@ -171,12 +209,14 @@ export default {
 			coords,
 			emissionSavings,
 			expToAddG,
+			dancingGif,
 		};
 	},
 	methods: {
 		fetchData() {
 			this.fetchRoutes();
 			this.fetchUser();
+			this.fetchRandomGif();
 		},
 
 		// Method for calculating distance between two points
@@ -208,6 +248,24 @@ export default {
 			return d;
 		},
 
+
+		async fetchRandomGif() {
+			const giphyApiKey = 'FuPGJnG0vBT3yRNDTJ8KzeoICLLNYQ5V'; // replace with your Giphy API key
+			const url = `https://api.giphy.com/v1/gifs/random?api_key=${giphyApiKey}&tag=dancing&rating=g`;
+
+			try {
+				const response = await axios.get(url);
+				this.dancingGif = response.data.data.images.fixed_height.url;
+				console.log(this.dancingGif);
+				// console.log("Successfully fetched gif!")
+				// console.log(response.data.data.images.original.url)
+				// console.log(response.data.url)
+				// console.log(response.data.images.original.url);
+
+			} catch (error) {
+				console.error('Error fetching random gif:', error);
+			}
+		},
 		// ==================================================================================================
 		async fetchUser() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
