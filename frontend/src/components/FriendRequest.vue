@@ -6,15 +6,17 @@
 				<button class="btn btn-success me-2" @click="acceptRequest">Accept</button>
 				<button class="btn btn-danger" @click="declineRequest">Decline</button>
 			</div>
-			<div v-if="showAlert" class="alert alert-success alert-dismissible fade show" role="alert">
+			<!-- <div v-if="showAlert" class="alert alert-success alert-dismissible fade show" role="alert">
 				{{ alertMessage }}
 				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" @click="showAlert = false"></button>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </template>
 <script>
 import axios from 'axios';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
 	props: ['friend', 'user', 'receivedRequests', 'sentRequests', 'type'],
@@ -44,6 +46,10 @@ export default {
 				const response = await axios.post(url, body, { headers });
 				this.showAlert = true;
 				this.alertMessage = 'Friend request accepted.';
+				toast.success(`Friend Request successfully declined.`, {
+					autoClose: 5000,
+					position: toast.POSITION.TOP_CENTER,
+				});
 				this.$emit('refresh');
 			} catch (error) {
 				console.error("Error accepting friend request", error);
@@ -61,6 +67,10 @@ export default {
 				const response = await axios.post(url, body, { headers });
 				this.showAlert = true;
 				this.alertMessage = 'Friend request declined.';
+				toast(`Friend Request successfully declined.`, {
+					autoClose: 5000,
+					position: toast.POSITION.TOP_CENTER,
+				});
 				this.$emit('refresh');
 			} catch (error) {
 				console.error("Error declining friend request", error);

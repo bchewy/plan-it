@@ -13,6 +13,7 @@ import boto3
 from werkzeug.utils import secure_filename
 from bson import json_util
 import json
+import os
 
 app = Flask(__name__)
 # CORS(app)
@@ -1296,10 +1297,15 @@ def create_group(user_email):
         required: true
         description: The email of the user who is creating the group
       - name: group_name
-        in: path
+        in: formData
         type: string
         required: true
         description: Group Name
+      - name: group_image
+        in: formData
+        type: file
+        required: false
+        description: Group Image
     responses:
       200:
         description: Group created successfully
@@ -1325,7 +1331,20 @@ def create_group(user_email):
     """
     current_user = user_collection.find_one({"email": user_email})
     user_group = db.groups.find_one({"owner_email": user_email})
-    group_name = request.json.get('group_name')
+    group_name = request.form.get('group_name')
+    group_image = request.files.get('group_image')
+
+    # Upload the file to s3
+    if group_image:
+        group_image_filename = secure_filename(group_image.filename)
+        group_image.save(group_image_filename)
+        upload_file_to_s3(group_image_filename)
+        group_image_url = f"https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/{group_image_filename}"
+        os.remove(group_image_filename)
+    else:
+        group_image_url = None
+
+
     group = db.groups.find_one({"name": group_name})
     
     if not current_user:
@@ -1336,11 +1355,11 @@ def create_group(user_email):
         return jsonify({"message": "User has already created a group."}), 400
     if group:
         return jsonify({"message": "Group name already exists."}), 400
-    return create_group_success(user_email, group_name)
+    return create_group_success(user_email, group_name, group_image)
 
 
-def create_group_success(user_email, group_name):
-    group = {"name": group_name, "owner_email": user_email, "members": [user_email]}
+def create_group_success(user_email, group_name, group_image):
+    group = {"name": group_name, "owner_email": user_email, "members": [user_email], "group_image": group_image}
     db.groups.insert_one(group)
     return jsonify({"message": "Group created successfully."}), 200
 
@@ -1564,8 +1583,8 @@ def create_badge():
 
     # Upload the image to S3 and get the public URL
     image_filename = secure_filename(image.filename)
-    image.save(image_filename)
-    upload_file_to_s3(image_filename)
+    # image.save(image_filename)
+    upload_file_to_s3('badges/'+image_filename)
     image_url = f"https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/{image_filename}"
     image = image_url
 

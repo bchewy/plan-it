@@ -49,9 +49,9 @@
 
 <template>
 	<div class="map-container" ref="mapContainer">
-		<div v-if="errorMessage" class="alert alert-danger" role="alert">
+		<!-- <div v-if="errorMessage" class="alert alert-danger" role="alert">
 			{{ errorMessage }}
-		</div>
+		</div> -->
 		<GMapMap class="map" :center="center" :zoom="zoom" map-type-id="terrain">
 			<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 			<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
@@ -232,6 +232,8 @@ import axios from "axios";
 import { useAuth0 } from '@auth0/auth0-vue';
 import Vue3DraggableResizable from 'vue3-draggable-resizable';
 import { useGeolocation } from '@vueuse/core'
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default defineComponent({
 	mounted() {
@@ -298,6 +300,10 @@ export default defineComponent({
 			})
 			.catch(error => {
 				console.error(error);
+				toast.error(`${error.response.data.message}`, {
+					autoClose: 5000,
+					position: toast.POSITION.TOP_CENTER,
+				});
 			});
 
 		const errorMessage = ref('');
@@ -418,7 +424,10 @@ export default defineComponent({
 			if (startLocation.value.lat && startLocation.value.lng && destination.value.lat && destination.value.lng) {
 				if (!travelMode.value) {
 					// TODO: Replace with toast feature
-					alert('Please select a valid travel mode.');
+					toast.error(`Please select a valid travel mode.`, {
+						autoClose: 5000,
+						position: toast.POSITION.TOP_CENTER,
+					});
 					return;
 				}
 				const [hours, minutes] = departureTime.value.split(':').map(Number);
@@ -495,6 +504,10 @@ export default defineComponent({
 							}
 						} catch (error) {
 							console.error('Failed to fetch location name:', error);
+							toast.error(`${error.response.data.message}`, {
+								autoClose: 5000,
+								position: toast.POSITION.TOP_CENTER,
+							});
 						}
 						return '';  // Return an empty string if the location name could not be fetched
 					};
@@ -529,13 +542,21 @@ export default defineComponent({
 
 					} catch (error) {
 						console.error('Failed to store route data:', error);
-						errorMessage.value = error.message += ' Please try again.';
+						// errorMessage.value = error.message += ' Please try again.';
+						toast.error(`${error.response.data.message}`, {
+							autoClose: 5000,
+							position: toast.POSITION.TOP_CENTER,
+						});
 
 
 					}
 				} catch (error) {
 					console.error("Failed to fetch route details:", error);
 					errorMessage.value = error.message += ' Please try again.';
+					toast.error(`${error.response.data.message}`, {
+						autoClose: 5000,
+						position: toast.POSITION.TOP_CENTER,
+					});
 
 
 				}
@@ -545,7 +566,10 @@ export default defineComponent({
 		const fetchPolylineOnly = async () => {
 			if (startLocation.value.lat && startLocation.value.lng && destination.value.lat && destination.value.lng) {
 				if (!travelMode.value) {
-					alert('Please select a valid travel mode.');
+					toast(`${error.response.data.message}`, {
+						autoClose: 5000,
+						position: toast.POSITION.TOP_CENTER,
+					});
 					return;
 				}
 				try {
