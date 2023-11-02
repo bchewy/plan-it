@@ -79,7 +79,13 @@ export default {
             });
             const result = response.data;
             if (response.status === 200) {
+                toast.success(`Group has been successfully created!`, {
+                    autoClose: 5000,
+                    position: toast.POSITION.TOP_CENTER,
+                });
+                document.getElementById('createGroupForm').reset();
                 return result;
+
             } else {
                 // alert(result.message);
                 throw new Error(result.message);

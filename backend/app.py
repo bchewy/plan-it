@@ -1355,11 +1355,11 @@ def create_group(user_email):
         return jsonify({"message": "User has already created a group."}), 400
     if group:
         return jsonify({"message": "Group name already exists."}), 400
-    return create_group_success(user_email, group_name, group_image)
+    return create_group_success(user_email, group_name, group_image_url)
 
 
-def create_group_success(user_email, group_name, group_image):
-    group = {"name": group_name, "owner_email": user_email, "members": [user_email], "group_image": group_image}
+def create_group_success(user_email, group_name, group_image_url):
+    group = {"name": group_name, "owner_email": user_email, "members": [user_email], "group_image": group_image_url}
     db.groups.insert_one(group)
     return jsonify({"message": "Group created successfully."}), 200
 
@@ -1404,6 +1404,55 @@ def list_all_groups():
     return jsonify({"groups": [convert_objectid_to_string(group) for group in groups]}), 200
 
 
+@app.route("/users/<user_email>/groups", methods=['GET'])
+@require_api_key
+def list_user_groups(user_email):
+    """
+    List all groups a user is in
+    ---
+    tags:
+      - Groups
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user who wants to see the groups they are in
+    responses:
+      200:
+        description: List of all groups the user is in
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              owner_email:
+                type: string
+              members:
+                type: array
+                items:
+                  type: string
+      404:
+        description: No groups found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    print(user_email)
+    groups = list(db.groups.find({"members": user_email}))
+    print(groups)
+    print('\n')
+    print('\n')
+    if len(groups) == 0:
+        return jsonify({"message": "No groups found."}), 404
+    groups = [convert_objectid_to_string(group) for group in groups]
+    return jsonify({"groups": groups}), 200
 
 # Join Group
 @app.route("/users/<user_email>/groups/<group_name>/join", methods=['POST'])
