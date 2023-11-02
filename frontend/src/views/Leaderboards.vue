@@ -51,6 +51,7 @@
 									<tr>
 										<th>Rank</th>
 										<th>Name</th>
+										<th>Badges Earned</th>
 										<th>Level</th>
 										<!-- <th>EXP to next level</th> -->
 										<th>CO2 Saved</th>
