@@ -70,6 +70,45 @@
 			</div>
 		</div>
 
+		<!-- Badges ================================================== -->
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card mt-4 mb-4">
+					<div class="card-header">
+						<h3 class="mb-0">Badge Management</h3>
+					</div>
+					<div class="container m-2">
+						<div class="row">
+							<div class="col-12 mt-5">
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th scope="col">#</th>
+											<th scope="col">Badge</th>
+											<th scope="col">Description</th>
+											<th scope="col">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(badge, index) in badges" :key="badge">
+											<th scope="row">{{ index + 1 }}</th>
+											<td>{{ badge.name }}</td>
+											<td>{{ badge.description }}</td>
+											<td>
+												<button class="btn btn-primary" @click="openBadgeModal(badge)" data-bs-toggle="modal" data-bs-target="#editBadgeModal">Edit</button>
+												<button class="btn btn-danger" @click="deleteBadge(badge.id)">Delete</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<button class="btn btn-success mt-3" @click="openBadgeModal()" data-bs-toggle="modal" data-bs-target="#addBadgeModal">Add New Badge</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true" ref="addUserModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -95,7 +134,7 @@
 		</div>
 
 
-		
+
 
 	</div>
 </template>
