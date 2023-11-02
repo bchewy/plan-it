@@ -128,10 +128,10 @@
 									</svg></td> -->
 								<td>{{ userExp + expToAddG }}/100 (+ {{ expToAddG }})</td>
 							</tr>
-							<tr>
+							<!-- <tr>
 								<td>Level Progress:</td>
 								<td>{{ userLvl }}</td>
-							</tr>
+							</tr> -->
 						</table>
 
 						<!-- <p>{{ expToAddG }}exp has been added to your progress!</p> -->
@@ -190,6 +190,15 @@ export default {
 		FriendRequest,
 		Badges,
 	},
+	watch: {
+		userLvl: {
+			handler() {
+				this.fetchUser();
+			},
+			immediate: true,
+		},
+
+	},
 	created() {
 		this.fetchData();
 	},
@@ -218,8 +227,8 @@ export default {
 	methods: {
 		fetchData() {
 			this.fetchRoutes();
-			this.fetchUser();
 			this.fetchRandomGif();
+			this.fetchUser();
 		},
 
 		// Method for calculating distance between two points

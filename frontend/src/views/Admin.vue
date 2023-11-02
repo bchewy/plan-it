@@ -29,6 +29,7 @@
 <template>
 	<Navbar />
 	<div class="container-fluid pt-3 bg-supergreen pb-3">
+		<!-- User Management ================================================== -->
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="card mt-4 mb-4">
@@ -93,6 +94,8 @@
 			</div>
 		</div>
 
+
+		
 
 	</div>
 </template>
