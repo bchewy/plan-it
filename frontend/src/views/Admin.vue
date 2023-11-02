@@ -122,7 +122,7 @@
 		</div>
 
 		<!-- Modal for updating user level and exp ================================================== -->
-		<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true" ref="addUserModal">
+		<div class="modal" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true" ref="addUserModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -147,7 +147,7 @@
 		</div>
 
 		<!-- Modal for adding badges ================================================== -->
-		<div class="modal fade" id="addBadgeModal" tabindex="-1" aria-labelledby="addBadgeModalLabel" aria-hidden="true" ref="addBadgeModal">
+		<div class="modal" id="addBadgeModal" tabindex="-1" aria-labelledby="addBadgeModalLabel" aria-hidden="true" ref="addBadgeModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -318,6 +318,8 @@ export default {
 				});
 				console.log(response.data.message);
 				myModal.hide();
+				this.badges = [];
+				this.fetchBadges();
 			} catch (error) {
 				console.error(error);
 			}

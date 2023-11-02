@@ -45,7 +45,8 @@ export default {
 
     },
     created() {
-
+        // this.fetchData();
+        this.getGroups();
     },
     setup() {
         const { loginWithRedirect, user, isAuthenticated } = useAuth0();
