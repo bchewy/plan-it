@@ -178,7 +178,7 @@ export default {
 			friendRequests: [],
 			receivedRequests: [],
 			sentRequests: [],
-			badges
+			badges:[]
 			}
 	},
 	computed: {
