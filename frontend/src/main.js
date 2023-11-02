@@ -54,6 +54,15 @@ library.add(faPeopleGroup)
 import PrimeVue from 'primevue/config';
 // import VueParallaxJs from 'vue-parallax-js'
 
+// AWS
+// import AWS from 'aws-sdk';
+
+// AWS.config.update({
+// 	region: 'ap-southeast-1',
+// 	accessKeyId: `${process.env.VITE_APP_AWS_ACCESS_KEY_ID}`,
+// 	secretAccessKey: `${process.env.VITE_APP_AWS_SECRET_ACCESS_KEY}`,
+// });
+
 
 
 const app = createApp(App)
