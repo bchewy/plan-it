@@ -1724,6 +1724,7 @@ def read_badge(badge_id):
             message:
               type: string
     """
+    print("badge id: ", badge_id)
     badge = db.badges.find_one({"_id": ObjectId(badge_id)})
     if badge:
         return json.loads(json_util.dumps(badge)), 200

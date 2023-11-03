@@ -53,7 +53,6 @@
 										<th>Name</th>
 										<th>Badges Earned</th>
 										<th>Level</th>
-										<!-- <th>EXP to next level</th> -->
 										<th>CO2 Saved</th>
 									</tr>
 								</thead>
@@ -95,23 +94,26 @@
 									<tr>
 										<th>Rank</th>
 										<th>Name</th>
+										<th>Badges Earned</th>
 										<th>Level</th>
-										<!-- <th>EXP to next level</th> -->
 										<th>CO2 Saved</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="(user, index) in friends" :key="user.email">
-										{{ friends }}
+									<tr v-for="(user, index) in friendStats" :key="user.email">
 										<td>{{ index + 1 }}</td>
 										<td>
-											<img :src="user.pictureurl" alt="User Image" width="50" height="50">
-											<br><span>{{ user.handle }}</span>
+											<img :src="user.stats.pictureurl" alt="User Image" width="50" height="50">&nbsp;
+											<span>{{ user.stats.handle }}</span>
 										</td>
-										<td>{{ user.level }}</td>
-										<!-- <td>{{ user.exp }}</td> -->
-										<td v-if="user.carbonsavings">{{ user.carbonsavings }} Co2 kg</td>
-										<td v-else></td>
+										<td>
+											<span v-for="badge in user.stats.badges" :key="badge.id">
+												<img :src="badge.badgesimg" alt="Badge Image" width="50" height="50">
+											</span>
+										</td>
+										<!-- You can now access the stats data for each user -->
+										<td>{{ user.stats.level }}</td>
+										<td>{{ user.stats.carbonsavings }} Co2 Kg</td>
 									</tr>
 								</tbody>
 							</table>
@@ -159,6 +161,7 @@ export default {
 		const userLvl = ref(0)
 		const users = [];
 		const friends = ref([]);
+		const friendStats = ref([]);
 
 		return {
 			users,
@@ -173,6 +176,8 @@ export default {
 			receivedRequests: [],
 			sentRequests: [],
 			badges: [],
+			friendStats,
+
 		}
 	},
 	computed: {
@@ -195,32 +200,11 @@ export default {
 		Badges,
 	},
 	methods: {
-		fetchData() {
+		async fetchData() {
 			this.fetchUsers();
-			this.fetchUser();
+			await this.fetchUser();
 			this.fetchFriendStats(this.friends);
-			this.fetchBadges();
-			// this.fetchRoutes().then(() => {
-			// 	this.drawChart();
-			// });
-			// this.fetchUser();
-			// this.fetchFriendRequests();
 		},
-		// async fetchBadges() {
-		// 	const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}/badges`;
-		// 	const headers = {
-		// 		"x-api-key": "PlanItIsTheBestProjectEverXYZ",
-		// 	};
-
-		// 	try {
-		// 		const response = await axios.get(url, { headers });
-		// 		this.badges = response.data.badges;
-		// 		// console.log(this.friends);
-
-		// 	} catch (error) {
-		// 		console.error("Error fetching user", error);
-		// 	}
-		// },
 		async fetchUser() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
 			const headers = {
@@ -232,7 +216,6 @@ export default {
 				this.friends = response.data.friends;
 				this.userLvl = response.data.level;
 				this.userExp = response.data.exp;
-				// console.log(this.friends);
 
 			} catch (error) {
 				console.error("Error fetching user", error);
@@ -292,32 +275,31 @@ export default {
 				const response = await axios.get(url, { headers });
 				this.users = response.data;
 				for (let user of this.users) {
-					const badgeUrl = `${import.meta.env.VITE_API_ENDPOINT}/users/${user.email}/badges`;
 					try {
+						const badgeUrl = `${import.meta.env.VITE_API_ENDPOINT}/users/${user.email}/badges`;
 						const badgeResponse = await axios.get(badgeUrl, { headers });
+						const badgeIds = badgeResponse.data;
+
+						// Initialize an empty array for user badges
 						user.badges = [];
 
-						// user.badges = badgeResponse.data;
-						// for every badge, fetch the details
-						for (let badgeId of badgeResponse.data) {
-							const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badgeId}`;
+						// Fetch each badge details
+						for (let badgeId of badgeIds) {
 							try {
+								const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badgeId}`;
 								const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
 
+								// Add the badge details to the user badges array
 								user.badges.push({
 									id: badgeId,
 									image: badgeDetailsResponse.data.image,
-									
 								});
-								
-
 							} catch (error) {
-								console.error("Error fetching details for badge:", error);
+								console.error(`Error fetching details for badge with ID ${badgeId}:`, error);
 							}
 						}
-						console.log(this.userBadges)
 					} catch (error) {
-						console.error("Error fetching badges for user:", error);
+						console.error(`Error fetching badges for user with email ${user.email}:`, error);
 					}
 				}
 			} catch (error) {
@@ -325,19 +307,47 @@ export default {
 			}
 		},
 		async fetchFriendStats(friends) {
+			console.log("Fetching friend stats")
+			console.log(friends)
 			try {
-				console.log('Fetching friend data')
-				console.log(friends)
+				const stats = [];
 				for (let friend of friends) {
-					console.log('friend')
+					console.log(friend)
+					console.log("Fetching our friend here.")
 					const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(friend)}`;
 					const headers = {
 						"x-api-key": "PlanItIsTheBestProjectEverXYZ",
 					};
 					const response = await axios.get(url, { headers });
-					friend.stats = response.data;
-					console.log(response.data)
+					stats.push({
+						...friend,
+						stats: {
+							...response.data,
+							badges: [],
+						},
+					});
+
+					for (let badge of response.data.badges) {
+						try {
+							const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badge}`;
+							const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
+							// console.log(badgeDetailsResponse.data.image)
+
+							// Add the badge details to the user badges array
+							stats[stats.length - 1].stats.badges.push({
+								id: badge,
+								badgesimg: badgeDetailsResponse.data.image,
+							});
+
+						} catch (error) {
+							console.error(`Error fetching details for badge with ID ${badge}:`, error);
+						}
+					}
+
+
 				}
+				this.friendStats = stats;
+				console.log(this.friendStats)
 			} catch (error) {
 				console.error("Error fetching friend stats:", error);
 			}
