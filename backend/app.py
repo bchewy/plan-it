@@ -1218,8 +1218,11 @@ def create_post(user_email):
             badge=params.get('badge')
             taggedfriends=params.get('taggedfriends')
             likes=params.get('likes')
+            useremail=params.get('useremail')
+            username=params.get('username')
+            userprofile=params.get('userprofile')
             
-            post = {"content": post_content,"badge": badge,"taggedfriends":taggedfriends,"likes":likes,"timestamp": datetime.datetime.utcnow()}
+            post = {"useremail":useremail,"username":username,"userprofile":userprofile,"content": post_content,"badge": badge,"taggedfriends":taggedfriends,"likes":likes,"timestamp": datetime.datetime.utcnow()}
             if 'posts' not in current_user:
                 current_user['posts'] = []
             current_user['posts'].append(post)

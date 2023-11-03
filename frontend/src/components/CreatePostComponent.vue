@@ -57,8 +57,26 @@
 	</div>
     <!--Create post button-->
     
-							<button class="btn btn-success col-3" type="button"  @click="createPost(user.email)"><font-awesome-icon icon="fa-solid fa-plus-square" /> Create post!</button>
+							<button class="btn btn-success col-3" type="button"  @click="createPost(user.email,user.handle,user.pictureurl)" data-bs-target="#createPostOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-plus-square" /> Create post!</button>
 							<span class="col-1"></span>
+	<div class="modal fade" id="createPostOverlay" tabindex="-1" aria-labelledby="createPostOverlayLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="ModalLabel">Post status</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p v-if="postStatus">Post created successfully!</p>
+					<p v-else>Post creation failed! </p>
+				</div>
+				<div class="modal-footer">
+			
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+				</div>
+			</div>
+		</div>
+	</div>
 						</div>
 					</div>
 				</div>
@@ -106,7 +124,8 @@ export default defineComponent({
 			content: '',
 			badge: '',
 			taggedfriends: [],
-			likes: []
+			likes: [],
+			postStatus:false
 
 
 		}
@@ -133,7 +152,7 @@ export default defineComponent({
 
 			return options ? options.slice(0, -1) : options
 		},
-		async createPost(useremail) {
+		async createPost(useremail,username,userprofile) {
 			console.log('content')
 			console.log(this.content)
 			const url = `https://api.bchwy.com//users/${encodeURIComponent(useremail)}/posts`;
@@ -144,6 +163,9 @@ export default defineComponent({
 			const contentData = this.content;
 
 			const params = {
+				userprofile: userprofile,
+				username: username,
+				useremail: useremail,
 				content: contentData,
 				badge: this.badge,
 				taggedfriends: this.taggedfriends,
@@ -153,8 +175,12 @@ export default defineComponent({
 			axios.post(url, { params }, { headers })
 				.then(response => {
 					console.log('response data here')
-					console.log(params)
+					
 					console.log(response.data);
+					if(response.data.message=='Post created successfully.'){
+						this.postStatus=true
+					}
+
 
 				})
 				.catch(error => {
