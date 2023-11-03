@@ -2,7 +2,7 @@
 
 <div class="row justify-content-center my-4 ">
 					<!--header-->
-					<div class="col-10 rounded border bg-white position-relative px-3 pt-3">
+					<div class="col-10 rounded border bg-white position-relative px-4 pt-3">
              
 <div class="row">
     <div class="col d-flex align-items-center px-2">
