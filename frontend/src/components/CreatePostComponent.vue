@@ -148,14 +148,15 @@ export default defineComponent({
 				
 				
 				for(let badgeID of response.data.badges){
-					console.log(badgeID)
+				
 					const badgeDetailsUrl = `https://api.bchwy.com/badges/${badgeID}`
 					try{
 						const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
 						this.userBadges.push({
 							id:badgeID,
 							image: badgeDetailsResponse.data.image,
-							name: badgeDetailsResponse.data.name
+							name: badgeDetailsResponse.data.name,
+							description: badgeDetailsResponse.data.description
 						})
 					}
 

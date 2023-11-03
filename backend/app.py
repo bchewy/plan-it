@@ -1285,7 +1285,7 @@ def get_posts(user_email):
     
 
 @app.route("/posts", methods=['GET'])
-#@require_api_key
+@require_api_key
 def get_all_posts():
     posts = list(post_collection.find())
     if posts:

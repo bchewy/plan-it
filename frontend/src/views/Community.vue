@@ -23,13 +23,14 @@
 			
 				<CreatePostComponent></CreatePostComponent>
 				
-				<PostComponent :username="sampleData.username" 
-				:profileImage="sampleData.profileImage" 
-				:timePosted="sampleData.timePosted" 
-				:badge="sampleData.badge" 
-				:taggedFriends="sampleData.taggedFriends"
-				:liked="sampleData.liked"
-				>Check out my new badge!</PostComponent>
+				<PostComponent v-for="post in posts" :username="post.username" 
+				:profileImage="post.userprofile" 
+				:timePosted="post.timestamp" 
+				:badge="post.badge" 
+				:taggedFriends="post.taggedfriends"
+				:liked="post.likes"
+				:content="post.content"
+				></PostComponent>
 	
 				
 
@@ -50,35 +51,36 @@ import CommunitySidebar from "../components/CommunitySidebar.vue";
 import NavBar from "../components/Navbar.vue";
 import { useAuth0 } from '@auth0/auth0-vue';
 import PostComponent from '../components/PostComponent.vue'
+import axios from "axios";
+
 
 
 
 export default {
 	name: 'Community',
-	data() {
+	data(){
 		return{
-			sampleData:{
-				username:"Ryan",
-				profileImage: "https://lh3.googleusercontent.com/a/ACg8ocJMqVngf0XBxJRe4tnMG_Q_kzEvs4Ier5N5-7V3fvw5=s96-c",
-				timePosted: "13/10/2023 6:25pm",
-				badge:"0",
-				taggedFriends:["Brian","Melody","Saph"],
-				liked:["email1","email2","email3"],
-				// comments:[{user:"Brian",comment:"Awesome stuff!"},{user:"Melody",comment:"Love to see that!"}]
+			posts:[]
+		}
+	}
+	,
 
-			}
-      
-		
+async created(){
+	const url = `https://api.bchwy.com/posts`;
+		const headers = {
+		"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+	};
+	try{
+		const response=await axios.get(url,{headers})
+		this.posts=response.data.reverse()
+		console.log(this.posts)
+	}
+	catch(error){
+		console.error("error",error)
+	}
 
-	}},
-	// async created(){
-	// 	const url = `https://api.bchwy.com/users/iz/`;
-	// 		const headers = {
-	// 			"x-api-key": "PlanItIsTheBestProjectEverXYZ",
-	// 		};
-
-
-	// }
+ }
+ ,
 	
 
 	components: {
