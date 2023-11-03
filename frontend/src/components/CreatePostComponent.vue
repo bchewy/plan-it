@@ -19,7 +19,7 @@
 				</div>
 				<div class="modal-body">
 					<ul class="list-unstyled">
-						<li v-for="badgeID in userBadges" class="row"><span class="card col-9">{{ badgeID }}</span>  <input type="radio" name="badges" :value="badge_1" v-model="badge" class="col-3"> </li> 
+						<li v-for="i in userBadges" class="row"><div class="card col-10 mb-2 ms-4" :style="[badge==i.id?'background-color:rgb(200, 209, 191)':'']"><img class="card-img-top w-50 mt-3 mx-auto rounded-circle" :src="i.image"><div class="card-body"><div class="card-title fw-bold text-center">{{ i.name }}</div></div></div><div class="col align-items-center d-flex">  <input type="radio" name="badges" :value="i.id" v-model="badge" > </div></li> 
 						
 
 					</ul>
@@ -145,13 +145,29 @@ export default defineComponent({
 				const response = await axios.get(url, { headers });
 				this.thisuser=response.data
 				this.userFriends=response.data.friends
-				this.userBadges=response.data.badges
+				
+				for(let badgeID of response.data.badges){
+					console.log(badgeID)
+					const badgeDetailsUrl = `https://api.bchwy.com/badges/${badgeID}`
+					try{
+						const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
+						this.userBadges.push({
+							id:badgeID,
+							image: badgeDetailsResponse.data.image,
+							name: badgeDetailsResponse.data.name
+						})
+					}
+
+					catch(error){console.error("error",error)}
+				}
+				console.log(this.userBadges)
+
 			
 
 			} catch (error) {
 				console.error("Error fetching user", error);
 			}
-			console.log
+			
 
 
 
@@ -162,17 +178,7 @@ export default defineComponent({
 	},
 
 	
-	methods: {
-		async getPicture(badgeID){
-			const url = `https://api.bchwy.com/users/${badgeID}`;
-			const headers = {
-				
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
-			}
-			const response=await axios.get(url,{headers})
 
-
-		},
 		
 		
 		parseParams(params) {
@@ -249,5 +255,5 @@ export default defineComponent({
 
 
 	}
-})
+)
 </script>

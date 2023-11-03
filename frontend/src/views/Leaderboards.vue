@@ -306,14 +306,16 @@ export default {
 
 								user.badges.push({
 									id: badgeId,
-									image: badgeDetailsResponse.data.image
+									image: badgeDetailsResponse.data.image,
+									
 								});
-								console.log(user.badges)
+								
 
 							} catch (error) {
 								console.error("Error fetching details for badge:", error);
 							}
 						}
+						console.log(this.userBadges)
 					} catch (error) {
 						console.error("Error fetching badges for user:", error);
 					}
