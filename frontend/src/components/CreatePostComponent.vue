@@ -3,7 +3,6 @@
 		<div class="col-10 rounded border bg-white">
 			<p class="mt-3 text-muted">&nbsp Share something with the community!</p>
 			<Editor class="mb-4" editorStyle="height: 100px" v-model="content"></Editor>
-			{{ taggedfriends }}
 
 						<div class="row mb-3 justify-content-between">
 							<span class="col-1"></span>
@@ -63,36 +62,8 @@
 						</div>
 					</div>
 				</div>
-				<!--tag friend button-->
-				<button class="btn btn-secondary col-3" type="button" @click="friends = !friends" data-bs-target="#friendsOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-tag" /> Tag a friend</button>
-				<!--tag friend model-->
-				<div v-if="friends" class="modal fade" id="friendsOverlay" tabindex="-1" aria-labelledby="friendsOverlayLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="TagFriendsModalLabel">Friends</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-							</div>
-							<div class="modal-body">
-								<ul>
-									<li> Friend1 </li> <input type="checkbox" value="friend1" v-model="taggedfriends">
-									<li> Friend2 </li> <input type="checkbox" value="friend2" v-model="taggedfriends">
-								</ul>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-								<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="console.log(taggedfriends)">Confirm</button> <!--yet to define-->
-							</div>
-						</div>
-					</div>
-				</div>
-				<!--Create post button-->
 
-				<button class="btn btn-success col-3" type="button" @click="createPost(user.email)"><font-awesome-icon icon="fa-solid fa-plus-square" /> Create post!</button>
-				<span class="col-1"></span>
-			</div>
-		</div>
-	</div>
+		
 </template>
 
 <script>
