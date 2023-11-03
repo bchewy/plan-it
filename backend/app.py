@@ -50,6 +50,7 @@ API_KEY = "PlanItIsTheBestProjectEverXYZ"
 db = client.wad2
 collection = db.routes
 user_collection = db.users
+post_collection = db.posts
 
 
 
@@ -1222,6 +1223,9 @@ def create_post(user_email):
                 current_user['posts'] = []
             current_user['posts'].append(post)
             user_collection.update_one({"email": user_email}, {"$set": current_user})
+
+            post_collection.insert_one(post)
+
             return jsonify({"message": "Post created successfully."}), 200
         else:
             return jsonify({"message": "Post content is required."}), 400
@@ -1274,6 +1278,9 @@ def get_posts(user_email):
         return jsonify({"posts": current_user['posts']}), 200
     else:
         return jsonify({"message": "User not found."}), 404
+
+
+
 
 # =====================================================================================
 
