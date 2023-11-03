@@ -3,7 +3,7 @@
 		<div class="col-10 rounded border bg-white">
 			<p class="mt-3 text-muted">&nbsp Share something with the community!</p>
 			<Editor class="mb-4" editorStyle="height: 100px" v-model="content"></Editor>
-
+			
 						<div class="row mb-3 justify-content-between">
 							<span class="col-1"></span>
     <!--share badges button-->
@@ -57,7 +57,7 @@
 	</div>
     <!--Create post button-->
     
-							<button class="btn btn-success col-3" type="button"  @click="createPost(user.email,user.handle,user.pictureurl)" data-bs-target="#createPostOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-plus-square" /> Create post!</button>
+							<button class="btn btn-success col-3" type="button"  @click="createPost(thisuser.email,thisuser.handle,thisuser.pictureurl)" data-bs-target="#createPostOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-plus-square" /> Create post!</button>
 							<span class="col-1"></span>
 	<div class="modal fade" id="createPostOverlay" tabindex="-1" aria-labelledby="createPostOverlayLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -125,12 +125,31 @@ export default defineComponent({
 			badge: '',
 			taggedfriends: [],
 			likes: [],
-			postStatus:false
+			postStatus:false,
+			thisuser:''
 
 
 		}
 	},
+	async created(){
+		
+			const url = `https://api.bchwy.com/users/iz/${encodeURIComponent(this.user.email)}`;
+			const headers = {
+				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+			};
+
+			try {
+				const response = await axios.get(url, { headers });
+				this.thisuser=response.data
+			
+
+			} catch (error) {
+				console.error("Error fetching user", error);
+			}
+		
+	},
 	methods: {
+		
 		parseParams(params) {
 			const keys = Object.keys(params)
 			let options = ''
@@ -155,7 +174,7 @@ export default defineComponent({
 		async createPost(useremail,username,userprofile) {
 			console.log('content')
 			console.log(this.content)
-			const url = `https://api.bchwy.com//users/${encodeURIComponent(useremail)}/posts`;
+			const url = `https://api.bchwy.com/users/${encodeURIComponent(useremail)}/posts`;
 			const headers = {
 				"Content-Type": "application/json",
 				"x-api-key": "PlanItIsTheBestProjectEverXYZ",

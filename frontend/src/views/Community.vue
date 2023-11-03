@@ -64,7 +64,7 @@ export default {
 				badge:"0",
 				taggedFriends:["Brian","Melody","Saph"],
 				liked:["email1","email2","email3"],
-				comments:[{user:"Brian",comment:"Awesome stuff!"},{user:"Melody",comment:"Love to see that!"}]
+				// comments:[{user:"Brian",comment:"Awesome stuff!"},{user:"Melody",comment:"Love to see that!"}]
 
 			}
       
