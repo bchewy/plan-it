@@ -1217,8 +1217,9 @@ def create_post(user_email):
         if post_content:
             badge=params.get('badge')
             taggedfriends=params.get('taggedfriends')
+            likes=params.get('likes')
             
-            post = {"content": post_content,"badge": badge,"taggedfriends":taggedfriends,"timestamp": datetime.datetime.utcnow()}
+            post = {"content": post_content,"badge": badge,"taggedfriends":taggedfriends,"likes":likes,"timestamp": datetime.datetime.utcnow()}
             if 'posts' not in current_user:
                 current_user['posts'] = []
             current_user['posts'].append(post)

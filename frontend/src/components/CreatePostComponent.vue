@@ -105,7 +105,8 @@ export default defineComponent({
 			friends: false,
 			content: '',
 			badge: '',
-			taggedfriends: []
+			taggedfriends: [],
+			likes: []
 
 
 		}
@@ -135,7 +136,7 @@ export default defineComponent({
 		async createPost(useremail) {
 			console.log('content')
 			console.log(this.content)
-			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(useremail)}/posts`;
+			const url = `https://api.bchwy.com//users/${encodeURIComponent(useremail)}/posts`;
 			const headers = {
 				"Content-Type": "application/json",
 				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
@@ -145,12 +146,14 @@ export default defineComponent({
 			const params = {
 				content: contentData,
 				badge: this.badge,
-				taggedfriends: this.taggedfriends
+				taggedfriends: this.taggedfriends,
+				likes: this.likes
 			};
-			// Update level
+
 			axios.post(url, { params }, { headers })
 				.then(response => {
 					console.log('response data here')
+					console.log(params)
 					console.log(response.data);
 
 				})
