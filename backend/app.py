@@ -1282,7 +1282,18 @@ def get_posts(user_email):
         return jsonify({"posts": current_user['posts']}), 200
     else:
         return jsonify({"message": "User not found."}), 404
+    
 
+@app.route("/posts", methods=['GET'])
+@require_api_key
+def get_all_posts():
+    posts = list(post_collection.find())
+    if posts:
+        posts = [convert_objectid_to_string(post) for post in posts]
+        return jsonify(posts), 200
+    else:
+        return jsonify({"message": "No users found."}), 404
+    
 
 
 

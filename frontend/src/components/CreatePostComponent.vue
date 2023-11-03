@@ -1,6 +1,6 @@
 <template>
 	<div class="row justify-content-center mt-4">
-		<div class="col-10 rounded border bg-white">
+		<div class="col-10 rounded border bg-white px-4">
 			<p class="mt-3 text-muted">&nbsp Share something with the community!</p>
 			<Editor class="mb-4" editorStyle="height: 100px" v-model="content"></Editor>
 		
@@ -14,7 +14,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="BadgesModalLabel">Badges</h5>
+					<h5 class="modal-title" id="BadgesModalLabel">Your badges</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
@@ -38,7 +38,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="TagFriendsModalLabel">Friends</h5>
+					<h5 class="modal-title" id="TagFriendsModalLabel">Your friends</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
@@ -192,7 +192,7 @@ export default defineComponent({
 	
 
 		
-		
+		methods:{
 		parseParams(params) {
 			const keys = Object.keys(params)
 			let options = ''
@@ -241,6 +241,7 @@ export default defineComponent({
 					console.log(response.data);
 					if(response.data.message=='Post created successfully.'){
 						this.postStatus=true
+						this.content=''
 					}
 
 
@@ -264,6 +265,7 @@ export default defineComponent({
 			// 	.catch(error => { console.log(error.message) })
 			// console.log(response)
 		}
+	}
 
 
 	}

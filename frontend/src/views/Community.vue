@@ -71,6 +71,16 @@ export default {
 		
 
 	}},
+	// async created(){
+	// 	const url = `https://api.bchwy.com/users/iz/`;
+	// 		const headers = {
+	// 			"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+	// 		};
+
+
+	// }
+	
+
 	components: {
 		NavBar,
 		CreatePostComponent,
