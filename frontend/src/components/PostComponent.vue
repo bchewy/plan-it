@@ -18,8 +18,8 @@
                        <div class="border-rounded border mt-3 " style="background-color: rgb(218, 239, 216);">
                         
                       <div class="row">
-                        <div class="col justify-content-end d-flex my-3">
-                        <br> <img :src="badges[badge].icon" style="width:300px" class="rounded-circle">
+                        <div class="col-3 justify-content-end d-flex my-3">
+                        <br> <img :src="badges[badge].icon" style="width:75%" class="rounded-circle">
                         </div>
                         <div class="col ms-2 mt-2 align-items-center d-flex">
                         <p class="fs-5"><span class="fw-bold fs-3">{{ badges[badge].name }} </span><br><br> {{ badges[badge].description }} <br><br> <strong>Milestone:</strong> {{ badges[badge].milestone }}</p></div>
