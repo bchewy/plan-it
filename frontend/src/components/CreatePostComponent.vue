@@ -19,7 +19,7 @@
 				</div>
 				<div class="modal-body">
 					<ul class="list-unstyled">
-						<li v-for="badge_1 in userBadges" class="card">{{ badge_1 }}  <input type="radio" name="badges" :value="badge_1" v-model="badge"> </li> 
+						<li v-for="badgeID in userBadges" class="row"><span class="card col-9">{{ badgeID }}</span>  <input type="radio" name="badges" :value="badge_1" v-model="badge" class="col-3"> </li> 
 						
 
 					</ul>
@@ -163,6 +163,16 @@ export default defineComponent({
 
 	
 	methods: {
+		async getPicture(badgeID){
+			const url = `https://api.bchwy.com/users/${badgeID}`;
+			const headers = {
+				
+				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+			}
+			const response=await axios.get(url,{headers})
+
+
+		},
 		
 		
 		parseParams(params) {
