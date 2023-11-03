@@ -3,7 +3,7 @@
 		<div class="col-10 rounded border bg-white">
 			<p class="mt-3 text-muted">&nbsp Share something with the community!</p>
 			<Editor class="mb-4" editorStyle="height: 100px" v-model="content"></Editor>
-			
+		
 						<div class="row mb-3 justify-content-between">
 							<span class="col-1"></span>
     <!--share badges button-->
@@ -15,19 +15,18 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="BadgesModalLabel">Badges</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="badge=''"></button>
 				</div>
 				<div class="modal-body">
-					<ul>
-						<li>New recruit <input type="radio" name="badges" value="0" v-model="badge"> </li> 
-						<li>Advanced <input type="radio" name="badges" value="1" v-model="badge"> </li> 
-						<li>Expert <input type="radio" name="badges" value="2" v-model="badge"> </li> 
+					<ul class="list-unstyled">
+						<li v-for="badge_1 in userBadges" class="card">{{ badge_1 }}  <input type="radio" name="badges" :value="badge_1" v-model="badge"> </li> 
+						
 
 					</ul>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="console.log(badge)" >Confirm</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="badge=''">Cancel</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal"  >Confirm</button>
 				</div>
 			</div>
 		</div>
@@ -40,17 +39,17 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="TagFriendsModalLabel">Friends</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="taggedfriends=[]"></button>
 				</div>
 				<div class="modal-body">
 					<ul>
-						<li> Friend1 </li> <input type="checkbox" value="friend1"  v-model="taggedfriends">
-                        <li> Friend2 </li> <input type="checkbox" value="friend2"  v-model="taggedfriends">
+						<li v-for="friend in userFriends"> {{friend}} <input type="checkbox" :value="friend"  v-model="taggedfriends"></li>
+                        
 					</ul>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
-					<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="console.log(taggedfriends)">Confirm</button> <!--yet to define-->
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="taggedfriends=[]" >Cancel</button>
+					<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button> <!--yet to define-->
 				</div>
 			</div>
 		</div>
@@ -126,11 +125,15 @@ export default defineComponent({
 			taggedfriends: [],
 			likes: [],
 			postStatus:false,
-			thisuser:''
+			thisuser:'',
+			userFriends:[],
+			userBadges:[],
+			
 
 
 		}
 	},
+	
 	async created(){
 		
 			const url = `https://api.bchwy.com/users/iz/${encodeURIComponent(this.user.email)}`;
@@ -141,14 +144,26 @@ export default defineComponent({
 			try {
 				const response = await axios.get(url, { headers });
 				this.thisuser=response.data
+				this.userFriends=response.data.friends
+				this.userBadges=response.data.badges
 			
 
 			} catch (error) {
 				console.error("Error fetching user", error);
 			}
+			console.log
+
+
+
+
+
+
 		
 	},
+
+	
 	methods: {
+		
 		
 		parseParams(params) {
 			const keys = Object.keys(params)
