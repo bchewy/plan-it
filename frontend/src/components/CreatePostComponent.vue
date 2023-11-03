@@ -15,11 +15,11 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="BadgesModalLabel">Badges</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="badge=''"></button>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
 					<ul class="list-unstyled">
-						<li v-for="i in userBadges" class="row"><div class="card col-10 mb-2 ms-4" :style="[badge==i.id?'background-color:rgb(200, 209, 191)':'']"><img class="card-img-top w-50 mt-3 mx-auto rounded-circle" :src="i.image"><div class="card-body"><div class="card-title fw-bold text-center">{{ i.name }}</div></div></div><div class="col align-items-center d-flex">  <input type="radio" name="badges" :value="i.id" v-model="badge" > </div></li> 
+						<li v-for="i in userBadges" class="row"><div class="card col-10 mb-2 ms-4" :style="[badge==i.id?'background-color:rgb(175, 209, 191)':'']"><img class="card-img-top w-50 mt-3 mx-auto rounded-circle" :src="i.image"><div class="card-body"><div class="card-title fw-bold text-center">{{ i.name }}</div></div></div><div class="col align-items-center d-flex">  <input type="radio" name="badges" :value="i.id" v-model="badge" > </div></li> 
 						
 
 					</ul>
@@ -39,11 +39,11 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="TagFriendsModalLabel">Friends</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="taggedfriends=[]"></button>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<ul>
-						<li v-for="friend in userFriends"> {{friend}} <input type="checkbox" :value="friend"  v-model="taggedfriends"></li>
+					<ul class="list-group">
+						<li v-for="friend in userFriends" class="list-group-item">  <input type="checkbox" :value="friend"  v-model="taggedfriends" class="me-2">{{friend.handle}} </li>
                         
 					</ul>
 				</div>
@@ -89,6 +89,7 @@ import Editor from 'primevue/editor';
 import { defineComponent } from 'vue';
 import { useAuth0 } from '@auth0/auth0-vue';
 import axios from 'axios';
+
 
 export default defineComponent({
 	setup() {
@@ -144,7 +145,7 @@ export default defineComponent({
 			try {
 				const response = await axios.get(url, { headers });
 				this.thisuser=response.data
-				this.userFriends=response.data.friends
+				
 				
 				for(let badgeID of response.data.badges){
 					console.log(badgeID)
@@ -160,7 +161,18 @@ export default defineComponent({
 
 					catch(error){console.error("error",error)}
 				}
-				console.log(this.userBadges)
+				 for (let friend of response.data.friends){
+					console.log(friend)
+					const friendDetailsURL = `https://api.bchwy.com/users/iz/${encodeURIComponent(friend)}`
+				
+					try{
+						const friendDetailsResponse = await axios.get(friendDetailsURL,{headers});
+						this.userFriends.push({handle: "@"+friendDetailsResponse.data.handle})
+					}
+					catch(error){
+						console.error("error",error)
+					}
+				 }
 
 			
 
