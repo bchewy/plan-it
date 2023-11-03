@@ -9,10 +9,10 @@
 						<div class="row mb-3 justify-content-between">
 							<span class="col-1"></span>
     <!--share badges button-->
-							<button class="btn btn-secondary col-3" type="button" @click="badges = !badges" data-bs-target="#badgesOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-share" /> Share a badge</button>
+							<button class="btn btn-secondary col-3" type="button" data-bs-target="#badgesOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-share" /> Share a badge</button>
 
     <!--modal for share badges-->
-	<div v-if="badges" class="modal fade" id="badgesOverlay" tabindex="-1" aria-labelledby="badgesOverlayLabel" aria-hidden="true">
+	<div class="modal fade" id="badgesOverlay" tabindex="-1" aria-labelledby="badgesOverlayLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -35,9 +35,9 @@
 		</div>
 	</div>
     <!--tag friend button-->
-							<button class="btn btn-secondary col-3" type="button" @click="friends=!friends" data-bs-target="#friendsOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-tag" /> Tag a friend</button>
+							<button class="btn btn-secondary col-3" type="button" data-bs-target="#friendsOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-tag" /> Tag a friend</button>
     <!--tag friend model-->
-    <div v-if="friends" class="modal fade" id="friendsOverlay" tabindex="-1" aria-labelledby="friendsOverlayLabel" aria-hidden="true">
+    <div class="modal fade" id="friendsOverlay" tabindex="-1" aria-labelledby="friendsOverlayLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
