@@ -13,9 +13,13 @@ import { defineComponent } from 'vue';
 export default defineComponent(
   {
     name: 'heart_btn',
-    data: function () {
+    props:{
+      postID: String
+    },
+
+    data(){
       return {
-        liked: false
+        liked: true
       }
     },
 

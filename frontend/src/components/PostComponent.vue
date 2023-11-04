@@ -89,7 +89,8 @@ export default defineComponent({
           id: this.badge,
           name: response.data.name,
           image: response.data.image,
-          description: response.data.description
+          description: response.data.description,
+          milestone:response.data.milestone
         }
       }
       catch (error) {
