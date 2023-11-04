@@ -8,8 +8,8 @@
 			</div>
 		</div>
 		<div class="row justify-content-center">
-			<CreatePostComponent></CreatePostComponent>
-			<PostComponent v-for="post in posts" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
+			<CreatePostComponent @postCreated="fetchPosts"></CreatePostComponent>
+			<PostComponent v-for="post in posts" :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
 		</div>
 	</div>
 </template>
@@ -37,9 +37,6 @@ export default {
 
 		const fetchPosts = async () => {
 			const url = `https://api.bchwy.com/posts`;
-			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
-			};
 			try {
 				const response = await axios.get(url, { headers })
 				posts.value = response.data.reverse()
