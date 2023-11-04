@@ -122,7 +122,7 @@
 				</div>
 				<!-- Log Route Button -->
 				<div class="mb-0 p-0">
-					<button class="btn btn-green w-100" @click="fetchRouteDetails" data-bs-toggle="modal" data-bs-target="#progressModal">Log Route</button>
+					<button class="btn btn-green w-100" @click="fetchRouteDetails" :disabled="isButtonClicked" :title="isButtonClicked ? 'Please refresh the page to log more routes' : ''">Log Route</button>
 				</div>
 			</div>
 
@@ -219,14 +219,14 @@
 						<span>{{ emissionSavings.toFixed(2) }} kg CO2</span>
 					</div>
 					<!-- Open in GMaps/CityMapper -->
-					<!-- <div class="d-flex justify-content-center">
+					<div class="d-flex justify-content-center">
 						<button class="btn btn-primary rounded-pill shadow-sm" @click="openGoogleMaps">
 							<i class="fas fa-map-marker-alt"></i> Open on Google Maps
 						</button>
 						<button class="btn btn-green rounded-pill shadow-sm" @click="openCityMapper">
 							<i class="fas fa-map-marker-alt"></i> Open on CityMapper
 						</button>
-					</div> -->
+					</div>
 					<div class="d-flex justify-content-center mt-3">
 						<button data-bs-dismiss="modal" class="btn btn-primary rounded-pill shadow-sm" @click="$router.push('/verify')">
 							Go to Verify Page
@@ -253,6 +253,8 @@ import Vue3DraggableResizable from 'vue3-draggable-resizable';
 import { useGeolocation } from '@vueuse/core'
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import { Modal } from 'bootstrap';
+
 
 export default defineComponent({
 	mounted() {
@@ -441,15 +443,24 @@ export default defineComponent({
 
 
 		const fetchRouteDetails = async () => {
+			if (!startLocation.value.lat || !destination.value.lat) {
+				console.log("hello")
+				toast.error(`You did not select any locations!`, {
+					autoClose: 5000,
+					position: toast.POSITION.TOP_CENTER,
+				});
+			}
 			if (startLocation.value.lat && startLocation.value.lng && destination.value.lat && destination.value.lng) {
 				if (!travelMode.value) {
-					// TODO: Replace with toast feature
 					toast.error(`Please select a valid travel mode.`, {
 						autoClose: 5000,
 						position: toast.POSITION.TOP_CENTER,
 					});
 					return;
 				}
+				// Check for user attempting to log the button more...
+				isButtonClicked.value = true;
+
 				const [hours, minutes] = departureTime.value.split(':').map(Number);
 				const departureDate = new Date();
 				departureDate.setHours(hours);
@@ -558,7 +569,7 @@ export default defineComponent({
 						await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/routes`, routeData, { headers });
 						// EXP Given here is not the most and incomplete.
 						await addExpBasedOnCarbonEmission(calculateCarbonEmissionForEXP(), distanceInKm, travelMode.value);
-
+						showModal();
 
 					} catch (error) {
 						console.error('Failed to store route data:', error);
@@ -570,7 +581,8 @@ export default defineComponent({
 
 
 					}
-				} catch (error) {
+				}
+				catch (error) {
 					console.error("Failed to fetch route details:", error);
 					errorMessage.value = error.message += ' Please try again.';
 					toast.error(`${error.response.data.message}`, {
@@ -633,34 +645,21 @@ export default defineComponent({
 		const startLocationRef = ref(null);
 
 		const getUserLocation = async () => {
-			// console.log("Getting user location here")
-			// console.log(coords.value)/
 			const lat = coords.value.latitude;
 			const lng = coords.value.longitude;
 			try {
 				const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
 				if (response.data.results && response.data.results.length > 0) {
-					// console.log("Logging auto complete here!")
-					// console.log(response.data.results[0].formatted_address)
-					// Replace the value of the startLocation input field with the formatted_address here!
-
 					startLocation.value = { lat, lng };
 					isDisabled.value = true;
 					placeholderText.value = response.data.results[0].formatted_address;
-					// console.log(autocomplete)
-					// console.log("End of logging for auto complete")
-
 				} else {
 					console.error('No results found');
 				}
-
 			} catch (error) {
 				console.error('Error making request:', error);
 			}
 		};
-
-
-		// onMounted(getUserLocation);
 
 		// # ================================================================================================================================================================================================================================================================================================
 
@@ -802,13 +801,18 @@ export default defineComponent({
 				});
 		};
 
+		const showModal = () => {
+			const modalElement = document.getElementById('progressModal');
+			const modalInstance = new Modal(modalElement);
+			modalInstance.show();
+		};
 
 		// Auto update as long as destination is updated.
 		// travelMode needs to be set.
 		watch(destination, fetchPolylineOnly);
 
 
-		// Chat Stuff
+		// FixieAI items
 		const x = ref(0);
 		const y = ref(0);
 		const showChat = ref(false);
@@ -821,6 +825,10 @@ export default defineComponent({
 		const toggleChat = () => {
 			showChat.value = !showChat.value;
 		};
+
+
+		// Button Validation
+		const isButtonClicked = ref(false);
 
 		return {
 			calculateCarbonEmission,
@@ -859,6 +867,7 @@ export default defineComponent({
 			y,
 			showChat,
 			toggleChat,
+			isButtonClicked
 		};
 	}
 });
