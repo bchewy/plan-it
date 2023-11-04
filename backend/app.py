@@ -1223,9 +1223,9 @@ def create_post(user_email):
             userprofile=params.get('userprofile')
             
             post = {"useremail":useremail,"username":username,"userprofile":userprofile,"content": post_content,"badge": badge,"taggedfriends":taggedfriends,"likes":likes,"timestamp": datetime.datetime.utcnow()}
-            if 'posts' not in current_user:
-                current_user['posts'] = []
-            current_user['posts'].append(post)
+            # if 'posts' not in current_user:
+            #     current_user['posts'] = []
+            # current_user['posts'].append(post)
             user_collection.update_one({"email": user_email}, {"$set": current_user})
 
             post_collection.insert_one(post)
@@ -1294,6 +1294,92 @@ def get_all_posts():
     else:
         return jsonify({"message": "No users found."}), 404
     
+
+
+@app.route("/posts/<post_id>", methods=['PUT'])
+@require_api_key
+def update_post(post_id):
+    """
+    Update a post.
+    ---
+    tags:
+      - Posts
+    security:
+      - api_key: []
+    parameters:
+      - name: post_id
+        in: path
+        type: string
+        required: true
+        description: The id of the post to be updated
+      - name: content
+        in: formData
+        type: string
+        required: true
+        description: The updated content of the post
+    responses:
+      200:
+        description: Post updated successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: Post not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    post = post_collection.find_one({"_id": ObjectId(post_id)})
+    if post:
+        user_email = request.form['user_email']
+        post_collection.update_one({"_id": ObjectId(post_id)}, {"$push": {"likes": user_email}})
+        return jsonify({"message": "Post updated successfully."}), 200
+    else:
+        return jsonify({"message": "Post not found."}), 404
+
+
+@app.route("/posts/<post_id>", methods=['DELETE'])
+@require_api_key
+def delete_post(post_id):
+    """
+    Delete a post.
+    ---
+    tags:
+      - Posts
+    security:
+      - api_key: []
+    parameters:
+      - name: post_id
+        in: path
+        type: string
+        required: true
+        description: The id of the post to be deleted
+    responses:
+      200:
+        description: Post deleted successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: Post not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    post = post_collection.find_one({"_id": ObjectId(post_id)})
+    if post:
+        post_collection.delete_one({"_id": ObjectId(post_id)})
+        return jsonify({"message": "Post deleted successfully."}), 200
+    else:
+        return jsonify({"message": "Post not found."}), 404
 
 
 
