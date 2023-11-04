@@ -1296,7 +1296,7 @@ def get_all_posts():
     
 
 
-@app.route("/posts/<post_id>", methods=['PUT'])
+@app.route("/posts/<post_id>/likes/add", methods=['PUT'])
 @require_api_key
 def update_post(post_id):
     """
@@ -1343,6 +1343,56 @@ def update_post(post_id):
             return jsonify({"message": "Post updated successfully."}), 200
     else:
         return jsonify({"message": "Post not found."}), 404
+    
+
+@app.route("/posts/<post_id>/likes/remove", methods=['PUT'])
+@require_api_key
+def remove_like(post_id):
+    """
+    Remove a like from a post.
+    ---
+    tags:
+      - Posts
+    security:
+      - api_key: []
+    parameters:
+      - name: post_id
+        in: path
+        type: string
+        required: true
+        description: The id of the post from which the like will be removed
+      - name: user_email
+        in: formData
+        type: string
+        required: true
+        description: The email of the user who liked the post
+    responses:
+      200:
+        description: Like removed successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: Post not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    post = post_collection.find_one({"_id": ObjectId(post_id)})
+    if post:
+        user_email = request.form['user_email']
+        if user_email not in post['likes']:
+            return jsonify({"message": "User has not liked this post."}), 400
+        else:
+            post_collection.update_one({"_id": ObjectId(post_id)}, {"$pull": {"likes": user_email}})
+            return jsonify({"message": "Like removed successfully."}), 200
+    else:
+        return jsonify({"message": "Post not found."}), 404
+
 
 @app.route("/posts/<post_id>", methods=['GET'])
 @require_api_key
