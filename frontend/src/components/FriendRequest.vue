@@ -46,7 +46,7 @@ export default {
 				const response = await axios.post(url, body, { headers });
 				this.showAlert = true;
 				this.alertMessage = 'Friend request accepted.';
-				toast.success(`Friend Request successfully declined.`, {
+				toast.success(`Friend Request successfully accepted.`, {
 					autoClose: 5000,
 					position: toast.POSITION.TOP_CENTER,
 				});
