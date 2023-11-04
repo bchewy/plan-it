@@ -1,25 +1,19 @@
 <template>
   <div class="row justify-content-center my-4 ">
-    <!--header-->
     <div class="col-10 rounded border bg-white position-relative px-4 pt-3">
-
       <div class="row">
         <div class="col d-flex align-items-center px-2">
           <img :src="profileImage" class="rounded-circle" style="width:40px;">
-
-
           <span class="fw-bold ms-2"> {{ username }} </span>
         </div>
       </div>
       <br>
       <div class="mx-1">
         <span v-html="content"></span>
-
         <div v-if="taggedFriends.length != 0"><br><span style="font-size: smaller;font-style: italic;" v-for="friend in taggedFriends"> {{ friend.handle }} &nbsp; </span></div>
       </div>
       <div v-if="badge != ''">
         <div class="border-rounded border mt-3 " style="background-color: rgb(218, 239, 216);">
-
           <div class="row">
             <div class="col-3 justify-content-end d-flex my-3 ms-3">
               <br> <img :src="badgeDetails.image" style="width:100%" class="rounded-circle">
@@ -30,18 +24,11 @@
           </div>
         </div>
       </div>
-
-
-
       <br>
       <span class="text-muted">{{ timePosted }}</span>
       <hr>
-
-      <div class="text-muted fw-bold mb-2">{{ liked.length }} likes</div>
-
-
-
-      <heart_btn :postID="postID" :useremail="useremail"></heart_btn>
+      <div class="text-muted fw-bold mb-2">{{ likesCount.value }} likes</div>
+      <heart_btn :postID="postID" :useremail="useremail" @updateLikes="updateLikes"></heart_btn>
       <br><br>
     </div>
   </div>
@@ -49,7 +36,7 @@
 
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import heart_btn from './like_button.vue'
 import axios from 'axios';
 
@@ -60,9 +47,10 @@ export default defineComponent({
     heart_btn
   },
   data() {
+    const likesCount = reactive({ value: this.liked.length });
     return {
-      badgeDetails: {}
-
+      badgeDetails: {},
+      likesCount,
     }
   },
   props: {
@@ -77,8 +65,6 @@ export default defineComponent({
     postID: String,
     useremail: String
   },
-
-
   async created() {
     if (this.badge != '') {
       const url = `https://api.bchwy.com/badges/${this.badge}`;
@@ -99,6 +85,11 @@ export default defineComponent({
         console.error("error", error)
       }
 
+    }
+  },
+  methods: {
+    updateLikes(newLikesCount) {
+      this.likesCount.value = newLikesCount;
     }
   }
 

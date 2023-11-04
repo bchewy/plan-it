@@ -1295,9 +1295,9 @@ def get_all_posts():
         return jsonify({"message": "No users found."}), 404
     
 
-
-@app.route("/posts/<post_id>/likes/add", methods=['PUT'])
-@require_api_key
+# Likes adding
+@app.route("/posts/<post_id>/likes/add", methods=['POST'])
+# @require_api_key
 def update_post(post_id):
     """
     Update a post.
@@ -1336,17 +1336,18 @@ def update_post(post_id):
     post = post_collection.find_one({"_id": ObjectId(post_id)})
     if post:
         user_email = request.form['user_email']
-        if user_email in post['likes']:
-            return jsonify({"message": "User already liked this post."}), 400
-        else:
-            post_collection.update_one({"_id": ObjectId(post_id)}, {"$push": {"likes": user_email}})
-            return jsonify({"message": "Post updated successfully."}), 200
+        post_collection.update_one({"_id": ObjectId(post_id)}, {"$push": {"likes": user_email}})
+        updated_post = post_collection.find_one({"_id": ObjectId(post_id)})
+        print("Successfully liked post.")
+        print(len(updated_post["likes"]))
+        return jsonify({"message": "Post updated successfully.", "likes_count": len(updated_post["likes"])}), 200
     else:
         return jsonify({"message": "Post not found."}), 404
-    
 
-@app.route("/posts/<post_id>/likes/remove", methods=['PUT'])
-@require_api_key
+
+# Likes Removing
+@app.route("/posts/<post_id>/likes/remove", methods=['POST'])
+# @require_api_key
 def remove_like(post_id):
     """
     Remove a like from a post.
@@ -1385,11 +1386,11 @@ def remove_like(post_id):
     post = post_collection.find_one({"_id": ObjectId(post_id)})
     if post:
         user_email = request.form['user_email']
-        if user_email not in post['likes']:
-            return jsonify({"message": "User has not liked this post."}), 400
-        else:
-            post_collection.update_one({"_id": ObjectId(post_id)}, {"$pull": {"likes": user_email}})
-            return jsonify({"message": "Like removed successfully."}), 200
+        post_collection.update_one({"_id": ObjectId(post_id)}, {"$pull": {"likes": user_email}})
+        updated_post = post_collection.find_one({"_id": ObjectId(post_id)})
+        print("Successfully removed like on post.")
+        print(len(updated_post["likes"]))
+        return jsonify({"message": "Post updated successfully.", "likes_count": len(updated_post["likes"])}), 200
     else:
         return jsonify({"message": "Post not found."}), 404
 
