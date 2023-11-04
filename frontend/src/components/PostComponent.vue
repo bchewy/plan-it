@@ -41,7 +41,7 @@
 
 
 
-      <heart_btn></heart_btn>
+      <heart_btn :postID="postID" :useremail="useremail"></heart_btn>
       <br><br>
     </div>
   </div>
@@ -73,7 +73,9 @@ export default defineComponent({
     timePosted: String,
     content: String,
     liked: Array,
-    comments: Array
+    comments: Array,
+    postID:String,
+    useremail:String
   },
 
 

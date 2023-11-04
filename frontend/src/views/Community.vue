@@ -12,7 +12,7 @@
 	
 			
 			<div class="text-center h2 mb-3 pt-4">
-				<span class="header" style="font-weight: bold;">For You </span>
+				<span class="header" style="font-weight: bold;">For You  </span>
 			</div>
 		</div>	
 		
@@ -30,7 +30,8 @@
 				:taggedFriends="post.taggedfriends"
 				:liked="post.likes"
 				:content="post.content"
-				
+				:postID="post._id"
+				:useremail="user.email"
 				></PostComponent>
 	
 				
@@ -74,6 +75,7 @@ async created(){
 	try{
 		const response=await axios.get(url,{headers})
 		this.posts=response.data.reverse()
+		
 
 	}
 	catch(error){
