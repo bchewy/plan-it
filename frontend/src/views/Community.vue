@@ -30,6 +30,7 @@
 				:taggedFriends="post.taggedfriends"
 				:liked="post.likes"
 				:content="post.content"
+				
 				></PostComponent>
 	
 				
@@ -73,7 +74,7 @@ async created(){
 	try{
 		const response=await axios.get(url,{headers})
 		this.posts=response.data.reverse()
-		console.log(this.posts)
+
 	}
 	catch(error){
 		console.error("error",error)

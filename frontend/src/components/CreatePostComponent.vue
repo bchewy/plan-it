@@ -163,7 +163,7 @@ export default defineComponent({
 					catch(error){console.error("error",error)}
 				}
 				 for (let friend of response.data.friends){
-					console.log(friend)
+				
 					const friendDetailsURL = `https://api.bchwy.com/users/iz/${encodeURIComponent(friend)}`
 				
 					try{
