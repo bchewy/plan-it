@@ -1336,8 +1336,11 @@ def update_post(post_id):
     post = post_collection.find_one({"_id": ObjectId(post_id)})
     if post:
         user_email = request.form['user_email']
-        post_collection.update_one({"_id": ObjectId(post_id)}, {"$push": {"likes": user_email}})
-        return jsonify({"message": "Post updated successfully."}), 200
+        if user_email in post['likes']:
+            return jsonify({"message": "User already liked this post."}), 400
+        else:
+            post_collection.update_one({"_id": ObjectId(post_id)}, {"$push": {"likes": user_email}})
+            return jsonify({"message": "Post updated successfully."}), 200
     else:
         return jsonify({"message": "Post not found."}), 404
 
