@@ -1,28 +1,28 @@
 <template>
-  <div v-if="isLoading" class="loading-screen">
-    <div>Loading...</div>
-  </div>
-  <div v-else class="container">
-    <div class="row">
-      <div class="col-12 text-center mt-5">
-        <h1>My Badges</h1>
-      </div>
-    </div>
-    <!-- All Badges -->
-    <div class="row justify-content-center mt-5">
-      <div v-for="(badge, index) in badgesLoaded" :key=index class="card" style="width: 18rem; margin:0.5rem">
+	<div v-if="isLoading" class="loading-screen">
+		<div>Loading...</div>
+	</div>
+	<div v-else class="container">
+		<div class="row">
+			<div class="col-12 text-center mt-5">
+				<h1>My Badges</h1>
+			</div>
+		</div>
+		<!-- All Badges -->
+		<div class="row justify-content-center mt-5">
+			<div v-for="(badge, index) in badgesLoaded" :key=index class="card" style="width: 18rem; margin:0.5rem">
 
-        <img :src="'../src/assets/badges/' + badge.icon" class="card-img-top">
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title">{{ badge.name }}</h5>
-          <p class="card-text">{{ badge.description }}</p>
-          <a href="community" class="btn btn-primary mt-auto">Share Badge</a>
-        </div>
-      </div>
-      <button v-if="this.length == 3" @click="loadMore()" class="btn btn-link">Load More</button>
-      <button v-else @click="showLess()" class="btn btn-link">Show Less</button>
-    </div>
-  </div>
+				<img :src="'../src/assets/badges/' + badge.icon" class="card-img-top">
+				<div class="card-body d-flex flex-column">
+					<h5 class="card-title">{{ badge.name }}</h5>
+					<p class="card-text">{{ badge.description }}</p>
+					<a href="community" class="btn btn-primary mt-auto">Share Badge</a>
+				</div>
+			</div>
+			<button v-if="this.length == 3" @click="loadMore()" class="btn btn-link">Load More</button>
+			<button v-else @click="showLess()" class="btn btn-link">Show Less</button>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -86,10 +86,10 @@ export default {
 	},
 	components: {
 		Navbar,
-		MapItem,
-		AddFriend,
-		FriendRequest,
-		Badges,
+		// MapItem,
+		// AddFriend,
+		// FriendRequest,
+		// Badges,
 	},
 	methods: {
 		async fetchData() {
