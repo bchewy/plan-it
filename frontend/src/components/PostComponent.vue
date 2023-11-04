@@ -74,8 +74,8 @@ export default defineComponent({
     content: String,
     liked: Array,
     comments: Array,
-    postID:String,
-    useremail:String
+    postID: String,
+    useremail: String
   },
 
 
@@ -92,7 +92,7 @@ export default defineComponent({
           name: response.data.name,
           image: response.data.image,
           description: response.data.description,
-          milestone:response.data.milestone
+          milestone: response.data.milestone
         }
       }
       catch (error) {
