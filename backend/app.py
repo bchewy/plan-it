@@ -1345,11 +1345,11 @@ def update_post(post_id):
         return jsonify({"message": "Post not found."}), 404
 
 @app.route("/posts/<post_id>", methods=['GET'])
-#@require_api_key
+@require_api_key
 def get_post(post_id):
-    post=post_collection.find_one({"_id":ObjectId(post_id)})
+    post=post_collection.find_one({"_id": ObjectId(post_id)})
     if post:
-        return jsonify(post),200
+        return json.loads(json_util.dumps(post)),200
     else:
         return jsonify({"message": "No post found."}), 404
 
