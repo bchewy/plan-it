@@ -10,6 +10,7 @@
 
 .map-container {
 	position: relative;
+	height: 100vh;
 }
 
 .map {
@@ -25,6 +26,13 @@
 	background-color: #739072;
 	padding: 7px;
 	/* border-radius: 5px; */
+}
+
+.toggle-button {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	z-index: 10000;
 }
 
 .top-right {
@@ -52,6 +60,14 @@
 		<!-- <div v-if="errorMessage" class="alert alert-danger" role="alert">
 			{{ errorMessage }}
 		</div> -->
+		<!-- <button @click="toggleChat" class="position-fixed bottom-0 end-0 btn" style="z-index: 10000;">
+			<img src="https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/Travel+chat+icon.png" alt="chat" width="50" height="50" />
+		</button>
+
+		<Vue3DraggableResizable v-if="showChat" :w="500" :h="300" :x="x" :y="y" :z="10001" :parent="true" :minw="200" :minh="200" :resizable="true" :draggable="true" class="rounded">
+			<iframe src="https://embed.fixie.ai/agents/a14a698f-4934-4410-a88a-67051418ed65?agentStartsConversation=1" allow="clipboard-write" class="h-100 w-100" />
+		</Vue3DraggableResizable> -->
+
 		<GMapMap class="map" :center="center" :zoom="zoom" map-type-id="terrain">
 			<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 			<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
@@ -158,6 +174,7 @@
 			<!-- </vue-draggable-resizable> -->
 		</Vue3DraggableResizable>
 
+
 	</div>
 	<!-- Modal for log completion -->
 	<div class="modal fade" id="progressModal" tabindex="-1" aria-labelledby="progressModalLabel" aria-hidden="true">
@@ -221,6 +238,8 @@
 					<!-- <button type="button" class="btn btn-secondary" @click="location.reload()">Refresh</button> -->
 				</div>
 			</div>
+
+
 		</div>
 	</div>
 </template>
@@ -291,6 +310,7 @@ export default defineComponent({
 		const userLvl = ref(0)
 		const expAdded = ref(0)
 		const show = ref(true);
+		const showIframe = ref(false);
 		// Call to check user's exp and level, if any.
 		axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/ez/${props.userme.email}`)
 			.then(response => {
@@ -788,6 +808,19 @@ export default defineComponent({
 		watch(destination, fetchPolylineOnly);
 
 
+		// Chat Stuff
+		const x = ref(0);
+		const y = ref(0);
+		const showChat = ref(false);
+
+		onMounted(() => {
+			x.value = window.innerWidth - 510; // 500 (width of the component) + 10 (right margin)
+			y.value = window.innerHeight - 310; // 300 (height of the component) + 10 (bottom margin)
+		});
+
+		const toggleChat = () => {
+			showChat.value = !showChat.value;
+		};
 
 		return {
 			calculateCarbonEmission,
@@ -821,7 +854,11 @@ export default defineComponent({
 			componentWidth: 300,
 			startLocationRef,
 			isDisabled,
-			placeholderText
+			placeholderText,
+			x,
+			y,
+			showChat,
+			toggleChat,
 		};
 	}
 });
