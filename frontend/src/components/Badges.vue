@@ -30,40 +30,106 @@ import Navbar from "../components/Navbar.vue";
 import axios from "axios";
 
 export default {
-  data() {
-    return {
-      isLoading: false,
-      length: 3,
-      badges: []
-    };
-  },
-  created() {
-    //this.fetchData();
-  },
-  components: {
-    Navbar
-  },
-  computed: {
-    badgesLoaded() {
-      return this.badges.slice(0, this.length);
-    }
-  },
-  methods: {
-    fetchData() {
-      this.isLoading = true;
-      this.fetchBadges();
-      this.isLoading = false;
-    },
-    loadMore() {
-      console.log(this.length)
-      console.log(this.badges.length)
-      this.length = this.badges.length;
-      console.log(this.length)
-    },
-    showLess() {
-      this.length = 3;
-    },
-    async fetchBadges() {
+	created() {
+		this.fetchData();
+
+	},
+	watch: {
+		activeTab: {
+			immediate: true,
+			handler(newVal, oldVal) {
+				if (newVal === 'routes') {
+					this.$nextTick(() => {
+						this.fetchData();
+					});
+				}
+			},
+		},
+	},
+	data() {
+		const { user, isAuthenticated } = useAuth0();
+		const userExp = ref(0);
+		const expToNextLevel = ref(0);
+		const userLvl = ref(0)
+		const users = [];
+		const friends = ref([]);
+		const friendStats = ref([]);
+
+		return {
+			users,
+			userExp,
+			expToNextLevel,
+			userLvl,
+			user,
+			isAuthenticated,
+			routes: [],
+			friends,
+			friendRequests: [],
+			receivedRequests: [],
+			sentRequests: [],
+			badges: [],
+			friendStats,
+
+		}
+	},
+	computed: {
+		// For pagination
+		paginatedRoutes() {
+			const start = (this.currentPage - 1) * this.itemsPerPage;
+			const end = start + this.itemsPerPage;
+			return this.routes.slice(start, end);
+		},
+		// Total pages
+		totalPages() {
+			return Math.ceil(this.routes.length / this.itemsPerPage);
+		},
+	},
+	components: {
+		Navbar,
+		MapItem,
+		AddFriend,
+		FriendRequest,
+		Badges,
+	},
+	methods: {
+		async fetchData() {
+			this.fetchUsers();
+			await this.fetchUser();
+			this.fetchFriendStats(this.friends);
+		},
+		async fetchUser() {
+			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
+			const headers = {
+				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+			};
+
+			try {
+				const response = await axios.get(url, { headers });
+				this.friends = response.data.friends;
+				this.userLvl = response.data.level;
+				this.userExp = response.data.exp;
+
+			} catch (error) {
+				console.error("Error fetching user", error);
+			}
+		},
+		async fetchFriendRequests() {
+			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(this.user.email)}/friend_requests`;
+			const headers = {
+				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+			};
+
+			try {
+				const response = await axios.get(url, { headers });
+				this.receivedRequests = response.data.received;
+				this.sentRequests = response.data.sent;
+
+			} catch (error) {
+				console.error("Error fetching friend requests", error);
+			}
+
+		},
+		async fetchBadges() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(this.user.email)}/badges`;
 			const headers = {
 				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
@@ -76,8 +142,63 @@ export default {
 			} catch (error) {
 				console.error("Error fetching badges", error);
 			}
+
 		},
-  },
+		async fetchRoutes() {
+			const email = this.user.email; // Get the email from user object
+			const url = `${import.meta.env.VITE_API_ENDPOINT}/routes/email?email=${encodeURIComponent(email)}`;
+			const headers = {
+				"x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
+			};
+			try {
+				const response = await axios.get(url, { headers });
+				this.routes = response.data.reverse(); // Assign the fetched routes to the routes data property
+			} catch (error) {
+				console.error("Error fetching routes:", error);
+			}
+		},
+		async fetchUsers() {
+			const url = `${import.meta.env.VITE_API_ENDPOINT}/users`;
+			const headers = {
+				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+			};
+
+			try {
+				const response = await axios.get(url, { headers });
+				this.users = response.data;
+				for (let user of this.users) {
+					try {
+						const badgeUrl = `${import.meta.env.VITE_API_ENDPOINT}/users/${user.email}/badges`;
+						const badgeResponse = await axios.get(badgeUrl, { headers });
+						const badgeIds = badgeResponse.data;
+
+						// Initialize an empty array for user badges
+						user.badges = [];
+
+						// Fetch each badge details
+						for (let badgeId of badgeIds) {
+							try {
+								const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badgeId}`;
+								const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
+
+								// Add the badge details to the user badges array
+								user.badges.push({
+									id: badgeId,
+									image: badgeDetailsResponse.data.image,
+								});
+							} catch (error) {
+								console.error(`Error fetching details for badge with ID ${badgeId}:`, error);
+							}
+						}
+					} catch (error) {
+						console.error(`Error fetching badges for user with email ${user.email}:`, error);
+					}
+				}
+			} catch (error) {
+				console.error("Error fetching users:", error);
+			}
+		}
+	},
 };
 </script>
 
