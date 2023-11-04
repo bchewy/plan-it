@@ -176,6 +176,8 @@
 
 
 	</div>
+
+
 	<!-- Modal for log completion -->
 	<div class="modal fade" id="progressModal" tabindex="-1" aria-labelledby="progressModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -185,7 +187,16 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<p> Congratulations. You've logged your route! Please proceed to verify it later in <strong>Profile > Verify</strong> to get maximum EXP.</p>
+					<div class="text-center">
+						<img :src="randomGif" alt="Random Gif" class="mb-2">
+						<p> Congratulations. You've logged your route! Please proceed to verify it later in <strong>Profile > Verify</strong> to get maximum EXP.</p>
+						<div class="d-flex justify-content-center mt-3">
+							<button data-bs-dismiss="modal" class="btn btn-primary rounded-pill shadow-sm" @click="$router.push('/verify')">
+								Go to Verify Page
+							</button>
+						</div>
+					</div>
+
 					<h5 class="card-title mb-4">Route Details</h5>
 					<div class="d-flex justify-content-between mb-2">
 						<strong>Distance:</strong>
@@ -206,10 +217,6 @@
 						<span><strong>User Level:</strong></span>
 						<span>{{ userLvl }}</span>
 					</div>
-					<!-- <div class="d-flex justify-content-between mb-2">
-						<span><strong>Experience Progress:</strong></span>
-						<span>{{ userExp }} / 100</span>
-					</div> -->
 					<div class="d-flex justify-content-between mb-2">
 						<span><strong>Experience Added:</strong></span>
 						<span>+{{ expAdded }}</span>
@@ -220,16 +227,11 @@
 					</div>
 					<!-- Open in GMaps/CityMapper -->
 					<div class="d-flex justify-content-center">
-						<button class="btn btn-primary rounded-pill shadow-sm" @click="openGoogleMaps">
+						<button class="btn btn-primary shadow-sm" @click="openGoogleMaps">
 							<i class="fas fa-map-marker-alt"></i> Open on Google Maps
 						</button>
-						<button class="btn btn-green rounded-pill shadow-sm" @click="openCityMapper">
+						<button class="btn btn-green shadow-sm" @click="openCityMapper">
 							<i class="fas fa-map-marker-alt"></i> Open on CityMapper
-						</button>
-					</div>
-					<div class="d-flex justify-content-center mt-3">
-						<button data-bs-dismiss="modal" class="btn btn-primary rounded-pill shadow-sm" @click="$router.push('/verify')">
-							Go to Verify Page
 						</button>
 					</div>
 				</div>
@@ -253,7 +255,8 @@ import Vue3DraggableResizable from 'vue3-draggable-resizable';
 import { useGeolocation } from '@vueuse/core'
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import { Modal } from 'bootstrap';
+import Modal from 'bootstrap/js/dist/modal';
+
 
 
 export default defineComponent({
@@ -571,6 +574,7 @@ export default defineComponent({
 						await addExpBasedOnCarbonEmission(calculateCarbonEmissionForEXP(), distanceInKm, travelMode.value);
 						showModal();
 
+
 					} catch (error) {
 						console.error('Failed to store route data:', error);
 						// errorMessage.value = error.message += ' Please try again.';
@@ -663,7 +667,19 @@ export default defineComponent({
 
 		// # ================================================================================================================================================================================================================================================================================================
 
+		const randomGif = ref('');
+		const fetchRandomGif = async () => {
+			const giphyApiKey = 'FuPGJnG0vBT3yRNDTJ8KzeoICLLNYQ5V'; // replace with your Giphy API key
+			const url = `https://api.giphy.com/v1/gifs/random?api_key=${giphyApiKey}&tag=congratulations&rating=g`;
 
+			try {
+				const response = await axios.get(url);
+				randomGif.value = response.data.data.images.fixed_height.url;
+				console.log(randomGif.value);
+			} catch (error) {
+				console.error('Error fetching random gif:', error);
+			}
+		};
 
 
 		const decodePolyline = (encoded) => {
@@ -817,9 +833,11 @@ export default defineComponent({
 		const y = ref(0);
 		const showChat = ref(false);
 
-		onMounted(() => {
+		onMounted(async () => {
 			x.value = window.innerWidth - 510; // 500 (width of the component) + 10 (right margin)
 			y.value = window.innerHeight - 310; // 300 (height of the component) + 10 (bottom margin)
+			await fetchRandomGif();
+
 		});
 
 		const toggleChat = () => {
@@ -867,7 +885,8 @@ export default defineComponent({
 			y,
 			showChat,
 			toggleChat,
-			isButtonClicked
+			isButtonClicked,
+			randomGif
 		};
 	}
 });

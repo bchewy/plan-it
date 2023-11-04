@@ -113,7 +113,7 @@
 										</tr>
 									</tbody>
 								</table>
-								<button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#addBadgeModal">Add New Badge</button>
+								<button class="btn btn-success mt-3" @click="addBadge">Add New Badge</button>
 							</div>
 						</div>
 					</div>
@@ -189,7 +189,10 @@ import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
 import { ref, defineComponent, computed, reactive } from "vue";
-import Modal from 'bootstrap/js/dist/modal';
+// import Modal from 'bootstrap/js/dist/modal';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+import * as bootstrap from 'bootstrap';
 
 export default {
 	async created() {
@@ -295,10 +298,17 @@ export default {
 		},
 		async addBadge() {
 
-			var myModalEl = document.getElementById('addBadgeModal');
-			var myModal = new Modal(myModalEl);
+			let myModalEl = document.getElementById('addBadgeModal');
+			let myModal = new bootstrap.Modal(myModalEl);
 			myModal.show();
 
+			if (!this.newBadge.name || !this.newBadge.description || !this.newBadge.image) {
+				toast.error(`Please fill in all fields.`, {
+					autoClose: 5000,
+					position: toast.POSITION.TOP_CENTER,
+				});
+				return;
+			}
 
 			console.log("Adding badge");
 			console.log(this.newBadge);
@@ -343,15 +353,6 @@ export default {
 				.catch(error => {
 					console.error("Error updating level:", error);
 				});
-
-			// // Update exp
-			// axios.post(urlExp, { exp: this.updatedUser.exp }, { headers })
-			// 	.then(response => {
-			// 		console.log(response.data);
-			// 	})
-			// 	.catch(error => {
-			// 		console.error("Error updating exp:", error);
-			// 	});
 		},
 		fetchData() {
 			this.fetchUsers();
