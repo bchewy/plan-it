@@ -38,7 +38,7 @@ export default {
     };
   },
   created() {
-    //this.fetchData();
+    this.fetchData();
   },
   components: {
     Navbar
