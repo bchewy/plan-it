@@ -279,8 +279,8 @@ export default {
 			}
 		},
 		async fetchFriendStats(friends) {
-			console.log("Fetching friend stats")
-			console.log(friends)
+			// console.log("Fetching friend stats")
+			// console.log(friends)
 			try {
 				const stats = [];
 				for (let friend of friends) {
@@ -299,7 +299,7 @@ export default {
 						},
 					});
 
-					console.log(response.data.badges)
+					// console.log(response.data.badges)
 					if (Array.isArray(response.data.badges)) {
 						for (let badge of response.data.badges) {
 							const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badge}`;
