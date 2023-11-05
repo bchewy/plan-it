@@ -231,7 +231,7 @@ import { ref, defineComponent, computed, reactive } from "vue";
 // import Modal from 'bootstrap/js/dist/modal';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-// import * as bootstrap from 'bootstrap';
+import * as bootstrap from 'bootstrap';
 
 export default {
 	async created() {
