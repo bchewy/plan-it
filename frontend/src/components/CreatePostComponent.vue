@@ -56,7 +56,7 @@
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="taggedfriends = []">Cancel</button>
-								<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button> <!--yet to define-->
+								<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
 							</div>
 						</div>
 					</div>
