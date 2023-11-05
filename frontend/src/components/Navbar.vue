@@ -241,7 +241,7 @@ export default defineComponent({
           };
 
           // Always do initial check to see if user exists
-          const response1 = await axios.get(`https://api.bchwy.com/users/ez/${encodeURIComponent(newValue.email)}`, {
+          const response1 = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/ez/${encodeURIComponent(newValue.email)}`, {
             headers: {
               'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
             }
@@ -254,7 +254,7 @@ export default defineComponent({
             requestBody.exp = 0;
             requestBody.level = 0;
             // When user is not found we create it.
-            const response = await fetch(`https://api.bchwy.com/users`, {
+            const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/users`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -282,7 +282,7 @@ export default defineComponent({
 
     // Initial API call to check if the user exists. (for @handle checking)
     const fetchUser = async () => {
-      const url = `https://api.bchwy.com/users/iz/${encodeURIComponent(user.value.email)}`;
+      const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(user.value.email)}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };

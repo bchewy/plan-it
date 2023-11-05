@@ -28,7 +28,7 @@ export default defineComponent(
       }
     },
     async created() {
-      const url = `https://api.bchwy.com/posts/${this.postID}`
+      const url = `${import.meta.env.VITE_API_ENDPOINT}/posts/${this.postID}`
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };
@@ -81,7 +81,7 @@ export default defineComponent(
       },
 
       likePost: async function () {
-        const url = `https://api.bchwy.com/posts/${this.postID}/likes/add`
+        const url = `${import.meta.env.VITE_API_ENDPOINT}/posts/${this.postID}/likes/add`
         const headers = {
           "x-api-key": "PlanItIsTheBestProjectEverXYZ",
           "Content-Type": "application/x-www-form-urlencoded"
@@ -91,7 +91,7 @@ export default defineComponent(
 
       },
       unlikePost: async function () {
-        const url = `https://api.bchwy.com/posts/${this.postID}/likes/remove`
+        const url = `${import.meta.env.VITE_API_ENDPOINT}/posts/${this.postID}/likes/remove`
         const headers = {
           "x-api-key": "PlanItIsTheBestProjectEverXYZ",
           "Content-Type": "application/x-www-form-urlencoded"

@@ -141,8 +141,8 @@ export default defineComponent({
 	},
 
 	async created() {
-		
-		const url = `https://api.bchwy.com/users/iz/${encodeURIComponent(this.user.email)}`;
+
+		const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
 		const headers = {
 			"x-api-key": "PlanItIsTheBestProjectEverXYZ",
 		};
@@ -154,7 +154,7 @@ export default defineComponent({
 
 			for (let badgeID of response.data.badges) {
 
-				const badgeDetailsUrl = `https://api.bchwy.com/badges/${badgeID}`
+				const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badgeID}`
 				try {
 					const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
 					this.userBadges.push({
@@ -169,7 +169,7 @@ export default defineComponent({
 			}
 			for (let friend of response.data.friends) {
 
-				const friendDetailsURL = `https://api.bchwy.com/users/iz/${encodeURIComponent(friend)}`
+				const friendDetailsURL = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(friend)}`
 
 				try {
 					const friendDetailsResponse = await axios.get(friendDetailsURL, { headers });
@@ -223,7 +223,7 @@ export default defineComponent({
 		async createPost(useremail, username, userprofile) {
 			console.log('content')
 			console.log(this.content)
-			const url = `https://api.bchwy.com/users/${encodeURIComponent(useremail)}/posts`;
+			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(useremail)}/posts`;
 			const headers = {
 				"Content-Type": "application/json",
 				"x-api-key": "PlanItIsTheBestProjectEverXYZ",

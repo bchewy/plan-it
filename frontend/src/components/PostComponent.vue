@@ -67,7 +67,7 @@ export default defineComponent({
   },
   async created() {
     if (this.badge != '') {
-      const url = `https://api.bchwy.com/badges/${this.badge}`;
+      const url = `${import.meta.env.VITE_API_ENDPOINT}/badges/${this.badge}`;
       const headers = {
         "x-api-key": "PlanItIsTheBestProjectEverXYZ",
       };

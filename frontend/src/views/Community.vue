@@ -36,7 +36,7 @@ export default {
 		const posts = ref([]);
 
 		const fetchPosts = async () => {
-			const url = `https://api.bchwy.com/posts`;
+			const url = `${import.meta.env.VITE_API_ENDPOINT}/posts`;
 			try {
 				const response = await axios.get(url, { headers })
 				posts.value = response.data.reverse()
