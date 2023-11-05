@@ -27,8 +27,8 @@ export default {
   setup() {
     const { loginWithRedirect, user, isAuthenticated } = useAuth0();
 
-    console.log("Setup method is called");
-    console.log("user is here", user);
+    // console.log("Setup method is called");
+    // console.log("user is here", user);
 
 
 

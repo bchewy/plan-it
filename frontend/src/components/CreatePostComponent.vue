@@ -101,7 +101,7 @@ export default defineComponent({
 		const { loginWithRedirect, user, isAuthenticated } = useAuth0();
 
 
-		console.log('Setup method is called');
+		// console.log('Setup method is called');
 
 		return {
 			login: async () => {

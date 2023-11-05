@@ -53,7 +53,7 @@ export default {
         const badges = false
         const groups = ref([]);
 
-        console.log('Setup method is called');
+        // console.log('Setup method is called');
 
         const getGroups = async () => {
             try {
