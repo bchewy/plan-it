@@ -180,18 +180,6 @@ export default {
 
 		}
 	},
-	computed: {
-		// For pagination
-		paginatedRoutes() {
-			const start = (this.currentPage - 1) * this.itemsPerPage;
-			const end = start + this.itemsPerPage;
-			return this.routes.slice(start, end);
-		},
-		// Total pages
-		totalPages() {
-			return Math.ceil(this.routes.length / this.itemsPerPage);
-		},
-	},
 	components: {
 		Navbar,
 		MapItem,
@@ -220,22 +208,6 @@ export default {
 			} catch (error) {
 				console.error("Error fetching user", error);
 			}
-		},
-		async fetchFriendRequests() {
-			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(this.user.email)}/friend_requests`;
-			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
-			};
-
-			try {
-				const response = await axios.get(url, { headers });
-				this.receivedRequests = response.data.received;
-				this.sentRequests = response.data.sent;
-
-			} catch (error) {
-				console.error("Error fetching friend requests", error);
-			}
-
 		},
 		async fetchBadges() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(this.user.email)}/badges`;
@@ -327,20 +299,16 @@ export default {
 						},
 					});
 
-					for (let badge of response.data.badges) {
-						try {
+					console.log(response.data.badges)
+					if (Array.isArray(response.data.badges)) {
+						for (let badge of response.data.badges) {
 							const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badge}`;
 							const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
-							// console.log(badgeDetailsResponse.data.image)
-
 							// Add the badge details to the user badges array
 							stats[stats.length - 1].stats.badges.push({
 								id: badge,
 								badgesimg: badgeDetailsResponse.data.image,
 							});
-
-						} catch (error) {
-							console.error(`Error fetching details for badge with ID ${badge}:`, error);
 						}
 					}
 
