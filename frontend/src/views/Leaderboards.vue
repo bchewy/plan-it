@@ -53,7 +53,6 @@
 										<th>Name</th>
 										<th>Badges Earned</th>
 										<th>Level</th>
-										<!-- <th>EXP to next level</th> -->
 										<th>CO2 Saved</th>
 									</tr>
 								</thead>
@@ -61,12 +60,15 @@
 									<tr v-for="(user, index) in users" :key="user.email">
 										<td>{{ index + 1 }}</td>
 										<td>
-											<img :src="user.pictureurl" alt="User Image" width="50" height="50">
-											<br><span>{{ user.handle }}</span>
+											<img :src="user.pictureurl" alt="User Image" width="50" height="50">&nbsp;
+											<span>@{{ user.handle }}</span>
 										</td>
 										<!-- add pictures of badges-->
 										<td>
-											<img v-for="badge in badges" :key="badge.id" :src="'../src/assets/badges/'+badge.icon" width="30" height="30">
+											<span v-for="badge in user.badges" :key="badge.id">
+												<img :src="badge.image" alt="Badge Image" width="50" height="50">
+											</span>
+											<!-- <img v-for="badge in badges" :key="badge.id" :src="'../src/assets/badges/' + badge.icon" width="30" height="30"> -->
 										</td>
 										<td>{{ user.level }}</td>
 										<!-- <td>{{ user.exp }}</td> -->
@@ -92,23 +94,26 @@
 									<tr>
 										<th>Rank</th>
 										<th>Name</th>
+										<th>Badges Earned</th>
 										<th>Level</th>
-										<!-- <th>EXP to next level</th> -->
 										<th>CO2 Saved</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="(user, index) in friends" :key="user.email">
-										{{ friends }}
+									<tr v-for="(user, index) in friendStats" :key="user.email">
 										<td>{{ index + 1 }}</td>
 										<td>
-											<img :src="user.pictureurl" alt="User Image" width="50" height="50">
-											<br><span>{{ user.handle }}</span>
+											<img :src="user.stats.pictureurl" alt="User Image" width="50" height="50">&nbsp;
+											<span>@{{ user.stats.handle }}</span>
 										</td>
-										<td>{{ user.level }}</td>
-										<!-- <td>{{ user.exp }}</td> -->
-										<td v-if="user.carbonsavings">{{ user.carbonsavings }} Co2 kg</td>
-										<td v-else></td>
+										<td>
+											<span v-for="badge in user.stats.badges" :key="badge.id">
+												<img :src="badge.badgesimg" alt="Badge Image" width="50" height="50">
+											</span>
+										</td>
+										<!-- You can now access the stats data for each user -->
+										<td>{{ user.stats.level }}</td>
+										<td>{{ user.stats.carbonsavings }} Co2 Kg</td>
 									</tr>
 								</tbody>
 							</table>
@@ -130,13 +135,7 @@ import FriendRequest from '../components/FriendRequest.vue';
 import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
-import { Chart, registerables } from 'chart.js/auto';
-import 'chartjs-adapter-date-fns';
-import { format } from 'date-fns';
 import { ref, defineComponent, computed, reactive } from "vue";
-Chart.register(...registerables);
-
-
 
 export default {
 	created() {
@@ -162,16 +161,13 @@ export default {
 		const userLvl = ref(0)
 		const users = [];
 		const friends = ref([]);
+		const friendStats = ref([]);
 
 		return {
 			users,
 			userExp,
 			expToNextLevel,
 			userLvl,
-			activeTab: 'profile',
-			isLoading: false,
-			currentPage: 1,
-			itemsPerPage: 3,
 			user,
 			isAuthenticated,
 			routes: [],
@@ -179,20 +175,10 @@ export default {
 			friendRequests: [],
 			receivedRequests: [],
 			sentRequests: [],
-			badges:[]
-			}
-	},
-	computed: {
-		// For pagination
-		paginatedRoutes() {
-			const start = (this.currentPage - 1) * this.itemsPerPage;
-			const end = start + this.itemsPerPage;
-			return this.routes.slice(start, end);
-		},
-		// Total pages
-		totalPages() {
-			return Math.ceil(this.routes.length / this.itemsPerPage);
-		},
+			badges: [],
+			friendStats,
+
+		}
 	},
 	components: {
 		Navbar,
@@ -202,149 +188,11 @@ export default {
 		Badges,
 	},
 	methods: {
-		async drawChart() {
-			if (!Array.isArray(this.routes) || this.routes.length === 0) {
-				console.error('No routes available.');
-				return;
-			}
-
-			this.routes.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-			const labels = this.routes.map(route => new Date(route.timestamp).toISOString());
-			const data = this.routes.map(route => parseFloat(route.carbon_emission.toFixed(1)));
-
-			const canvas = document.getElementById('carbonFootprintChart');
-			if (canvas) {
-				const ctx = document.getElementById('carbonFootprintChart').getContext('2d');
-				if (this.myChart) {
-					this.myChart.destroy();
-				}
-
-				console.log('Labels:', labels);
-				console.log('Count of Labels:', labels.length);
-				console.log('Data:', data);
-				console.log('Count of Data:', data.length);
-
-				console.log('Fake Data', [2, 4, 3],)
-				console.log('Fake Labels', ["2023-10-26T00:00:00.000Z", "2023-10-27T00:00:00.000Z", "2023-10-28T00:00:00.000Z"],)
-				this.myChart = new Chart(ctx, {
-					type: 'bar',
-					// data: {
-					//   labels: parsedLabels,
-					//   datasets: [{
-					//     label: 'Carbon Emission',
-					//     data: data,
-					//     backgroundColor: 'rgba(75, 192, 192, 0.2)',
-					//     borderColor: 'rgba(75, 192, 192, 1)',
-					//     borderWidth: 1
-					//   }]
-					// },
-					data: {
-						labels: labels,
-						datasets: [{
-							label: 'Carbon Emission',
-							data: data,
-							backgroundColor: 'rgba(75, 192, 192, 0.2)',
-							borderColor: 'rgba(75, 192, 192, 1)',
-							borderWidth: 1
-						}]
-					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: true,
-						aspectRatio: 1,
-						scales: {
-							x: {
-								type: 'time',
-								time: {
-									unit: 'day',
-									displayFormats: {
-										day: 'mmm d'
-									},
-								},
-								bounds: 'data',
-								ticks: {
-									source: 'data',
-									autoSkip: true,
-									minUnit: 'day'
-								}
-							},
-							y: {
-								min: 0,
-								suggestedMax: 5,
-								ticks: {
-									stepSize: 0.5
-								}
-							}
-						},
-					}
-				});
-
-				// Pie chart for travel mode
-				const travelModes = this.routes.map(route => route.transport_mode);
-				const travelModeCounts = {};
-				travelModes.forEach(mode => {
-					if (!travelModeCounts[mode]) {
-						travelModeCounts[mode] = 1;
-					} else {
-						travelModeCounts[mode]++;
-					}
-				});
-				const travelModeLabels = Object.keys(travelModeCounts);
-				const travelModeData = Object.values(travelModeCounts);
-				const travelModeCanvas = document.getElementById('travelCategoryChart');
-				if (travelModeCanvas) {
-					const travelModeCtx = document.getElementById('travelCategoryChart').getContext('2d');
-					if (this.myTravelModeChart) {
-						this.myTravelModeChart.destroy();
-					}
-					this.myTravelModeChart = new Chart(travelModeCtx, {
-						type: 'pie',
-						data: {
-							labels: travelModeLabels,
-							datasets: [{
-								data: travelModeData,
-								backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
-								borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
-								borderWidth: 1
-							}]
-						},
-						options: {
-							responsive: true,
-							maintainAspectRatio: true,
-							aspectRatio: 2
-						}
-					});
-				}
-
-
-			}
-		},
-		fetchData() {
+		async fetchData() {
 			this.fetchUsers();
-			this.fetchUser();
+			await this.fetchUser();
 			this.fetchFriendStats(this.friends);
-			this.fetchBadges();
-			// this.fetchRoutes().then(() => {
-			// 	this.drawChart();
-			// });
-			// this.fetchUser();
-			// this.fetchFriendRequests();
 		},
-		// async fetchBadges() {
-		// 	const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}/badges`;
-		// 	const headers = {
-		// 		"x-api-key": "PlanItIsTheBestProjectEverXYZ",
-		// 	};
-
-		// 	try {
-		// 		const response = await axios.get(url, { headers });
-		// 		this.badges = response.data.badges;
-		// 		// console.log(this.friends);
-
-		// 	} catch (error) {
-		// 		console.error("Error fetching user", error);
-		// 	}
-		// },
 		async fetchUser() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
 			const headers = {
@@ -356,27 +204,10 @@ export default {
 				this.friends = response.data.friends;
 				this.userLvl = response.data.level;
 				this.userExp = response.data.exp;
-				// console.log(this.friends);
 
 			} catch (error) {
 				console.error("Error fetching user", error);
 			}
-		},
-		async fetchFriendRequests() {
-			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(this.user.email)}/friend_requests`;
-			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
-			};
-
-			try {
-				const response = await axios.get(url, { headers });
-				this.receivedRequests = response.data.received;
-				this.sentRequests = response.data.sent;
-
-			} catch (error) {
-				console.error("Error fetching friend requests", error);
-			}
-
 		},
 		async fetchBadges() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(this.user.email)}/badges`;
@@ -415,24 +246,76 @@ export default {
 			try {
 				const response = await axios.get(url, { headers });
 				this.users = response.data;
+				for (let user of this.users) {
+					try {
+						const badgeUrl = `${import.meta.env.VITE_API_ENDPOINT}/users/${user.email}/badges`;
+						const badgeResponse = await axios.get(badgeUrl, { headers });
+						const badgeIds = badgeResponse.data;
+
+						// Initialize an empty array for user badges
+						user.badges = [];
+
+						// Fetch each badge details
+						for (let badgeId of badgeIds) {
+							try {
+								const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badgeId}`;
+								const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
+
+								// Add the badge details to the user badges array
+								user.badges.push({
+									id: badgeId,
+									image: badgeDetailsResponse.data.image,
+								});
+							} catch (error) {
+								console.error(`Error fetching details for badge with ID ${badgeId}:`, error);
+							}
+						}
+					} catch (error) {
+						console.error(`Error fetching badges for user with email ${user.email}:`, error);
+					}
+				}
 			} catch (error) {
 				console.error("Error fetching users:", error);
 			}
 		},
 		async fetchFriendStats(friends) {
+			// console.log("Fetching friend stats")
+			// console.log(friends)
 			try {
-				console.log('Fetching friend data')
-				console.log(friends)
+				const stats = [];
 				for (let friend of friends) {
-					console.log('friend')
+					// console.log(friend)
+					// console.log("Fetching our friend here.")
 					const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(friend)}`;
 					const headers = {
 						"x-api-key": "PlanItIsTheBestProjectEverXYZ",
 					};
 					const response = await axios.get(url, { headers });
-					friend.stats = response.data;
-					console.log(response.data)
+					stats.push({
+						...friend,
+						stats: {
+							...response.data,
+							badges: [],
+						},
+					});
+
+					// console.log(response.data.badges)
+					if (Array.isArray(response.data.badges)) {
+						for (let badge of response.data.badges) {
+							const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badge}`;
+							const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
+							// Add the badge details to the user badges array
+							stats[stats.length - 1].stats.badges.push({
+								id: badge,
+								badgesimg: badgeDetailsResponse.data.image,
+							});
+						}
+					}
+
+
 				}
+				this.friendStats = stats;
+				// console.log(this.friendStats)
 			} catch (error) {
 				console.error("Error fetching friend stats:", error);
 			}

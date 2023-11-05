@@ -9,9 +9,14 @@ from bson import ObjectId
 from flasgger import Flasgger
 from flasgger.utils import swag_from
 import datetime
+import boto3
+from werkzeug.utils import secure_filename
+from bson import json_util
+import json
+import os
 
 app = Flask(__name__)
-
+# CORS(app)
 swagger_config = {
     "headers": [],
     "specs": [
@@ -34,6 +39,7 @@ swagger_config = {
     },
 }
 
+
 swagger = Flasgger(app, config=swagger_config)
 # swagger = Flasgger(app)
 
@@ -44,6 +50,9 @@ API_KEY = "PlanItIsTheBestProjectEverXYZ"
 db = client.wad2
 collection = db.routes
 user_collection = db.users
+post_collection = db.posts
+
+
 
 @app.after_request
 def after_request(response):
@@ -64,6 +73,32 @@ def convert_objectid_to_string(data):
         return str(data)
     return data
 
+
+def upload_file_to_s3(file_name, object_name=None):
+    """Upload a file to an S3 bucket
+
+    :param file_name: File to upload
+    :param bucket: Bucket to upload to
+    :param object_name: S3 object name. If not specified then file_name is used
+    :return: True if file was uploaded, else False
+    """
+
+    # If S3 object_name was not specified, use file_name
+    if object_name is None:
+        object_name = 'plan-it/'+file_name
+
+    s3_client = boto3.client('s3')
+    try:
+        response = s3_client.upload_file(
+            file_name, 
+            'bchewy-images', 
+            object_name,
+            ExtraArgs={'ACL': 'public-read'}  # Set the ACL to 'public-read'
+        )
+    except Exception as e:
+        print("Error uploading file: ", e)
+        return False
+    return True
 
 # API Key
 
@@ -135,7 +170,8 @@ def db_check():
     except ServerSelectionTimeoutError:
         return jsonify({"message": "Database is unhealthy."}), 500
 
-# CRUD Operations
+
+# Routes ============================================================
 
 # Create (POST)
 @app.route("/routes", methods=['POST'])
@@ -378,7 +414,9 @@ def delete_route(route_id):
     else:
         return jsonify({"message": "Route not found."}), 404
 
-# User Operations
+# =====================================================================================
+
+# User Operations ======================================================================
 
 # Update or create user init into our backend, since we're using auth0
 @app.route("/users", methods=['POST', 'PUT'])
@@ -493,7 +531,7 @@ def get_all_users():
       404:
         description: No users found
     """
-    users = list(user_collection.find({}, {"email": 1, "handle": 1, "level": 1, "pictureurl": 1, "exp": 1, "carbonsavings":1}).sort("level", -1))
+    users = list(user_collection.find({}, {"email": 1, "handle": 1, "level": 1, "pictureurl": 1, "exp": 1, "carbonsavings":1, "badges":1}).sort("level", -1))
     if users:
         users = [convert_objectid_to_string(user) for user in users]
         return jsonify(users), 200
@@ -1063,8 +1101,7 @@ def add_exp(user_email):
     else:
         return jsonify({"message": "User not found."}), 404
 
-
-
+# Replace level
 @app.route("/users/<user_email>/replace/level", methods=['POST'])
 @require_api_key
 def update_level(user_email):
@@ -1121,10 +1158,13 @@ def update_level(user_email):
     else:
         return jsonify({"message": "User not found."}), 404
 
+# =====================================================================================
 
-# Post section
+
+
+# Post section ======================================================================
 @app.route("/users/<user_email>/posts", methods=['POST'])
-@require_api_key
+#@require_api_key
 def create_post(user_email):
     """
     Create a post for a user
@@ -1168,12 +1208,28 @@ def create_post(user_email):
               type: string
     """
     current_user = user_collection.find_one({"email": user_email})
+    params = request.json.get('params')
     if current_user:
-        post_content = request.json.get('content')
+        post_content = params.get('content')
+        print('Test')
+        print(request.json)
+        print('\n')
         if post_content:
-            post = {"content": post_content, "author": user_email, "timestamp": datetime.datetime.utcnow()}
-            current_user['posts'].append(post)
+            badge=params.get('badge')
+            taggedfriends=params.get('taggedfriends')
+            likes=params.get('likes')
+            useremail=params.get('useremail')
+            username=params.get('username')
+            userprofile=params.get('userprofile')
+            
+            post = {"useremail":useremail,"username":username,"userprofile":userprofile,"content": post_content,"badge": badge,"taggedfriends":taggedfriends,"likes":likes,"timestamp": datetime.datetime.utcnow()}
+            # if 'posts' not in current_user:
+            #     current_user['posts'] = []
+            # current_user['posts'].append(post)
             user_collection.update_one({"email": user_email}, {"$set": current_user})
+
+            post_collection.insert_one(post)
+
             return jsonify({"message": "Post created successfully."}), 200
         else:
             return jsonify({"message": "Post content is required."}), 400
@@ -1223,11 +1279,181 @@ def get_posts(user_email):
     """
     current_user = user_collection.find_one({"email": user_email})
     if current_user:
-        return jsonify({"posts": current_user['posts']}), 200
+        user_posts = list(post_collection.find({"useremail": user_email}))
+        user_posts = [convert_objectid_to_string(post) for post in user_posts]
+        return jsonify(user_posts), 200
     else:
         return jsonify({"message": "User not found."}), 404
+    
 
-# Groups section
+@app.route("/posts", methods=['GET'])
+@require_api_key
+def get_all_posts():
+    posts = list(post_collection.find())
+    if posts:
+        posts = [convert_objectid_to_string(post) for post in posts]
+        return jsonify(posts), 200
+    else:
+        return jsonify({"message": "No users found."}), 404
+    
+
+# Likes adding
+@app.route("/posts/<post_id>/likes/add", methods=['POST'])
+# @require_api_key
+def update_post(post_id):
+    """
+    Update a post.
+    ---
+    tags:
+      - Posts
+    security:
+      - api_key: []
+    parameters:
+      - name: post_id
+        in: path
+        type: string
+        required: true
+        description: The id of the post to be updated
+      - name: content
+        in: formData
+        type: string
+        required: true
+        description: The updated content of the post
+    responses:
+      200:
+        description: Post updated successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: Post not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    post = post_collection.find_one({"_id": ObjectId(post_id)})
+    if post:
+        user_email = request.form['user_email']
+        post_collection.update_one({"_id": ObjectId(post_id)}, {"$push": {"likes": user_email}})
+        updated_post = post_collection.find_one({"_id": ObjectId(post_id)})
+        print("Successfully liked post.")
+        print(len(updated_post["likes"]))
+        return jsonify({"message": "Post updated successfully.", "likes_count": len(updated_post["likes"])}), 200
+    else:
+        return jsonify({"message": "Post not found."}), 404
+
+
+# Likes Removing
+@app.route("/posts/<post_id>/likes/remove", methods=['POST'])
+# @require_api_key
+def remove_like(post_id):
+    """
+    Remove a like from a post.
+    ---
+    tags:
+      - Posts
+    security:
+      - api_key: []
+    parameters:
+      - name: post_id
+        in: path
+        type: string
+        required: true
+        description: The id of the post from which the like will be removed
+      - name: user_email
+        in: formData
+        type: string
+        required: true
+        description: The email of the user who liked the post
+    responses:
+      200:
+        description: Like removed successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: Post not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    post = post_collection.find_one({"_id": ObjectId(post_id)})
+    if post:
+        user_email = request.form['user_email']
+        post_collection.update_one({"_id": ObjectId(post_id)}, {"$pull": {"likes": user_email}})
+        updated_post = post_collection.find_one({"_id": ObjectId(post_id)})
+        print("Successfully removed like on post.")
+        print(len(updated_post["likes"]))
+        return jsonify({"message": "Post updated successfully.", "likes_count": len(updated_post["likes"])}), 200
+    else:
+        return jsonify({"message": "Post not found."}), 404
+
+
+@app.route("/posts/<post_id>", methods=['GET'])
+@require_api_key
+def get_post(post_id):
+    post=post_collection.find_one({"_id": ObjectId(post_id)})
+    if post:
+        return json.loads(json_util.dumps(post)),200
+    else:
+        return jsonify({"message": "No post found."}), 404
+
+
+
+@app.route("/posts/<post_id>", methods=['DELETE'])
+@require_api_key
+def delete_post(post_id):
+    """
+    Delete a post.
+    ---
+    tags:
+      - Posts
+    security:
+      - api_key: []
+    parameters:
+      - name: post_id
+        in: path
+        type: string
+        required: true
+        description: The id of the post to be deleted
+    responses:
+      200:
+        description: Post deleted successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: Post not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    post = post_collection.find_one({"_id": ObjectId(post_id)})
+    if post:
+        post_collection.delete_one({"_id": ObjectId(post_id)})
+        return jsonify({"message": "Post deleted successfully."}), 200
+    else:
+        return jsonify({"message": "Post not found."}), 404
+
+
+
+# =====================================================================================
+
+
+
+# Groups section ======================================================================
 @app.route("/users/<user_email>/groups", methods=['POST'])
 @require_api_key
 def create_group(user_email):
@@ -1245,10 +1471,15 @@ def create_group(user_email):
         required: true
         description: The email of the user who is creating the group
       - name: group_name
-        in: path
+        in: formData
         type: string
         required: true
         description: Group Name
+      - name: group_image
+        in: formData
+        type: file
+        required: false
+        description: Group Image
     responses:
       200:
         description: Group created successfully
@@ -1274,7 +1505,20 @@ def create_group(user_email):
     """
     current_user = user_collection.find_one({"email": user_email})
     user_group = db.groups.find_one({"owner_email": user_email})
-    group_name = request.json.get('group_name')
+    group_name = request.form.get('group_name')
+    group_image = request.files.get('group_image')
+
+    # Upload the file to s3
+    if group_image:
+        group_image_filename = secure_filename(group_image.filename)
+        group_image.save(group_image_filename)
+        upload_file_to_s3(group_image_filename)
+        group_image_url = f"https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/{group_image_filename}"
+        os.remove(group_image_filename)
+    else:
+        group_image_url = None
+
+
     group = db.groups.find_one({"name": group_name})
     
     if not current_user:
@@ -1285,11 +1529,11 @@ def create_group(user_email):
         return jsonify({"message": "User has already created a group."}), 400
     if group:
         return jsonify({"message": "Group name already exists."}), 400
-    return create_group_success(user_email, group_name)
+    return create_group_success(user_email, group_name, group_image_url)
 
 
-def create_group_success(user_email, group_name):
-    group = {"name": group_name, "owner_email": user_email, "members": [user_email]}
+def create_group_success(user_email, group_name, group_image_url):
+    group = {"name": group_name, "owner_email": user_email, "members": [user_email], "group_image": group_image_url}
     db.groups.insert_one(group)
     return jsonify({"message": "Group created successfully."}), 200
 
@@ -1334,6 +1578,55 @@ def list_all_groups():
     return jsonify({"groups": [convert_objectid_to_string(group) for group in groups]}), 200
 
 
+@app.route("/users/<user_email>/groups", methods=['GET'])
+@require_api_key
+def list_user_groups(user_email):
+    """
+    List all groups a user is in
+    ---
+    tags:
+      - Groups
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user who wants to see the groups they are in
+    responses:
+      200:
+        description: List of all groups the user is in
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              owner_email:
+                type: string
+              members:
+                type: array
+                items:
+                  type: string
+      404:
+        description: No groups found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    print(user_email)
+    groups = list(db.groups.find({"members": user_email}))
+    print(groups)
+    print('\n')
+    print('\n')
+    if len(groups) == 0:
+        return jsonify({"message": "No groups found."}), 404
+    groups = [convert_objectid_to_string(group) for group in groups]
+    return jsonify({"groups": groups}), 200
 
 # Join Group
 @app.route("/users/<user_email>/groups/<group_name>/join", methods=['POST'])
@@ -1457,7 +1750,11 @@ def leave_group(user_email, group_name):
     else:
         return jsonify({"message": "User not found."}), 404
 
-# Badges CRUD
+# =====================================================================================
+
+
+
+# Badges CRUD =========================================================================================================
 
 # Create Badge
 @app.route("/badges", methods=['POST'])
@@ -1501,15 +1798,61 @@ def create_badge():
             message:
               type: string
     """
-    name = request.json.get('name')
-    description = request.json.get('description')
-    image = request.json.get('image')
+    data = request.form
+    name = data.get('name')
+    description = data.get('description')
+    image = request.files.get('image')
+
+
+    # Upload the image to S3 and get the public URL
+    image_filename = secure_filename(image.filename)
+    image.save(image_filename)
+    upload_file_to_s3(image_filename)
+    image_url = f"https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/{image_filename}"
+    image = image_url
+    os.remove(image_filename)
+
     if name and description and image:
         badge = {"name": name, "description": description, "image": image}
         db.badges.insert_one(badge)
         return jsonify({"message": "Badge created successfully."}), 200
     else:
         return jsonify({"message": "Name, description and image are required."}), 400
+
+
+@app.route("/badges", methods=['GET'])
+@require_api_key
+def get_all_badges():
+    """
+    Get all badges
+    ---
+    tags:
+      - Badges
+    responses:
+      200:
+        description: Badges retrieved successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      404:
+        description: No badges found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    badges = list(db.badges.find())
+    for badge in badges:
+        badge["_id"] = str(badge["_id"])
+    if badges:
+        return jsonify(badges), 200
+    else:
+        return jsonify({"message": "No badges found."}), 404
+
+
 
 # Read Badge
 @app.route("/badges/<badge_id>", methods=['GET'])
@@ -1544,9 +1887,10 @@ def read_badge(badge_id):
             message:
               type: string
     """
+    print("badge id: ", badge_id)
     badge = db.badges.find_one({"_id": ObjectId(badge_id)})
     if badge:
-        return jsonify(badge), 200
+        return json.loads(json_util.dumps(badge)), 200
     else:
         return jsonify({"message": "Badge not found."}), 404
     
@@ -1583,59 +1927,115 @@ def get_user_badges(user_email):
             message:
               type: string
     """
-    if user_email == "brian@bchewy.com":
-        badges = [
-        {
-            "id": "badge_1",
-            "name": "Green Newbie",
-            "description": "Congratulations on taking your first step toward a greener planet!",
-            "icon": "green_newbie_icon.png",
-            "milestone": "First carbon footprint calculation"
-            },
-            {
-            "id": "badge_2",
-            "name": "Eco-Friendly Traveler",
-            "description": "You've offset the carbon footprint of your travels for one month!",
-            "icon": "eco_friendly_traveler_icon.png",
-            "milestone": "Offset one month of travel"
-            },
-            {
-            "id": "badge_3",
-            "name": "Foodprint Fighter",
-            "description": "One week of sustainable eating choices. Way to go!",
-            "icon": "foodprint_fighter_icon.png",
-            "milestone": "One week of sustainable food choices"
-            },
-            {
-            "id": "badge_4",
-            "name": "Solar Superstar",
-            "description": "You've converted to using solar energy at home.",
-            "icon": "solar_superstar_icon.png",
-            "milestone": "Switch to solar energy"
-            },
-            {
-            "id": "badge_5",
-            "name": "Recycle Ranger",
-            "description": "Recycled items for 30 consecutive days!",
-            "icon": "recycle_ranger_icon.png",
-            "milestone": "30 days of recycling"
-            },
-            {
-            "id": "badge_6",
-            "name": "Community Catalyst",
-            "description": "You've inspired 5 friends to join the app and start tracking their footprint.",
-            "icon": "community_catalyst_icon.png",
-            "milestone": "Refer 5 friends"
-            },
-            {
-            "id": "badge_7",
-            "name": "Zero-Waste Warrior",
-            "description": "Achieved a zero-waste lifestyle for one month.",
-            "icon": "zero_waste_warrior_icon.png",
-            "milestone": "One month of zero-waste"
-            }
-        ]
-        return jsonify({"badges": badges}), 200
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        if 'badges' not in current_user:
+            current_user['badges'] = []
+        return jsonify(current_user['badges']), 200
+    else:
+        return jsonify({"message": "User not found."}), 404
+
+# Assign Badge
+@app.route("/users/<user_email>/badges", methods=['PUT'])
+@require_api_key
+def assign_badges(user_email):
+    """
+    Assign badges to a user
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: user_id
+        in: path
+        type: string
+        required: true
+        description: The id of the user
+      - name: badges
+        in: body
+        type: array
+        required: true
+        description: The list of badges to assign
+    responses:
+      200:
+        description: Badges assigned successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Badges are required
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    badges = request.json.get('badges')
+    if not badges:
+        return jsonify({"message": "Badges are required."}), 400
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        if 'badges' not in current_user:
+            current_user['badges'] = []
+        else:
+            for badge in badges:
+                if badge in current_user['badges']:
+                    return jsonify({"message": "Badge already assigned to user."}), 400
+        current_user['badges'].extend(badges)
+        user_collection.update_one({"email": user_email}, {"$set": {"badges": current_user['badges']}})
+        return jsonify({"message": "Badges assigned successfully."}), 200
+    else:
+        return jsonify({"message": "User not found."}), 404
+
+# Unassign Badge
+@app.route("/users/<user_email>/badges/<badge_id>", methods=['DELETE'])
+@require_api_key
+def unassign_badge(user_email, badge_id):
+    """
+    Unassign a badge from a user
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: user_id
+        in: path
+        type: string
+        required: true
+        description: The id of the user
+      - name: badge_id
+        in: path
+        type: string
+        required: true
+        description: The id of the badge to unassign
+    responses:
+      200:
+        description: Badge unassigned successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+      400:
+        description: Badge not found in user's badges
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+    """
+    current_user = user_collection.find_one({"email": user_email})
+    if current_user:
+        if 'badges' in current_user and badge_id in current_user['badges']:
+            current_user['badges'].remove(badge_id)
+            user_collection.update_one({"email": user_email}, {"$set": {"badges": current_user['badges']}})
+            return jsonify({"message": "Badge unassigned successfully."}), 200
+        else:
+            return jsonify({"message": "Badge not found in user's badges."}), 400
     else:
         return jsonify({"message": "User not found."}), 404
 
@@ -1731,9 +2131,16 @@ def delete_badge(badge_id):
             message:
               type: string
     """
-    db.badges.delete_one({"_id": ObjectId(badge_id)})
-    return jsonify({"message": "Badge deleted successfully."}), 200
+    result = db.badges.delete_one({"_id": ObjectId(badge_id)})
+    if result.deleted_count == 1:
+        return jsonify({"message": "Badge deleted successfully."}), 200
+    else:
+        return jsonify({"message": "Badge not found."}), 404
 
+#  =========================================================================================================
+
+
+# Logging: User Activity Logs =========================================================================================================
 
 
 @app.route("/users/<user_id>/log", methods=['POST'])
@@ -1808,6 +2215,9 @@ def get_user_logs(user_id):
     """
     logs = db.user_logs.find({"user_id": user_id})
     return jsonify({"logs": list(logs)}), 200
+
+
+# =========================================================================================================
 
 
 if __name__ == '__main__':

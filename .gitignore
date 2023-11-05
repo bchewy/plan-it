@@ -4,3 +4,4 @@ __pycache__
 cloud/
 .DS_Store
 .DS_Store
+venv/

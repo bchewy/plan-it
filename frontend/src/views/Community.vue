@@ -1,102 +1,58 @@
-<style scoped>
-</style>
-
 <template>
-	<!-- nav -->
 	<NavBar />
-	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: #739072;">
-
-		
-		<div class="sticky-top border-bottom" style="background-color: #739072; z-index: 1;">
-		<CommunitySidebar ></CommunitySidebar>
-	
-			
+	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: rgb(232, 251, 240);">
+		<div class="sticky-top border-bottom" style="background-color:rgb(232, 251, 240); z-index: 1;">
+			<CommunitySidebar></CommunitySidebar>
 			<div class="text-center h2 mb-3 pt-4">
-				<span class="header" style="font-weight: bold;">For You</span>
+				<span class="header" style="font-weight: bold;">For You </span>
 			</div>
-		</div>	
-		
-		
-	
-		<div class="row justify-content-center">
-			
-			
-				<CreatePostComponent></CreatePostComponent>
-				
-				<PostComponent :username="sampleData.username" 
-				:profileImage="sampleData.profileImage" 
-				:timePosted="sampleData.timePosted" 
-				:badge="sampleData.badge" 
-				:taggedFriends="sampleData.taggedFriends"
-				:liked="sampleData.liked"
-				>Check out my new badge!</PostComponent>
-	
-				
-
-
-
-	
-	</div>
 		</div>
-		
-	
-	<footer>
-		<!-- footer -->
-	</footer>
+		<div class="row justify-content-center">
+			<CreatePostComponent @postCreated="fetchPosts"></CreatePostComponent>
+			<PostComponent v-for="post in posts" :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
+		</div>
+	</div>
 </template>
 <script>
 import CreatePostComponent from "../components/CreatePostComponent.vue"
 import CommunitySidebar from "../components/CommunitySidebar.vue";
 import NavBar from "../components/Navbar.vue";
-import { useAuth0 } from '@auth0/auth0-vue';
 import PostComponent from '../components/PostComponent.vue'
-
-
+import { ref, onMounted } from "vue";
+import { useAuth0 } from '@auth0/auth0-vue';
+import axios from "axios";
 
 export default {
 	name: 'Community',
-	data() {
-		return{
-			sampleData:{
-				username:"Ryan",
-				profileImage: "https://lh3.googleusercontent.com/a/ACg8ocJMqVngf0XBxJRe4tnMG_Q_kzEvs4Ier5N5-7V3fvw5=s96-c",
-				timePosted: "13/10/2023 6:25pm",
-				badge:"0",
-				taggedFriends:["Brian","Melody","Saph"],
-				liked:["email1","email2","email3"],
-				comments:[{user:"Brian",comment:"Awesome stuff!"},{user:"Melody",comment:"Love to see that!"}]
-
-			}
-      
-		
-
-	}},
 	components: {
 		NavBar,
 		CreatePostComponent,
 		PostComponent,
 		CommunitySidebar,
-
-
 	},
 	setup() {
 		const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+		const headers = { "x-api-key": "PlanItIsTheBestProjectEverXYZ", };
+		const posts = ref([]);
 
+		const fetchPosts = async () => {
+			const url = `${import.meta.env.VITE_API_ENDPOINT}/posts`;
+			try {
+				const response = await axios.get(url, { headers })
+				posts.value = response.data.reverse()
+				console.log(posts.value)
+			}
+			catch (error) {
+				console.error("error", error)
+			}
+		}
 
-		console.log('Setup method is called');
+		onMounted(fetchPosts);
 
 		return {
-			login: async () => {
-				console.log('Login button clicked');
-				try {
-					await loginWithRedirect();
-				} catch (e) {
-					alert('Failed to login');
-					console.error('Failed to login:', e);
-				}
-			},
 			user,
-			isAuthenticated,
+			posts,
+			fetchPosts,
 
 		};
 	}

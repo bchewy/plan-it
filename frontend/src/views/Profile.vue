@@ -97,6 +97,13 @@
               </svg> My Profile</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" :class="{ 'active': activeTab === 'myactivity' }" @click="activeTab = 'myactivity'" href="#" role="tab">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(236, 227, 206, 1);transform: ;msFilter:;">
+                <path d="M20 2H4c-1.103 0-2 .897-2 2v18l4-4h14c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zM9 12a2 2 0 1 1 .001-4.001A2 2 0 0 1 9 12zm6 0a2 2 0 1 1 .001-4.001A2 2 0 0 1 15 12z"></path>
+              </svg>
+              My Activity</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" :class="{ 'active': activeTab === 'routes' }" @click="activeTab = 'routes'" href="#" role="tab"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(236, 227, 206, 1);transform: ;msFilter:;">
                 <path d="m21.447 6.105-6-3a1 1 0 0 0-.895 0L9 5.882 3.447 3.105A1 1 0 0 0 2 4v13c0 .379.214.725.553.895l6 3a1 1 0 0 0 .895 0L15 18.118l5.553 2.776a.992.992 0 0 0 .972-.043c.295-.183.475-.504.475-.851V7c0-.379-.214-.725-.553-.895zM10 7.618l4-2v10.764l-4 2V7.618zm-6-2 4 2v10.764l-4-2V5.618zm16 12.764-4-2V5.618l4 2v10.764z"></path>
               </svg> My Routes</a>
@@ -216,17 +223,14 @@
 
         </div>
         <div v-if="activeTab === 'progress'" class="tab-pane">
-          <!-- Friends Content -->
           <div class="card mt-4 mb-4">
             <div class="card-header">
               <h3 class="mb-0">Game Stats</h3>
             </div>
             <Badges></Badges>
           </div>
-
         </div>
         <div v-if="activeTab === 'settings'" class="tab-pane">
-          <!-- Friends Content -->
           <div class="card mt-4 mb-4">
             <div class="card-header">
               <h3 class="mb-0">Settings</h3>
@@ -264,6 +268,15 @@
             <!-- <Badges></Badges> -->
           </div>
 
+        </div>
+        <div v-if="activeTab === 'myactivity'" class="tab-pane">
+          <div class="card mt-4 mb-4">
+            <div class="card-header">
+              <h3 class="mb-0">Your Activity</h3>
+            </div>
+            
+
+          </div>
         </div>
 
       </div>
@@ -312,9 +325,6 @@ export default {
     const userExp = ref(0);
     const expToNextLevel = ref(0);
     const userLvl = ref(0)
-
-    // Retrieve user EXP
-
     return {
       userExp,
       expToNextLevel,

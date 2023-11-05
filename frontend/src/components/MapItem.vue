@@ -10,6 +10,7 @@
 
 .map-container {
 	position: relative;
+	height: 100vh;
 }
 
 .map {
@@ -25,6 +26,13 @@
 	background-color: #739072;
 	padding: 7px;
 	/* border-radius: 5px; */
+}
+
+.toggle-button {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	z-index: 10000;
 }
 
 .top-right {
@@ -49,9 +57,17 @@
 
 <template>
 	<div class="map-container" ref="mapContainer">
-		<div v-if="errorMessage" class="alert alert-danger" role="alert">
+		<!-- <div v-if="errorMessage" class="alert alert-danger" role="alert">
 			{{ errorMessage }}
-		</div>
+		</div> -->
+		<!-- <button @click="toggleChat" class="position-fixed bottom-0 end-0 btn" style="z-index: 10000;">
+			<img src="https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/Travel+chat+icon.png" alt="chat" width="50" height="50" />
+		</button>
+
+		<Vue3DraggableResizable v-if="showChat" :w="500" :h="300" :x="x" :y="y" :z="10001" :parent="true" :minw="200" :minh="200" :resizable="true" :draggable="true" class="rounded">
+			<iframe src="https://embed.fixie.ai/agents/a14a698f-4934-4410-a88a-67051418ed65?agentStartsConversation=1" allow="clipboard-write" class="h-100 w-100" />
+		</Vue3DraggableResizable> -->
+
 		<GMapMap class="map" :center="center" :zoom="zoom" map-type-id="terrain">
 			<GMapMarker v-if="startLocation.lat && startLocation.lng" :position="startLocation" />
 			<GMapMarker v-if="destination.lat && destination.lng" :position="destination" />
@@ -106,7 +122,7 @@
 				</div>
 				<!-- Log Route Button -->
 				<div class="mb-0 p-0">
-					<button class="btn btn-green w-100" @click="fetchRouteDetails" data-bs-toggle="modal" data-bs-target="#progressModal">Log Route</button>
+					<button class="btn btn-green w-100" @click="fetchRouteDetails" :disabled="isButtonClicked" :title="isButtonClicked ? 'Please refresh the page to log more routes' : ''">Log Route</button>
 				</div>
 			</div>
 
@@ -158,7 +174,10 @@
 			<!-- </vue-draggable-resizable> -->
 		</Vue3DraggableResizable>
 
+
 	</div>
+
+
 	<!-- Modal for log completion -->
 	<div class="modal fade" id="progressModal" tabindex="-1" aria-labelledby="progressModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -168,7 +187,16 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<p> Congratulations. You've logged your route! Please proceed to verify it later in <strong>Profile > Verify</strong> to get maximum EXP.</p>
+					<div class="text-center">
+						<img :src="randomGif" alt="Random Gif" class="mb-2">
+						<p> Congratulations. You've logged your route! Please proceed to verify it later in <strong>Profile > Verify</strong> to get maximum EXP.</p>
+						<div class="d-flex justify-content-center mt-3">
+							<button data-bs-dismiss="modal" class="btn btn-primary rounded-pill shadow-sm" @click="$router.push('/verify')">
+								Go to Verify Page
+							</button>
+						</div>
+					</div>
+
 					<h5 class="card-title mb-4">Route Details</h5>
 					<div class="d-flex justify-content-between mb-2">
 						<strong>Distance:</strong>
@@ -189,10 +217,6 @@
 						<span><strong>User Level:</strong></span>
 						<span>{{ userLvl }}</span>
 					</div>
-					<!-- <div class="d-flex justify-content-between mb-2">
-						<span><strong>Experience Progress:</strong></span>
-						<span>{{ userExp }} / 100</span>
-					</div> -->
 					<div class="d-flex justify-content-between mb-2">
 						<span><strong>Experience Added:</strong></span>
 						<span>+{{ expAdded }}</span>
@@ -202,17 +226,12 @@
 						<span>{{ emissionSavings.toFixed(2) }} kg CO2</span>
 					</div>
 					<!-- Open in GMaps/CityMapper -->
-					<!-- <div class="d-flex justify-content-center">
-						<button class="btn btn-primary rounded-pill shadow-sm" @click="openGoogleMaps">
+					<div class="d-flex justify-content-center">
+						<button class="btn btn-primary shadow-sm" @click="openGoogleMaps">
 							<i class="fas fa-map-marker-alt"></i> Open on Google Maps
 						</button>
-						<button class="btn btn-green rounded-pill shadow-sm" @click="openCityMapper">
+						<button class="btn btn-green shadow-sm" @click="openCityMapper">
 							<i class="fas fa-map-marker-alt"></i> Open on CityMapper
-						</button>
-					</div> -->
-					<div class="d-flex justify-content-center mt-3">
-						<button data-bs-dismiss="modal" class="btn btn-primary rounded-pill shadow-sm" @click="$router.push('/verify')">
-							Go to Verify Page
 						</button>
 					</div>
 				</div>
@@ -221,6 +240,8 @@
 					<!-- <button type="button" class="btn btn-secondary" @click="location.reload()">Refresh</button> -->
 				</div>
 			</div>
+
+
 		</div>
 	</div>
 </template>
@@ -232,6 +253,11 @@ import axios from "axios";
 import { useAuth0 } from '@auth0/auth0-vue';
 import Vue3DraggableResizable from 'vue3-draggable-resizable';
 import { useGeolocation } from '@vueuse/core'
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+import Modal from 'bootstrap/js/dist/modal';
+
+
 
 export default defineComponent({
 	mounted() {
@@ -289,6 +315,7 @@ export default defineComponent({
 		const userLvl = ref(0)
 		const expAdded = ref(0)
 		const show = ref(true);
+		const showIframe = ref(false);
 		// Call to check user's exp and level, if any.
 		axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/ez/${props.userme.email}`)
 			.then(response => {
@@ -298,6 +325,10 @@ export default defineComponent({
 			})
 			.catch(error => {
 				console.error(error);
+				toast.error(`${error.response.data.message}`, {
+					autoClose: 5000,
+					position: toast.POSITION.TOP_CENTER,
+				});
 			});
 
 		const errorMessage = ref('');
@@ -415,12 +446,24 @@ export default defineComponent({
 
 
 		const fetchRouteDetails = async () => {
+			if (!startLocation.value.lat || !destination.value.lat) {
+				console.log("hello")
+				toast.error(`You did not select any locations!`, {
+					autoClose: 5000,
+					position: toast.POSITION.TOP_CENTER,
+				});
+			}
 			if (startLocation.value.lat && startLocation.value.lng && destination.value.lat && destination.value.lng) {
 				if (!travelMode.value) {
-					// TODO: Replace with toast feature
-					alert('Please select a valid travel mode.');
+					toast.error(`Please select a valid travel mode.`, {
+						autoClose: 5000,
+						position: toast.POSITION.TOP_CENTER,
+					});
 					return;
 				}
+				// Check for user attempting to log the button more...
+				isButtonClicked.value = true;
+
 				const [hours, minutes] = departureTime.value.split(':').map(Number);
 				const departureDate = new Date();
 				departureDate.setHours(hours);
@@ -495,6 +538,10 @@ export default defineComponent({
 							}
 						} catch (error) {
 							console.error('Failed to fetch location name:', error);
+							toast.error(`${error.response.data.message}`, {
+								autoClose: 5000,
+								position: toast.POSITION.TOP_CENTER,
+							});
 						}
 						return '';  // Return an empty string if the location name could not be fetched
 					};
@@ -525,17 +572,27 @@ export default defineComponent({
 						await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/routes`, routeData, { headers });
 						// EXP Given here is not the most and incomplete.
 						await addExpBasedOnCarbonEmission(calculateCarbonEmissionForEXP(), distanceInKm, travelMode.value);
+						showModal();
 
 
 					} catch (error) {
 						console.error('Failed to store route data:', error);
-						errorMessage.value = error.message += ' Please try again.';
+						// errorMessage.value = error.message += ' Please try again.';
+						toast.error(`${error.response.data.message}`, {
+							autoClose: 5000,
+							position: toast.POSITION.TOP_CENTER,
+						});
 
 
 					}
-				} catch (error) {
+				}
+				catch (error) {
 					console.error("Failed to fetch route details:", error);
 					errorMessage.value = error.message += ' Please try again.';
+					toast.error(`${error.response.data.message}`, {
+						autoClose: 5000,
+						position: toast.POSITION.TOP_CENTER,
+					});
 
 
 				}
@@ -545,7 +602,10 @@ export default defineComponent({
 		const fetchPolylineOnly = async () => {
 			if (startLocation.value.lat && startLocation.value.lng && destination.value.lat && destination.value.lng) {
 				if (!travelMode.value) {
-					alert('Please select a valid travel mode.');
+					toast(`${error.response.data.message}`, {
+						autoClose: 5000,
+						position: toast.POSITION.TOP_CENTER,
+					});
 					return;
 				}
 				try {
@@ -589,38 +649,37 @@ export default defineComponent({
 		const startLocationRef = ref(null);
 
 		const getUserLocation = async () => {
-			// console.log("Getting user location here")
-			// console.log(coords.value)/
 			const lat = coords.value.latitude;
 			const lng = coords.value.longitude;
 			try {
 				const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
 				if (response.data.results && response.data.results.length > 0) {
-					// console.log("Logging auto complete here!")
-					// console.log(response.data.results[0].formatted_address)
-					// Replace the value of the startLocation input field with the formatted_address here!
-
 					startLocation.value = { lat, lng };
 					isDisabled.value = true;
 					placeholderText.value = response.data.results[0].formatted_address;
-					// console.log(autocomplete)
-					// console.log("End of logging for auto complete")
-
 				} else {
 					console.error('No results found');
 				}
-
 			} catch (error) {
 				console.error('Error making request:', error);
 			}
 		};
 
-
-		// onMounted(getUserLocation);
-
 		// # ================================================================================================================================================================================================================================================================================================
 
+		const randomGif = ref('');
+		const fetchRandomGif = async () => {
+			const giphyApiKey = 'FuPGJnG0vBT3yRNDTJ8KzeoICLLNYQ5V'; // replace with your Giphy API key
+			const url = `https://api.giphy.com/v1/gifs/random?api_key=${giphyApiKey}&tag=congratulations&rating=g`;
 
+			try {
+				const response = await axios.get(url);
+				randomGif.value = response.data.data.images.fixed_height.url;
+				console.log(randomGif.value);
+			} catch (error) {
+				console.error('Error fetching random gif:', error);
+			}
+		};
 
 
 		const decodePolyline = (encoded) => {
@@ -758,12 +817,36 @@ export default defineComponent({
 				});
 		};
 
+		const showModal = () => {
+			const modalElement = document.getElementById('progressModal');
+			const modalInstance = new Modal(modalElement);
+			modalInstance.show();
+		};
 
 		// Auto update as long as destination is updated.
 		// travelMode needs to be set.
 		watch(destination, fetchPolylineOnly);
 
 
+		// FixieAI items
+		const x = ref(0);
+		const y = ref(0);
+		const showChat = ref(false);
+
+		onMounted(async () => {
+			x.value = window.innerWidth - 510; // 500 (width of the component) + 10 (right margin)
+			y.value = window.innerHeight - 310; // 300 (height of the component) + 10 (bottom margin)
+			await fetchRandomGif();
+
+		});
+
+		const toggleChat = () => {
+			showChat.value = !showChat.value;
+		};
+
+
+		// Button Validation
+		const isButtonClicked = ref(false);
 
 		return {
 			calculateCarbonEmission,
@@ -797,7 +880,13 @@ export default defineComponent({
 			componentWidth: 300,
 			startLocationRef,
 			isDisabled,
-			placeholderText
+			placeholderText,
+			x,
+			y,
+			showChat,
+			toggleChat,
+			isButtonClicked,
+			randomGif
 		};
 	}
 });
