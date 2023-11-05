@@ -141,7 +141,7 @@ export default defineComponent({
 	},
 
 	async created() {
-
+		
 		const url = `https://api.bchwy.com/users/iz/${encodeURIComponent(this.user.email)}`;
 		const headers = {
 			"x-api-key": "PlanItIsTheBestProjectEverXYZ",
