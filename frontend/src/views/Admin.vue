@@ -47,7 +47,7 @@
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
-	left: 2px; /* Adjust the position as needed */
+	left: 1px; /* Adjust the position as needed */
 	transition: 0.4s; /* Add a smooth transition effect */
   }
   
@@ -56,7 +56,7 @@
   }
   
   .badge-select input[type="checkbox"]:checked::before {
-	left: calc(100% - 14px); /* Position the handle to the right when checked */
+	left: calc(100% - 15px); /* Position the handle to the right when checked */
   }
   
   .badge-select label{
@@ -91,7 +91,7 @@
 									<tbody>
 										<tr v-for="(user, index) in users" :key="user">
 											<th scope="row">{{ index + 1 }}</th>
-											<td><img :src="user.pictureurl" alt="User Image" width="50" height="50">&nbsp; @{{ user.handle }}</td>
+											<td><img :src="user.pictureurl" alt="User Image" width="50" height="50"><br> @{{ user.handle }}</td>
 											<td v-if="user.level">Lvl {{ user.level }}, EXP: {{ user.exp }}/100</td>
 											<td v-else>-</td>
 											<td>
