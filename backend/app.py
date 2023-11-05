@@ -1279,7 +1279,9 @@ def get_posts(user_email):
     """
     current_user = user_collection.find_one({"email": user_email})
     if current_user:
-        return jsonify({"posts": current_user['posts']}), 200
+        user_posts = list(post_collection.find({"useremail": user_email}))
+        user_posts = [convert_objectid_to_string(post) for post in user_posts]
+        return jsonify(user_posts), 200
     else:
         return jsonify({"message": "User not found."}), 404
     

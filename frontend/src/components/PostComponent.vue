@@ -36,7 +36,7 @@
 
 
 <script>
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, reactive, watch } from 'vue';
 import heart_btn from './like_button.vue'
 import axios from 'axios';
 
@@ -84,7 +84,6 @@ export default defineComponent({
       catch (error) {
         console.error("error", error)
       }
-
     }
   },
   methods: {
@@ -92,11 +91,5 @@ export default defineComponent({
       this.likesCount.value = newLikesCount;
     }
   }
-
-
 })
-
-
-
-
 </script>

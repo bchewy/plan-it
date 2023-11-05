@@ -142,18 +142,17 @@ export default defineComponent({
 
 	async created() {
 
+		if (!this.user.email) {
+			return;
+		}
 		const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
 		const headers = {
 			"x-api-key": "PlanItIsTheBestProjectEverXYZ",
 		};
-
 		try {
 			const response = await axios.get(url, { headers });
 			this.thisuser = response.data
-
-
 			for (let badgeID of response.data.badges) {
-
 				const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badgeID}`
 				try {
 					const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
@@ -164,13 +163,10 @@ export default defineComponent({
 						description: badgeDetailsResponse.data.description
 					})
 				}
-
 				catch (error) { console.error("error", error) }
 			}
 			for (let friend of response.data.friends) {
-
 				const friendDetailsURL = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(friend)}`
-
 				try {
 					const friendDetailsResponse = await axios.get(friendDetailsURL, { headers });
 					this.userFriends.push({ handle: "@" + friendDetailsResponse.data.handle })
@@ -179,10 +175,8 @@ export default defineComponent({
 					console.error("error", error)
 				}
 			}
-
-
-
-		} catch (error) {
+		}
+		catch (error) {
 			console.error("Error fetching user", error);
 		}
 

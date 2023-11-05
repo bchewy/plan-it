@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="row justify-content-center">
-            <CreatePostComponent></CreatePostComponent>
+            <CreatePostComponent @postCreated="fetchData"></CreatePostComponent>
             <PostComponent v-for="post in posts" :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
         </div>
     </div>
@@ -30,66 +30,44 @@ export default {
         PostComponent,
         CommunitySidebar,
     },
+    created() {
+        this.fetchData();
+    },
     setup() {
-        const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+        const { loginWithRedirect, user, isAuthenticated, isLoading } = useAuth0();
         const headers = { "x-api-key": "PlanItIsTheBestProjectEverXYZ", };
         const posts = ref([]);
         const friends = ref([]);
 
-
         const fetchData = async () => {
-            await fetchUser();
-            await fetchFriendPosts();
-        };
 
-        const fetchPosts = async () => {
-            const url = `${import.meta.env.VITE_API_ENDPOINT}/posts`;
-            try {
-                const response = await axios.get(url, { headers })
-                // posts.value = response.data.reverse()
-            }
-            catch (error) {
-                console.error("error", error)
-            }
-        };
+            // Debug Statements
 
-        const fetchFriendPosts = async () => {
-            console.log("Fetching friends")
-            console.log(friends.value)
-            for (let friend of friends.value) {
-                const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(friend)}/posts`;
-                try {
-                    const response = await axios.get(url, { headers });
-                    posts.value = [...posts.value, ...response.data.posts];
-                } catch (error) {
-                    console.error("Error fetching friend's posts", error);
-                }
+            // Fixes a bug where refreshing the page does not retrieve users
+            while (isLoading.value) {
+                await new Promise(resolve => setTimeout(resolve, 100));
             }
 
-        };
 
-        const fetchUser = async () => {
             const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(user.value.email)}`;
-            const headers = {
-                "x-api-key": "PlanItIsTheBestProjectEverXYZ",
-            };
-
-            try {
+            const response = await axios.get(url, { headers });
+            friends.value = response.data.friends;
+            // Fetch posts per badge
+            for (let friend of friends.value) {
+                console.log("Fetching posts for friend", friend)
+                const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(friend)}/posts`;
                 const response = await axios.get(url, { headers });
-                friends.value = response.data.friends;
-                console.log(friends.value)
-
-            } catch (error) {
-                console.error("Error fetching user", error);
+                posts.value = [...posts.value, ...response.data];
             }
         };
 
         onMounted(fetchData);
 
         return {
-            user
-
-
+            user,
+            posts,
+            friends,
+            fetchData,
         };
     },
 
