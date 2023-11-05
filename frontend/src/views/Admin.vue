@@ -236,7 +236,7 @@ export default {
 	},
 	methods: {
 		hasBadge(user, badgeId) {
-			return user.badges.includes(badgeId);
+			return user && user.badges && user.badges.includes(badgeId);
 		},
 		toggleBadge(user, badgeId) {
 			if (this.hasBadge(user, badgeId)) {
