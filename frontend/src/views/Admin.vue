@@ -139,7 +139,7 @@
 								<label for="user-exp" class="form-label">EXP</label>
 								<input disabled type="number" class="form-control" id="user-exp" v-model="updatedUser.exp">
 							</div>
-							<button type="submit" class="btn btn-primary">Update</button>
+							<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
 						</form>
 					</div>
 				</div>

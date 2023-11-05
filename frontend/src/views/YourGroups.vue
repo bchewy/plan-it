@@ -7,7 +7,7 @@
 
     <div class="container-fluid vh-100" style="background-color: rgb(232, 251, 240);">
         <section class="py-5">
-            <h1 class="text-center mb-5" style="font-weight: bold; color: #4CAF50;">Your Groups</h1>
+            <h2 class="text-center mb-5" style="font-weight: bold">Your Groups</h2>
             <div v-for="(groupArray, index) in groups" :key="index" class="row">
                 <div v-for="group in groupArray" :key="group._id" class="col-md-4 mb-4">
                     <div class="card">
