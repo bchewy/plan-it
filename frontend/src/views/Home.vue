@@ -245,7 +245,7 @@ export default {
 }
 
 .light-green {
-  background-color: rgb(209, 244, 209)
+  background-color: #d1f4d1
 }
 
 

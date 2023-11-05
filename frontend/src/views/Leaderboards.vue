@@ -284,8 +284,8 @@ export default {
 			try {
 				const stats = [];
 				for (let friend of friends) {
-					console.log(friend)
-					console.log("Fetching our friend here.")
+					// console.log(friend)
+					// console.log("Fetching our friend here.")
 					const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(friend)}`;
 					const headers = {
 						"x-api-key": "PlanItIsTheBestProjectEverXYZ",
@@ -315,7 +315,7 @@ export default {
 
 				}
 				this.friendStats = stats;
-				console.log(this.friendStats)
+				// console.log(this.friendStats)
 			} catch (error) {
 				console.error("Error fetching friend stats:", error);
 			}
