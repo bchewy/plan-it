@@ -91,7 +91,7 @@
 									<tbody>
 										<tr v-for="(user, index) in users" :key="user">
 											<th scope="row">{{ index + 1 }}</th>
-											<td>@{{ user.handle }}</td>
+											<td><img :src="user.pictureurl" alt="User Image" width="50" height="50">&nbsp; @{{ user.handle }}</td>
 											<td v-if="user.level">Lvl {{ user.level }}, EXP: {{ user.exp }}/100</td>
 											<td v-else>-</td>
 											<td>
@@ -152,7 +152,7 @@
 										</tr>
 									</tbody>
 								</table>
-								<button class="btn btn-success mt-3" @click="addBadge">Add New Badge</button>
+								<button class="btn btn-success mt-3 mb-2" @click="addBadge">Add New Badge</button>
 							</div>
 						</div>
 					</div>
