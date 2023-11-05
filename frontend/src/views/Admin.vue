@@ -102,7 +102,7 @@
 												</div>
 											</td>
 											<td>
-												<button class="btn btn-primary" @click="openModal(user)" data-bs-toggle="modal" data-bs-target="#addUserModal">Edit</button>
+												<button class="btn btn-success" @click="openModal(user)" data-bs-toggle="modal" data-bs-target="#addUserModal">Edit</button>
 												<!-- <button disabled class="btn btn-danger" @click="deleteUser(user.id)">Delete</button> -->
 
 											</td>
@@ -178,7 +178,7 @@
 								<label for="user-exp" class="form-label">EXP</label>
 								<input disabled type="number" class="form-control" id="user-exp" v-model="updatedUser.exp">
 							</div>
-							<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
+							<button type="submit" class="btn btn-success" data-bs-dismiss="modal">Update</button>
 						</form>
 					</div>
 				</div>
@@ -207,7 +207,7 @@
 								<label for="badge-image" class="form-label">Image</label>
 								<input type="file" class="form-control" id="badge-image" @change="handleFileUpload" accept=".png, .jpg, .jpeg">
 							</div>
-							<button type="submit" class="btn btn-primary">Add</button>
+							<button type="submit" class="btn btn-success">Add</button>
 						</form>
 					</div>
 				</div>
