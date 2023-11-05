@@ -57,7 +57,7 @@ export default {
             console.log("Fetching friends")
             console.log(friends.value)
             for (let friend of friends.value) {
-                const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(friend)}/posts`;
+                const url = `https://api.bchwy.com/users/${encodeURIComponent(friend)}/posts`;
                 try {
                     const response = await axios.get(url, { headers });
                     posts.value = [...posts.value, ...response.data.posts];
@@ -69,7 +69,7 @@ export default {
         };
 
         const fetchUser = async () => {
-            const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(user.value.email)}`;
+            const url = `https://api.bchwy.com/users/iz/${encodeURIComponent(user.value.email)}`;
             const headers = {
                 "x-api-key": "PlanItIsTheBestProjectEverXYZ",
             };
