@@ -75,7 +75,7 @@
 					<div class="card-header">
 						<h3 class="mb-0">User Management</h3>
 					</div>
-					<div class="container m-2">
+					<div class="container p-0">
 						<div class="row">
 							<div class="col-12 mt-5">
 								<table class="table table-responsive">
@@ -124,7 +124,7 @@
 					<div class="card-header">
 						<h3 class="mb-0">Badge Management</h3>
 					</div>
-					<div class="container m-2">
+					<div class="container p-0">
 						<div class="row">
 							<div class="col-12 mt-5">
 								<table class="table table-striped">
