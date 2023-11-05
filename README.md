@@ -1,32 +1,20 @@
 # Plan-IT
 
-This project consists of two main components: the backend and the frontend. Below are the instructions for setting up and running each component in both development and production environments.
+![deploy to frontend](https://github.com/bchewy/plan-it/actions/workflows/deploy-to-s3.yml/badge.svg)
+![deploy to backend](https://github.com/bchewy/plan-it/actions/workflows/deploy-flask-to-ec2.yml/badge.svg)
 
-## Backend Setup and Running Instructions
+### What is Plan-it?
+Plan-it is a sustainable travel routing web-app built on Google Maps to help users consciously keep track of their carbon emissions savings when commuting.
 
-### Development Environment
+### What's the purpose?
+To encourage green choices, we will implement gamification features like rewards and social sharing for selecting low-carbon routes. The app will also provide tools for tracking carbon footprint over time, optimized route planning based on sustainability, and a community forum for knowledge sharing around sustainable transportation. 
 
-1. Navigate to the `backend` directory.
-2. Run the Flask application using the default development server.
-    ```bash
-    flask run
-    ```
+### Technologies Used
+Frontend: VueJS, Auth0<br>
+Backend: Python (Flask), MongoDB
 
-### Production Environment
-
-1. Navigate to the `backend` directory.
-2. Run the application using Gunicorn as the WSGI server. The following command will start Gunicorn with 4 worker processes and bind it to all available network interfaces on port 8888.
-    ```bash
-    gunicorn -w 4 -b 0.0.0.0:8888 app:app
-    ```
-
-## Frontend Setup and Running Instructions
-
-### Development Environment
-
-1. Navigate to the `frontend` directory.
-2. Run the following command to start the development server:
-    ```bash
-    npm install --legacy-peer-deps
-    npm run dev #to start dev server
-    ```
+### Contributors:
+@bchewy - Backend/Frontend<br>
+@ryan99324 - Backend/Frontend<br>
+@melodywong23 - Frontend/Design<br>
+@saphalex - Frontend<br>

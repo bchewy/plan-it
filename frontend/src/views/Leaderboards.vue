@@ -60,8 +60,8 @@
 									<tr v-for="(user, index) in users" :key="user.email">
 										<td>{{ index + 1 }}</td>
 										<td>
-											<img :src="user.pictureurl" alt="User Image" width="50" height="50">
-											<br><span>{{ user.handle }}</span>
+											<img :src="user.pictureurl" alt="User Image" width="50" height="50">&nbsp;
+											<span>@{{ user.handle }}</span>
 										</td>
 										<!-- add pictures of badges-->
 										<td>
@@ -104,7 +104,7 @@
 										<td>{{ index + 1 }}</td>
 										<td>
 											<img :src="user.stats.pictureurl" alt="User Image" width="50" height="50">&nbsp;
-											<span>{{ user.stats.handle }}</span>
+											<span>@{{ user.stats.handle }}</span>
 										</td>
 										<td>
 											<span v-for="badge in user.stats.badges" :key="badge.id">
