@@ -24,6 +24,45 @@
 	padding-top: 3rem;
 	background-color: #739072;
 }
+
+.badge-select {
+	display: flex;
+	align-items: center;
+  }
+  
+  .badge-select input[type="checkbox"]{
+	appearance: none;
+	width: 32px;
+	height: 14px;
+	background-color: #c67074;
+	border-radius: 14px;
+	position: relative;
+  }
+  .badge-select input[type="checkbox"]::before {
+	content: "";
+	width: 14px; /* Width of the switch handle */
+	height: 14px; /* Height of the switch handle */
+	background-color: #ebedf0; /* Color of the switch handle */
+	border-radius: 50%; /* Make it a circle */
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 1px; /* Adjust the position as needed */
+	transition: 0.4s; /* Add a smooth transition effect */
+  }
+  
+  .badge-select input[type="checkbox"]:checked {
+	background-color: #4CAF50; /* Background color for the "on" state */
+  }
+  
+  .badge-select input[type="checkbox"]:checked::before {
+	left: calc(100% - 15px); /* Position the handle to the right when checked */
+  }
+  
+  .badge-select label{
+	margin-left: 8px;
+  }
+  
 </style>
 
 <template>
@@ -36,7 +75,7 @@
 					<div class="card-header">
 						<h3 class="mb-0">User Management</h3>
 					</div>
-					<div class="container m-2">
+					<div class="container p-0">
 						<div class="row">
 							<div class="col-12 mt-5">
 								<table class="table table-responsive">
@@ -52,18 +91,18 @@
 									<tbody>
 										<tr v-for="(user, index) in users" :key="user">
 											<th scope="row">{{ index + 1 }}</th>
-											<td>@{{ user.handle }}</td>
+											<td><img :src="user.pictureurl" alt="User Image" width="50" height="50"><br> @{{ user.handle }}</td>
 											<td v-if="user.level">Lvl {{ user.level }}, EXP: {{ user.exp }}/100</td>
 											<td v-else>-</td>
 											<td>
-												<div v-for="badge in badges" :key="badge._id">
+												<div v-for="badge in badges" :key="badge._id" class="badge-select">
 													<input type="checkbox" :value="badge._id" :checked="hasBadge(user, badge._id)" @change="handleBadgeChange(user, badge._id)">
 													<label>{{ badge.name }}</label>
 													<img :src="badge.image" class="badge-image" style="width: 30px;">
 												</div>
 											</td>
 											<td>
-												<button class="btn btn-primary" @click="openModal(user)" data-bs-toggle="modal" data-bs-target="#addUserModal">Edit</button>
+												<button class="btn btn-success" @click="openModal(user)" data-bs-toggle="modal" data-bs-target="#addUserModal">Edit</button>
 												<!-- <button disabled class="btn btn-danger" @click="deleteUser(user.id)">Delete</button> -->
 
 											</td>
@@ -85,7 +124,7 @@
 					<div class="card-header">
 						<h3 class="mb-0">Badge Management</h3>
 					</div>
-					<div class="container m-2">
+					<div class="container p-0">
 						<div class="row">
 							<div class="col-12 mt-5">
 								<table class="table table-striped">
@@ -113,7 +152,7 @@
 										</tr>
 									</tbody>
 								</table>
-								<button class="btn btn-success mt-3" @click="addBadge">Add New Badge</button>
+								<button class="btn btn-success mt-3 mb-2" @click="addBadge">Add New Badge</button>
 							</div>
 						</div>
 					</div>
@@ -139,7 +178,7 @@
 								<label for="user-exp" class="form-label">EXP</label>
 								<input disabled type="number" class="form-control" id="user-exp" v-model="updatedUser.exp">
 							</div>
-							<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
+							<button type="submit" class="btn btn-success" data-bs-dismiss="modal">Update</button>
 						</form>
 					</div>
 				</div>
@@ -168,7 +207,7 @@
 								<label for="badge-image" class="form-label">Image</label>
 								<input type="file" class="form-control" id="badge-image" @change="handleFileUpload" accept=".png, .jpg, .jpeg">
 							</div>
-							<button type="submit" class="btn btn-primary">Add</button>
+							<button type="submit" class="btn btn-success">Add</button>
 						</form>
 					</div>
 				</div>
