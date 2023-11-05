@@ -24,6 +24,45 @@
 	padding-top: 3rem;
 	background-color: #739072;
 }
+
+.badge-select {
+	display: flex;
+	align-items: center;
+  }
+  
+  .badge-select input[type="checkbox"]{
+	appearance: none;
+	width: 32px;
+	height: 14px;
+	background-color: #c67074;
+	border-radius: 14px;
+	position: relative;
+  }
+  .badge-select input[type="checkbox"]::before {
+	content: "";
+	width: 14px; /* Width of the switch handle */
+	height: 14px; /* Height of the switch handle */
+	background-color: #ebedf0; /* Color of the switch handle */
+	border-radius: 50%; /* Make it a circle */
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 2px; /* Adjust the position as needed */
+	transition: 0.4s; /* Add a smooth transition effect */
+  }
+  
+  .badge-select input[type="checkbox"]:checked {
+	background-color: #4CAF50; /* Background color for the "on" state */
+  }
+  
+  .badge-select input[type="checkbox"]:checked::before {
+	left: calc(100% - 14px); /* Position the handle to the right when checked */
+  }
+  
+  .badge-select label{
+	margin-left: 8px;
+  }
+  
 </style>
 
 <template>
@@ -56,7 +95,7 @@
 											<td v-if="user.level">Lvl {{ user.level }}, EXP: {{ user.exp }}/100</td>
 											<td v-else>-</td>
 											<td>
-												<div v-for="badge in badges" :key="badge._id">
+												<div v-for="badge in badges" :key="badge._id" class="badge-select">
 													<input type="checkbox" :value="badge._id" :checked="hasBadge(user, badge._id)" @change="handleBadgeChange(user, badge._id)">
 													<label>{{ badge.name }}</label>
 													<img :src="badge.image" class="badge-image" style="width: 30px;">
