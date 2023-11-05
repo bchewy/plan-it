@@ -81,7 +81,7 @@ export default defineComponent(
       },
 
       likePost: async function () {
-        const url = `http://127.0.0.1:5000/posts/${this.postID}/likes/add`
+        const url = `https://api.bchwy.com/posts/${this.postID}/likes/add`
         const headers = {
           "x-api-key": "PlanItIsTheBestProjectEverXYZ",
           "Content-Type": "application/x-www-form-urlencoded"
@@ -91,7 +91,7 @@ export default defineComponent(
 
       },
       unlikePost: async function () {
-        const url = `http://127.0.0.1:5000/posts/${this.postID}/likes/remove`
+        const url = `https://api.bchwy.com/posts/${this.postID}/likes/remove`
         const headers = {
           "x-api-key": "PlanItIsTheBestProjectEverXYZ",
           "Content-Type": "application/x-www-form-urlencoded"
