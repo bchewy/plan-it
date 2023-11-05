@@ -1,7 +1,7 @@
 <template>
 	<NavBar />
-	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: rgb(200, 209, 191);">
-		<div class="sticky-top border-bottom" style="background-color:rgb(200, 209, 191); z-index: 1;">
+	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: rgb(232, 251, 240);">
+		<div class="sticky-top border-bottom" style="background-color:rgb(232, 251, 240); z-index: 1;">
 			<CommunitySidebar></CommunitySidebar>
 			<div class="text-center h2 mb-3 pt-4">
 				<span class="header" style="font-weight: bold;">For You </span>
