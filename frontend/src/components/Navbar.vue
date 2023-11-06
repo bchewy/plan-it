@@ -253,6 +253,7 @@ export default defineComponent({
             console.log('User not found in the database');
             requestBody.exp = 0;
             requestBody.level = 0;
+            requestBody.total_km = 0;
             // When user is not found we create it.
             const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/users`, {
               method: 'POST',
