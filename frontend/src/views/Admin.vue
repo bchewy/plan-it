@@ -207,7 +207,7 @@
 								<label for="badge-image" class="form-label">Image</label>
 								<input type="file" class="form-control" id="badge-image" @change="handleFileUpload" accept=".png, .jpg, .jpeg">
 							</div>
-							<button type="submit" class="btn btn-success">Add</button>
+							<button type="submit" class="btn btn-success" data-bs-dismiss="modal">Add</button>
 						</form>
 					</div>
 				</div>
