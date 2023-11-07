@@ -102,3 +102,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+
+.beige-colour {
+  color: rgba(236, 227, 206, 1);
+}
+
+</style>
