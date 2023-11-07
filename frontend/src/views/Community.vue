@@ -1,7 +1,7 @@
 <template>
 	<NavBar />
-	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: #739072;">
-		<div class="sticky-top border-bottom" style="background-color:#739072; z-index: 1;">
+	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: #a8cfa8;">
+		<div class="sticky-top border-bottom" style="background-color:#a8cfa8; z-index: 1;">
 			<CommunitySidebar></CommunitySidebar>
 			<div class="text-center h2 mb-3 pt-4">
 				<span class="header text-muted" style="font-weight: bold;">For You </span>
@@ -61,6 +61,6 @@ export default {
 
 <style scoped>
 .beige-colour {
-  color: rgba(236, 227, 206, 1);
+  color: rgb(68, 49, 4);
 }
 </style>
