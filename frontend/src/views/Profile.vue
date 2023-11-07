@@ -29,7 +29,7 @@
   background-color: #739072;
 }
 
-/* This changes the chart sizes. */
+ /* This changes the chart sizes. */
 /* .pr-4.pb-3.pb-md-0 {
   flex: 2;
 }

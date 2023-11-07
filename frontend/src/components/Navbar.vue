@@ -67,7 +67,8 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-green">
     <div class="container">
       <a class="navbar-brand text-supergreen" href="#">
-        <font-awesome-icon icon="fa-solid fa-car" bounce style="color: #a7c957" /> Plan-It
+        <!-- <font-awesome-icon icon="fa-solid fa-car" bounce style="color: #a7c957" /> Plan-It -->
+        <img src="https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/bchewy+conscious+travel+mascot.png" class="img-fluid" style="max-height: 40px;"> Plan-It
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
