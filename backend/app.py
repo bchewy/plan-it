@@ -1548,7 +1548,9 @@ def create_group(user_email):
     user_group = db.groups.find_one({"owner_email": user_email})
     group_name = request.form.get('group_name')
     group_image = request.files.get('group_image')
-
+    group_members=request.form.get('group_members')
+    
+    
     # Upload the file to s3
     if group_image:
         group_image_filename = secure_filename(group_image.filename)
@@ -1570,11 +1572,12 @@ def create_group(user_email):
         return jsonify({"message": "User has already created a group."}), 400
     if group:
         return jsonify({"message": "Group name already exists."}), 400
-    return create_group_success(user_email, group_name, group_image_url)
+    return create_group_success(user_email, group_name, group_image_url, group_members)
 
 
-def create_group_success(user_email, group_name, group_image_url):
-    group = {"name": group_name, "owner_email": user_email, "members": [user_email], "group_image": group_image_url}
+def create_group_success(user_email, group_name, group_image_url,group_members):
+    group_members=group_members.split(",")
+    group = {"name": group_name, "owner_email": user_email, "members": group_members, "group_image": group_image_url}
     db.groups.insert_one(group)
     return jsonify({"message": "Group created successfully."}), 200
 
@@ -1661,6 +1664,9 @@ def list_user_groups(user_email):
     """
     print(user_email)
     groups = list(db.groups.find({"members": user_email}))
+    usergroups =list(db.groups.find({"owner_email":user_email}))
+    if usergroups:
+        groups.append(usergroups)
     print(groups)
     print('\n')
     print('\n')

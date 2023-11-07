@@ -1,10 +1,10 @@
 <template>
     <NavBar />
-    <div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color:  #739072;">
-        <div class="sticky-top border-bottom" style="background-color: #739072; z-index: 1;">
+    <div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: #a8cfa8;">
+        <div class="sticky-top border-bottom" style="background-color: #a8cfa8; z-index: 1;">
             <CommunitySidebar></CommunitySidebar>
             <div class="text-center h2 mb-3 pt-4">
-                <span class="header beige-colour" style="font-weight: bold;">Your Friends </span>
+                <span class="header text-muted" style="font-weight: bold;">Your Friends </span>
             </div>
         </div>
         <div class="row justify-content-center" style = "background-color:  #739072 ;">
@@ -92,7 +92,6 @@ export default {
     }
 }
 </script>
-
 <style scoped>
 
 .beige-colour {

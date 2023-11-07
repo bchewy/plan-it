@@ -5,9 +5,11 @@
     <CommunitySidebar></CommunitySidebar>
 
 
-    <div class="container-fluid vh-100" style="background-color: #739072;">
-        <section class="py-5">
-            <h2 class="text-center mb-5 beige-colour" style="font-weight: bold">Your Groups</h2>
+    <div class="container-fluid vh-100" style="background-color: #a8cfa8;">
+        
+        <div class="text-center h2 mb-3 pt-4">
+				<span class="header text-muted" style="font-weight: bold;">Your Groups </span>
+			</div>
             <div v-for="(groupArray, index) in groups" :key="index" class="row">
                 <div v-for="group in groupArray" :key="group._id" class="col-md-4 mb-4">
                     <div class="card">
@@ -15,12 +17,13 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ group.name }}</h5>
                             <p class="card-text">Owner: {{ group.owner_email }}</p>
-                            <p class="card-text">Members: {{ group.members.join(', ') }}</p>
+                            
+                            <p class="card-text">Members: {{ group.members.toString("\n") }}</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        
 
 
     </div>
@@ -44,10 +47,10 @@ export default {
         CommunitySidebar
 
     },
-    created() {
+    onMounted(){
         // this.fetchData();
-        this.getGroups();
-    },
+        this.getGroups()}
+    ,
     setup() {
         const { loginWithRedirect, user, isAuthenticated } = useAuth0();
         const badges = false
@@ -58,24 +61,25 @@ export default {
         const getGroups = async () => {
             try {
                 console.log(user.value.email)
-                const email = user.value.email;
                 const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(user.value.email)}/groups`, {
                     headers: {
                         'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
                     }
                 });
                 // console.log(response);
-                groups.value = response.data;
+                console.log(response.data.groups)
+                groups.value = response.data.groups;
             } catch (error) {
                 console.error(error);
             }
         }
 
-        watch(user, (newUser, oldUser) => {
-            if (newUser !== null) {
-                getGroups();
-            }
-        }, { immediate: false });
+        watch(user, (newUser) => {
+            console.log(newUser); // Add this line
+    if (newUser) {
+        getGroups();
+    }
+});
 
         return {
             login: async () => {
