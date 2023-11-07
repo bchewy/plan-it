@@ -15,7 +15,7 @@
             
             <div v-else v-for="(groupArray, index) in groups" :key="index" class="row">
                 <div v-for="group in groupArray" :key="group._id" class="col-md-4 mb-4">
-                    <div class="card" style="background-color: rgb(248, 244, 239);">
+                    <div class="card">
                         <img class="card-img-top" :src="group.group_image" alt="Group Image" v-if="group.group_image">
                         <div class="card-body">
                         
@@ -32,7 +32,7 @@
                             <p class="card-text"><span class="fw-bold">Badges:</span></p>
                             
                                 
-                                <div v-for="badge in group.badges" class="col-11 text-center rounded border mb-2">
+                                <div v-for="badge in group.badges" class="col-11 bg-light text-center rounded border mb-2">
                                     <img :src="badge.image" class="w-75 rounded-circle mb-3 mt-3"><br>
                                     <button class="btn btn-secondary mb-3" data-bs-toggle="modal" :data-bs-target="'#a'+badge._id">More info</button>
                                 
