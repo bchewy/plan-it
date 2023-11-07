@@ -164,12 +164,11 @@ export default {
                 });
             }
         };
-        watch(user, (newUser) => {
-            if (newUser) {
-                friendList();
-                
-                    }
-                });
+        watch(user, async (newUser) => {
+        if (newUser) {
+            await friendList();
+        }
+    }, { immediate: true });
 
 
         return {

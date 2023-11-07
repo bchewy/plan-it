@@ -61,6 +61,7 @@ export default {
         const { loginWithRedirect, user, isAuthenticated } = useAuth0();
         const badges = false
         const groups = ref([]);
+        
 
         // console.log('Setup method is called');
 
@@ -75,11 +76,15 @@ export default {
                 // console.log(response);
                 console.log(response.data.groups)
                 groups.value = response.data.groups;
+                clearTimeout(timeoutId)
                 loading.value=false
             } catch (error) {
                 console.error(error);
             }
         }
+        const timeoutId = setTimeout(() => {
+            loading.value = false;
+            }, 5000);
 
         watch(user, async (newUser) => {
         if (newUser) {
