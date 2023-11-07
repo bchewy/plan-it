@@ -7,7 +7,7 @@
                 <span class="header text-muted" style="font-weight: bold;">Your Friends </span>
             </div>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center" style = "background-color:  #739072 ;">
             <CreatePostComponent @postCreated="fetchData"></CreatePostComponent>
             <PostComponent v-for="post in posts" :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
         </div>
