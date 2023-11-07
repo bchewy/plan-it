@@ -362,6 +362,7 @@ export default defineComponent({
 		const { coords, locatedAt, error, resume, pause } = useGeolocation()
 		const isDisabled = ref(false) // Set this to true when you want to disable the input
 		const placeholderText = ref('Origin')
+		const totalKm = ref(0)
 
 
 		const setStartLocation = (place) => {
@@ -563,16 +564,23 @@ export default defineComponent({
 						checkedStartLocation: isDisabled.val //Validation here is for users to ensure that they selected currentLocation as start location.
 					};
 
-					// Update our route database (backend call)
+
+					// Update our route database (backend Call)
 					// Update user's EXP based on carbon emission calculation
 					try {
 						const headers = {
 							'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
 						};
+
+
 						await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/routes`, routeData, { headers });
+
+
+						totalKm.value += distanceInKm;
 						// EXP Given here is not the most and incomplete.
 						await addExpBasedOnCarbonEmission(calculateCarbonEmissionForEXP(), distanceInKm, travelMode.value);
 						showModal();
+
 
 
 					} catch (error) {
@@ -773,6 +781,21 @@ export default defineComponent({
 			// Calculate the total EXP to add based on the base EXP and the bonus for saved emissions
 			const expToAdd = Math.ceil(BASE_EXP + (emissionSavings.value * BONUS_EXP_PER_SAVED_KG));
 			expAdded.value = expToAdd
+
+			// Update the user's total km travelled
+			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/total_km`, { total_km: totalKm.value }, {
+				headers: {
+					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+				}
+			})
+				.then(response => {
+					console.log(response.data.message);
+					// logUserActivity(`travelled ${distanceInKm} km`)
+				})
+				.catch(error => {
+					console.error(error);
+				});
+
 
 
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/carbonsavings`, { carbonsavings: emissionSavings.value }, {

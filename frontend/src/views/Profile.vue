@@ -29,11 +29,13 @@
   background-color: #739072;
 }
 
-.pr-4.pb-3.pb-md-0 {
+/* This changes the chart sizes. */
+/* .pr-4.pb-3.pb-md-0 {
   flex: 2;
-  /* Adjust as needed */
 }
+*/
 
+/* Settings Styles */
 .checkbox-label {
   display: flex;
   align-items: center;
@@ -125,6 +127,7 @@
 
       <!-- Main Content Area -->
       <div class="col-md-10 my-4">
+        <!-- Profile tab -->
         <div v-if="activeTab === 'profile'" class="tab-pane show active">
           <!-- Profile Content -->
           <div class="profile-container bg-light p-3 rounded d-flex flex-column flex-md-row mb-4">
@@ -135,15 +138,17 @@
             <div class="pl-md-4">
               <h3 class="mb-2 glowing-text">{{ user.name }}</h3>
               <p class="mb-2"><b>Level:</b> {{ userLvl }}</p>
-              <div class="progress stylish-progress-bar mb-4">
-                <div v-if="userExp" class="progress-bar bg-supergreen" role="progressbar" :style="{ width: `${userExp.toFixed(2)}%` }" aria-valuenow="" aria-valuemin="0" aria-valuemax="100">{{ userExp.toFixed(2) }}%</div>
-                <div v-else="userExp" class="progress-bar bg-supergreen" role="progressbar"></div>
-              </div>
+              <!-- Progress Bar -->
+              <ProgressBar :userExp="userExp" />
+              <!-- Separate percentage text, positioned with Bootstrap classes -->
+
+              <!-- Progress Bar end -->
               <p class="mb-2"><b>Handle:</b> @{{ user.nickname }}</p>
               <p class="mb-2"><b>Email:</b> {{ user.email }}</p>
             </div>
 
           </div>
+          <!-- Friends Section -->
           <div class="bg-white rounded-3 shadow-sm p-3">
             <h3 class="mb-0">Friends</h3>
             <div class="mt-3">
@@ -152,6 +157,8 @@
               </div>
             </div>
           </div>
+
+          <!-- Friend Request Section -->
           <div class="bg-white rounded shadow-sm p-3 mt-4 mb-4">
             <h3 class="mb-0">Friend Requests</h3>
             <div class="mt-3">
@@ -168,57 +175,96 @@
             </div>
           </div>
         </div>
+
+        <!-- Routes tab -->
         <div v-if="activeTab === 'routes'" class="tab-pane">
-          <!-- Routes Content -->
-          <div class="bg-light p-3 rounded d-flex flex-column flex-md-row mb-2">
-            <!-- User Routes -->
-            <div class="pr-4 pb-3 pb-md-0">
-              <h3 class="mb-2">Your Routes</h3>
-              <!-- Here you can add the code to display the user's routes -->
-              <div class="container">
-                <div v-if="routes && routes.length == 0">
-                  <p class="text-center">
-                    Your route list is empty. You need to commit more.
-                  </p>
+          <div class="pr-4 pb-3 pb-md-0 bg-white p-3 rounded shadow-sm">
+
+            <h3 class="mb-2">Your Routes</h3>
+            <!-- <div class="container bg-white">
+              <div v-if="routes && routes.length == 0">
+                <p class="text-center">
+                  Your route list is empty. You need to commit more.
+                </p>
+              </div>
+              <div v-else>
+                <div v-for="route in paginatedRoutes" :key="route.route_id" class="route-item">
+                  <h4>{{ route.start_point_name }} to {{ route.end_point_name }}</h4>
+                  <p><b>Mode of Transport:</b> {{ route.transport_mode }}</p>
+                  <p><b>Carbon Emission:</b> {{ route.carbon_emission }}</p>
+                  <p><b>Timestamp:</b> {{ route.timestamp }}</p>
                 </div>
-                <div v-else>
-                  <div v-for="route in paginatedRoutes" :key="route.route_id" class="route-item">
-                    <h4>{{ route.start_point_name }} to {{ route.end_point_name }}</h4>
-                    <p><b>Mode of Transport:</b> {{ route.transport_mode }}</p>
-                    <p><b>Carbon Emission:</b> {{ route.carbon_emission }}</p>
-                    <p><b>Timestamp:</b> {{ route.timestamp }}</p>
+              </div>
+            </div>
+            <nav aria-label="Pagination-for-routes">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                  <a class="page-link" href="#" @click.prevent="currentPage--">Previous</a>
+                </li>
+                <li class="page-item disabled">
+                  <span class="page-link">{{ currentPage }} / {{ totalPages }}</span>
+                </li>
+                <li class="page-item" :class="{ disabled: currentPage >= totalPages }">
+                  <a class="page-link" href="#" @click.prevent="currentPage++">Next</a>
+                </li>
+              </ul>
+            </nav> -->
+
+
+            <!-- Display carbon emisisons total here in a nice graphic -->
+            <div class="container">
+              <div class="row">
+                <!-- Card for Calories -->
+                <div class="col">
+                  <div class="card text-center">
+                    <div class="card-body">
+                      <img src="https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/Cool+animals.png" alt="Levels" class="card-img-top" style="width: 60px; height: auto;">
+                      <h5 class="card-title">{{ userLvl }}</h5>
+                      <p class="card-text">Levels gained!</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- Card for CO2 Saved -->
+                <div class="col">
+                  <div class="card text-center">
+                    <div class="card-body">
+                      <img src="https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/code+block%0AGreen+cute+space.png" alt="CO2 Saved" class="card-img-top" style="width: 60px; height: auto;">
+                      <h5 class="card-title">{{ carbonSavings.toFixed(2) }}g</h5>
+                      <p class="card-text">CO2 Saved</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- Card for Money Saved -->
+                <div class="col">
+                  <div class="card text-center">
+                    <div class="card-body">
+                      <img src="https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/Distance+icons.gif" alt="Distance travelled" class="card-img-top" style="width: 60px; height: auto;">
+                      <h5 class="card-title">{{ totalKM.toFixed(2) }}km</h5>
+                      <p class="card-text">travelled</p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <nav aria-label="Pagination-for-routes">
-                <ul class="pagination justify-content-center">
-                  <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                    <a class="page-link" href="#" @click.prevent="currentPage--">Previous</a>
-                  </li>
-                  <li class="page-item disabled">
-                    <span class="page-link">{{ currentPage }} / {{ totalPages }}</span>
-                  </li>
-                  <li class="page-item" :class="{ disabled: currentPage >= totalPages }">
-                    <a class="page-link" href="#" @click.prevent="currentPage++">Next</a>
-                  </li>
-                </ul>
-              </nav>
-              <hr>
-              <div class="chart-container">
-                <h4 class="mb-2">Carbon emissions</h4>
-                <canvas id="carbonFootprintChart"></canvas>
-              </div>
 
-              <div class="chart-container mt-4">
-                <h4 class="mb-2">Travel modes</h4>
-                <canvas id="travelCategoryChart"></canvas>
-              </div>
-
-              <Compare v-if="user" :user="user"></Compare>
 
 
             </div>
+            <!-- Other graphs here -->
+            <div class="chart-container mt-2">
+              <h5 class="mb-2">Carbon Savings(g) over Distance Travelled (km)</h5>
+              <canvas id="carbonFootprintChart"></canvas>
+            </div>
+
+            <div class="chart-container mt-4">
+              <h5 class="mb-2">Travel modes</h5>
+              <canvas id="travelCategoryChart"></canvas>
+            </div>
+
+            <!-- <YourMap></YourMap> -->
+            <!-- <Compare v-if="user" :user="user"></Compare> -->
+
+
           </div>
 
         </div>
@@ -274,7 +320,7 @@
             <div class="card-header">
               <h3 class="mb-0">Your Activity</h3>
             </div>
-            
+
 
           </div>
         </div>
@@ -292,15 +338,21 @@ import Navbar from "../components/Navbar.vue";
 import FriendRequest from '../components/FriendRequest.vue';
 import Compare from "../components/Compare.vue";
 import Badges from '../components/Badges.vue';
+import ProgressBar from '../components/ProgressBar.vue';
+// import YourMap from "../components/YourMap.vue";
+
+// Others
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
+import { ref, defineComponent, computed, reactive } from "vue";
+
+// Chart JS 
 import { Chart, registerables } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import { format } from 'date-fns';
-import { ref, defineComponent, computed, reactive } from "vue";
-
-
+import ChartDataLabels from "chartjs-plugin-datalabels";
 Chart.register(...registerables);
+Chart.register(ChartDataLabels);
 
 
 
@@ -325,6 +377,8 @@ export default {
     const userExp = ref(0);
     const expToNextLevel = ref(0);
     const userLvl = ref(0)
+    const carbonSavings = ref(0);
+    const totalKM = ref(0);
     return {
       userExp,
       expToNextLevel,
@@ -343,7 +397,9 @@ export default {
       isSubmitted: false,
       newFriends: false,
       newFeatures: false,
-      lostPlace: false
+      lostPlace: false,
+      carbonSavings,
+      totalKM,
     };
   },
   computed: {
@@ -365,6 +421,8 @@ export default {
     FriendRequest,
     Badges,
     Compare,
+    ProgressBar,
+    // YourMap,
   },
   methods: {
     async drawChart() {
@@ -373,44 +431,68 @@ export default {
         return;
       }
 
-      this.routes.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-      const labels = this.routes.map(route => new Date(route.timestamp).toISOString());
-      const data = this.routes.map(route => parseFloat(route.carbon_emission.toFixed(1)));
+      // this.routes.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      // const labels = this.routes.map(route => new Date(route.timestamp).toISOString());
+      // const data = this.routes.map(route => parseFloat(route.carbon_emission.toFixed(1)));
+
+
+      const dateEmissionsMap = this.routes.reduce((acc, route) => {
+        const date = new Date(route.timestamp).toISOString().split('T')[0];
+        if (!acc[date]) {
+          acc[date] = 0;
+        }
+        acc[date] += parseFloat(route.carbon_emission.toFixed(1));
+        return acc;
+      }, {});
+      const dateDistanceMap = this.routes.reduce((acc, route) => {
+        const date = new Date(route.timestamp).toISOString().split('T')[0];
+        if (!acc[date]) {
+          acc[date] = 0;
+        }
+        acc[date] += route.distance; // Assuming distance is a number
+        return acc;
+      }, {});
+
+      const labels = Object.keys(dateEmissionsMap).sort();
+      const data = labels.map(label => dateEmissionsMap[label]);
+      const distanceData = labels.map(label => dateDistanceMap[label]);
 
       const canvas = document.getElementById('carbonFootprintChart');
+
+
+
+
       if (canvas) {
         const ctx = document.getElementById('carbonFootprintChart').getContext('2d');
         if (this.myChart) {
           this.myChart.destroy();
         }
-        // console.log('Labels:', labels);
-        // console.log('Count of Labels:', labels.length);
-        // console.log('Data:', data);
-        // console.log('Count of Data:', data.length);
-        // console.log('Fake Data', [2, 4, 3],)
-        // console.log('Fake Labels', ["2023-10-26T00:00:00.000Z", "2023-10-27T00:00:00.000Z", "2023-10-28T00:00:00.000Z"],)
 
+        // Carbon Emissions Chart
         const routes = this.routes;
         this.myChart = new Chart(ctx, {
           type: 'bar',
-          // data: {
-          //   labels: parsedLabels,
-          //   datasets: [{
-          //     label: 'Carbon Emission',
-          //     data: data,
-          //     backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          //     borderColor: 'rgba(75, 192, 192, 1)',
-          //     borderWidth: 1
-          //   }]
-          // },
           data: {
             labels: labels,
             datasets: [{
               label: 'Carbon Emission',
               data: data,
+              // datalabels: {
+              //   color: '#444',
+              //   backgroundColor: 'rgba(255,255,255,0.75)',
+              //   borderColor: 'grey',
+              //   borderRadius: 4,
+              //   borderWidth: 1,
+              //   padding: 4
+              // },
               backgroundColor: 'rgba(75, 192, 192, 0.2)',
               borderColor: 'rgba(75, 192, 192, 1)',
               borderWidth: 1
+            },
+            {
+              label: 'Distance Travelled',
+              data: distanceData,
+              // Additional dataset styling goes here
             }]
           },
           options: {
@@ -418,96 +500,98 @@ export default {
             maintainAspectRatio: true,
             aspectRatio: 1,
             scales: {
-              x: {
-                barPercentage: 0.5,
-                categoryPercentage: 0.5,
-                type: 'category',
-                time: {
-                  unit: 'day',
-                  displayFormats: {
-                    day: 'mmm d'
-                  },
-                },
-                bounds: 'data',
-                ticks: {
-                  source: 'data',
-                  autoSkip: true,
-                  minUnit: 'day'
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Carbon emissions (g CO₂e)'
                 }
               },
-              y: {
-                min: 0,
-                suggestedMax: 5,
+              x: {
+                title: {
+                  display: true,
+                  text: 'Date'
+                },
                 ticks: {
-                  stepSize: 0.5
+                  autoSkip: true,
+                  maxTicksLimit: 20 // Adjust this number based on your preference and space
                 }
               }
             },
-            tooltips: {
-              callbacks: {
-                title: function (tooltipItem, data) {
-                  // Get the route corresponding to the hovered bar
-                  const route = routes[tooltipItem[0].index];
-                  // Return the title for the tooltip
-                  return `Route: ${route.start_point_name} to ${route.end_point_name}`;
-                },
-                label: function (tooltipItem, data) {
-                  // Get the route corresponding to the hovered bar
-                  const route = routes[tooltipItem.index];
-                  // Return the label for the tooltip
-                  return `Carbon Emission: ${route.carbon_emission}`;
-                },
-                afterLabel: function (tooltipItem, data) {
-                  // Get the route corresponding to the hovered bar
-                  const route = routes[tooltipItem.index];
-                  // Return additional information for the tooltip
-                  return `Mode of Transport: ${route.transport_mode}`;
+            // tooltip: { //tool tip is deprac
+            //   callbacks: {
+            //     label: function (tooltipItem, data) {
+            //       const emission = data.datasets[0].data[tooltipItem.index].toFixed(2);
+            //       const distance = data.datasets[1].data[tooltipItem.index].toFixed(2);
+            //       return `${emission}g CO₂e, ${distance} km`; // Format as per your preference
+            //     }
+            //   }
+            // },
+            plugins: {
+              datalabels: {
+                align: 'end',
+                anchor: 'end',
+                formatter: (value, context) => {
+                  // Check the dataset index
+                  // If the current dataset is for carbon emissions (index 0), format the label for emissions
+                  if (context.datasetIndex === 0) {
+                    return `${value.toFixed(2)} g CO₂e`;
+                  }
+                  // If the current dataset is for distance (index 1), format the label for distance
+                  else if (context.datasetIndex === 1) {
+                    return `${value.toFixed(2)} km`; // Replace 'km' with your unit for distance if necessary
+                  }
+                  return null; // Return null for any other dataset to avoid displaying a label
                 }
               }
             }
-          }
+          },
+
 
         });
-
-        // Pie chart for travel mode
-        const travelModes = this.routes.map(route => route.transport_mode);
-        const travelModeCounts = {};
-        travelModes.forEach(mode => {
-          if (!travelModeCounts[mode]) {
-            travelModeCounts[mode] = 1;
-          } else {
-            travelModeCounts[mode]++;
-          }
-        });
-        const travelModeLabels = Object.keys(travelModeCounts);
-        const travelModeData = Object.values(travelModeCounts);
-        const travelModeCanvas = document.getElementById('travelCategoryChart');
-        if (travelModeCanvas) {
-          const travelModeCtx = document.getElementById('travelCategoryChart').getContext('2d');
-          if (this.myTravelModeChart) {
-            this.myTravelModeChart.destroy();
-          }
-          this.myTravelModeChart = new Chart(travelModeCtx, {
-            type: 'pie',
-            data: {
-              labels: travelModeLabels,
-              datasets: [{
-                data: travelModeData,
-                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
-                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
-                borderWidth: 1
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: true,
-              aspectRatio: 2
-            }
-          });
-        }
-
-
       }
+
+
+      // Travel category chart
+      const travelModes = this.routes.map(route => route.transport_mode);
+      const travelModeCounts = {};
+      travelModes.forEach(mode => {
+        if (!travelModeCounts[mode]) {
+          travelModeCounts[mode] = 1;
+        } else {
+          travelModeCounts[mode]++;
+        }
+      });
+      const travelModeLabels = Object.keys(travelModeCounts);
+      const travelModeData = Object.values(travelModeCounts);
+
+      const travelModeCanvas = document.getElementById('travelCategoryChart');
+      if (travelModeCanvas) {
+        const travelModeCtx = document.getElementById('travelCategoryChart').getContext('2d');
+        if (this.myTravelModeChart) {
+          this.myTravelModeChart.destroy();
+        }
+        this.myTravelModeChart = new Chart(travelModeCtx, {
+          type: 'pie',
+          data: {
+            labels: travelModeLabels,
+            datasets: [{
+              data: travelModeData,
+              backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
+              borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 2
+          }
+        });
+      }
+
+
+
     },
     fetchData() {
       this.fetchRoutes().then(() => {
@@ -528,6 +612,9 @@ export default {
         this.userLvl = response.data.level;
         this.userExp = response.data.exp;
         this.userEmail = response.data.email
+        this.carbonSavings = response.data.carbonsavings;
+        this.totalKM = response.data.total_km;
+        // console.log(response.data);
 
       } catch (error) {
         console.error("Error fetching user", error);

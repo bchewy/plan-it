@@ -578,6 +578,47 @@ def add_carbon_savings(user_email):
         return jsonify({"message": "User not found."}), 404
 
 
+@app.route("/users/<user_email>/total_km", methods=['POST'])
+@require_api_key
+def update_total_km(user_email):
+    """
+    Update total distance for a user
+    ---
+    tags:
+      - Users
+    security:
+      - api_key: []
+    parameters:
+      - name: user_email
+        in: path
+        type: string
+        required: true
+        description: The email of the user
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            total_km:
+              type: number
+              description: The total distance to update
+    responses:
+      200:
+        description: Total distance updated successfully
+      404:
+        description: User not found
+    """
+    data = request.get_json()
+    user = user_collection.find_one({"email": user_email})
+    if user:
+        user_collection.update_one({"email": user_email}, {"$set": {"total_km": data['total_km']}})
+        return jsonify({"message": "Total distance updated successfully."}), 200
+    else:
+        return jsonify({"message": "User not found."}), 404
+
+
+
 # Users get individual user ## Internal 
 @app.route("/users/iz/<user_email>", methods=['GET'])
 @require_api_key

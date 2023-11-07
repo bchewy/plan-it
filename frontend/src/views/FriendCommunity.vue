@@ -57,7 +57,7 @@ export default {
                 console.log("Fetching posts for friend", friend)
                 const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(friend)}/posts`;
                 const response = await axios.get(url, { headers });
-                posts.value = [...posts.value, ...response.data.reverse()].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));;
+                posts.value = [...posts.value, ...response.data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));;
             }
 
 

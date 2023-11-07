@@ -28,6 +28,7 @@
     "bootstrap": "^5.3.2",
     "chart.js": "^4.4.0",
     "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "d3": "^7.8.5",
     "date-fns": "^2.30.0",
     "esbuild-node-loader": "^0.8.0",
