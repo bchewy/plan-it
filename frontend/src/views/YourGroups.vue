@@ -23,10 +23,49 @@
                             <br>
                             <p class="card-text"><span class="fw-bold">Owner:</span> {{ group.owner_email }}</p>
                             
-                            <p class="card-text"> <span class="fw-bold">Members:</span>
-                                <ul class="list-unstyled">
-                                    <li v-for="member in group.members ">{{ member }}</li>
-                                </ul> </p>
+                            <p class="card-text"> <span class="fw-bold">Members:</span></p>
+                                <ul class="list-group">
+                                    <li v-for="member in group.members " class="list-group-item">{{ member }}</li>
+                                </ul> <br>
+                                
+                            <div v-if="group.badges.length>0">
+                            <p class="card-text"><span class="fw-bold">Badges:</span></p>
+                            <span v-for="badge in group.badges">
+                                <div class="col-6 text-center">
+                                    <img :src="badge.image" class="w-100">
+                                    <button class="btn btn-secondary" data-bs-toggle="modal" :data-bs-target="'#a'+badge._id">More info</button>
+                                </div>
+                                    <div class="modal fade" :id="'a'+badge._id" tabindex="-1" :aria-labelledby="badge._id" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" :id="badge.name">Badge Info</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+                                <div class="row">
+                                <div class="col justify-content-end">
+								<img :src="badge.image" class="w-100">
+							</div>
+                            <div class="col align-items-center d-flex">
+                               <div> <span class="fw-bold fs-4">{{ badge.name }} </span><br><br> {{ badge.description }} <br><br><strong>Milestone:</strong> {{ badge.milestone }}</div>
+                                
+                            </div>
+                                </div>
+							<div class="modal-footer">
+								
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+                                </div>
+                                
+                            </span>
+
+                            
+                            </div>
                         </div>
                     </div>
                 </div>
