@@ -2,12 +2,12 @@
     <!-- nav -->
     <NavBar />
     <CommunitySidebar></CommunitySidebar>
-    <div class="container-fluid" style="background-color: rgb(232, 251, 240);">
+    <div class="container-fluid" style="background-color: #739072;">
         <div class="row justify-content-center">
 
             <div class="col-10 vh-100">
 
-                <h1 class="text-center py-3 text-muted" style="font-weight: bold;">Create your very group!</h1>
+                <h1 class="text-center py-3 beige-colour" style="font-weight: bold;">Create your very own group!</h1>
                 <div class="row justify-content-center">
 
                     <form class="col-8 rounded border bg-white p-3" @submit.prevent="onSubmit">
@@ -27,7 +27,7 @@
                             </select>
                             </div> -->
 
-                        <button type="submit" class="btn btn-primary"><font-awesome-icon icon="fa-solid fa-plus-square"></font-awesome-icon> Create group!</button>
+                        <button type="submit" class="btn btn-success"><font-awesome-icon icon="fa-solid fa-plus-square"></font-awesome-icon> Create group!</button>
 
                     </form>
                 </div>
@@ -132,3 +132,12 @@ export default {
     }
 }
 </script>
+
+
+<style scoped>
+
+.beige-colour {
+  color: rgba(236, 227, 206, 1);
+}
+
+</style>
