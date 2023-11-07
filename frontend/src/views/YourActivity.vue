@@ -9,9 +9,13 @@
 		</div>
 		<div class="row justify-content-center">
 			
-			
-			<PostComponent v-for="post in posts" :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
-			<button class="btn">hi</button>
+			<span  v-for="post in posts">
+			<PostComponent :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
+			<div class="col justify-content-center d-flex">
+				<button type="button" class="btn btn-danger" :id="post._id">Delete post! </button>
+				
+			</div>
+		</span>
 		</div>
 	</div>
 </template>
