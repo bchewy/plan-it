@@ -1843,6 +1843,7 @@ def create_badge():
     name = data.get('name')
     description = data.get('description')
     image = request.files.get('image')
+    milestone= data.get('milestone')
 
 
     # Upload the image to S3 and get the public URL
@@ -1853,8 +1854,8 @@ def create_badge():
     image = image_url
     os.remove(image_filename)
 
-    if name and description and image:
-        badge = {"name": name, "description": description, "image": image}
+    if name and description and image and milestone:
+        badge = {"name": name, "description": description, "image": image, "milestone":milestone}
         db.badges.insert_one(badge)
         return jsonify({"message": "Badge created successfully."}), 200
     else:
