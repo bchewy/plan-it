@@ -4,7 +4,7 @@
 		<div class="sticky-top border-bottom" style="background-color:rgb(232, 251, 240); z-index: 1;">
 			<CommunitySidebar></CommunitySidebar>
 			<div class="text-center h2 mb-3 pt-4">
-				<span class="header" style="font-weight: bold;">For You </span>
+				<span class="header text-muted" style="font-weight: bold;">For You </span>
 			</div>
 		</div>
 		<div class="row justify-content-center">
