@@ -7,7 +7,7 @@
 
             <div class="col-10 vh-100">
 
-                <h1 class="text-center py-3 text-colour" style="font-weight: bold;">Create your very group!</h1>
+                <h2 class="text-center py-3 text-colour" style="font-weight: bold;">Create your very group!</h2>
                 <div class="row justify-content-center">
 
                     <form class="col-8 rounded border bg-white p-3" @submit.prevent="onSubmit">

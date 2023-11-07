@@ -4,14 +4,16 @@
 
     <CommunitySidebar></CommunitySidebar>
 
-
+    
+    
     <div class="container-fluid vh-100" style="background-color: #a8cfa8;">
         
         <div class="text-center h2 mb-3 pt-4">
 				<span class="header text-muted" style="font-weight: bold;">Your Groups </span>
 			</div>
+            <div v-if="loading">Loading...</div>
             
-            <div v-for="(groupArray, index) in groups" :key="index" class="row">
+            <div v-else v-for="(groupArray, index) in groups" :key="index" class="row">
                 <div v-for="group in groupArray" :key="group._id" class="col-md-4 mb-4">
                     <div class="card">
                         <img class="card-img-top" :src="group.group_image" alt="Group Image" v-if="group.group_image">
@@ -55,6 +57,7 @@ export default {
     }
     ,
     setup() {
+        const loading=ref(true)
         const { loginWithRedirect, user, isAuthenticated } = useAuth0();
         const badges = false
         const groups = ref([]);
@@ -72,16 +75,17 @@ export default {
                 // console.log(response);
                 console.log(response.data.groups)
                 groups.value = response.data.groups;
+                loading.value=false
             } catch (error) {
                 console.error(error);
             }
         }
 
-        onMounted(async () => {
-            if (user.value) {
-        await getGroups();
-            }
-            });;
+        watch(user, async (newUser) => {
+        if (newUser) {
+            await getGroups();
+        }
+    }, { immediate: true });
 
         return {
             login: async () => {
@@ -97,6 +101,7 @@ export default {
             },
             user,
             isAuthenticated,
+            loading,
             badges,
             getGroups,
             groups
