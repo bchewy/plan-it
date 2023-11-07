@@ -5,9 +5,9 @@
     <CommunitySidebar></CommunitySidebar>
 
 
-    <div class="container-fluid vh-100" style="background-color: rgb(232, 251, 240);">
+    <div class="container-fluid vh-100" style="background-color: #739072;">
         <section class="py-5">
-            <h2 class="text-center mb-5" style="font-weight: bold">Your Groups</h2>
+            <h2 class="text-center mb-5 beige-colour" style="font-weight: bold">Your Groups</h2>
             <div v-for="(groupArray, index) in groups" :key="index" class="row">
                 <div v-for="group in groupArray" :key="group._id" class="col-md-4 mb-4">
                     <div class="card">
@@ -98,3 +98,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+
+.beige-colour {
+  color: rgba(236, 227, 206, 1);
+}
+
+</style>
