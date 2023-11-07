@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="row justify-content-center" style = "background-color:  #a8cfa8 ;">
-            <CreatePostComponent @postCreated="fetchData"></CreatePostComponent>
+            
             <PostComponent v-for="post in posts" :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
         </div>
     </div>
