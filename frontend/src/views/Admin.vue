@@ -204,10 +204,14 @@
 								<input type="text" class="form-control" id="badge-description" v-model="newBadge.description">
 							</div>
 							<div class="mb-3">
+								<label for="badge-milestone" class="form-label">Milestone</label>
+								<input type="text" class="form-control" id="badge-milestone" v-model="newBadge.milestone">
+							</div>
+							<div class="mb-3">
 								<label for="badge-image" class="form-label">Image</label>
 								<input type="file" class="form-control" id="badge-image" @change="handleFileUpload" accept=".png, .jpg, .jpeg">
 							</div>
-							<button type="submit" class="btn btn-success">Add</button>
+							<button type="submit" class="btn btn-success" data-bs-dismiss="modal">Add</button>
 						</form>
 					</div>
 				</div>
@@ -260,7 +264,9 @@ export default {
 			newBadge: {
 				name: '',
 				description: '',
+				milestone:'',
 				image: null,
+
 			},
 			selectedBadges: reactive({}),
 		};
@@ -341,7 +347,7 @@ export default {
 			let myModal = new bootstrap.Modal(myModalEl);
 			myModal.show();
 
-			if (!this.newBadge.name || !this.newBadge.description || !this.newBadge.image) {
+			if (!this.newBadge.name || !this.newBadge.description || !this.newBadge.image || !this.newBadge.milestone) {
 				toast.error(`Please fill in all fields.`, {
 					autoClose: 5000,
 					position: toast.POSITION.TOP_CENTER,
@@ -357,6 +363,7 @@ export default {
 			formData.append('name', this.newBadge.name);
 			formData.append('description', this.newBadge.description);
 			formData.append('image', this.newBadge.image);
+			formData.append('milestone',this.newBadge.milestone)
 
 			try {
 				const response = await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/badges`, formData, {
