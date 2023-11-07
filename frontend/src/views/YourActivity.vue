@@ -9,13 +9,31 @@
 		</div>
 		<div class="row justify-content-center">
 			
-			<span  v-for="post in posts">
+			<div  v-for="post in posts">
 			<PostComponent :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
 			<div class="col justify-content-center d-flex">
-				<button type="button" class="btn btn-danger" :id="post._id">Delete post! </button>
-				
+				<button type="button" class="btn btn-danger" data-bs-toggle="modal" :data-bs-target="'#a'+post._id">Delete post! </button>
+				<div class="modal fade" :id="'a'+post._id" tabindex="-1" :aria-labelledby="post._id" aria-hidden="true">
+					<div class="modal-dialog">
+						
+						<div class="modal-content">
+							
+							
+								
+							
+							<div class="modal-body fs-5 text-center">
+								Are you sure you want to delete this post? <br>
+								This action is <strong>irreversible</strong>!
+							</div>
+								<div class="modal-footer justify-content-center">
+								<button type="button" class="btn btn-secondary col-3" data-bs-dismiss="modal" >Cancel</button>
+								<button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal" @click="deletePost()">Confirm</button>
+								</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</span>
+		</div>
 		</div>
 	</div>
 </template>
