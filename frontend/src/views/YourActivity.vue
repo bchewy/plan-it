@@ -27,7 +27,7 @@
 							</div>
 								<div class="modal-footer justify-content-center">
 								<button type="button" class="btn btn-secondary col-3" data-bs-dismiss="modal" >Cancel</button>
-								<button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal" @click="deletePost()">Confirm</button>
+								<button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal" @click="deletePost(post._id)">Confirm</button>
 								</div>
 						</div>
 					</div>
