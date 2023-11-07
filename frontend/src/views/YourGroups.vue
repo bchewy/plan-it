@@ -6,7 +6,7 @@
 
     
     
-    <div class="container-fluid vh-100" style="background-color: #a8cfa8;">
+    <div class="container-fluid" style="background-color: #a8cfa8;">
         
         <div class="text-center h2 mb-3 pt-4">
 				<span class="header text-muted" style="font-weight: bold;">Your Groups </span>
@@ -15,26 +15,29 @@
             
             <div v-else v-for="(groupArray, index) in groups" :key="index" class="row">
                 <div v-for="group in groupArray" :key="group._id" class="col-md-4 mb-4">
-                    <div class="card">
+                    <div class="card" style="background-color: rgb(248, 244, 239);">
                         <img class="card-img-top" :src="group.group_image" alt="Group Image" v-if="group.group_image">
                         <div class="card-body">
                         
-                            <h5 class="card-title fs-2">{{ group.name }}</h5>
+                            <h5 class="card-title fs-2 text-center">{{ group.name }}</h5>
                             <br>
                             <p class="card-text"><span class="fw-bold">Owner:</span> {{ group.owner_email }}</p>
                             
                             <p class="card-text"> <span class="fw-bold">Members:</span></p>
                                 <ul class="list-group">
-                                    <li v-for="member in group.members " class="list-group-item">{{ member }}</li>
+                                    <li v-for="member in group.members " class="list-group-item bg-light">{{ member }}</li>
                                 </ul> <br>
                                 
                             <div v-if="group.badges.length>0">
                             <p class="card-text"><span class="fw-bold">Badges:</span></p>
-                            <span v-for="badge in group.badges">
-                                <div class="col-6 text-center">
-                                    <img :src="badge.image" class="w-100">
-                                    <button class="btn btn-secondary" data-bs-toggle="modal" :data-bs-target="'#a'+badge._id">More info</button>
-                                </div>
+                            
+                                
+                                <div v-for="badge in group.badges" class="col-11 text-center rounded border mb-2">
+                                    <img :src="badge.image" class="w-75 rounded-circle mb-3 mt-3"><br>
+                                    <button class="btn btn-secondary mb-3" data-bs-toggle="modal" :data-bs-target="'#a'+badge._id">More info</button>
+                                
+                                
+                                
                                     <div class="modal fade" :id="'a'+badge._id" tabindex="-1" :aria-labelledby="badge._id" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content">
@@ -62,7 +65,7 @@
 
                                 </div>
                                 
-                            </span>
+                            </div>
 
                             
                             </div>
