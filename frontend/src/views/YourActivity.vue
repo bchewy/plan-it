@@ -50,7 +50,7 @@ export default {
 	name: 'Community',
 	components: {
 		NavBar,
-		CreatePostComponent,
+		
 		PostComponent,
 		CommunitySidebar,
 	},
@@ -88,6 +88,20 @@ export default {
 			fetchPosts,
 
 		};
+	},
+	methods:{
+		async deletePost(postID){
+			const url=`${import.meta.env.VITE_API_ENDPOINT}/posts/${postID}`
+			const headers= { "x-api-key": "PlanItIsTheBestProjectEverXYZ", }
+			try{
+			const response= await axios.delete(url,{headers})
+			}
+			catch(error){
+				console.error("Error",error)
+			}
+			location.reload()
+		
+		}
 	}
 }
 </script>
