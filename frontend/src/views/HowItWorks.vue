@@ -91,7 +91,7 @@ ul li{
 
 <template>
 	<Navbar />
-	<div class="container-fluid pt-3 pb-3 bg-supergreen">
+	<div class="container-fluid pt-3 pb-3" style="background-color: ;">
 		<div class="row justify-content-center">
 			<div class="block col-lg-8">
 				<h2 class="text-center"><a class="title">What is It?</a></h2>

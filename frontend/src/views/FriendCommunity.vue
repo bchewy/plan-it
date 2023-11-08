@@ -1,14 +1,15 @@
 <template>
     <NavBar />
-    <div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: rgb(232, 251, 240);">
-        <div class="sticky-top border-bottom" style="background-color:rgb(232, 251, 240); z-index: 1;">
+    
+    <div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: #a8cfa8;">
+        <div class="sticky-top border-bottom" style="background-color: #a8cfa8; z-index: 1;">
             <CommunitySidebar></CommunitySidebar>
             <div class="text-center h2 mb-3 pt-4">
-                <span class="header" style="font-weight: bold;">Your Friends </span>
+                <span class="header text-muted" style="font-weight: bold;">Your Friends </span>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <CreatePostComponent @postCreated="fetchData"></CreatePostComponent>
+        <div class="row justify-content-center" style = "background-color:  #a8cfa8 ;">
+            
             <PostComponent v-for="post in posts" :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
         </div>
     </div>
@@ -92,3 +93,10 @@ export default {
     }
 }
 </script>
+<style scoped>
+
+.beige-colour {
+  color: rgba(236, 227, 206, 1);
+}
+
+</style>

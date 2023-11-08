@@ -84,6 +84,11 @@ const router = createRouter({
 			component: () => import('./views/YourGroups.vue')
 		},
 		{
+			path: '/community/yourActivity',
+			component: () => import('./views/YourActivity.vue')
+		},
+
+		{
 			path: '/compare',
 			component: () => import('./components/Compare.vue')
 		},
