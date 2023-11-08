@@ -61,6 +61,6 @@ export default {
 
 <style scoped>
 .beige-colour {
-  color: rgb(68, 49, 4);
+	color: rgb(68, 49, 4);
 }
 </style>
