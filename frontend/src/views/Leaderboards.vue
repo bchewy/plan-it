@@ -237,6 +237,7 @@ export default {
 				console.error("Error fetching routes:", error);
 			}
 		},
+		// This call fetch the iniital users in the leaderboard page.
 		async fetchUsers() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users`;
 			const headers = {
@@ -248,6 +249,7 @@ export default {
 				this.users = response.data;
 				for (let user of this.users) {
 					try {
+						// console.log(user);
 						const badgeUrl = `${import.meta.env.VITE_API_ENDPOINT}/users/${user.email}/badges`;
 						const badgeResponse = await axios.get(badgeUrl, { headers });
 						const badgeIds = badgeResponse.data;
@@ -262,6 +264,7 @@ export default {
 								const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
 
 								// Add the badge details to the user badges array
+								// console.log(badgeDetailsResponse.data);
 								user.badges.push({
 									id: badgeId,
 									image: badgeDetailsResponse.data.image,
@@ -278,6 +281,8 @@ export default {
 				console.error("Error fetching users:", error);
 			}
 		},
+
+		// This call fetches the friends in the leaderboard page.
 		async fetchFriendStats(friends) {
 			// console.log("Fetching friend stats")
 			// console.log(friends)
@@ -304,6 +309,7 @@ export default {
 						for (let badge of response.data.badges) {
 							const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badge}`;
 							const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
+
 							// Add the badge details to the user badges array
 							stats[stats.length - 1].stats.badges.push({
 								id: badge,
