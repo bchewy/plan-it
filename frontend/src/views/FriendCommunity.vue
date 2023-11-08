@@ -1,6 +1,6 @@
 <template>
     <NavBar />
-    
+
     <div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: #a8cfa8;">
         <div class="sticky-top border-bottom" style="background-color: #a8cfa8; z-index: 1;">
             <CommunitySidebar></CommunitySidebar>
@@ -8,8 +8,8 @@
                 <span class="header text-muted" style="font-weight: bold;">Your Friends </span>
             </div>
         </div>
-        <div class="row justify-content-center" style = "background-color:  #a8cfa8 ;">
-            
+        <div class="row justify-content-center" style="background-color:  #a8cfa8 ;">
+
             <PostComponent v-for="post in posts" :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
         </div>
     </div>
@@ -30,9 +30,6 @@ export default {
         CreatePostComponent,
         PostComponent,
         CommunitySidebar,
-    },
-    created() {
-        this.fetchData();
     },
     setup() {
         const { loginWithRedirect, user, isAuthenticated, isLoading } = useAuth0();
@@ -58,7 +55,8 @@ export default {
                 console.log("Fetching posts for friend", friend)
                 const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(friend)}/posts`;
                 const response = await axios.get(url, { headers });
-                posts.value = [...posts.value, ...response.data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));;
+                posts.value = [...posts.value, ...response.data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                console.log(posts.value)
             }
 
 
@@ -94,9 +92,7 @@ export default {
 }
 </script>
 <style scoped>
-
 .beige-colour {
-  color: rgba(236, 227, 206, 1);
+    color: rgba(236, 227, 206, 1);
 }
-
 </style>
