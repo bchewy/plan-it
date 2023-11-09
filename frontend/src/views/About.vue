@@ -56,7 +56,7 @@
 	/* Add padding to avoid text touching the edges */
 	margin: 10px;
 	/* Add some margin if needed */
-	max-width: 60%;
+	max-width: 65%;
 	/* Control the max width of the transparent background */
 	box-sizing: border-box;
 }
@@ -116,9 +116,10 @@
 
 			<!-- Section 1: Welcome -->
 			<div class="col-12 story-part ">
-				<div class="text-background">
-					<h1>Get Scrolling to:</h1>
-					<p><span class="element"></span></p>
+				<div class="">
+					<img class="img-fluid w-25" src="https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/bchewy+conscious+travel+mascot.png" alt="PlanIt Logo">
+					<p class="">Hello! I'm Planny:<br>Scroll to...</p>
+					<h2><span class="text-success element"></span></h2>
 					<!-- <h2>Welcome to PlanIt!</h2>
 					<p>PlanIt helps you make sustainable transportation choices while exploring your city. Our app allows you to log and compare routes across different modes like walking, biking, driving, and public transit.</p> -->
 					<!-- <img class="img-fluid" src="../assets/product_demo_real.gif" alt="Product Demo"> -->
@@ -143,7 +144,7 @@
 			<div class="col-12 story-part">
 				<div class="text-background">
 					<h3>See Your Profile</h3>
-					<p>View all your logged routes, earned badges, points, and current level on your profile. Compare stats with friends on the leaderboard.</p>
+					<p class="text-muted">View all your logged routes, earned badges, points, and current level on your profile. Compare stats with friends on the leaderboard.</p>
 					<div class="video-container">
 						<video controls autoplay muted loop>
 							<source src="https://bchewy-videos.s3.ap-southeast-1.amazonaws.com/profile.mov" type="video/mp4">
@@ -158,7 +159,7 @@
 				<div class="text-background">
 
 					<h3>Earn Points and Level Up</h3>
-					<p>Gain XP points and advance levels for choosing low-carbon active transport like walking and biking. Unlock badges and rewards as you level up!</p>
+					<p class="text-muted">Gain XP points and advance levels for choosing low-carbon active transport like walking and biking. Unlock badges and rewards as you level up!</p>
 					<div class="video-container">
 						<video controls autoplay muted loop>
 							<source src="https://bchewy-videos.s3.ap-southeast-1.amazonaws.com/game.mov" type="video/mp4">
@@ -173,7 +174,7 @@
 				<div class="text-background">
 
 					<h3>Connect with Community</h3>
-					<p>Join the conversation around sustainable transportation. Share route ideas, transit tips, and stories with other members.</p>
+					<p class="text-muted">Join the conversation around sustainable transportation. Share route ideas, transit tips, and stories with other members.</p>
 					<div class="video-container">
 						<video controls autoplay muted loop>
 							<source src="https://bchewy-videos.s3.ap-southeast-1.amazonaws.com/community.mov" type="video/mp4">
@@ -189,7 +190,7 @@
 					<h3>Built with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(241, 18, 18, 1);transform: ;msFilter:;">
 							<path d="M20.205 4.791a5.938 5.938 0 0 0-4.209-1.754A5.906 5.906 0 0 0 12 4.595a5.904 5.904 0 0 0-3.996-1.558 5.942 5.942 0 0 0-4.213 1.758c-2.353 2.363-2.352 6.059.002 8.412L12 21.414l8.207-8.207c2.354-2.353 2.355-6.049-.002-8.416z"></path>
 						</svg></h3>
-					<p>Our platform is fully built to run on sustainable energy on AWS</p>
+					<p>Our website fully runs on <a class="link-success" href="https://sustainability.aboutamazon.com/products-services/the-cloud">sustainable energy</a> thanks to AWS.</p>
 
 					<div class="d-flex flex-wrap justify-content-between">
 						<div class="mb-3">
@@ -215,6 +216,10 @@
 						<div class="mb-3">
 							<img style="height: 35px;" src="../assets/cf.png" alt="Tool 1">
 							<p>Cloudfront</p>
+						</div>
+						<div class="mb-3">
+							<img style="height: 35px;" src="https://static-00.iconduck.com/assets.00/flask-icon-1594x2048-84mjydzf.png" alt="Tool 1">
+							<p>Flask</p>
 						</div>
 
 					</div>
