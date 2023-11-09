@@ -77,7 +77,7 @@
 
 .text-background ul li {
 	/* Your styles for list items here */
-	text-align: left;
+	text-align: center;
 	/* or 'center' as per your design */
 }
 
@@ -147,6 +147,10 @@
 
 					<div class="d-flex flex-wrap justify-content-between">
 						<div class="mb-3">
+							<img style="height: 50px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/2367px-Vue.js_Logo_2.svg.png" alt="Tool 1">
+							<p>VueJS</p>
+						</div>
+						<div class="mb-3">
 							<img style="height: 50px;" src="https://www.svgrepo.com/show/331488/mongodb.svg" alt="Tool 1">
 							<p>MongoDB</p>
 						</div>
@@ -156,24 +160,42 @@
 						</div>
 						<div class="mb-3">
 							<img style="height: 50px;" src="../assets/ec2.png" alt="Tool 1">
-							<p>AWS EC2</p>
+							<p>EC2</p>
 						</div>
 						<div class="mb-3">
 							<img style="height: 50px;" src="../assets/s3.png" alt="Tool 1">
-							<p>AWS S3</p>
+							<p>S3</p>
 						</div>
 						<div class="mb-3">
 							<img style="height: 50px;" src="../assets/cf.png" alt="Tool 1">
-							<p>AWS Cloudfront</p>
+							<p>Cloudfront</p>
 						</div>
+
 					</div>
 
 
-					<h3>Contributors</h3>
-					<p>@bchewy - frontend/backend</p>
-					<p>@ryan - frontend/backend</p>
-					<p>@melody - frontend</p>
-					<p>@saph - frontend</p>
+					<h3>Meet Our Contributors</h3>
+					<ul class="d-flex flex-column">
+						<li class="mb-1">
+							<img style="height: 35px;" src="https://bchewy.s3.ap-southeast-1.amazonaws.com/code+block%60%60%60%3A+'Brian+Chew+LinkedIn.jpeg">&nbsp;
+							<a class="link-success" href="https://github.com/bchewy">@bchewy</a>
+						</li>
+						<li class="mb-1">
+							<img style="height: 35px;" src="../assets/s3.png" alt="Tool 1">&nbsp;
+
+							<a class="link-success" href="https://github.com/ryan99324">@ryan99324</a>
+						</li>
+						<li class="mb-1">
+							<img style="height: 35px;" src="../assets/s3.png" alt="Tool 1">&nbsp;
+
+							<a class="link-success" href="https://github.com/melodywong23">@melodywong23</a>
+						</li>
+						<li class="mb-1">
+							<img style="height: 35px;" src="../assets/s3.png" alt="Tool 1">&nbsp;
+
+							<a class="link-success" href="https://github.com/saphalex">@saphalex</a>
+						</li>
+					</ul>
 				</div>
 			</div>
 
