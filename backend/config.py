@@ -5,3 +5,4 @@ load_dotenv()
 class Config:
     DEBUG = True
     MONGO_URI = os.getenv("MONGO_URI")
+    API_KEY = os.getenv("API_KEY")
