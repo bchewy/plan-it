@@ -72,7 +72,7 @@
 										</td>
 										<td>{{ user.level }}</td>
 										<!-- <td>{{ user.exp }}</td> -->
-										<td v-if="user.carbonsavings">{{ user.carbonsavings }} Co2 kg</td>
+										<td v-if="user.carbonsavings">{{ user.carbonsavings.toFixed(2) }}g Co2 </td>
 										<td v-else></td>
 									</tr>
 								</tbody>
