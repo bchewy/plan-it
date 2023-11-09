@@ -15,7 +15,7 @@ use admin
 db.createUser(
   {
     user: "admin",
-    pwd: "T=5T1i+iWUMac4sWAj!9",
+    pwd: "T=5T1i+iWUMac4sWAj!9", # this password doesn't work.. plz dont try
     roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
   }
 )
