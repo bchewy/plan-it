@@ -15,7 +15,6 @@ import VueGoogleMaps from 'bchewy-maps'
 
 // Auth0
 import { createAuth0 } from '@auth0/auth0-vue';
-import authConfig from "../auth_config.json";
 
 // animations
 import 'animate.css'
