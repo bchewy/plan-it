@@ -20,9 +20,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-southeast-1 # Replace with your AWS region
 
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
+      # - uses: oven-sh/setup-bun@v1
+      #   with:
+      #     bun-version: latest
 
       - name: Create .env.production file
         run: |
@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend
-          bun install
+          npm install
 
       - name: Build
         run: |
