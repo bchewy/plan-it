@@ -64,8 +64,8 @@ app.use(VueGoogleMaps, {
 })
 app.use(
 	createAuth0({
-		domain: authConfig.domain,
-		clientId: authConfig.clientId,
+		domain: `${import.meta.env.VITE_AUTH0_DOMAIN}`,
+		clientId: `${import.meta.env.VITE_AUTH0_CLIENTID}`,
 		authorizationParams: {
 			redirect_uri: window.location.origin,
 		}
