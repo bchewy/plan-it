@@ -1,12 +1,14 @@
 <template>
   <header>
     <!-- nav -->
-    <NavBar />
+   
   </header>
-  <div class="container-fluid p-0">
+  <div class="container-fluid p-0 scroll-container">
+    
 
-
-    <section class=" section-background text-light text-center vh-100 d-flex align-items-center justify-content-center" >
+    <section >
+      <NavBar />
+    <div class="section-background text-light text-center vh-100 d-flex align-items-center justify-content-center" >
       <div class="container">
         <div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
           <div class="text-center">
@@ -17,6 +19,7 @@
           </div>
         </div>
       </div>
+    </div>
       <!--/div-->
     </section>
     <!-- </Parallaxy> -->
@@ -254,10 +257,11 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  min-height: 50em;
+  min-height: 100vh;
   background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/Brown+pathway.jpg');
   background-size: cover;
-  opacity: 0.7; /* Adjust this to your liking */
+  /* Adjust this to your liking */
+  opacity:0.9;
   z-index: -1;
 
 }
@@ -278,6 +282,16 @@ export default {
   z-index: -1;
 }
 
+.scroll-container {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+section {
+  scroll-snap-align: start;
+  height: 100vh;
+}
 
 /* Additional styles if needed */
 </style>
