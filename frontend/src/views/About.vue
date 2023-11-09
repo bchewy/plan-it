@@ -227,7 +227,7 @@
 							<a class="link-success" href="https://github.com/bchewy">@bchewy</a>
 						</li>
 						<li class="mb-1">
-							<img style="height: 35px;" src="https://cdn.vectorstock.com/i/preview-1x/08/19/gray-photo-placeholder-icon-design-ui-vector-35850819.jpg" alt="">&nbsp;
+							<img style="height: 35px;" src="../assets/ryan.jpg" alt="">&nbsp;
 
 							<a class="link-success" href="https://github.com/ryan99324">@ryan99324</a>
 						</li>
