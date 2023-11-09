@@ -26,31 +26,31 @@
                                 <option>2</option> 
                             </select>
                             </div> -->
-                        
-                            <div class="mb-3">
-                                <button class="btn btn-secondary col" type="button" data-bs-target="#friendsOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-plus" /> Select your members!</button>
-				<!--tag friend model-->
-				<div class="modal fade" id="friendsOverlay" tabindex="-1" aria-labelledby="friendsOverlayLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="TagFriendsModalLabel">Your friends</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-							</div>
-							<div class="modal-body">
-								<ul class="list-group">
-                                    
-									<li v-for="friend in friends" class="list-group-item bg-light"> <input type="checkbox" :value="friend.email" v-model="groupMembers" class="me-2">{{ friend.handle }} </li>
 
-								</ul>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="groupMembers = []">Cancel</button>
-								<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
-							</div>
-						</div>
-					</div>
-				</div>
+                        <div class="mb-3">
+                            <button class="btn btn-secondary col" type="button" data-bs-target="#friendsOverlay" data-bs-toggle="modal"><font-awesome-icon icon="fa-solid fa-plus" /> Select your members!</button>
+                            <!--tag friend model-->
+                            <div class="modal fade" id="friendsOverlay" tabindex="-1" aria-labelledby="friendsOverlayLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="TagFriendsModalLabel">Your friends</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <ul class="list-group">
+
+                                                <li v-for="friend in friends" class="list-group-item bg-light"> <input type="checkbox" :value="friend.email" v-model="groupMembers" class="me-2">{{ friend.handle }} </li>
+
+                                            </ul>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="groupMembers = []">Cancel</button>
+                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
 
@@ -88,48 +88,48 @@ export default {
         NavBar,
         CommunitySidebar
     },
-   
-    
+
+
     setup() {
         const { loginWithRedirect, user, isAuthenticated } = useAuth0();
         const badges = false
         const groupName = ref('');
         const groupImage = ref(null);
-        const groupMembers=ref([]);
-        const friends=ref([])
+        const groupMembers = ref([]);
+        const friends = ref([])
 
-        const friendList= async()=>{
-            
+        const friendList = async () => {
+
             const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${user.value.email}`
-            
-            const headers={
-                    'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
-                }
-            const response= await axios.get(url,{headers})
-            for (let friend of response.data.friends){
+
+            const headers = {
+                'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
+            }
+            const response = await axios.get(url, { headers })
+            for (let friend of response.data.friends) {
                 const friendDetailsURL = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(friend)}`
-				try {
-					const friendDetailsResponse = await axios.get(friendDetailsURL, { headers });
-					friends.value.push({ handle: "@" + friendDetailsResponse.data.handle, email: friendDetailsResponse.data.email})
-				}
-				catch (error) {
-					console.error("error", error)
-				}
+                try {
+                    const friendDetailsResponse = await axios.get(friendDetailsURL, { headers });
+                    friends.value.push({ handle: "@" + friendDetailsResponse.data.handle, email: friendDetailsResponse.data.email })
+                }
+                catch (error) {
+                    console.error("error", error)
+                }
 
             }
             console.log(friends)
         }
-        
-        const createGroup = async (userEmail, groupName, groupImage,groupMembers) => {
+
+        const createGroup = async (userEmail, groupName, groupImage, groupMembers) => {
             const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${userEmail}/groups`;
             const formData = new FormData();
-            
+
             formData.append('group_name', groupName);
             formData.append('group_image', groupImage);
-            formData.append('group_members',groupMembers)
-            const response = await axios.post(url, formData,{
+            formData.append('group_members', groupMembers)
+            const response = await axios.post(url, formData, {
                 headers: {
-                    'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+                    'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
                 }
             });
             const result = response.data;
@@ -153,8 +153,8 @@ export default {
 
         const onSubmit = async () => {
             try {
-                
-                const result = await createGroup(user.value.email, groupName.value, groupImage.value,groupMembers.value);
+
+                const result = await createGroup(user.value.email, groupName.value, groupImage.value, groupMembers.value);
                 // console.log(result);
             } catch (error) {
                 console.error(error.response.data.message);
@@ -165,10 +165,10 @@ export default {
             }
         };
         watch(user, async (newUser) => {
-        if (newUser) {
-            await friendList();
-        }
-    }, { immediate: true });
+            if (newUser) {
+                await friendList();
+            }
+        }, { immediate: true });
 
 
         return {
@@ -199,9 +199,7 @@ export default {
 
 
 <style scoped>
-
 .beige-colour {
-  color: rgba(236, 227, 206, 1);
+    color: rgba(236, 227, 206, 1);
 }
-
 </style>

@@ -220,7 +220,7 @@ export default defineComponent({
         //   const handleResponse = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/users/handle/${newValue.nickname}`, {
         //     method: 'GET',
         //     headers: {
-        //       'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+        //       'x-api-key': `${import.meta.env.VITE_API_KEY}`
         //     }
         //   });
         //   const handleData = await handleResponse.json();
@@ -244,7 +244,7 @@ export default defineComponent({
           // Always do initial check to see if user exists
           const response1 = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/ez/${encodeURIComponent(newValue.email)}`, {
             headers: {
-              'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+              'x-api-key': `${import.meta.env.VITE_API_KEY}`
             }
           });
           const msg = await response1.data;
@@ -260,7 +260,7 @@ export default defineComponent({
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+                'x-api-key': `${import.meta.env.VITE_API_KEY}`
               },
               body: JSON.stringify(requestBody)
 

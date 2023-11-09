@@ -569,7 +569,7 @@ export default defineComponent({
 					// Update user's EXP based on carbon emission calculation
 					try {
 						const headers = {
-							'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+							'x-api-key': `${import.meta.env.VITE_API_KEY}`
 						};
 
 
@@ -785,7 +785,7 @@ export default defineComponent({
 			// Update the user's total km travelled
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/total_km`, { total_km: totalKm.value }, {
 				headers: {
-					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+					'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
 				}
 			})
 				.then(response => {
@@ -800,7 +800,7 @@ export default defineComponent({
 
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/carbonsavings`, { carbonsavings: emissionSavings.value }, {
 				headers: {
-					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+					'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
 				}
 			})
 				.then(response => {
@@ -814,7 +814,7 @@ export default defineComponent({
 			// Update the user exp in the backend
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/exp`, { exp: expToAdd }, {
 				headers: {
-					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+					'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
 				}
 			})
 				.then(response => {
@@ -829,7 +829,7 @@ export default defineComponent({
 		const logUserActivity = (activity) => {
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/log`, { activity: activity }, {
 				headers: {
-					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+					'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
 				}
 			})
 				.then(response => {

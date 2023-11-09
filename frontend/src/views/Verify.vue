@@ -371,7 +371,7 @@ export default {
 			// Update the user's carbon savings in the backend
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${this.user.email}/carbonsavings`, { carbonsavings: this.emissionSavings }, {
 				headers: {
-					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+					'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
 				}
 			})
 				.then(response => {
@@ -385,7 +385,7 @@ export default {
 			// Update the user exp in the backend
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${this.user.email}/exp`, { exp: this.expToAddG }, {
 				headers: {
-					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+					'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
 				}
 			})
 				.then(response => {

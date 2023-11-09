@@ -376,7 +376,7 @@ export default {
 				const response = await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/badges`, formData, {
 					headers: {
 						// 'Content-Type': 'application/json',
-						'x-api-key': 'PlanItIsTheBestProjectEverXYZ' // replace with your actual API key
+						'x-api-key': `${import.meta.env.VITE_API_KEY}` // replace with your actual API key
 					}
 				});
 				console.log(response.data.message);
