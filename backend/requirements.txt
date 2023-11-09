@@ -5,3 +5,4 @@ flake8
 autopep8
 flasgger
 boto3
+dotenv
