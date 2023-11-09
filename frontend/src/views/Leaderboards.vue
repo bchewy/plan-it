@@ -113,7 +113,7 @@
 										</td>
 										<!-- You can now access the stats data for each user -->
 										<td>{{ user.stats.level }}</td>
-										<td>{{ user.stats.carbonsavings }} Co2 Kg</td>
+										<td>{{ user.stats.carbonsavings.toFixed(2) }}g CO2</td>
 									</tr>
 								</tbody>
 							</table>
