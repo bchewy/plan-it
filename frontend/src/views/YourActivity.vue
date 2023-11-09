@@ -7,33 +7,28 @@
 				<span class="header text-muted" style="font-weight: bold;">Your Activity </span>
 			</div>
 		</div>
-		<div class="row justify-content-center">
-			
-			<div  v-for="post in posts">
-			<PostComponent :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
-			<div class="col justify-content-center d-flex">
-				<button type="button" class="btn btn-danger" data-bs-toggle="modal" :data-bs-target="'#a'+post._id">Delete post! </button>
-				<div class="modal fade" :id="'a'+post._id" tabindex="-1" :aria-labelledby="post._id" aria-hidden="true">
-					<div class="modal-dialog">
-						
-						<div class="modal-content">
-							
-							
-								
-							
-							<div class="modal-body fs-5 text-center">
-								Are you sure you want to delete this post? <br>
-								This action is <strong>irreversible</strong>!
-							</div>
-								<div class="modal-footer justify-content-center">
-								<button type="button" class="btn btn-secondary col-3" data-bs-dismiss="modal" >Cancel</button>
-								<button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal" @click="deletePost(post._id)">Confirm</button>
+		<div class="row justify-content-center" style="background-color: #cbdbb7;">
+
+			<div v-for=" post in posts">
+				<PostComponent :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
+				<div class="col justify-content-center d-flex mb-5">
+					<button type="button" class="btn btn-danger" data-bs-toggle="modal" :data-bs-target="'#a' + post._id">Delete post! </button>
+					<div class="modal fade" :id="'a' + post._id" tabindex="-1" :aria-labelledby="post._id" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-body fs-5 text-center">
+									Are you sure you want to delete this post? <br>
+									This action is <strong>irreversible</strong>!
 								</div>
+								<div class="modal-footer justify-content-center">
+									<button type="button" class="btn btn-secondary col-3" data-bs-dismiss="modal">Cancel</button>
+									<button type="button" class="btn btn-danger col-3" data-bs-dismiss="modal" @click="deletePost(post._id)">Confirm</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 		</div>
 	</div>
 </template>
@@ -42,7 +37,7 @@ import CreatePostComponent from "../components/CreatePostComponent.vue"
 import CommunitySidebar from "../components/CommunitySidebar.vue";
 import NavBar from "../components/Navbar.vue";
 import PostComponent from '../components/PostComponent.vue'
-import { ref, onMounted,watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useAuth0 } from '@auth0/auth0-vue';
 import axios from "axios";
 
@@ -50,7 +45,7 @@ export default {
 	name: 'Community',
 	components: {
 		NavBar,
-		
+
 		PostComponent,
 		CommunitySidebar,
 	},
@@ -64,12 +59,12 @@ export default {
 			const headers = { "x-api-key": "PlanItIsTheBestProjectEverXYZ", }
 			try {
 				const response = await axios.get(url, { headers })
-				for (let i of response.data){
-					if(i.useremail==user.value.email){
+				for (let i of response.data) {
+					if (i.useremail == user.value.email) {
 						posts.value.push(i)
 					}
 				}
-				
+
 			}
 			catch (error) {
 				console.error("error", error)
@@ -77,10 +72,10 @@ export default {
 		}
 
 		watch(user, async (newUser) => {
-        if (newUser) {
-            await fetchPosts();
-        }
-    }, { immediate: true });
+			if (newUser) {
+				await fetchPosts();
+			}
+		}, { immediate: true });
 
 		return {
 			user,
@@ -89,18 +84,18 @@ export default {
 
 		};
 	},
-	methods:{
-		async deletePost(postID){
-			const url=`${import.meta.env.VITE_API_ENDPOINT}/posts/${postID}`
-			const headers= { "x-api-key": "PlanItIsTheBestProjectEverXYZ", }
-			try{
-			const response= await axios.delete(url,{headers})
+	methods: {
+		async deletePost(postID) {
+			const url = `${import.meta.env.VITE_API_ENDPOINT}/posts/${postID}`
+			const headers = { "x-api-key": "PlanItIsTheBestProjectEverXYZ", }
+			try {
+				const response = await axios.delete(url, { headers })
 			}
-			catch(error){
-				console.error("Error",error)
+			catch (error) {
+				console.error("Error", error)
 			}
 			location.reload()
-		
+
 		}
 	}
 }
@@ -108,6 +103,6 @@ export default {
 
 <style scoped>
 .beige-colour {
-  color: rgb(68, 49, 4);
+	color: rgb(68, 49, 4);
 }
 </style>
