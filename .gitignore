@@ -6,3 +6,4 @@ cloud/
 .DS_Store
 venv/
 .DS_Store
+frontend/auth_config.json
