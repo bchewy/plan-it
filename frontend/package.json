@@ -21,7 +21,6 @@
     "@vue/cli-plugin-eslint": "^5.0.8",
     "@vueuse/components": "^10.5.0",
     "@vueuse/core": "^10.5.0",
-    "@vueuse/motion": "vueuse/motion",
     "animate.css": "^4.1.1",
     "aws-sdk": "^2.1486.0",
     "axios": "^1.5.1",
