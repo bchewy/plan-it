@@ -7,13 +7,9 @@
 	text-align: center;
 	position: relative;
 	display: flex;
-	/* Add this */
 	justify-content: center;
-	/* Add this */
 	align-items: center;
-	/* Add this */
 	flex-direction: column;
-	/* Add this */
 }
 
 .row {
@@ -96,8 +92,10 @@
 			<!-- Section 1: Welcome -->
 			<div class="col-12 story-part ">
 				<div class="text-background">
-					<h2>Welcome to PlanIt!</h2>
-					<p>PlanIt helps you make sustainable transportation choices while exploring your city. Our app allows you to log and compare routes across different modes like walking, biking, driving, and public transit.</p>
+					<h1>Get Scrolling to:</h1>
+					<p><span class="element"></span></p>
+					<!-- <h2>Welcome to PlanIt!</h2>
+					<p>PlanIt helps you make sustainable transportation choices while exploring your city. Our app allows you to log and compare routes across different modes like walking, biking, driving, and public transit.</p> -->
 					<!-- <img class="img-fluid" src="../assets/product_demo_real.gif" alt="Product Demo"> -->
 				</div>
 			</div>
@@ -107,6 +105,9 @@
 				<div class="text-background">
 					<h3>Log Your Routes</h3>
 					<p>Easily log routes you take around the city by entering your starting point and destination. We'll show route options with distance and emissions for modes like walking, biking, driving, or public transit. Select the route you took to add it to your log.</p>
+					<img class="img-fluid" src="../assets/log_routes.gif" alt="Product Demo">
+					
+
 				</div>
 			</div>
 
@@ -208,10 +209,32 @@
 <script>
 import Navbar from "../components/Navbar.vue";
 import { onMounted, onBeforeUnmount } from 'vue';
+import Typed from 'typed.js';
 
 export default {
+	data() {
+		return {
+			isTypedInitialized: false
+
+		};
+	},
 	components: {
 		Navbar,
+	},
+	mounted() {
+		const element = document.querySelector('.element');
+		const cursors = document.querySelectorAll('.typed-cursor');
+		cursors.forEach(cursor => cursor.remove());  // Remove existing cursors
+
+		if (!this.isTypedInitialized) {
+			new Typed(element, {
+				strings: ["Explore PlanIt!", "Get Started!", "Meet the team!"],
+				typeSpeed: 30,
+				backSpeed: 50,
+				loop: true
+			});
+			this.isTypedInitialized = true;
+		}
 	},
 	setup() {
 		let horizontalScroll = (e) => {
