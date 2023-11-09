@@ -534,7 +534,7 @@ export default defineComponent({
 						try {
 							const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyBrGgc_N-cEmcpP4mqYXHkXcl-7dfz1xos`);
 							console.log("Retriving location name");
-							console.log(repsonse.data.results[0].formatted_address);
+							console.log(response.data);
 							if (response.data.results && response.data.results.length > 0) {
 								return response.data.results[0].formatted_address;
 							}

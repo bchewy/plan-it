@@ -52,7 +52,7 @@
 				<div class="card">
 					<div class="card-header">
 						<h4 class="card-title text-center">Invalid Routes</h4>
-						<p class="card-text">The invalid routes here do not have their end locations verified. <strong>Verify your end locations</strong> before the time limit to get more EXP.</p>
+						<p class="card-text text-center">The invalid routes here do not have their end locations verified. <strong>Verify your end locations</strong> before the time limit to get more EXP.</p>
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
@@ -82,7 +82,11 @@
 										<td>
 											Start: <b>{{ route.start_point_name }} </b><br>
 											End: <b>{{ route.end_point_name }} </b><br>
-											<button class="btn btn-primary" @click="checkEndLocation(route)">Validate Route</button><br>
+											Distance: <b>{{ route.distance }} km</b><br>
+											Carbon Emission: <b>{{ route.carbon_emission.toFixed(2) }}g</b><br>
+											Transport Mode: <b>{{ route.transport_mode }}</b><br>
+											Time: <b>{{ new Date(route.timestamp).toLocaleString() }}</b><br>
+											<button class="btn btn-success mt-2" @click="checkEndLocation(route)">Validate Route</button><br>
 
 										</td>
 										<!-- <td>{{ route.checkedStartLocation }}</td> -->
