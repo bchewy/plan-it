@@ -69,7 +69,7 @@ export default defineComponent({
     if (this.badge != '') {
       const url = `${import.meta.env.VITE_API_ENDPOINT}/badges/${this.badge}`;
       const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+        "x-api-key": `${import.meta.env.VITE_API_KEY}`,
       };
       try {
         const response = await axios.get(url, { headers })

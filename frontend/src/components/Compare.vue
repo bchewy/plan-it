@@ -80,7 +80,7 @@ export default {
       console.log(props.user)
       const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(props.user.email)}`;
       const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+        "x-api-key": `${import.meta.env.VITE_API_KEY}`,
       };
 
       try {
@@ -108,7 +108,7 @@ export default {
       try {
         const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(selectedFriendEmail)}`;
         const headers = {
-          "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+          "x-api-key": `${import.meta.env.VITE_API_KEY}`,
         };
 
         const response = await axios.get(url, { headers });

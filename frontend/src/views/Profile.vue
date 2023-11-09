@@ -603,7 +603,7 @@ export default {
     async fetchUser() {
       const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
       const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+        "x-api-key": `${import.meta.env.VITE_API_KEY}`,
       };
 
       try {
@@ -623,7 +623,7 @@ export default {
     async fetchFriendRequests() {
       const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(this.user.email)}/friend_requests`;
       const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+        "x-api-key": `${import.meta.env.VITE_API_KEY}`,
       };
 
       try {
@@ -640,7 +640,7 @@ export default {
       const email = this.user.email; // Get the email from user object
       const url = `${import.meta.env.VITE_API_ENDPOINT}/routes/email?email=${encodeURIComponent(email)}`;
       const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
+        "x-api-key": `${import.meta.env.VITE_API_KEY}`, // Replace with your actual API key
       };
       try {
         const response = await axios.get(url, { headers });

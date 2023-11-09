@@ -27,6 +27,7 @@ jobs:
           echo "VITE_GIFY_API_KEY=${{ secrets.VITE_GIFY_API_KEY }}" >> .env.production
           echo "VITE_GMAPS_API_KEY=${{ secrets.VITE_GMAPS_API_KEY }}" >> .env.production
           echo "VITE_API_ENDPOINT=${{ secrets.VITE_API_ENDPOINT }}" >> .env.production
+          echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}" >> .env.production
           mv .env.production ./frontend
 
       - name: Install dependencies

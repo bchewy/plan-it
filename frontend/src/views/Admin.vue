@@ -315,7 +315,7 @@ export default {
 		async assignBadges(email, badges) {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${email}/badges`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			try {
@@ -329,7 +329,7 @@ export default {
 		async unassignBadges(email, badge) {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${email}/badges/${badge}`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			try {
@@ -391,7 +391,7 @@ export default {
 			const urlLevel = `${import.meta.env.VITE_API_ENDPOINT}/users/${this.updatedUser.email}/replace/level`;
 			// const urlExp = `${import.meta.env.VITE_API_ENDPOINT}/users/${this.updatedUser.email}/exp`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			// Update level
@@ -413,7 +413,7 @@ export default {
 		},
 		async fetchUsers() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users`;
-			const headers = { "x-api-key": "PlanItIsTheBestProjectEverXYZ" };
+			const headers = { "x-api-key": `${import.meta.env.VITE_API_KEY}` };
 
 			try {
 				const response = await axios.get(url, { headers });
@@ -433,7 +433,7 @@ export default {
 		async fetchBadges() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/badges`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			try {
@@ -446,7 +446,7 @@ export default {
 		async deleteBadge(badgeId) {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badgeId}`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			try {

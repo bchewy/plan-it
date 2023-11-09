@@ -1,10 +1,10 @@
 <template>
 	<NavBar />
 	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color:#cbdbb7">
-		
+
 		<div class="sticky-top border-bottom" style="background-color:#cbdbb7; z-index: 1;">
 			<CommunitySidebar></CommunitySidebar>
-			
+
 			<div class="text-center h2 mb-3 pt-4">
 				<span class="header text-muted" style="font-weight: bold;">For You </span>
 			</div>
@@ -34,7 +34,7 @@ export default {
 	},
 	setup() {
 		const { loginWithRedirect, user, isAuthenticated } = useAuth0();
-		const headers = { "x-api-key": "PlanItIsTheBestProjectEverXYZ", };
+		const headers = { "x-api-key": `${import.meta.env.VITE_API_KEY}`, };
 		const posts = ref([]);
 
 		const fetchPosts = async () => {

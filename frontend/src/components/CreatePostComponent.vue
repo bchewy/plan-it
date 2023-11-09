@@ -147,7 +147,7 @@ export default defineComponent({
 		}
 		const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
 		const headers = {
-			"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+			"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 		};
 		try {
 			const response = await axios.get(url, { headers });
@@ -220,7 +220,7 @@ export default defineComponent({
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(useremail)}/posts`;
 			const headers = {
 				"Content-Type": "application/json",
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 			const contentData = this.content;
 

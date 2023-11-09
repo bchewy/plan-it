@@ -53,7 +53,7 @@ export default {
           {
             headers: {
               "Content-Type": "application/json",
-              "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
+              "x-api-key": `${import.meta.env.VITE_API_KEY}`, // Replace with your actual API key
             },
             validateStatus: function (status) {
               return status >= 200 && status < 500; // Resolve only if the status code is less than 500
@@ -96,7 +96,7 @@ export default {
           {
             headers: {
               "Content-Type": "application/json",
-              "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
+              "x-api-key": `${import.meta.env.VITE_API_KEY}`, // Replace with your actual API key
             },
           }
         );

@@ -71,7 +71,7 @@ export default {
     async fetchUser() {
       const url = `${import.meta.env.VITE_API_ENDPOINT}/users/ez/${this.$route.params.userEmail}`;
       const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+        "x-api-key": `${import.meta.env.VITE_API_KEY}`,
       };
 
       try {

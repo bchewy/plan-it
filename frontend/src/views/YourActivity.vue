@@ -51,12 +51,12 @@ export default {
 	},
 	setup() {
 		const { loginWithRedirect, user, isAuthenticated } = useAuth0();
-		const headers = { "x-api-key": "PlanItIsTheBestProjectEverXYZ", };
+		const headers = { "x-api-key": `${import.meta.env.VITE_API_KEY}`, };
 		const posts = ref([]);
 
 		const fetchPosts = async () => {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/posts`;
-			const headers = { "x-api-key": "PlanItIsTheBestProjectEverXYZ", }
+			const headers = { "x-api-key": `${import.meta.env.VITE_API_KEY}`, }
 			try {
 				const response = await axios.get(url, { headers })
 				for (let i of response.data) {
@@ -87,7 +87,7 @@ export default {
 	methods: {
 		async deletePost(postID) {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/posts/${postID}`
-			const headers = { "x-api-key": "PlanItIsTheBestProjectEverXYZ", }
+			const headers = { "x-api-key": `${import.meta.env.VITE_API_KEY}`, }
 			try {
 				const response = await axios.delete(url, { headers })
 			}

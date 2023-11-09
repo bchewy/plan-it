@@ -31,7 +31,7 @@ export default {
     },
     setup() {
         const { loginWithRedirect, user, isAuthenticated, isLoading } = useAuth0();
-        const headers = { "x-api-key": "PlanItIsTheBestProjectEverXYZ", };
+        const headers = { "x-api-key": `${import.meta.env.VITE_API_KEY}`, };
         const posts = ref([]);
         const friends = ref([]);
 
@@ -74,7 +74,7 @@ export default {
         async friendslist() {
             const url = `https://api.bchwy.com/users/${encodeURIComponent(this.user.email)}`
             const headers = {
-                "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+                "x-api-key": `${import.meta.env.VITE_API_KEY}`,
             };
             try {
                 const response = await axios.get(url, { headers })
