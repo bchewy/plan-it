@@ -660,7 +660,7 @@ export default defineComponent({
 			const lat = coords.value.latitude;
 			const lng = coords.value.longitude;
 			try {
-				url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${import.meta.env.VITE_GMAPS_API_KEY}`
+				const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${import.meta.env.VITE_GMAPS_API_KEY}`;
 				const response = await axios.get(url);
 				if (response.data.results && response.data.results.length > 0) {
 					startLocation.value = { lat, lng };

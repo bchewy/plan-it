@@ -1,31 +1,31 @@
 <template>
   <header>
     <!-- nav -->
-   
   </header>
-  <div class="container-fluid p-0 scroll-container">
-    
+  <div class="container-fluid p-0 scroll-container bg-image pb-5">
 
-    <section >
+
+    <section>
       <NavBar />
-    <div class="section-background text-light text-center vh-100 d-flex align-items-center justify-content-center" >
-      <div class="container">
-        <div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
-          <div class="text-center">
-            <h1><span class="text-supergreen element"></span></h1>
-            <p class="lead">
-              Account for your own carbon footprint for your traffic taken, <br>value-add and commit to reducing your carbon footprint <br>and reduce your personal impact.
-            </p>
+      <div class="section-background text-light text-center vh-100 d-flex align-items-center justify-content-center">
+        <div class="container">
+          <div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
+            <div class="text-center">
+              <h1><span class="text-supergreen element"></span></h1>
+              <p class="lead">
+                Account for your own carbon footprint for your traffic taken, <br>value-add and commit to reducing your carbon footprint <br>and reduce your personal impact.
+              </p>
+              <button class="btn btn-success" @click="$router.push('/about')">Get Started</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
       <!--/div-->
     </section>
     <!-- </Parallaxy> -->
 
     <!-- boxes-->
-    <section class="h-25 bg-brown pt-5" >
+    <section class="h-25 bg-brown pt-5">
       <div class="container">
         <div class="row text-center">
           <div class="col-md" v-for="(card, index) in cards" :key="index">
@@ -45,29 +45,29 @@
           </div>
         </div>
       </div>
-    
-
-    <!-- "Learn More" modal -->
-    <LearnMore :visible="currentCardIndex !== -1" :card="currentCardIndex !== -1 ? cards[currentCardIndex] : {}" @close="closeModal" />
-
-    <!-- <div class="bg-supergreen" style="height: 50px;"></div> Adjust the height as needed -->
-
-    
-    
 
 
-    <!-- Question Accordion -->
-    
-      <div class="container" style="margin-top: 100px;">
-       
+      <!-- "Learn More" modal -->
+      <LearnMore :visible="currentCardIndex !== -1" :card="currentCardIndex !== -1 ? cards[currentCardIndex] : {}" @close="closeModal" />
+
+      <!-- <div class="bg-supergreen" style="height: 50px;"></div> Adjust the height as needed -->
+
+
+
+
+
+      <!-- Question Accordion -->
+
+      <div class="container my-5 ">
+
         <div class="accordion accordion-flush " id="questions">
           <div class="accordion-item ">
             <h3 class="accordion-header text-center beige-colour py-2">
-              
-                <b>Frequently Asked Questions</b>
-            
+
+              <b>Frequently Asked Questions</b>
+
             </h3>
-            
+
           </div>
           <!--Item 1-->
           <div class="accordion-item ">
@@ -106,25 +106,8 @@
       </div>
     </section>
 
-
-    <!-- refer friend now-->
-    <!-- <section class="text-muted bg-supergreen">
-      <div class="container">
-        <div class="d-md-flex justify-content-between align-items-center mb-3 mb-md-0">
-          <h4 class="news-input">Refer a friend now!</h4>
-          <div class="input-group news-input">
-            <input type="text" class="form-control news-input" placeholder="Friend's Email Address" aria-label="Friend's Email Address" aria-describedby="button-addon2">
-            <button class="btn btn-lg beige-colour" id="button-addon2">Send</button>
-          </div>
-        </div>
-      </div>
-    </section> -->
-
-    <!-- Add space between "Refer a friend" section and footer -->
-
-    <!-- Footer -->
-    <!-- <Footer /> -->
   </div>
+  <!-- <Footer /> -->
 </template>
 
 <script>
@@ -134,8 +117,6 @@ import LearnMore from '../components/LearnMore.vue';
 import { ref } from 'vue';
 import Typed from 'typed.js';
 import Footer from '../components/Footer.vue'
-// import Parallaxy from '@lucien144/vue3-parallaxy';
-
 
 export default {
   name: 'Home',
@@ -225,6 +206,11 @@ export default {
 
 <style scoped>
 /* Other component-specific styles */
+.bg-image {
+  background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/planit.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 
 .news-input {
   width: 50%;
@@ -248,9 +234,10 @@ export default {
   background-color: #d1f4d1
 }
 
-.h-25.bg-brown.pt-5 {
+/* .h-25.bg-brown.pt-5 {
   position: relative;
 }
+
 .h-25.bg-brown.pt-5::before {
   content: "";
   position: absolute;
@@ -260,12 +247,13 @@ export default {
   min-height: 100vh;
   background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/Brown+pathway.jpg');
   background-size: cover;
-  /* Adjust this to your liking */
-  opacity:0.9;
-  z-index: -1;
+opacity: 0.9;
+z-index: -1;
 
 }
-.section-background {
+
+*/
+/* .section-background {
   position: relative;
 }
 
@@ -278,20 +266,43 @@ export default {
   height: 100%;
   background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/planit.png');
   background-size: cover;
-  opacity: 0.9; /* Adjust this to your liking */
+  opacity: 0.9;
   z-index: -1;
-}
+} */
 
-.scroll-container {
+/* .scroll-container {
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
   height: 100vh;
 }
+
+
 
 section {
   scroll-snap-align: start;
   height: 100vh;
 }
 
-/* Additional styles if needed */
+
+@media (max-width: 768px) {
+  .scroll-container {
+    height: auto;
+  }
+
+  section {
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll-container {
+    height: auto;
+  }
+
+  section {
+    height: auto;
+  }
+}
+
+*/
 </style>

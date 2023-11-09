@@ -262,17 +262,12 @@ export default {
 
 
 		async fetchRandomGif() {
-			const giphyApiKey = 'FuPGJnG0vBT3yRNDTJ8KzeoICLLNYQ5V'; // replace with your Giphy API key
-			const url = `https://api.giphy.com/v1/gifs/random?api_key=${giphyApiKey}&tag=dancing&rating=g`;
+			const url = `https://api.giphy.com/v1/gifs/random?api_key=${import.meta.env.VITE_GIFY_API_KEY}&tag=dancing&rating=g`;
 
 			try {
 				const response = await axios.get(url);
 				this.dancingGif = response.data.data.images.fixed_height.url;
 				console.log(this.dancingGif);
-				// console.log("Successfully fetched gif!")
-				// console.log(response.data.data.images.original.url)
-				// console.log(response.data.url)
-				// console.log(response.data.images.original.url);
 
 			} catch (error) {
 				console.error('Error fetching random gif:', error);
