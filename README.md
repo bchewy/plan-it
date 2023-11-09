@@ -9,10 +9,6 @@ Plan-it is a sustainable travel routing web-app built on Google Maps to help use
 ### What's the purpose?
 To encourage green choices, we will implement gamification features like rewards and social sharing for selecting low-carbon routes. The app will also provide tools for tracking carbon footprint over time, optimized route planning based on sustainability, and a community forum for knowledge sharing around sustainable transportation. 
 
-### Technologies Used
-Frontend: VueJS, Auth0<br>
-Backend: Python (Flask), MongoDB
-
 
 ### ENV Configuration:
 `frontend/`
