@@ -29,6 +29,9 @@
                         <h5 class="card-title fs-2 text-center">{{ group.name }}</h5>
                         <br>
 
+                        <p class="card-text"> <span class="fw-bold">Owner:</span> {{ group.owner_email }}</p>
+                        <br>
+
                         <p class="card-text"> <span class="fw-bold">Members:</span></p>
                         <ul class="list-group">
                             <li v-for="member in group.members " class="list-group-item bg-light">{{ member }}</li>
