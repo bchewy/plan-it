@@ -532,7 +532,7 @@ export default defineComponent({
 					// Helper Function to get names
 					const getLocationName = async (lat, lng) => {
 						try {
-							const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${import.meta.env.VITE_GMAPS_API_KEY_API_KEY}`);
+							const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyBrGgc_N-cEmcpP4mqYXHkXcl-7dfz1xos`);
 							if (response.data.results && response.data.results.length > 0) {
 								// Return the formatted address of the first result
 								return response.data.results[0].formatted_address;
@@ -660,7 +660,8 @@ export default defineComponent({
 			const lat = coords.value.latitude;
 			const lng = coords.value.longitude;
 			try {
-				const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${import.meta.env.VITE_GMAPS_API_KEY}`;
+				const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyBrGgc_N-cEmcpP4mqYXHkXcl-7dfz1xos`;
+				console.log(url);
 				const response = await axios.get(url);
 				if (response.data.results && response.data.results.length > 0) {
 					startLocation.value = { lat, lng };
