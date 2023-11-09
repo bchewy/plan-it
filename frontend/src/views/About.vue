@@ -51,7 +51,7 @@
 }
 
 .text-background {
-	background-color: rgba(255, 255, 255, 0.7);
+	background-color: rgba(220, 255, 195, 0.826);
 	/* White background with 70% opacity */
 	border-radius: 10px;
 	/* Optional: for rounded corners */
@@ -63,6 +63,23 @@
 	/* Control the max width of the transparent background */
 	box-sizing: border-box;
 }
+
+.text-background ul {
+	padding: 0;
+	/* Reset default padding */
+	margin: 0;
+	/* Reset default margin */
+	list-style-type: none;
+	/* Remove default list item bullets */
+	/* Add more styling as needed */
+}
+
+.text-background ul li {
+	/* Your styles for list items here */
+	text-align: left;
+	/* or 'center' as per your design */
+}
+
 
 /* .section-1 {
 	background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/aboutf.png');
@@ -81,7 +98,7 @@
 				<div class="text-background">
 					<h2>Welcome to PlanIt!</h2>
 					<p>PlanIt helps you make sustainable transportation choices while exploring your city. Our app allows you to log and compare routes across different modes like walking, biking, driving, and public transit.</p>
-					<img class="img-fluid" src="../assets/product_demo_real.gif" alt="Product Demo">
+					<!-- <img class="img-fluid" src="../assets/product_demo_real.gif" alt="Product Demo"> -->
 				</div>
 			</div>
 
@@ -127,20 +144,28 @@
 						</svg></h3>
 					<p>Our platform is fully built to run on sustainable energy on AWS</p>
 
-					<img style="height: 50px;" src="https://www.svgrepo.com/show/331488/mongodb.svg" alt="Tool 1">
-					<p>MongoDB</p>
-
-					<img style="height: 50px;" src="https://static-00.iconduck.com/assets.00/auth0-icon-458x512-8spyi0ve.png" alt="Tool 1">
-					<p>Auth0</p>
-
-					<img style="height: 50px;" src="https://static-00.iconduck.com/assets.00/aws-ec2-icon-423x512-iaajemnx.png" alt="Tool 1">
-					<p>AWS EC2</p>
-
-					<img style="height: 50px;" src="https://www.outsystems.com/blog/-/media/images/blog/posts/aws-service-list/amazon-s3-bp-aws-services-list.png?updated=20210415092723" alt="Tool 1">
-					<p>AWS S3</p>
-
-					<img style="height: 50px;" src="https://pbs.twimg.com/profile_images/1189603938137280512/Xy_sEdeN_400x400.jpg" alt="Tool 1">
-					<p>AWS Cloudfront</p>
+					<div class="d-flex flex-wrap justify-content-between">
+						<div class="mb-3">
+							<img style="height: 50px;" src="https://www.svgrepo.com/show/331488/mongodb.svg" alt="Tool 1">
+							<p>MongoDB</p>
+						</div>
+						<div class="mb-3">
+							<img style="height: 50px;" src="https://static-00.iconduck.com/assets.00/auth0-icon-458x512-8spyi0ve.png" alt="Tool 1">
+							<p>Auth0</p>
+						</div>
+						<div class="mb-3">
+							<img style="height: 50px;" src="../assets/ec2.png" alt="Tool 1">
+							<p>AWS EC2</p>
+						</div>
+						<div class="mb-3">
+							<img style="height: 50px;" src="../assets/s3.png" alt="Tool 1">
+							<p>AWS S3</p>
+						</div>
+						<div class="mb-3">
+							<img style="height: 50px;" src="../assets/cf.png" alt="Tool 1">
+							<p>AWS Cloudfront</p>
+						</div>
+					</div>
 
 
 					<h3>Contributors</h3>
