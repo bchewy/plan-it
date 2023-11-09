@@ -92,6 +92,16 @@
 	height: 100%;
 }
 
+@media (max-width: 768px) {
+
+	/* Adjust the breakpoint as needed */
+	.text-background {
+		max-height: 100vh;
+		overflow: auto;
+		/* Add a scrollbar if the content exceeds the max height */
+	}
+}
+
 /* .section-1 {
 	background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/aboutf.png');
 	/* background-size: cover;
