@@ -1,8 +1,10 @@
 <template>
 	<NavBar />
-	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: #cbdbb7;">
+	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-image: url('../assets/treebackground.png');">
+		
 		<div class="sticky-top border-bottom" style="background-color:#cbdbb7; z-index: 1;">
 			<CommunitySidebar></CommunitySidebar>
+			
 			<div class="text-center h2 mb-3 pt-4">
 				<span class="header text-muted" style="font-weight: bold;">For You </span>
 			</div>
