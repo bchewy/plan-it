@@ -208,7 +208,7 @@
 					</div>
 					<div class="d-flex justify-content-between mb-3">
 						<span><strong>Carbon Emission:</strong></span>
-						<span>{{ calculateCarbonEmission().toFixed(2) }} kg CO2</span>
+						<span>{{ calculateCarbonEmission().toFixed(2) }} g CO2</span>
 					</div>
 					<hr>
 					<h5 class="card-title mb-4">User Details</h5>
@@ -223,7 +223,7 @@
 					</div>
 					<div class="d-flex justify-content-between mb-2">
 						<span><strong>Emission Savings:</strong></span>
-						<span>{{ emissionSavings.toFixed(2) }} kg CO2</span>
+						<span>{{ emissionSavings.toFixed(2) }} g CO2</span>
 					</div>
 					<!-- Open in GMaps/CityMapper -->
 					<div class="d-flex justify-content-center">
