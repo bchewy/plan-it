@@ -13,8 +13,9 @@
         </div>
         <div v-if="loading">Loading...</div>
 
-        <div v-else v-for="(groupArray, index) in groups" :key="index" class="row">
-            <div v-for="group in groupArray" :key="group._id" class="col-md-4 mb-4">
+        <div v-else v-for="(groupArray, index) in groups" :key="index" class="row" style="background-color: #cbdbb7;">
+
+            <div v-for=" group in groupArray" :key="group._id" class="col-md-4 mb-4">
                 <div class="card">
                     <img class="card-img-top" :src="group.group_image" alt="Group Image" v-if="group.group_image">
                     <div class="card-body">
@@ -28,15 +29,13 @@
                             <li v-for="member in group.members " class="list-group-item bg-light">{{ member }}</li>
                         </ul> <br>
 
-                        <div v-if="group.badges.length > 0">
+                        <div v-if="group.badges">
                             <p class="card-text"><span class="fw-bold">Badges:</span></p>
 
 
                             <div v-for="badge in group.badges" class="col-11 bg-light text-center rounded border mb-2">
                                 <img :src="badge.image" class="w-75 rounded-circle mb-3 mt-3"><br>
                                 <button class="btn btn-secondary mb-3" data-bs-toggle="modal" :data-bs-target="'#a' + badge._id">More info</button>
-
-
 
                                 <div class="modal fade" :id="'a' + badge._id" tabindex="-1" :aria-labelledby="badge._id" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -69,6 +68,9 @@
 
 
                         </div>
+                        <div v-else>
+                            <p class="card-text"><span class="fw-bold">Badges:</span> None</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -100,52 +102,49 @@ export default {
     ,
     setup() {
         const loading = ref(true)
-        const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+        const { loginWithRedirect, user, isAuthenticated, isLoading } = useAuth0();
         const badges = false
         const groups = ref([]);
 
 
         // console.log('Setup method is called');
 
-        const getGroups = async () => {
-            try {
-                console.log(user.value.email)
-                const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(user.value.email)}/groups`, {
-                    headers: {
-                        'x-api-key': `${import.meta.env.VITE_API_KEY}`
-                    }
-                });
-                // console.log(response);
-                console.log(response.data.groups)
-                groups.value = response.data.groups;
-                clearTimeout(timeoutId)
-                loading.value = false
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        const timeoutId = setTimeout(() => {
-            loading.value = false;
-        }, 5000);
 
-        watch(user, async (newUser) => {
-            if (newUser) {
-                await getGroups();
+        const getGroups = async () => {
+            while (isLoading.value) {
+                await new Promise(resolve => setTimeout(resolve, 100));
             }
-        }, { immediate: true });
+
+            console.log(user.value.email)
+            const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(user.value.email)}/groups`, {
+                headers: {
+                    'x-api-key': `${import.meta.env.VITE_API_KEY}`
+                }
+            });
+            // console.log(response);
+            console.log("groups")
+            console.log(response.data.groups)
+            groups.value = response.data.groups;
+            // clearTimeout(timeoutId)
+            // loading.value = false
+        }
+
+        onMounted(() => {
+            getGroups();
+            loading.value = false;
+        });
+
+        // const timeoutId = setTimeout(() => {
+        //     loading.value = false;
+        // }, 5000);
+
+        // watch(user, async (newUser) => {
+        //     if (newUser) {
+        //         await getGroups();
+        //     }
+        // }, { immediate: true });
 
         return {
-            login: async () => {
-                console.log('Login button clicked');
-                try {
-                    await loginWithRedirect();
-                    // console.log('User:', user);
-                    // console.log('Authenticated:', isAuthenticated);
-                } catch (e) {
-                    alert('Failed to login');
-                    console.error('Failed to login:', e);
-                }
-            },
             user,
             isAuthenticated,
             loading,
