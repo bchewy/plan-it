@@ -1,6 +1,6 @@
 <template>
 	<NavBar />
-	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-image: url('../assets/treebackground.png');">
+	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color:#cbdbb7">
 		
 		<div class="sticky-top border-bottom" style="background-color:#cbdbb7; z-index: 1;">
 			<CommunitySidebar></CommunitySidebar>
