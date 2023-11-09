@@ -12,9 +12,3 @@ To encourage green choices, we will implement gamification features like rewards
 ### Technologies Used
 Frontend: VueJS, Auth0<br>
 Backend: Python (Flask), MongoDB
-
-### Contributors:
-@bchewy - Backend/Frontend<br>
-@ryan99324 - Backend/Frontend<br>
-@melodywong23 - Frontend/Design<br>
-@saphalex - Frontend<br>
