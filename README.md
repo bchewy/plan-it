@@ -12,3 +12,11 @@ To encourage green choices, we will implement gamification features like rewards
 ### Technologies Used
 Frontend: VueJS, Auth0<br>
 Backend: Python (Flask), MongoDB
+
+
+### ENV Configuration:
+VITE_GMAPS_API_KEY=XYZ
+VITE_GIFY_API_KEY=XYZ
+VITE_AUTH0_DOMAIN=XYZ
+VITE_AUTH0_CLIENTID=XYZ
+VITE_API_KEY=XYZ
