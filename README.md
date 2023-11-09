@@ -15,10 +15,16 @@ Backend: Python (Flask), MongoDB
 
 
 ### ENV Configuration:
-```
+`frontend/`
+```env
 VITE_GMAPS_API_KEY=XYZ
 VITE_GIFY_API_KEY=XYZ
 VITE_AUTH0_DOMAIN=XYZ
 VITE_AUTH0_CLIENTID=XYZ
 VITE_API_KEY=XYZ
+```
+`backend/`
+```env
+MONGO_URI="mongodb_connection_string"
+API_KEY="XYZ"
 ```
