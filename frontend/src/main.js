@@ -11,9 +11,6 @@ import App from './App.vue'
 import router from './router'
 
 // Google Maps
-// import VueGoogleMaps from '@fawmi/vue-google-maps'
-// import VueGOogleMaps from '@bchewy/vue3-gmaps'
-// import VueGoogleMaps from 'vue-google-maps-community-fork'
 import VueGoogleMaps from 'bchewy-maps'
 
 // Auth0
@@ -52,24 +49,13 @@ library.add(faPeopleGroup)
 
 // Prima Vue
 import PrimeVue from 'primevue/config';
-// import VueParallaxJs from 'vue-parallax-js'
-// import { MotionPlugin } from '@vueuse/motion'
-
-// AWS
-// import AWS from 'aws-sdk';
-
-// AWS.config.update({
-// 	region: 'ap-southeast-1',
-// 	accessKeyId: `${process.env.VITE_APP_AWS_ACCESS_KEY_ID}`,
-// 	secretAccessKey: `${process.env.VITE_APP_AWS_SECRET_ACCESS_KEY}`,
-// });
 
 
 
 const app = createApp(App)
 app.use(VueGoogleMaps, {
 	load: {
-		key: "AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM",
+		key: `${import.meta.env.VITE_GMAPS_API_KEY}`,
 		libraries: "places",
 		componentRestrictions: {
 			country: "SG"

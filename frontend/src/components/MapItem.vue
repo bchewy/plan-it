@@ -363,7 +363,7 @@ export default defineComponent({
 		const isDisabled = ref(false) // Set this to true when you want to disable the input
 		const placeholderText = ref('Origin')
 		const totalKm = ref(0)
-
+		const API_KEY = `${import.meta.env.VITE_GMAPS_API_KEY}`
 
 		const setStartLocation = (place) => {
 			const lat = Number(place.geometry.location.lat());
@@ -511,7 +511,7 @@ export default defineComponent({
 					const response = await axios.post("https://routes.googleapis.com/directions/v2:computeRoutes", requestData, {
 						headers: {
 							'Content-Type': 'application/json',
-							'X-Goog-Api-Key': 'AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM',
+							'X-Goog-Api-Key': `${import.meta.env.VITE_GMAPS_API_KEY}`,
 							'X-Goog-FieldMask': 'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs.steps'
 						}
 					});
@@ -532,7 +532,7 @@ export default defineComponent({
 					// Helper Function to get names
 					const getLocationName = async (lat, lng) => {
 						try {
-							const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
+							const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${import.meta.env.VITE_GMAPS_API_KEY_API_KEY}`);
 							if (response.data.results && response.data.results.length > 0) {
 								// Return the formatted address of the first result
 								return response.data.results[0].formatted_address;
@@ -639,7 +639,7 @@ export default defineComponent({
 					const response = await axios.post("https://routes.googleapis.com/directions/v2:computeRoutes", requestData, {
 						headers: {
 							'Content-Type': 'application/json',
-							'X-Goog-Api-Key': 'AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM',
+							'X-Goog-Api-Key': `${import.meta.env.VITE_GMAPS_API_KEY}`,
 							'X-Goog-FieldMask': 'routes.polyline.encodedPolyline'
 						}
 					});
@@ -660,7 +660,8 @@ export default defineComponent({
 			const lat = coords.value.latitude;
 			const lng = coords.value.longitude;
 			try {
-				const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
+				url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${import.meta.env.VITE_GMAPS_API_KEY}`
+				const response = await axios.get(url);
 				if (response.data.results && response.data.results.length > 0) {
 					startLocation.value = { lat, lng };
 					isDisabled.value = true;
@@ -677,13 +678,12 @@ export default defineComponent({
 
 		const randomGif = ref('');
 		const fetchRandomGif = async () => {
-			const giphyApiKey = 'FuPGJnG0vBT3yRNDTJ8KzeoICLLNYQ5V'; // replace with your Giphy API key
-			const url = `https://api.giphy.com/v1/gifs/random?api_key=${giphyApiKey}&tag=congratulations&rating=g`;
+			const url = `https://api.giphy.com/v1/gifs/random?api_key=${import.meta.env.VITE_GIFY_API_KEY}&tag=congratulations&rating=g`;
 
 			try {
 				const response = await axios.get(url);
 				randomGif.value = response.data.data.images.fixed_height.url;
-				console.log(randomGif.value);
+				// console.log(randomGif.value);
 			} catch (error) {
 				console.error('Error fetching random gif:', error);
 			}

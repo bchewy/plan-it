@@ -28,41 +28,49 @@
 .badge-select {
 	display: flex;
 	align-items: center;
-  }
-  
-  .badge-select input[type="checkbox"]{
+}
+
+.badge-select input[type="checkbox"] {
 	appearance: none;
 	width: 32px;
 	height: 14px;
 	background-color: #c67074;
 	border-radius: 14px;
 	position: relative;
-  }
-  .badge-select input[type="checkbox"]::before {
+}
+
+.badge-select input[type="checkbox"]::before {
 	content: "";
-	width: 14px; /* Width of the switch handle */
-	height: 14px; /* Height of the switch handle */
-	background-color: #ebedf0; /* Color of the switch handle */
-	border-radius: 50%; /* Make it a circle */
+	width: 14px;
+	/* Width of the switch handle */
+	height: 14px;
+	/* Height of the switch handle */
+	background-color: #ebedf0;
+	/* Color of the switch handle */
+	border-radius: 50%;
+	/* Make it a circle */
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
-	left: 1px; /* Adjust the position as needed */
-	transition: 0.4s; /* Add a smooth transition effect */
-  }
-  
-  .badge-select input[type="checkbox"]:checked {
-	background-color: #4CAF50; /* Background color for the "on" state */
-  }
-  
-  .badge-select input[type="checkbox"]:checked::before {
-	left: calc(100% - 15px); /* Position the handle to the right when checked */
-  }
-  
-  .badge-select label{
+	left: 1px;
+	/* Adjust the position as needed */
+	transition: 0.4s;
+	/* Add a smooth transition effect */
+}
+
+.badge-select input[type="checkbox"]:checked {
+	background-color: #4CAF50;
+	/* Background color for the "on" state */
+}
+
+.badge-select input[type="checkbox"]:checked::before {
+	left: calc(100% - 15px);
+	/* Position the handle to the right when checked */
+}
+
+.badge-select label {
 	margin-left: 8px;
-  }
-  
+}
 </style>
 
 <template>
@@ -232,10 +240,10 @@ import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
 import { ref, defineComponent, computed, reactive } from "vue";
-// import Modal from 'bootstrap/js/dist/modal';
+import Modal from 'bootstrap/js/dist/modal';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import * as bootstrap from 'bootstrap';
+// import * as bootstrap from 'bootstrap';
 
 export default {
 	async created() {
@@ -264,7 +272,7 @@ export default {
 			newBadge: {
 				name: '',
 				description: '',
-				milestone:'',
+				milestone: '',
 				image: null,
 
 			},
@@ -342,9 +350,8 @@ export default {
 			this.updatedUser.exp = user.exp;
 		},
 		async addBadge() {
-
 			let myModalEl = document.getElementById('addBadgeModal');
-			let myModal = new bootstrap.Modal(myModalEl);
+			let myModal = new Modal(myModalEl);
 			myModal.show();
 
 			if (!this.newBadge.name || !this.newBadge.description || !this.newBadge.image || !this.newBadge.milestone) {
@@ -363,7 +370,7 @@ export default {
 			formData.append('name', this.newBadge.name);
 			formData.append('description', this.newBadge.description);
 			formData.append('image', this.newBadge.image);
-			formData.append('milestone',this.newBadge.milestone)
+			formData.append('milestone', this.newBadge.milestone)
 
 			try {
 				const response = await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/badges`, formData, {
