@@ -122,7 +122,7 @@
 					<p class="text-muted">Easily log routes you take around the city by entering your starting point and destination. Select the route you took to add it to your log.</p>
 					<div class="video-container">
 						<video controls autoplay muted loop>
-							<source src="../assets/routes.mov" type="video/mp4">
+							<source src="https://bchewy-videos.s3.ap-southeast-1.amazonaws.com/routes.mov" type="video/mp4">
 							Your browser does not support the video tag.
 						</video>
 					</div>
@@ -136,7 +136,7 @@
 					<p>View all your logged routes, earned badges, points, and current level on your profile. Compare stats with friends on the leaderboard.</p>
 					<div class="video-container">
 						<video controls autoplay muted loop>
-							<source src="../assets/profile.mov" type="video/mp4">
+							<source src="https://bchewy-videos.s3.ap-southeast-1.amazonaws.com/profile.mov" type="video/mp4">
 							Your browser does not support the video tag.
 						</video>
 					</div>
@@ -151,7 +151,7 @@
 					<p>Gain XP points and advance levels for choosing low-carbon active transport like walking and biking. Unlock badges and rewards as you level up!</p>
 					<div class="video-container">
 						<video controls autoplay muted loop>
-							<source src="../assets/game.mov" type="video/mp4">
+							<source src="https://bchewy-videos.s3.ap-southeast-1.amazonaws.com/game.mov" type="video/mp4">
 							Your browser does not support the video tag.
 						</video>
 					</div>
@@ -166,7 +166,7 @@
 					<p>Join the conversation around sustainable transportation. Share route ideas, transit tips, and stories with other members.</p>
 					<div class="video-container">
 						<video controls autoplay muted loop>
-							<source src="../assets/community.mov" type="video/mp4">
+							<source src="https://bchewy-videos.s3.ap-southeast-1.amazonaws.com/community.mov" type="video/mp4">
 							Your browser does not support the video tag.
 						</video>
 					</div>
