@@ -56,7 +56,7 @@
 	/* Add padding to avoid text touching the edges */
 	margin: 10px;
 	/* Add some margin if needed */
-	max-width: 80%;
+	max-width: 60%;
 	/* Control the max width of the transparent background */
 	box-sizing: border-box;
 }
@@ -77,6 +77,20 @@
 	/* or 'center' as per your design */
 }
 
+.video-container {
+	position: relative;
+	width: 100%;
+	padding-bottom: 56.25%;
+	/* Aspect Ratio (height / width * 100%) */
+}
+
+.video-container video {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
 
 /* .section-1 {
 	background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/aboutf.png');
@@ -105,10 +119,13 @@
 			<div class="col-12 story-part">
 				<div class="text-background">
 					<h3>Log Your Routes</h3>
-					<p>Easily log routes you take around the city by entering your starting point and destination. We'll show route options with distance and emissions for modes like walking, biking, driving, or public transit. Select the route you took to add it to your log.</p>
-					<img class="img-fluid" src="../assets/log_routes.gif" alt="Product Demo">
-					
-
+					<p class="text-muted">Easily log routes you take around the city by entering your starting point and destination. Select the route you took to add it to your log.</p>
+					<div class="video-container">
+						<video controls autoplay muted loop>
+							<source src="../assets/routes.mov" type="video/mp4">
+							Your browser does not support the video tag.
+						</video>
+					</div>
 				</div>
 			</div>
 
@@ -117,6 +134,12 @@
 				<div class="text-background">
 					<h3>See Your Profile</h3>
 					<p>View all your logged routes, earned badges, points, and current level on your profile. Compare stats with friends on the leaderboard.</p>
+					<div class="video-container">
+						<video controls autoplay muted loop>
+							<source src="../assets/profile.mov" type="video/mp4">
+							Your browser does not support the video tag.
+						</video>
+					</div>
 				</div>
 			</div>
 
@@ -126,6 +149,12 @@
 
 					<h3>Earn Points and Level Up</h3>
 					<p>Gain XP points and advance levels for choosing low-carbon active transport like walking and biking. Unlock badges and rewards as you level up!</p>
+					<div class="video-container">
+						<video controls autoplay muted loop>
+							<source src="../assets/game.mov" type="video/mp4">
+							Your browser does not support the video tag.
+						</video>
+					</div>
 				</div>
 			</div>
 
@@ -135,6 +164,12 @@
 
 					<h3>Connect with Community</h3>
 					<p>Join the conversation around sustainable transportation. Share route ideas, transit tips, and stories with other members.</p>
+					<div class="video-container">
+						<video controls autoplay muted loop>
+							<source src="../assets/community.mov" type="video/mp4">
+							Your browser does not support the video tag.
+						</video>
+					</div>
 				</div>
 			</div>
 
@@ -175,24 +210,24 @@
 					</div>
 
 
-					<h3>Meet Our Contributors</h3>
+					<h3>Meet Our Team</h3>
 					<ul class="d-flex flex-column">
 						<li class="mb-1">
 							<img style="height: 35px;" src="https://bchewy.s3.ap-southeast-1.amazonaws.com/code+block%60%60%60%3A+'Brian+Chew+LinkedIn.jpeg">&nbsp;
 							<a class="link-success" href="https://github.com/bchewy">@bchewy</a>
 						</li>
 						<li class="mb-1">
-							<img style="height: 35px;" src="../assets/s3.png" alt="Tool 1">&nbsp;
+							<img style="height: 35px;" src="https://cdn.vectorstock.com/i/preview-1x/08/19/gray-photo-placeholder-icon-design-ui-vector-35850819.jpg" alt="">&nbsp;
 
 							<a class="link-success" href="https://github.com/ryan99324">@ryan99324</a>
 						</li>
 						<li class="mb-1">
-							<img style="height: 35px;" src="../assets/s3.png" alt="Tool 1">&nbsp;
+							<img style="height: 35px;" src="https://cdn.vectorstock.com/i/preview-1x/08/19/gray-photo-placeholder-icon-design-ui-vector-35850819.jpg" alt="">&nbsp;
 
 							<a class="link-success" href="https://github.com/melodywong23">@melodywong23</a>
 						</li>
 						<li class="mb-1">
-							<img style="height: 35px;" src="../assets/s3.png" alt="Tool 1">&nbsp;
+							<img style="height: 35px;" src="https://cdn.vectorstock.com/i/preview-1x/08/19/gray-photo-placeholder-icon-design-ui-vector-35850819.jpg">&nbsp;
 
 							<a class="link-success" href="https://github.com/saphalex">@saphalex</a>
 						</li>

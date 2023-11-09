@@ -53,6 +53,7 @@ library.add(faPeopleGroup)
 // Prima Vue
 import PrimeVue from 'primevue/config';
 // import VueParallaxJs from 'vue-parallax-js'
+// import { MotionPlugin } from '@vueuse/motion'
 
 // AWS
 // import AWS from 'aws-sdk';
@@ -84,6 +85,7 @@ app.use(
 		}
 	})
 );
+// app.use(MotionPlugin)
 app.use(PrimeVue);
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)
