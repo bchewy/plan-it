@@ -1,12 +1,14 @@
 <template>
   <header>
     <!-- nav -->
-    <NavBar />
+   
   </header>
-  <div class="container-fluid p-0">
+  <div class="container-fluid p-0 scroll-container">
+    
 
-
-    <section class="text-light text-center vh-100 d-flex align-items-center justify-content-center bg-supergreen" style="background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/planit.png'); background-size: cover;">
+    <section >
+      <NavBar />
+    <div class="section-background text-light text-center vh-100 d-flex align-items-center justify-content-center" >
       <div class="container">
         <div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
           <div class="text-center">
@@ -17,12 +19,13 @@
           </div>
         </div>
       </div>
+    </div>
       <!--/div-->
     </section>
     <!-- </Parallaxy> -->
 
     <!-- boxes-->
-    <section class="p-5 bg-supergreen">
+    <section class="h-25 bg-brown pt-5" >
       <div class="container">
         <div class="row text-center">
           <div class="col-md" v-for="(card, index) in cards" :key="index">
@@ -42,22 +45,30 @@
           </div>
         </div>
       </div>
-    </section>
+    
 
     <!-- "Learn More" modal -->
     <LearnMore :visible="currentCardIndex !== -1" :card="currentCardIndex !== -1 ? cards[currentCardIndex] : {}" @close="closeModal" />
 
     <!-- <div class="bg-supergreen" style="height: 50px;"></div> Adjust the height as needed -->
 
-    <section class="h-25 bg-supergreen" style="background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/Brown+pathway.jpg'); background-size: cover; min-height: 20em;">
-    </section>
+    
+    
 
 
     <!-- Question Accordion -->
-    <section id="questions" class="p-5 bg-supergreen ">
-      <div class="container">
-        <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+    
+      <div class="container" style="margin-top: 100px;">
+       
         <div class="accordion accordion-flush " id="questions">
+          <div class="accordion-item ">
+            <h3 class="accordion-header text-center beige-colour py-2">
+              
+                <b>Frequently Asked Questions</b>
+            
+            </h3>
+            
+          </div>
           <!--Item 1-->
           <div class="accordion-item ">
             <h2 class="accordion-header ">
@@ -237,6 +248,50 @@ export default {
   background-color: #d1f4d1
 }
 
+.h-25.bg-brown.pt-5 {
+  position: relative;
+}
+.h-25.bg-brown.pt-5::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/Brown+pathway.jpg');
+  background-size: cover;
+  /* Adjust this to your liking */
+  opacity:0.9;
+  z-index: -1;
+
+}
+.section-background {
+  position: relative;
+}
+
+.section-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/planit.png');
+  background-size: cover;
+  opacity: 0.9; /* Adjust this to your liking */
+  z-index: -1;
+}
+
+.scroll-container {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+section {
+  scroll-snap-align: start;
+  height: 100vh;
+}
 
 /* Additional styles if needed */
 </style>

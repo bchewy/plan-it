@@ -34,6 +34,7 @@
 	/* Adjust this value to match the total width of your content */
 	height: 100%;
 	background-image: url('../assets/aboutfinal.png');
+	opacity: 0.6;
 	background-size: auto 100%;
 	background-repeat: no-repeat;
 	z-index: -1;
@@ -47,7 +48,7 @@
 }
 
 .text-background {
-	background-color: rgba(220, 255, 195, 0.826);
+	background-color: rgba(255, 248, 248, 0.92);
 	/* White background with 70% opacity */
 	border-radius: 10px;
 	/* Optional: for rounded corners */
