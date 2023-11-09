@@ -1,6 +1,6 @@
 <template>
 	<NavBar />
-	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color: #a8cfa8;">
+	<div class="container-fluid vh-100 bg-supergreen pb-3 position-relative" style="background-color: #a8cfa8;">
 		<div class="sticky-top border-bottom" style="background-color:#a8cfa8; z-index: 1;">
 			<CommunitySidebar></CommunitySidebar>
 			<div class="text-center h2 mb-3 pt-4">

@@ -2,21 +2,21 @@
     <!-- nav -->
     <NavBar />
     <CommunitySidebar></CommunitySidebar>
-    <div class="container-fluid" style="background-color: #a8cfa8;">
+    <div class="container-fluid" style="background-color: #cbdbb7;">
         <div class="row justify-content-center">
 
             <div class="col-10 vh-100">
 
-                <h2 class="text-center py-3 text-colour" style="font-weight: bold;">Create your very group!</h2>
+                <h2 class="text-center py-4 text-colour" style="font-weight: bold;">Create your very group!</h2>
                 <div class="row justify-content-center">
 
                     <form class="col-8 rounded border bg-white p-3" @submit.prevent="onSubmit">
                         <div class="mb-3 mt-3">
-                            <label for="grpName" class="form-label">Enter your group name:</label>
+                            <label for="grpName" class="form-label fw-bold">Enter your group name:</label>
                             <input type="text" class="form-control" id="grpName" placeholder="Group name" v-model="groupName">
                         </div>
                         <div class="mb-3">
-                            <label for="grpImg" class="form-label">Select your group profile image:</label>
+                            <label for="grpImg" class="form-label fw-bold">Select your group profile image:</label>
                             <input class="form-control" type="file" id="grpImg" @change="onFileChange">
                         </div>
                         <!-- <div class="form-check mb-3">

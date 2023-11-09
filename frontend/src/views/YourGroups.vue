@@ -6,7 +6,7 @@
 
     
     
-    <div class="container-fluid" style="background-color: #a8cfa8;">
+    <div class="container-fluid vh-100" style="background-color: #cbdbb7;">
         
         <div class="text-center h2 mb-3 pt-4">
 				<span class="header text-muted" style="font-weight: bold;">Your Groups </span>
