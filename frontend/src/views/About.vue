@@ -183,27 +183,27 @@
 
 					<div class="d-flex flex-wrap justify-content-between">
 						<div class="mb-3">
-							<img style="height: 50px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/2367px-Vue.js_Logo_2.svg.png" alt="Tool 1">
+							<img style="height: 35px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/2367px-Vue.js_Logo_2.svg.png" alt="Tool 1">
 							<p>VueJS</p>
 						</div>
 						<div class="mb-3">
-							<img style="height: 50px;" src="https://www.svgrepo.com/show/331488/mongodb.svg" alt="Tool 1">
+							<img style="height: 35px;" src="https://www.svgrepo.com/show/331488/mongodb.svg" alt="Tool 1">
 							<p>MongoDB</p>
 						</div>
 						<div class="mb-3">
-							<img style="height: 50px;" src="https://static-00.iconduck.com/assets.00/auth0-icon-458x512-8spyi0ve.png" alt="Tool 1">
+							<img style="height: 35px;" src="https://static-00.iconduck.com/assets.00/auth0-icon-458x512-8spyi0ve.png" alt="Tool 1">
 							<p>Auth0</p>
 						</div>
 						<div class="mb-3">
-							<img style="height: 50px;" src="../assets/ec2.png" alt="Tool 1">
+							<img style="height: 35px;" src="../assets/ec2.png" alt="Tool 1">
 							<p>EC2</p>
 						</div>
 						<div class="mb-3">
-							<img style="height: 50px;" src="../assets/s3.png" alt="Tool 1">
+							<img style="height: 35px;" src="../assets/s3.png" alt="Tool 1">
 							<p>S3</p>
 						</div>
 						<div class="mb-3">
-							<img style="height: 50px;" src="../assets/cf.png" alt="Tool 1">
+							<img style="height: 35px;" src="../assets/cf.png" alt="Tool 1">
 							<p>Cloudfront</p>
 						</div>
 

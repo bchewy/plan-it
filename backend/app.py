@@ -1666,10 +1666,7 @@ def list_user_groups(user_email):
     groups = list(db.groups.find({"members": user_email}))
     usergroups =list(db.groups.find({"owner_email":user_email}))
     if usergroups:
-        groups.append(usergroups)
-    print(groups)
-    print('\n')
-    print('\n')
+        groups.extend(usergroups)
     if len(groups) == 0:
         return jsonify({"message": "No groups found."}), 404
     groups = [convert_objectid_to_string(group) for group in groups]

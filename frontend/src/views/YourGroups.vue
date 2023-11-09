@@ -7,24 +7,27 @@
 
 
     <div class="container-fluid vh-100 bg-supergreen pb-3 position-relative" style="background-color: #cbdbb7;">
-		<div class="sticky-top border-bottom" style="background-color:#cbdbb7; z-index: 1;">
-			<CommunitySidebar></CommunitySidebar>
-			<div class="text-center h2 mb-3 pt-4">
-				<span class="header text-muted" style="font-weight: bold;">Your Groups </span>
-			</div>
-		</div>
+        <div class="sticky-top border-bottom" style="background-color:#cbdbb7; z-index: 1;">
+            <CommunitySidebar></CommunitySidebar>
+            <div class="text-center h2 mb-3 pt-4">
+                <span class="header text-muted" style="font-weight: bold;">Your Groups </span>
+            </div>
+        </div>
         <div v-if="loading">Loading...</div>
 
-        <div v-else v-for="(groupArray, index) in groups" :key="index" class="row" style="background-color: #cbdbb7;">
+        <div v-else v-for="(group, index) in groups" :key="index" class="row" style="background-color: #cbdbb7;">
+            <!-- {{ groups }} -->
+            <br><br>
+            <div :key="group._id" class="col-md-4 mb-4">
 
-            <div v-for=" group in groupArray" :key="group._id" class="col-md-4 mb-4">
+                <!-- {{ group }} -->
+
                 <div class="card">
                     <img class="card-img-top" :src="group.group_image" alt="Group Image" v-if="group.group_image">
                     <div class="card-body">
 
                         <h5 class="card-title fs-2 text-center">{{ group.name }}</h5>
                         <br>
-                        <p class="card-text"><span class="fw-bold">Owner:</span> {{ group.owner_email }}</p>
 
                         <p class="card-text"> <span class="fw-bold">Members:</span></p>
                         <ul class="list-group">
