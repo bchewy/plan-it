@@ -8,8 +8,14 @@
             </div>
         </div>
         <div class="row justify-content-center" style="background-color: #cbdbb7;">
-            <PostComponent v-for=" post in posts" :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email">
-            </PostComponent>
+            <div v-if="posts">
+                <PostComponent v-for=" post in posts" :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email">
+                </PostComponent>
+            </div>
+            <div v-else>
+                You don't have any posts from your friends.
+            </div>
+
         </div>
     </div>
 </template>
@@ -21,6 +27,7 @@ import PostComponent from '../components/PostComponent.vue'
 import { ref, onMounted } from "vue";
 import { useAuth0 } from '@auth0/auth0-vue';
 import axios from "axios";
+import { toast } from 'vue3-toastify';
 
 export default {
     name: 'FriendCommunity',
@@ -44,8 +51,6 @@ export default {
             while (isLoading.value) {
                 await new Promise(resolve => setTimeout(resolve, 100));
             }
-
-
             const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(user.value.email)}`;
             const response = await axios.get(url, { headers });
             friends.value = response.data.friends;
@@ -55,10 +60,8 @@ export default {
                 const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(friend)}/posts`;
                 const response = await axios.get(url, { headers });
                 posts.value = [...posts.value, ...response.data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                console.log(posts.value)
+                // console.log(posts.value)
             }
-
-
         };
 
         onMounted(fetchData);
@@ -79,11 +82,14 @@ export default {
             };
             try {
                 const response = await axios.get(url, { headers })
-                console.log(response.data)
+                // console.log(response.data)
             }
-
             catch (error) {
                 console.error("error", error)
+                toast.error(`${error.response.data.message}`, {
+                    autoClose: 5000,
+                    position: toast.POSITION.TOP_CENTER,
+                });
 
             }
         }

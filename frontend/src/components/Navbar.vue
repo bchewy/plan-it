@@ -196,7 +196,6 @@ import { useAuth0 } from '@auth0/auth0-vue';
 import { watch, computed, defineComponent, ref } from 'vue';
 import axios from "axios";
 
-
 export default defineComponent({
   name: 'NavBar',
   setup() {
@@ -272,7 +271,7 @@ export default defineComponent({
             console.log('User found in the database');
           }
         } catch (e) {
-          console.error('Failed to upsert user:', e);
+          console.error('Failed to upsert user on the Backend:', e);
         }
       }
     });

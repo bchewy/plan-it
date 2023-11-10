@@ -23,6 +23,7 @@ import PostComponent from '../components/PostComponent.vue'
 import { ref, onMounted } from "vue";
 import { useAuth0 } from '@auth0/auth0-vue';
 import axios from "axios";
+import { toast } from 'vue3-toastify';
 
 export default {
 	name: 'Community',
@@ -45,7 +46,11 @@ export default {
 				console.log(posts.value)
 			}
 			catch (error) {
-				console.error("error", error)
+				console.error("error", error);
+				toast.error(`Encountered an error on the backend. ${error}. Please try again later.`, {
+					autoClose: 5000,
+					position: toast.POSITION.TOP_CENTER,
+				});
 			}
 		}
 
