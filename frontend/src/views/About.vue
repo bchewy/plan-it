@@ -240,7 +240,7 @@
 							<a class="link-success" href="https://github.com/ryan99324">@ryan99324</a>
 						</li>
 						<li class="mb-1">
-							<img style="height: 35px;" src="..assets/melody.jpg" alt="">&nbsp;
+							<img style="height: 35px;" src="../assets/melody.jpg" alt="">&nbsp;
 
 							<a class="link-success" href="https://github.com/melodywong23">@melodywong23</a>
 						</li>
