@@ -8,12 +8,15 @@
             </div>
         </div>
         <div class="row justify-content-center" style="background-color: #cbdbb7;">
-            <div v-if="posts">
+            <div v-if="IsbackendConnected">
                 <PostComponent v-for=" post in posts" :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email">
                 </PostComponent>
             </div>
-            <div v-else>
-                You don't have any posts from your friends.
+            <div v-else style="background-color: #cbdbb7;">
+                <FailBackend></FailBackend>
+            </div>
+            <div v-if="posts.length == 0 && IsbackendConnected" class="text-center h2 mb-3 pt-4" style="background-color: #cbdbb7;">
+                <span class="header text-muted" style="font-weight: bold;">You have no friends yet!</span>
             </div>
 
         </div>
@@ -24,6 +27,7 @@ import CreatePostComponent from "../components/CreatePostComponent.vue"
 import CommunitySidebar from "../components/CommunitySidebar.vue";
 import NavBar from "../components/Navbar.vue";
 import PostComponent from '../components/PostComponent.vue'
+import FailBackend from "../components/FailBackend.vue";
 import { ref, onMounted } from "vue";
 import { useAuth0 } from '@auth0/auth0-vue';
 import axios from "axios";
@@ -36,12 +40,14 @@ export default {
         CreatePostComponent,
         PostComponent,
         CommunitySidebar,
+        FailBackend,
     },
     setup() {
         const { loginWithRedirect, user, isAuthenticated, isLoading } = useAuth0();
         const headers = { "x-api-key": `${import.meta.env.VITE_API_KEY}`, };
         const posts = ref([]);
         const friends = ref([]);
+        const IsbackendConnected = ref(false);
 
         const fetchData = async () => {
 
@@ -51,17 +57,26 @@ export default {
             while (isLoading.value) {
                 await new Promise(resolve => setTimeout(resolve, 100));
             }
-            const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(user.value.email)}`;
-            const response = await axios.get(url, { headers });
-            friends.value = response.data.friends;
-            // Fetch posts per badge
-            for (let friend of friends.value) {
-                console.log("Fetching posts for friend", friend)
-                const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(friend)}/posts`;
+            try {
+                const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(user.value.email)}`;
                 const response = await axios.get(url, { headers });
-                posts.value = [...posts.value, ...response.data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                // console.log(posts.value)
+                friends.value = response.data.friends;
+                // Fetch posts per badge
+                for (let friend of friends.value) {
+                    console.log("Fetching posts for friend", friend)
+                    const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(friend)}/posts`;
+                    const response = await axios.get(url, { headers });
+                    posts.value = [...posts.value, ...response.data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    // console.log(posts.value)
+                    IsbackendConnected.value = true;
+                }
             }
+            catch (error) {
+                console.error("error", error);
+                IsbackendConnected.value = false;
+
+            }
+
         };
 
         onMounted(fetchData);
@@ -71,6 +86,7 @@ export default {
             posts,
             friends,
             fetchData,
+            IsbackendConnected,
         };
     },
 
