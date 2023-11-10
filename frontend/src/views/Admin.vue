@@ -107,6 +107,7 @@
 				<div class="card mt-4 mb-4">
 					<div class="card-header">
 						<h3 class="mb-0">Badge Management</h3>
+						<button class="btn btn-success mt-3 mb-2" @click="addBadge">Add New Badge</button>
 					</div>
 					<div class="container-fluid">
 						<div class="row">
@@ -137,7 +138,6 @@
 										</tr>
 									</tbody>
 								</table>
-								<button class="btn btn-success mt-3 mb-2" @click="addBadge">Add New Badge</button>
 							</div>
 						</div>
 					</div>
