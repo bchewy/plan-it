@@ -69,6 +69,7 @@ export default {
 			catch (error) {
 				console.error("error", error)
 			}
+			posts.value.reverse()
 		}
 
 		watch(user, async (newUser) => {
