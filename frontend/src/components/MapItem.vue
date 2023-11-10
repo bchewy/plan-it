@@ -325,7 +325,7 @@ export default defineComponent({
 			})
 			.catch(error => {
 				console.error(error);
-				toast.error(`${error.response.data.message}`, {
+				toast.error(`Encountered an error on the backend. ${error}. Please try again later.`, {
 					autoClose: 5000,
 					position: toast.POSITION.TOP_CENTER,
 				});
