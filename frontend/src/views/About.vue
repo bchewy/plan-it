@@ -245,7 +245,7 @@
 							<a class="link-success" href="https://github.com/melodywong23">@melodywong23</a>
 						</li>
 						<li class="mb-1">
-							<img style="height: 35px;" src="https://cdn.vectorstock.com/i/preview-1x/08/19/gray-photo-placeholder-icon-design-ui-vector-35850819.jpg">&nbsp;
+							<img style="height: 35px;" src="../assets/saph.jpg" alt="">&nbsp;
 
 							<a class="link-success" href="https://github.com/saphalex">@saphalex</a>
 						</li>
