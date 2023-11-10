@@ -51,5 +51,3 @@ AWS_SECRET_ACCESS_KEY=XYZ
 EC2_HOST=XYZ
 EC2_SSH_KEY=XYZ
 ```
-![How to get AWS Secret Key](https://aws.amazon.com/blogs/security/wheres-my-secret-access-key/)
-
