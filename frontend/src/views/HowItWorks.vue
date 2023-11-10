@@ -91,6 +91,19 @@ ul li{
 
 <template>
 	<Navbar />
+	<section class="text-light text-center vh-100 d-flex align-items-center" style="background-image: url('https://bchewy-images.s3.ap-southeast-1.amazonaws.com/planit.png'); background-size: cover;">
+	  <div class="container">
+		<div class="d-sm-flex align-items-center justify-content-center"> <!-- Center vertically and horizontally -->
+		  <div class="text-center">
+			<h1><span class="text-supergreen element"></span></h1>
+			<p class="lead">
+			  Account for your own carbon footprint for your traffic taken, <br>value-add and commit to reducing your carbon footprint <br>and reduce your personal impact.
+			</p>
+		  </div>
+		</div>
+	  </div>
+	  <!--/div-->
+	</section>
 	<div class="container-fluid pt-3 pb-3 bg-supergreen">
 		<div class="row justify-content-center">
 			<div class="block col-lg-8">
