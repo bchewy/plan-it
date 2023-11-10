@@ -1,3 +1,8 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 class Config:
     DEBUG = True
-    MONGO_URI = "mongodb://admin:T%3D5T1i%2BiWUMac4sWAj!9@api.bchwy.com:27017/?authMechanism=DEFAULT&directConnection=true"
+    MONGO_URI = os.getenv("MONGO_URI")
+    API_KEY = os.getenv("API_KEY")

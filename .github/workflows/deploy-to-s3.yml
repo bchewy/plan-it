@@ -1,30 +1,48 @@
 name: Deploy Vue.js to S3
 
-on: 
+on:
   push:
     branches:
-      - main  # Trigger the workflow on push to the main branch
+      - main # Trigger the workflow on push to the main branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-southeast-1  # Replace with your AWS region
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-1 # Replace with your AWS region
 
-    - name: Install dependencies
-      run: npm install --legacy-peer-deps --prefix ./frontend  # Replace with your frontend directory
+      # - uses: oven-sh/setup-bun@v1
+      #   with:
+      #     bun-version: latest
 
-    - name: Build
-      run: npm run build --prefix ./frontend  # Replace with your frontend directory
+      - name: Create .env.production file
+        run: |
+          echo "VITE_AUTH0_CLIENTID=${{ secrets.VITE_AUTH0_CLIENTID }}" >> .env.production
+          echo "VITE_AUTH0_DOMAIN=${{ secrets.VITE_AUTH0_DOMAIN }}" >> .env.production
+          echo "VITE_GIFY_API_KEY=${{ secrets.VITE_GIFY_API_KEY }}" >> .env.production
+          echo "VITE_GMAPS_API_KEY=${{ secrets.VITE_GMAPS_API_KEY }}" >> .env.production
+          echo "VITE_API_ENDPOINT=${{ secrets.VITE_API_ENDPOINT }}" >> .env.production
+          echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}" >> .env.production
+          mv .env.production ./frontend
 
-    - name: Deploy to S3
-      run: aws s3 sync frontend/dist s3://wad2.bchwy.com/ --delete --cache-control max-age=60 --acl public-read  # Replace with your S3 bucket name
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Build
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Deploy to S3
+        run: aws s3 sync frontend/dist s3://wad2.bchwy.com/ --delete --cache-control max-age=60 --acl public-read

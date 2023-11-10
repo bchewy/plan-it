@@ -16,7 +16,7 @@
         <div class="border-rounded border mt-3 " style="background-color: rgb(218, 239, 216);">
           <div class="row">
             <div class="col-3 justify-content-end d-flex my-3 ms-3">
-              <br> <img :src="badgeDetails.image" style="width:100%" class="rounded-circle">
+              <br> <img :src="badgeDetails.image" style="max-width:100%;max-height: 100%;" class="rounded-circle my-auto">
             </div>
             <div class="col ms-2 mt-2 align-items-center d-flex">
               <p class="fs-5"><span class="fw-bold fs-3">{{ badgeDetails.name }} </span><br><br> {{ badgeDetails.description }} <br><br> <strong>Milestone:</strong> {{ badgeDetails.milestone }}</p>
@@ -69,7 +69,7 @@ export default defineComponent({
     if (this.badge != '') {
       const url = `${import.meta.env.VITE_API_ENDPOINT}/badges/${this.badge}`;
       const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+        "x-api-key": `${import.meta.env.VITE_API_KEY}`,
       };
       try {
         const response = await axios.get(url, { headers })

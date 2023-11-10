@@ -3,66 +3,46 @@
 	background-color: #739072;
 }
 
-.nav-pills .nav-link.active {
-	background-color: #4F6F52;
-	/* Replace with the background color you want */
-	color: #ECE3CE;
-	/* Replace with the text color you want */
-}
-
-.nav-pills .nav-link {
-	/* background-color: ; */
-	color: #ECE3CE;
-}
-
-.nav-pills .nav-item {
-	margin-bottom: 20px;
-}
-
-.container-fluid {
-	min-height: 100vh;
-	padding-top: 3rem;
-	background-color: #739072;
-}
 
 .badge-select {
 	display: flex;
 	align-items: center;
-  }
-  
-  .badge-select input[type="checkbox"]{
+}
+
+.badge-select input[type="checkbox"] {
 	appearance: none;
 	width: 32px;
 	height: 14px;
 	background-color: #c67074;
 	border-radius: 14px;
 	position: relative;
-  }
-  .badge-select input[type="checkbox"]::before {
+}
+
+.badge-select input[type="checkbox"]::before {
 	content: "";
-	width: 14px; /* Width of the switch handle */
-	height: 14px; /* Height of the switch handle */
-	background-color: #ebedf0; /* Color of the switch handle */
-	border-radius: 50%; /* Make it a circle */
+	width: 14px;
+	height: 14px;
+	background-color: #ebedf0;
+	border-radius: 50%;
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
-	left: 1px; /* Adjust the position as needed */
-	transition: 0.4s; /* Add a smooth transition effect */
-  }
-  
-  .badge-select input[type="checkbox"]:checked {
-	background-color: #4CAF50; /* Background color for the "on" state */
-  }
-  
-  .badge-select input[type="checkbox"]:checked::before {
-	left: calc(100% - 15px); /* Position the handle to the right when checked */
-  }
-  
-  .badge-select label{
+	left: 1px;
+	/* Adjust the position as needed */
+	transition: 0.4s;
+}
+
+.badge-select input[type="checkbox"]:checked {
+	background-color: #4CAF50;
+}
+
+.badge-select input[type="checkbox"]:checked::before {
+	left: 70%;
+}
+
+.badge-select label {
 	margin-left: 8px;
-  }
-  
+}
 </style>
 
 <template>
@@ -70,45 +50,47 @@
 	<div class="container-fluid pt-3 bg-supergreen pb-3">
 		<!-- User Management ================================================== -->
 		<div class="row">
-			<div class="col-lg-12">
+			<div class="col">
+				<input class="input-group-text" type="text" v-model="searchUser" placeholder="Search users...">
 				<div class="card mt-4 mb-4">
 					<div class="card-header">
 						<h3 class="mb-0">User Management</h3>
 					</div>
-					<div class="container p-0">
+
+					<div class="container-fluid">
 						<div class="row">
 							<div class="col-12 mt-5">
-								<table class="table table-responsive">
-									<thead>
-										<tr>
-											<th scope="col">#</th>
-											<th scope="col">Handle</th>
-											<th scope="col">Progress</th>
-											<th scope="col">Badges</th>
-											<th scope="col">Actions</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr v-for="(user, index) in users" :key="user">
-											<th scope="row">{{ index + 1 }}</th>
-											<td><img :src="user.pictureurl" alt="User Image" width="50" height="50"><br> @{{ user.handle }}</td>
-											<td v-if="user.level">Lvl {{ user.level }}, EXP: {{ user.exp }}/100</td>
-											<td v-else>-</td>
-											<td>
-												<div v-for="badge in badges" :key="badge._id" class="badge-select">
-													<input type="checkbox" :value="badge._id" :checked="hasBadge(user, badge._id)" @change="handleBadgeChange(user, badge._id)">
-													<label>{{ badge.name }}</label>
-													<img :src="badge.image" class="badge-image" style="width: 30px;">
-												</div>
-											</td>
-											<td>
-												<button class="btn btn-success" @click="openModal(user)" data-bs-toggle="modal" data-bs-target="#addUserModal">Edit</button>
-												<!-- <button disabled class="btn btn-danger" @click="deleteUser(user.id)">Delete</button> -->
+								<div class="table-responsive">
+									<table class="table">
+										<thead>
+											<tr>
+												<th>Handle</th>
+												<th>Progress</th>
+												<th>Badges</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="(user, index) in filteredUsers" :key="user">
+												<td><img class="img-fluid w-25" :src="user.pictureurl" alt="User Image"><br> @{{ user.handle }}</td>
+												<td v-if="user.level">Lvl {{ user.level }}, EXP: {{ user.exp }}/100</td>
+												<td v-else>-</td>
+												<td>
+													<div v-for="badge in badges" :key="badge._id" class="badge-select">
+														<input type="checkbox" :value="badge._id" :checked="hasBadge(user, badge._id)" @change="handleBadgeChange(user, badge._id)">
+														<label class="text-muted">{{ badge.name }}</label>
+														<img :src="badge.image" class="badge-image" style="width: 30px;">
+													</div>
+												</td>
+												<td>
+													<button class="btn btn-success" @click="openModal(user)" data-bs-toggle="modal" data-bs-target="#addUserModal">Edit</button>
+													<!-- <button disabled class="btn btn-danger" @click="deleteUser(user.id)">Delete</button> -->
 
-											</td>
-										</tr>
-									</tbody>
-								</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -119,12 +101,15 @@
 
 		<!-- Badges ================================================== -->
 		<div class="row">
-			<div class="col-lg-12">
+
+			<div class="col">
+				<input class="input-group-text" type="text" v-model="searchBadge" placeholder="Search Badges...">
 				<div class="card mt-4 mb-4">
 					<div class="card-header">
 						<h3 class="mb-0">Badge Management</h3>
+						<button class="btn btn-success mt-3 mb-2" @click="addBadge">Add New Badge</button>
 					</div>
-					<div class="container p-0">
+					<div class="container-fluid">
 						<div class="row">
 							<div class="col-12 mt-5">
 								<table class="table table-striped">
@@ -137,7 +122,8 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr v-for="(badge, index) in badges" :key="badge">
+										<tr v-for="(badge, index) in filteredBadges" :key="badge">
+
 											<th scope="row">{{ index + 1 }}</th>
 											<td>
 												{{ badge.name }}
@@ -152,7 +138,6 @@
 										</tr>
 									</tbody>
 								</table>
-								<button class="btn btn-success mt-3 mb-2" @click="addBadge">Add New Badge</button>
 							</div>
 						</div>
 					</div>
@@ -232,10 +217,10 @@ import Badges from '../components/Badges.vue';
 import { useAuth0 } from "@auth0/auth0-vue";
 import axios from "axios";
 import { ref, defineComponent, computed, reactive } from "vue";
-// import Modal from 'bootstrap/js/dist/modal';
+import Modal from 'bootstrap/js/dist/modal';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import * as bootstrap from 'bootstrap';
+// import * as bootstrap from 'bootstrap';
 
 export default {
 	async created() {
@@ -264,14 +249,23 @@ export default {
 			newBadge: {
 				name: '',
 				description: '',
-				milestone:'',
+				milestone: '',
 				image: null,
 
 			},
 			selectedBadges: reactive({}),
+			searchUser: '',
+			searchBadge: '',
 		};
 	},
-	computed: {},
+	computed: {
+		filteredUsers() {
+			return this.users.filter(user => user.handle.includes(this.searchUser));
+		},
+		filteredBadges() {
+			return this.badges.filter(badge => badge.name.includes(this.searchBadge));
+		}
+	},
 	components: {
 		Navbar,
 		MapItem,
@@ -307,7 +301,7 @@ export default {
 		async assignBadges(email, badges) {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${email}/badges`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			try {
@@ -321,7 +315,7 @@ export default {
 		async unassignBadges(email, badge) {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${email}/badges/${badge}`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			try {
@@ -342,9 +336,8 @@ export default {
 			this.updatedUser.exp = user.exp;
 		},
 		async addBadge() {
-
 			let myModalEl = document.getElementById('addBadgeModal');
-			let myModal = new bootstrap.Modal(myModalEl);
+			let myModal = new Modal(myModalEl);
 			myModal.show();
 
 			if (!this.newBadge.name || !this.newBadge.description || !this.newBadge.image || !this.newBadge.milestone) {
@@ -363,13 +356,13 @@ export default {
 			formData.append('name', this.newBadge.name);
 			formData.append('description', this.newBadge.description);
 			formData.append('image', this.newBadge.image);
-			formData.append('milestone',this.newBadge.milestone)
+			formData.append('milestone', this.newBadge.milestone)
 
 			try {
 				const response = await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/badges`, formData, {
 					headers: {
 						// 'Content-Type': 'application/json',
-						'x-api-key': 'PlanItIsTheBestProjectEverXYZ' // replace with your actual API key
+						'x-api-key': `${import.meta.env.VITE_API_KEY}` // replace with your actual API key
 					}
 				});
 				console.log(response.data.message);
@@ -384,7 +377,7 @@ export default {
 			const urlLevel = `${import.meta.env.VITE_API_ENDPOINT}/users/${this.updatedUser.email}/replace/level`;
 			// const urlExp = `${import.meta.env.VITE_API_ENDPOINT}/users/${this.updatedUser.email}/exp`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			// Update level
@@ -406,7 +399,7 @@ export default {
 		},
 		async fetchUsers() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users`;
-			const headers = { "x-api-key": "PlanItIsTheBestProjectEverXYZ" };
+			const headers = { "x-api-key": `${import.meta.env.VITE_API_KEY}` };
 
 			try {
 				const response = await axios.get(url, { headers });
@@ -426,7 +419,7 @@ export default {
 		async fetchBadges() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/badges`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			try {
@@ -439,7 +432,7 @@ export default {
 		async deleteBadge(badgeId) {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badgeId}`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			try {

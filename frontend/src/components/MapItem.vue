@@ -208,7 +208,7 @@
 					</div>
 					<div class="d-flex justify-content-between mb-3">
 						<span><strong>Carbon Emission:</strong></span>
-						<span>{{ calculateCarbonEmission().toFixed(2) }} kg CO2</span>
+						<span>{{ calculateCarbonEmission().toFixed(2) }} g CO2</span>
 					</div>
 					<hr>
 					<h5 class="card-title mb-4">User Details</h5>
@@ -223,7 +223,7 @@
 					</div>
 					<div class="d-flex justify-content-between mb-2">
 						<span><strong>Emission Savings:</strong></span>
-						<span>{{ emissionSavings.toFixed(2) }} kg CO2</span>
+						<span>{{ emissionSavings.toFixed(2) }} g CO2</span>
 					</div>
 					<!-- Open in GMaps/CityMapper -->
 					<div class="d-flex justify-content-center">
@@ -325,7 +325,7 @@ export default defineComponent({
 			})
 			.catch(error => {
 				console.error(error);
-				toast.error(`${error.response.data.message}`, {
+				toast.error(`Encountered an error on the backend. ${error}. Please try again later.`, {
 					autoClose: 5000,
 					position: toast.POSITION.TOP_CENTER,
 				});
@@ -363,7 +363,7 @@ export default defineComponent({
 		const isDisabled = ref(false) // Set this to true when you want to disable the input
 		const placeholderText = ref('Origin')
 		const totalKm = ref(0)
-
+		const API_KEY = `${import.meta.env.VITE_GMAPS_API_KEY}`
 
 		const setStartLocation = (place) => {
 			const lat = Number(place.geometry.location.lat());
@@ -511,7 +511,7 @@ export default defineComponent({
 					const response = await axios.post("https://routes.googleapis.com/directions/v2:computeRoutes", requestData, {
 						headers: {
 							'Content-Type': 'application/json',
-							'X-Goog-Api-Key': 'AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM',
+							'X-Goog-Api-Key': `${import.meta.env.VITE_GMAPS_API_KEY}`,
 							'X-Goog-FieldMask': 'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs.steps'
 						}
 					});
@@ -532,9 +532,10 @@ export default defineComponent({
 					// Helper Function to get names
 					const getLocationName = async (lat, lng) => {
 						try {
-							const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
+							const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyBrGgc_N-cEmcpP4mqYXHkXcl-7dfz1xos`);
+							console.log("Retriving location name");
+							console.log(response.data);
 							if (response.data.results && response.data.results.length > 0) {
-								// Return the formatted address of the first result
 								return response.data.results[0].formatted_address;
 							}
 						} catch (error) {
@@ -564,19 +565,20 @@ export default defineComponent({
 						checkedStartLocation: isDisabled.val //Validation here is for users to ensure that they selected currentLocation as start location.
 					};
 
+					totalKm.value += distanceInKm;
 
 					// Update our route database (backend Call)
 					// Update user's EXP based on carbon emission calculation
 					try {
 						const headers = {
-							'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+							'x-api-key': `${import.meta.env.VITE_API_KEY}`
 						};
 
 
 						await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/routes`, routeData, { headers });
 
 
-						totalKm.value += distanceInKm;
+						// totalKm.value += distanceInKm;
 						// EXP Given here is not the most and incomplete.
 						await addExpBasedOnCarbonEmission(calculateCarbonEmissionForEXP(), distanceInKm, travelMode.value);
 						showModal();
@@ -639,7 +641,7 @@ export default defineComponent({
 					const response = await axios.post("https://routes.googleapis.com/directions/v2:computeRoutes", requestData, {
 						headers: {
 							'Content-Type': 'application/json',
-							'X-Goog-Api-Key': 'AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM',
+							'X-Goog-Api-Key': `${import.meta.env.VITE_GMAPS_API_KEY}`,
 							'X-Goog-FieldMask': 'routes.polyline.encodedPolyline'
 						}
 					});
@@ -660,7 +662,9 @@ export default defineComponent({
 			const lat = coords.value.latitude;
 			const lng = coords.value.longitude;
 			try {
-				const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6xTDY_NrDH0U1NSE2Ug6AnzuVsbRPFYM`);
+				const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyBrGgc_N-cEmcpP4mqYXHkXcl-7dfz1xos`;
+				console.log(url);
+				const response = await axios.get(url);
 				if (response.data.results && response.data.results.length > 0) {
 					startLocation.value = { lat, lng };
 					isDisabled.value = true;
@@ -677,13 +681,12 @@ export default defineComponent({
 
 		const randomGif = ref('');
 		const fetchRandomGif = async () => {
-			const giphyApiKey = 'FuPGJnG0vBT3yRNDTJ8KzeoICLLNYQ5V'; // replace with your Giphy API key
-			const url = `https://api.giphy.com/v1/gifs/random?api_key=${giphyApiKey}&tag=congratulations&rating=g`;
+			const url = `https://api.giphy.com/v1/gifs/random?api_key=${import.meta.env.VITE_GIFY_API_KEY}&tag=congratulations&rating=g`;
 
 			try {
 				const response = await axios.get(url);
 				randomGif.value = response.data.data.images.fixed_height.url;
-				console.log(randomGif.value);
+				// console.log(randomGif.value);
 			} catch (error) {
 				console.error('Error fetching random gif:', error);
 			}
@@ -785,7 +788,7 @@ export default defineComponent({
 			// Update the user's total km travelled
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/total_km`, { total_km: totalKm.value }, {
 				headers: {
-					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+					'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
 				}
 			})
 				.then(response => {
@@ -800,7 +803,7 @@ export default defineComponent({
 
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/carbonsavings`, { carbonsavings: emissionSavings.value }, {
 				headers: {
-					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+					'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
 				}
 			})
 				.then(response => {
@@ -814,7 +817,7 @@ export default defineComponent({
 			// Update the user exp in the backend
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/exp`, { exp: expToAdd }, {
 				headers: {
-					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+					'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
 				}
 			})
 				.then(response => {
@@ -829,7 +832,7 @@ export default defineComponent({
 		const logUserActivity = (activity) => {
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${user.value.email}/log`, { activity: activity }, {
 				headers: {
-					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+					'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
 				}
 			})
 				.then(response => {

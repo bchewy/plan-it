@@ -52,7 +52,7 @@
 				<div class="card">
 					<div class="card-header">
 						<h4 class="card-title text-center">Invalid Routes</h4>
-						<p class="card-text">The invalid routes here do not have their end locations verified. <strong>Verify your end locations</strong> before the time limit to get more EXP.</p>
+						<p class="card-text text-center">The invalid routes here do not have their end locations verified. <strong>Verify your end locations</strong> before the time limit to get more EXP.</p>
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
@@ -82,7 +82,11 @@
 										<td>
 											Start: <b>{{ route.start_point_name }} </b><br>
 											End: <b>{{ route.end_point_name }} </b><br>
-											<button class="btn btn-primary" @click="checkEndLocation(route)">Validate Route</button><br>
+											Distance: <b>{{ route.distance }} km</b><br>
+											Carbon Emission: <b>{{ route.carbon_emission.toFixed(2) }}g</b><br>
+											Transport Mode: <b>{{ route.transport_mode }}</b><br>
+											Time: <b>{{ new Date(route.timestamp).toLocaleString() }}</b><br>
+											<button class="btn btn-success mt-2" @click="checkEndLocation(route)">Validate Route</button><br>
 
 										</td>
 										<!-- <td>{{ route.checkedStartLocation }}</td> -->
@@ -262,17 +266,12 @@ export default {
 
 
 		async fetchRandomGif() {
-			const giphyApiKey = 'FuPGJnG0vBT3yRNDTJ8KzeoICLLNYQ5V'; // replace with your Giphy API key
-			const url = `https://api.giphy.com/v1/gifs/random?api_key=${giphyApiKey}&tag=dancing&rating=g`;
+			const url = `https://api.giphy.com/v1/gifs/random?api_key=${import.meta.env.VITE_GIFY_API_KEY}&tag=dancing&rating=g`;
 
 			try {
 				const response = await axios.get(url);
 				this.dancingGif = response.data.data.images.fixed_height.url;
 				console.log(this.dancingGif);
-				// console.log("Successfully fetched gif!")
-				// console.log(response.data.data.images.original.url)
-				// console.log(response.data.url)
-				// console.log(response.data.images.original.url);
 
 			} catch (error) {
 				console.error('Error fetching random gif:', error);
@@ -282,7 +281,7 @@ export default {
 		async fetchUser() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			try {
@@ -301,7 +300,7 @@ export default {
 			const email = this.user.email; // Get the email from user object
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/routes/email?email=${encodeURIComponent(email)}`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`, // Replace with your actual API key
 			};
 			try {
 				const response = await axios.get(url, { headers });
@@ -317,7 +316,7 @@ export default {
 		async updateRoute(routeId) {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/routes/${routeId}/validate`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`, // Replace with your actual API key
 			};
 			try {
 				const response = await axios.put(url, {}, { headers });
@@ -371,7 +370,7 @@ export default {
 			// Update the user's carbon savings in the backend
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${this.user.email}/carbonsavings`, { carbonsavings: this.emissionSavings }, {
 				headers: {
-					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+					'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
 				}
 			})
 				.then(response => {
@@ -385,7 +384,7 @@ export default {
 			// Update the user exp in the backend
 			axios.post(`${import.meta.env.VITE_API_ENDPOINT}/users/${this.user.email}/exp`, { exp: this.expToAddG }, {
 				headers: {
-					'X-Api-Key': 'PlanItIsTheBestProjectEverXYZ'
+					'X-Api-Key': `${import.meta.env.VITE_API_KEY}`
 				}
 			})
 				.then(response => {

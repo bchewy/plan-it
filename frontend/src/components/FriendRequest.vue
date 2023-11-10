@@ -41,7 +41,7 @@ export default {
 				const body = { friend_email: this.friend };
 				const headers = {
 					'Content-Type': 'application/json',
-					'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+					'x-api-key': `${import.meta.env.VITE_API_KEY}`
 				};
 				const response = await axios.post(url, body, { headers });
 				this.showAlert = true;
@@ -62,7 +62,7 @@ export default {
 				const body = { friend_email: this.friend };
 				const headers = {
 					'Content-Type': 'application/json',
-					'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+					'x-api-key': `${import.meta.env.VITE_API_KEY}`
 				};
 				const response = await axios.post(url, body, { headers });
 				this.showAlert = true;

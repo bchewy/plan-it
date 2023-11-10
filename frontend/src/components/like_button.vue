@@ -30,7 +30,7 @@ export default defineComponent(
     async created() {
       const url = `${import.meta.env.VITE_API_ENDPOINT}/posts/${this.postID}`
       const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+        "x-api-key": `${import.meta.env.VITE_API_KEY}`,
       };
       try {
         const response = await axios.get(url, { headers })
@@ -83,7 +83,7 @@ export default defineComponent(
       likePost: async function () {
         const url = `${import.meta.env.VITE_API_ENDPOINT}/posts/${this.postID}/likes/add`
         const headers = {
-          "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+          "x-api-key": `${import.meta.env.VITE_API_KEY}`,
           "Content-Type": "application/x-www-form-urlencoded"
 
         };
@@ -93,7 +93,7 @@ export default defineComponent(
       unlikePost: async function () {
         const url = `${import.meta.env.VITE_API_ENDPOINT}/posts/${this.postID}/likes/remove`
         const headers = {
-          "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+          "x-api-key": `${import.meta.env.VITE_API_KEY}`,
           "Content-Type": "application/x-www-form-urlencoded"
 
         };

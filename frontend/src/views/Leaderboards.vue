@@ -72,7 +72,7 @@
 										</td>
 										<td>{{ user.level }}</td>
 										<!-- <td>{{ user.exp }}</td> -->
-										<td v-if="user.carbonsavings">{{ user.carbonsavings }} Co2 kg</td>
+										<td v-if="user.carbonsavings">{{ user.carbonsavings.toFixed(2) }}g Co2 </td>
 										<td v-else></td>
 									</tr>
 								</tbody>
@@ -113,7 +113,7 @@
 										</td>
 										<!-- You can now access the stats data for each user -->
 										<td>{{ user.stats.level }}</td>
-										<td>{{ user.stats.carbonsavings }} Co2 Kg</td>
+										<td v-if="user.stats.carbonsavings">{{ user.stats.carbonsavings }}g CO2</td>
 									</tr>
 								</tbody>
 							</table>
@@ -196,7 +196,7 @@ export default {
 		async fetchUser() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			try {
@@ -212,7 +212,7 @@ export default {
 		async fetchBadges() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(this.user.email)}/badges`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			try {
@@ -228,7 +228,7 @@ export default {
 			const email = this.user.email; // Get the email from user object
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/routes/email?email=${encodeURIComponent(email)}`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`, // Replace with your actual API key
 			};
 			try {
 				const response = await axios.get(url, { headers });
@@ -237,10 +237,11 @@ export default {
 				console.error("Error fetching routes:", error);
 			}
 		},
+		// This call fetch the iniital users in the leaderboard page.
 		async fetchUsers() {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users`;
 			const headers = {
-				"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+				"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 			};
 
 			try {
@@ -248,6 +249,7 @@ export default {
 				this.users = response.data;
 				for (let user of this.users) {
 					try {
+						// console.log(user);
 						const badgeUrl = `${import.meta.env.VITE_API_ENDPOINT}/users/${user.email}/badges`;
 						const badgeResponse = await axios.get(badgeUrl, { headers });
 						const badgeIds = badgeResponse.data;
@@ -262,6 +264,7 @@ export default {
 								const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
 
 								// Add the badge details to the user badges array
+								// console.log(badgeDetailsResponse.data);
 								user.badges.push({
 									id: badgeId,
 									image: badgeDetailsResponse.data.image,
@@ -278,6 +281,8 @@ export default {
 				console.error("Error fetching users:", error);
 			}
 		},
+
+		// This call fetches the friends in the leaderboard page.
 		async fetchFriendStats(friends) {
 			// console.log("Fetching friend stats")
 			// console.log(friends)
@@ -288,7 +293,7 @@ export default {
 					// console.log("Fetching our friend here.")
 					const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(friend)}`;
 					const headers = {
-						"x-api-key": "PlanItIsTheBestProjectEverXYZ",
+						"x-api-key": `${import.meta.env.VITE_API_KEY}`,
 					};
 					const response = await axios.get(url, { headers });
 					stats.push({
@@ -304,6 +309,7 @@ export default {
 						for (let badge of response.data.badges) {
 							const badgeDetailsUrl = `${import.meta.env.VITE_API_ENDPOINT}/badges/${badge}`;
 							const badgeDetailsResponse = await axios.get(badgeDetailsUrl, { headers });
+
 							// Add the badge details to the user badges array
 							stats[stats.length - 1].stats.badges.push({
 								id: badge,

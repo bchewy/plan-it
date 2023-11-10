@@ -6,4 +6,7 @@ cloud/
 .DS_Store
 venv/
 .DS_Store
-.DS_Store
+frontend/auth_config.json
+frontend/auth_config old.json
+frontend/.DS_Store
+frontend/dist/

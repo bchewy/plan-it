@@ -46,7 +46,7 @@ swagger = Flasgger(app, config=swagger_config)
 app.config.from_object(Config)
 
 client = MongoClient(app.config['MONGO_URI'])
-API_KEY = "PlanItIsTheBestProjectEverXYZ"
+API_KEY = app.config['API_KEY']
 db = client.wad2
 collection = db.routes
 user_collection = db.users
@@ -612,7 +612,8 @@ def update_total_km(user_email):
     data = request.get_json()
     user = user_collection.find_one({"email": user_email})
     if user:
-        user_collection.update_one({"email": user_email}, {"$set": {"total_km": data['total_km']}})
+        # user_collection.update_one({"email": user_email}, {"$set": {"total_km": data['total_km']}})
+        user_collection.update_one({"email": user_email}, {"$inc": {"total_km": data['total_km']}})
         return jsonify({"message": "Total distance updated successfully."}), 200
     else:
         return jsonify({"message": "User not found."}), 404
@@ -1577,7 +1578,7 @@ def create_group(user_email):
 
 def create_group_success(user_email, group_name, group_image_url,group_members):
     group_members=group_members.split(",")
-    group = {"name": group_name, "owner_email": user_email, "members": group_members, "group_image": group_image_url}
+    group = {"name": group_name, "owner_email": user_email, "members": group_members, "group_image": group_image_url,"badges":[]}
     db.groups.insert_one(group)
     return jsonify({"message": "Group created successfully."}), 200
 
@@ -1666,10 +1667,7 @@ def list_user_groups(user_email):
     groups = list(db.groups.find({"members": user_email}))
     usergroups =list(db.groups.find({"owner_email":user_email}))
     if usergroups:
-        groups.append(usergroups)
-    print(groups)
-    print('\n')
-    print('\n')
+        groups.extend(usergroups)
     if len(groups) == 0:
         return jsonify({"message": "No groups found."}), 404
     groups = [convert_objectid_to_string(group) for group in groups]

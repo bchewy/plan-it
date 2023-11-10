@@ -36,7 +36,7 @@ export default {
 	setup() {
 		const { user, isAuthenticated } = useAuth0();
 		const badges = ref([]);
-		const headers = { "x-api-key": "PlanItIsTheBestProjectEverXYZ", };
+		const headers = { "x-api-key": `${import.meta.env.VITE_API_KEY}`, };
 
 		const fetchUsersBadges = async () => {
 			const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(user.value.email)}/badges`;

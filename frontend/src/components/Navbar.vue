@@ -80,7 +80,7 @@
             <router-link class="nav-link text-evenlighter" to="/">Home</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-evenlighter" to="/how">
+            <router-link class="nav-link text-evenlighter" to="/about">
               About
             </router-link>
           </li>
@@ -129,8 +129,8 @@
                     <path d="M13.978 12.27c.245.368.611.647 1.031.787l2.675.892.633-1.896-2.675-.892-1.663-2.495a2.016 2.016 0 0 0-.769-.679l-1.434-.717a1.989 1.989 0 0 0-1.378-.149l-3.193.797a2.002 2.002 0 0 0-1.306 1.046l-1.794 3.589 1.789.895 1.794-3.589 2.223-.556-1.804 8.346-3.674 2.527 1.133 1.648 3.675-2.528c.421-.29.713-.725.82-1.225l.517-2.388 2.517 1.888.925 4.625 1.961-.393-.925-4.627a2 2 0 0 0-.762-1.206l-2.171-1.628.647-3.885 1.208 1.813z"></path>
                   </svg> Verify</router-link>
               </li>
-              <li v-if="user.email == 'brian@bchewy.com' || user.email == 'melody.wong.2022@smu.edu.sg' || user.email == 'ryanlee99324@gmail.com'">
-                <router-link class="dropdown-item text-light" to="/admin">
+              <li v-if="user.email == 'brian@bchewy.com' || user.email == 'melody.wong.2022@smu.edu.sg' || user.email == 'ryanlee99324@gmail.com' || user.email == 'planituser27@gmail.com'">
+                <router-link class=" dropdown-item text-light" to="/admin">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(255, 255, 255);transform: ;msFilter:;">
                     <path d="m2.344 15.271 2 3.46a1 1 0 0 0 1.366.365l1.396-.806c.58.457 1.221.832 1.895 1.112V21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1.598a8.094 8.094 0 0 0 1.895-1.112l1.396.806c.477.275 1.091.11 1.366-.365l2-3.46a1.004 1.004 0 0 0-.365-1.366l-1.372-.793a7.683 7.683 0 0 0-.002-2.224l1.372-.793c.476-.275.641-.89.365-1.366l-2-3.46a1 1 0 0 0-1.366-.365l-1.396.806A8.034 8.034 0 0 0 15 4.598V3a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v1.598A8.094 8.094 0 0 0 7.105 5.71L5.71 4.904a.999.999 0 0 0-1.366.365l-2 3.46a1.004 1.004 0 0 0 .365 1.366l1.372.793a7.683 7.683 0 0 0 0 2.224l-1.372.793c-.476.275-.641.89-.365 1.366zM12 8c2.206 0 4 1.794 4 4s-1.794 4-4 4-4-1.794-4-4 1.794-4 4-4z"></path>
                   </svg>
@@ -196,7 +196,6 @@ import { useAuth0 } from '@auth0/auth0-vue';
 import { watch, computed, defineComponent, ref } from 'vue';
 import axios from "axios";
 
-
 export default defineComponent({
   name: 'NavBar',
   setup() {
@@ -220,7 +219,7 @@ export default defineComponent({
         //   const handleResponse = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/users/handle/${newValue.nickname}`, {
         //     method: 'GET',
         //     headers: {
-        //       'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+        //       'x-api-key': `${import.meta.env.VITE_API_KEY}`
         //     }
         //   });
         //   const handleData = await handleResponse.json();
@@ -244,7 +243,7 @@ export default defineComponent({
           // Always do initial check to see if user exists
           const response1 = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/users/ez/${encodeURIComponent(newValue.email)}`, {
             headers: {
-              'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+              'x-api-key': `${import.meta.env.VITE_API_KEY}`
             }
           });
           const msg = await response1.data;
@@ -260,7 +259,7 @@ export default defineComponent({
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': 'PlanItIsTheBestProjectEverXYZ'
+                'x-api-key': `${import.meta.env.VITE_API_KEY}`
               },
               body: JSON.stringify(requestBody)
 
@@ -272,7 +271,7 @@ export default defineComponent({
             console.log('User found in the database');
           }
         } catch (e) {
-          console.error('Failed to upsert user:', e);
+          console.error('Failed to upsert user on the Backend:', e);
         }
       }
     });
@@ -286,7 +285,7 @@ export default defineComponent({
     const fetchUser = async () => {
       const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(user.value.email)}`;
       const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+        "x-api-key": `${import.meta.env.VITE_API_KEY}`,
       };
 
       try {

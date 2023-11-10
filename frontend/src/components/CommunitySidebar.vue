@@ -9,14 +9,15 @@
 				<li class="active nav-item"><router-link class="h3 nav-link beige-colour" to="/community"><font-awesome-icon icon="fa-solid fa-user"></font-awesome-icon> For You</router-link></li>
 				<hr>
 				<li class="nav-item dropdown"><a class="h3 nav-link dropdown-toggle beige-colour" href="#" data-bs-toggle="dropdown"><font-awesome-icon icon="fa-solid fa-people-group"></font-awesome-icon>  Groups</a>
-					<ul class="dropdown-menu beige-colour" style="background-color: #739072">
-						<li><router-link class="dropdown-item beige-colour" to="/community/createGroup" style="background-color: #739072"><font-awesome-icon icon="fa-solid fa-plus" /> Create group</router-link></li>
-						<li><router-link class="dropdown-item beige-colour" to="/community/yourGroups" style="background-color: #739072"><font-awesome-icon icon="fa-solid fa-users" /> Your groups</router-link></li>
+					<ul class="dropdown-menu beige-colour">
+						<li><router-link class="dropdown-item beige-colour" to="/community/createGroup"><font-awesome-icon icon="fa-solid fa-plus" /> Create group</router-link></li>
+						<li><router-link class="dropdown-item beige-colour" to="/community/yourGroups" ><font-awesome-icon icon="fa-solid fa-users" /> Your groups</router-link></li>
 					</ul>
 				</li>
 				<hr>
 				<li class="nav-item"><router-link class="h3 nav-link beige-colour" to="/community/friendCommunity"><font-awesome-icon icon="fa-solid fa-user-group"></font-awesome-icon>  Your Friends</router-link></li>
 				<hr>
+        <li class="nav-item"><router-link class="h3 nav-link beige-colour" to="/community/yourActivity"><font-awesome-icon icon="fa-solid fa-user"></font-awesome-icon>  Your Activity</router-link></li>
 			</ul>
 	
 		</div>
@@ -71,10 +72,6 @@ export default defineComponent({
   align-items: center;
 }
 
-.p-sidebar-content i {
-  font-size: 24px;
-  color: #ffffff;
-}
 
 .p-sidebar-content li span {
   /* Hide the text in the sidebar items by default */
@@ -105,14 +102,14 @@ export default defineComponent({
   padding: 10px;
 }
 
+
 .p-sidebar-content .dropdown-menu li:hover {
   background-color: #537052;
 }
-
-.p-sidebar-content .dropdown-menu i {
-  font-size: 16px;
-  color: #ffffff;
+.p-sidebar-content .dropdown-menu li .dropdown-item:hover{
+  background-color: #537052;
 }
+
 
 
 </style>

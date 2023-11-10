@@ -12,8 +12,8 @@ const router = createRouter({
 			component: () => import('./views/Home.vue')
 		},
 		{
-			path: '/how',
-			component: () => import('./views/HowItWorks.vue'),
+			path: '/about',
+			component: () => import('./views/About.vue'),
 		},
 		{
 			path: '/route',
@@ -25,10 +25,6 @@ const router = createRouter({
 			component: () => import('./views/Verify.vue'),
 			beforeEnter: authGuard
 
-		},
-		{
-			path: '/debug',
-			component: () => import('./views/Debug.vue')
 		},
 		{
 			path: '/profile',
@@ -83,6 +79,11 @@ const router = createRouter({
 			path: '/community/yourGroups',
 			component: () => import('./views/YourGroups.vue')
 		},
+		{
+			path: '/community/yourActivity',
+			component: () => import('./views/YourActivity.vue')
+		},
+
 		{
 			path: '/compare',
 			component: () => import('./components/Compare.vue')

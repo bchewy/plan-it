@@ -23,6 +23,9 @@ jobs:
             cd /home/ubuntu/sustainable-singapore/backend
             git pull git@github.com:bchewy/sustainable-singapore.git main
             pip3 install -r requirements.txt
+            echo 'export MONGO_URI="${{ secrets.MONGO_URI }}"' >> .env
+            echo 'export API_KEY="${{ secrets.VITE_API_KEY }}"' >> .env
+            source .env
             sudo systemctl restart backend.service
             if systemctl is-active --quiet backend.service
             then

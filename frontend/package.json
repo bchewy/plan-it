@@ -1,6 +1,6 @@
 {
   "name": "package.json",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "vite --port 3000",
@@ -15,10 +15,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/vue-fontawesome": "^3.0.3",
-    "@lucien144/vue3-parallaxy": "^0.1.1",
     "@popperjs/core": "^2.11.8",
-    "@skilltree/skills-client-vue": "^3.5.0",
-    "@vue/cli-plugin-eslint": "^5.0.8",
     "@vueuse/components": "^10.5.0",
     "@vueuse/core": "^10.5.0",
     "animate.css": "^4.1.1",
@@ -29,7 +26,6 @@
     "chart.js": "^4.4.0",
     "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-plugin-datalabels": "^2.2.0",
-    "d3": "^7.8.5",
     "date-fns": "^2.30.0",
     "esbuild-node-loader": "^0.8.0",
     "install": "^0.13.0",

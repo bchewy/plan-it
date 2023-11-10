@@ -29,7 +29,7 @@
   background-color: #739072;
 }
 
- /* This changes the chart sizes. */
+/* This changes the chart sizes. */
 /* .pr-4.pb-3.pb-md-0 {
   flex: 2;
 }
@@ -98,13 +98,13 @@
                 <path d="M19 2H5c-1.103 0-2 .897-2 2v13c0 1.103.897 2 2 2h4l3 3 3-3h4c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zm-5 15-2 2-2-2H5V4h14l.002 13H14z"></path>
               </svg> My Profile</a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" :class="{ 'active': activeTab === 'myactivity' }" @click="activeTab = 'myactivity'" href="#" role="tab">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(236, 227, 206, 1);transform: ;msFilter:;">
                 <path d="M20 2H4c-1.103 0-2 .897-2 2v18l4-4h14c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zM9 12a2 2 0 1 1 .001-4.001A2 2 0 0 1 9 12zm6 0a2 2 0 1 1 .001-4.001A2 2 0 0 1 15 12z"></path>
               </svg>
               My Activity</a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a class="nav-link" :class="{ 'active': activeTab === 'routes' }" @click="activeTab = 'routes'" href="#" role="tab"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(236, 227, 206, 1);transform: ;msFilter:;">
                 <path d="m21.447 6.105-6-3a1 1 0 0 0-.895 0L9 5.882 3.447 3.105A1 1 0 0 0 2 4v13c0 .379.214.725.553.895l6 3a1 1 0 0 0 .895 0L15 18.118l5.553 2.776a.992.992 0 0 0 .972-.043c.295-.183.475-.504.475-.851V7c0-.379-.214-.725-.553-.895zM10 7.618l4-2v10.764l-4 2V7.618zm-6-2 4 2v10.764l-4-2V5.618zm16 12.764-4-2V5.618l4 2v10.764z"></path>
@@ -217,7 +217,7 @@
                 <!-- Card for Calories -->
                 <div class="col">
                   <div class="card text-center">
-                    <div class="card-body">
+                    <div class="card-body p-2">
                       <img src="https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/Cool+animals.png" alt="Levels" class="card-img-top" style="width: 60px; height: auto;">
                       <h5 class="card-title">{{ userLvl }}</h5>
                       <p class="card-text">Levels gained!</p>
@@ -227,7 +227,7 @@
                 <!-- Card for CO2 Saved -->
                 <div class="col">
                   <div class="card text-center">
-                    <div class="card-body">
+                    <div class="card-body p-2">
                       <img src="https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/code+block%0AGreen+cute+space.png" alt="CO2 Saved" class="card-img-top" style="width: 60px; height: auto;">
                       <h5 class="card-title">{{ carbonSavings.toFixed(2) }}g</h5>
                       <p class="card-text">CO2 Saved</p>
@@ -535,11 +535,13 @@ export default {
                   // Check the dataset index
                   // If the current dataset is for carbon emissions (index 0), format the label for emissions
                   if (context.datasetIndex === 0) {
-                    return `${value.toFixed(2)} g CO₂e`;
+                    return '';
+                    // return `${value.toFixed(2)} g CO₂e`;
                   }
                   // If the current dataset is for distance (index 1), format the label for distance
                   else if (context.datasetIndex === 1) {
-                    return `${value.toFixed(2)} km`; // Replace 'km' with your unit for distance if necessary
+                    return '';
+                    // return `${value.toFixed(2)} km`; // Replace 'km' with your unit for distance if necessary
                   }
                   return null; // Return null for any other dataset to avoid displaying a label
                 }
@@ -603,7 +605,7 @@ export default {
     async fetchUser() {
       const url = `${import.meta.env.VITE_API_ENDPOINT}/users/iz/${encodeURIComponent(this.user.email)}`;
       const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+        "x-api-key": `${import.meta.env.VITE_API_KEY}`,
       };
 
       try {
@@ -623,7 +625,7 @@ export default {
     async fetchFriendRequests() {
       const url = `${import.meta.env.VITE_API_ENDPOINT}/users/${encodeURIComponent(this.user.email)}/friend_requests`;
       const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ",
+        "x-api-key": `${import.meta.env.VITE_API_KEY}`,
       };
 
       try {
@@ -640,7 +642,7 @@ export default {
       const email = this.user.email; // Get the email from user object
       const url = `${import.meta.env.VITE_API_ENDPOINT}/routes/email?email=${encodeURIComponent(email)}`;
       const headers = {
-        "x-api-key": "PlanItIsTheBestProjectEverXYZ", // Replace with your actual API key
+        "x-api-key": `${import.meta.env.VITE_API_KEY}`, // Replace with your actual API key
       };
       try {
         const response = await axios.get(url, { headers });
