@@ -612,7 +612,8 @@ def update_total_km(user_email):
     data = request.get_json()
     user = user_collection.find_one({"email": user_email})
     if user:
-        user_collection.update_one({"email": user_email}, {"$set": {"total_km": data['total_km']}})
+        # user_collection.update_one({"email": user_email}, {"$set": {"total_km": data['total_km']}})
+        user_collection.update_one({"email": user_email}, {"$inc": {"total_km": data['total_km']}})
         return jsonify({"message": "Total distance updated successfully."}), 200
     else:
         return jsonify({"message": "User not found."}), 404
