@@ -1,11 +1,5 @@
-// import './assets/main.css'
-
-// Importing bootstrap CSS and JS
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js'
-
-// import 'bootstrap'
-// Importing the main App component
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -45,8 +39,6 @@ library.add(faBars)
 library.add(faUserGroup)
 library.add(faPeopleGroup)
 
-
-// Prima Vue
 import PrimeVue from 'primevue/config';
 
 
@@ -70,7 +62,6 @@ app.use(
 		}
 	})
 );
-// app.use(MotionPlugin)
 app.use(PrimeVue);
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)
