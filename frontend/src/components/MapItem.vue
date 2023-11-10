@@ -565,6 +565,7 @@ export default defineComponent({
 						checkedStartLocation: isDisabled.val //Validation here is for users to ensure that they selected currentLocation as start location.
 					};
 
+					totalKm.value += distanceInKm;
 
 					// Update our route database (backend Call)
 					// Update user's EXP based on carbon emission calculation
@@ -577,7 +578,7 @@ export default defineComponent({
 						await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/routes`, routeData, { headers });
 
 
-						totalKm.value += distanceInKm;
+						// totalKm.value += distanceInKm;
 						// EXP Given here is not the most and incomplete.
 						await addExpBasedOnCarbonEmission(calculateCarbonEmissionForEXP(), distanceInKm, travelMode.value);
 						showModal();
