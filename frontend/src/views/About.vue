@@ -56,7 +56,7 @@
 	/* Add padding to avoid text touching the edges */
 	margin: 10px;
 	/* Add some margin if needed */
-	max-width: 65%;
+	max-width: 50%;
 	/* Control the max width of the transparent background */
 	box-sizing: border-box;
 }
@@ -237,7 +237,7 @@
 							<a class="link-success" href="https://github.com/ryan99324">@ryan99324</a>
 						</li>
 						<li class="mb-1">
-							<img style="height: 35px;" src="https://cdn.vectorstock.com/i/preview-1x/08/19/gray-photo-placeholder-icon-design-ui-vector-35850819.jpg" alt="">&nbsp;
+							<img style="height: 35px;" src="..assets/melody.jpg" alt="">&nbsp;
 
 							<a class="link-success" href="https://github.com/melodywong23">@melodywong23</a>
 						</li>
