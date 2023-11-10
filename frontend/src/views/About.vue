@@ -56,7 +56,7 @@
 	/* Add padding to avoid text touching the edges */
 	margin: 10px;
 	/* Add some margin if needed */
-	max-width: 65%;
+	max-width: 50%;
 	/* Control the max width of the transparent background */
 	box-sizing: border-box;
 }
