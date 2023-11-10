@@ -321,6 +321,7 @@ export default {
 
 				}
 				this.friendStats = stats;
+				this.friendStats.sort((a, b) => a.stats.level - b.stats.level).reverse();
 				// console.log(this.friendStats)
 			} catch (error) {
 				console.error("Error fetching friend stats:", error);
