@@ -118,8 +118,11 @@
 			<div class="col-12 story-part ">
 				<div class="">
 					<img class="img-fluid w-25" src="https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/bchewy+conscious+travel+mascot.png" alt="PlanIt Logo">
-					<p class="">Hello! I'm Planny:<br>Scroll to...</p>
-					<h2><span class="text-success element"></span></h2>
+					<div class="w-25 text-background justify-content-center mx-auto pb-5">
+						<p class="text-center">Hello! I'm Planny:<br>Scroll to...</p>
+						<h2 class="text-center"><span class="text-success element"></span></h2>
+					</div>
+
 					<!-- <h2>Welcome to PlanIt!</h2>
 					<p>PlanIt helps you make sustainable transportation choices while exploring your city. Our app allows you to log and compare routes across different modes like walking, biking, driving, and public transit.</p> -->
 					<!-- <img class="img-fluid" src="../assets/product_demo_real.gif" alt="Product Demo"> -->
