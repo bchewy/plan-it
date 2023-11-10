@@ -1,6 +1,6 @@
 <template>
 	<NavBar />
-	<div class="container-fluid bg-supergreen pb-3 position-relative" style="background-color:#cbdbb7">
+	<div class="container-fluid bg-supergreen pb-3 vh-100 position-relative" style="background-color:#cbdbb7">
 
 		<div class="sticky-top border-bottom" style="background-color:#cbdbb7; z-index: 1;">
 			<CommunitySidebar></CommunitySidebar>
@@ -9,7 +9,7 @@
 				<span class="header text-muted" style="font-weight: bold;">For You </span>
 			</div>
 		</div>
-		<div class="row justify-content-center">
+		<div class="row justify-content-center bg-supergreen">
 			<CreatePostComponent @postCreated="fetchPosts"></CreatePostComponent>
 			<PostComponent v-for="post in posts" :key="post._id" :username="post.username" :profileImage="post.userprofile" :timePosted="post.timestamp" :badge="post.badge" :taggedFriends="post.taggedfriends" :liked="post.likes" :content="post.content" :postID="post._id" :useremail="user.email"></PostComponent>
 		</div>
@@ -64,5 +64,9 @@ export default {
 <style scoped>
 .beige-colour {
 	color: rgb(68, 49, 4);
+}
+
+.bg-supergreen {
+	background-color: #cbdbb7;
 }
 </style>

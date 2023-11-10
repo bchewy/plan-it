@@ -217,7 +217,7 @@
                 <!-- Card for Calories -->
                 <div class="col">
                   <div class="card text-center">
-                    <div class="card-body">
+                    <div class="card-body p-2">
                       <img src="https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/Cool+animals.png" alt="Levels" class="card-img-top" style="width: 60px; height: auto;">
                       <h5 class="card-title">{{ userLvl }}</h5>
                       <p class="card-text">Levels gained!</p>
@@ -227,7 +227,7 @@
                 <!-- Card for CO2 Saved -->
                 <div class="col">
                   <div class="card text-center">
-                    <div class="card-body">
+                    <div class="card-body p-2">
                       <img src="https://bchewy-images.s3.ap-southeast-1.amazonaws.com/plan-it/code+block%0AGreen+cute+space.png" alt="CO2 Saved" class="card-img-top" style="width: 60px; height: auto;">
                       <h5 class="card-title">{{ carbonSavings.toFixed(2) }}g</h5>
                       <p class="card-text">CO2 Saved</p>
@@ -535,11 +535,13 @@ export default {
                   // Check the dataset index
                   // If the current dataset is for carbon emissions (index 0), format the label for emissions
                   if (context.datasetIndex === 0) {
-                    return `${value.toFixed(2)} g CO₂e`;
+                    return '';
+                    // return `${value.toFixed(2)} g CO₂e`;
                   }
                   // If the current dataset is for distance (index 1), format the label for distance
                   else if (context.datasetIndex === 1) {
-                    return `${value.toFixed(2)} km`; // Replace 'km' with your unit for distance if necessary
+                    return '';
+                    // return `${value.toFixed(2)} km`; // Replace 'km' with your unit for distance if necessary
                   }
                   return null; // Return null for any other dataset to avoid displaying a label
                 }
